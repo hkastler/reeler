@@ -145,10 +145,11 @@ public class WeblogEntryBean {
         log.info("postingComment");
         log.info("numberOfComments:" + getComments(this.weblogEntry).size());
         //this.weblogEntryComment.setWeblogEntry(this.weblogEntry);
-        wecm.create(this.weblogEntryComment);
-
+        //call this to get around lazy load issues
+        this.comments = this.weblogEntryComment.getWeblogEntry().getComments();
+        wecm.saveAndLoadComments(this.weblogEntryComment);
         this.commentIsPosted = true;
-        //log.log(Level.FINE, "comment posted, commentIsPosted: " + this.isCommentIsPosted());
+        log.log(Level.FINE, "comment posted, commentIsPosted: " + this.isCommentIsPosted());
         this.comments = getComments(this.weblogEntry);
         //log.log(Level.FINE, "numberOfComments:" + this.weblogEntry.getComments().size());
     }

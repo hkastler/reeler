@@ -5,6 +5,8 @@
  */
 package com.hkstlr.reeler.weblogger.boundary.manager;
 
+import com.hkstlr.reeler.weblogger.boundary.jsf.WeblogEntryBean;
+import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -39,6 +41,13 @@ public class WeblogEntryCommentManager {
     
     public void persist(WeblogEntryComment entity) {
     	getEntityManager().persist(entity);
+    }
+    
+    public void saveAndLoadComments(WeblogEntryComment comment){
+        
+        persist(comment);
+        //WeblogEntry entry = comment.getWeblogEntry();
+        //web.setComments(entry.getComments());
     }
     
 }

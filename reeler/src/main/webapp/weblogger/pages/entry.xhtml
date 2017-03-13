@@ -42,8 +42,8 @@
                  jsfc="h:panelGroup" 
                  prependId="false" 
                  >
-                <h5 class="card-header" >#{!weblogEntryBean.commentIsPosted ? "Leave a Comment":"Comments"}</h5>
-                <div class="card-block" id="formDiv" jsfc="h:panelGroup" jsf:rendered="#{!weblogEntryBean.commentIsPosted}">
+                <h5 class="card-header" >Comments</h5>
+                <div class="card-block" id="formDiv" jsfc="h:panelGroup" rendered="#{!weblogEntryBean.commentIsPosted}">
                     <form jsfc="h:form" 
                           class="form" 
                           prependId="false" 
@@ -129,9 +129,9 @@
 
             <!-- Single Comment -->
             <div jsfc="h:panelGroup" id="comments" prependId="false" >
-                <ui:repeat value="#{weblogEntryBean.comments}" var="comment" >
+                <ui:repeat value="#{weblogEntryBean.comments}" var="comment" varStatus="status" >
                     <div class="media mb-4" >
-                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt=""/>
+                        #{status.index}<img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt=""/>
                         <div class="media-body">
                             <h5 class="mt-0"><h:outputText value="#{comment.name}"/></h5> 
                             <h:outputText value="#{comment.content}"/>
