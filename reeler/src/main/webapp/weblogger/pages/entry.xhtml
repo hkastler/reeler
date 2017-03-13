@@ -1,0 +1,148 @@
+
+<ui:composition template="/WEB-INF/weblogger/templates/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <!-- Page Content -->
+    
+    <ui:define name="content">
+    <f:view>
+        <!-- Title -->
+        <h1 class="mt-4"><h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.title}" /></h1>
+
+        <!-- Author -->
+        <p class="lead">
+            by <a href="#"><h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.creatorUserName}" /></a>
+        </p>
+
+        <hr/>
+
+        <!-- Date/Time -->
+        <p>Posted on <h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.pubTime}"/></p>
+
+        <hr/>
+
+        <!-- Preview Image -->
+        <img class="img-fluid rounded" src="http://placehold.it/900x300" alt=""/>
+
+        <hr/>
+
+        <!-- Post Content -->
+        <h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.text}" escape="false"/>
+
+        <hr/>
+
+        <!-- Comments Form -->
+        <h:panelGroup id="commentWrapper">
+            <div class="card my-4" 
+                 id="commentBlock" 
+                 jsfc="h:panelGroup" 
+                 prependId="false" 
+                 >
+                <h5 class="card-header" >#{!weblogEntryBean.commentIsPosted ? "Leave a Comment":"Comments"}</h5>
+                <div class="card-block" id="formDiv" jsfc="h:panelGroup" jsf:rendered="#{!weblogEntryBean.commentIsPosted}">
+                    <form jsfc="h:form" 
+                          class="form" 
+                          prependId="false" 
+                          id="commentForm">            
+                        <h:messages errorStyle="color: red" 
+                                    infoStyle="color: green" 
+                                    layout="table"/>
+                        <fieldset>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <label for="name">Your Name</label>
+                                </div>
+                                <div>
+                                    <input 
+                                        class="form-control"
+                                        type="text" 
+                                        jsf:binding="#{name}"
+                                        jsf:id="name" 
+                                        jsf:value="#{weblogEntryBean.weblogEntryComment.name}"
+                                        jsf:requiredMessage="Name is required."
+                                        placeholder=""
+                                        required="true"
+                                        oninvalid="this.setCustomValidity('Please enter a name')"
+                                        oninput="setCustomValidity('')"
+                                        />
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <label for="emailAddress">Email Address</label>
+                                </div>
+                                <div>
+                                    <input class="form-control"
+                                           type="email" 
+                                           jsf:binding="#{emailAddress}"
+                                           jsf:id="emailAddress" 
+                                           jsf:value="#{weblogEntryBean.weblogEntryComment.email}"
+                                           required="true"
+                                           oninvalid="this.setCustomValidity('Please enter your email')"
+                                           oninput="setCustomValidity('')"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <label for="url">URL</label>
+                                </div>
+                                <div>
+                                    <input class="form-control"
+                                           type="text" 
+                                           jsf:id="url" 
+                                           jsf:value="#{weblogEntryBean.weblogEntryComment.url}"
+                                           />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="control-label">
+                                    <label for="comment">Comment</label>
+                                </div>
+                                <textarea jsf:id="comment" 
+                                          jsf:binding="#{content}"
+                                          jsf:value="#{weblogEntryBean.weblogEntryComment.content}" 
+                                          jsf:required="true" 
+                                          jsf:requiredMessage="Comment is required."
+                                          class="form-control" rows="3"></textarea>
+                            </div>
+
+
+                        </fieldset>
+                        <input type="hidden" name="weblogEntry" value="#{weblogEntryBean.weblogEntry}"/>
+                        <button type="submit" 
+                                           class="btn btn-primary" 
+                                jsf:actionListener="#{weblogEntryBean.postComment}"
+                                           jsfc="h:commandButton"
+                                >Submit
+                            <f:ajax execute="commentForm" render="commentBlock comments"/>
+                            <f:param name="handle" value="#{weblogEntryBean.handle}"/>
+                            <f:param name="anchor" value="#{weblogEntryBean.anchor}"/>
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Single Comment -->
+            <div jsfc="h:panelGroup" id="comments" prependId="false" >
+                <ui:repeat value="#{weblogEntryBean.comments}" var="comment" >
+                    <div class="media mb-4" >
+                        <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt=""/>
+                        <div class="media-body">
+                            <h5 class="mt-0"><h:outputText value="#{comment.name}"/></h5> 
+                            <h:outputText value="#{comment.content}"/>
+                        </div>
+                    </div>
+                </ui:repeat>
+            </div>
+            
+        </h:panelGroup>
+    </f:view>        
+    </ui:define>
+    
+    <!-- /.container -->
+</ui:composition>

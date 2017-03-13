@@ -1,0 +1,40 @@
+<ui:composition template="/WEB-INF/weblogger/templates/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">>
+    <!-- Page Content -->
+    <ui:define name="content">        
+            <!-- Title -->
+            <h1 class="mt-4">
+                <a href="#{request.contextPath}/#{weblogBean.handle}/entry/#{weblogBean.latestWeblogEntryForWeblog.anchor}">
+                    <h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.title}" />
+                </a>
+            </h1>
+            <!-- Author -->
+            <p class="lead">
+                by <a href="#"><h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.creatorUserName}" /></a>
+            </p>
+
+            <hr/>
+
+            <!-- Date/Time -->
+            <p>Posted on <h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.pubTime}"/></p>
+
+            <hr/>
+
+            <!-- Preview Image -->
+            <img class="img-fluid rounded" src="http://placehold.it/900x300" alt=""/>
+
+            <hr/>
+
+            <!-- Post Content -->
+            <h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.text}" escape="false"/>
+
+            <hr/>
+        
+    </ui:define>
+    <!-- /.container -->
+</ui:composition>
