@@ -3,15 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.weblogger.entities;
+package com.hkstlr.reeler.weblogger.users.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -33,8 +39,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "User.findAll", query = "SELECT r FROM User r")
     , @NamedQuery(name = "User.findById", query = "SELECT r FROM User r WHERE r.id = :id")
-    , @NamedQuery(name = "User.findByUserName", query = "SELECT r FROM User r WHERE r.userName = :userName")
-    , @NamedQuery(name = "User.findByPassphrase", query = "SELECT r FROM User r WHERE r.passphrase = :passphrase")
+    , @NamedQuery(name = "User.findByUsername", query = "SELECT r FROM User r WHERE r.userName = :userName")
+    , @NamedQuery(name = "User.findByPassword", query = "SELECT r FROM User r WHERE r.password = :password")
     , @NamedQuery(name = "User.findByOpenIdUrl", query = "SELECT r FROM User r WHERE r.openIdUrl = :openIdUrl")
     , @NamedQuery(name = "User.findByScreenName", query = "SELECT r FROM User r WHERE r.screenName = :screenName")
     , @NamedQuery(name = "User.findByFullName", query = "SELECT r FROM User r WHERE r.fullName = :fullName")
@@ -59,74 +65,78 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "User.getByEndDate&StartDateOrderByStartDateDesc", query = "SELECT u FROM User u WHERE u.dateCreated < ?1 AND u.dateCreated > ?2 ORDER BY u.dateCreated DESC")
     , @NamedQuery(name = "User.getCountByUserNameLike", query = "SELECT COUNT(u) FROM User u WHERE UPPER(u.userName) LIKE ?1")
     , @NamedQuery(name = "User.getCountEnabledDistinct", query = "SELECT COUNT(u) FROM User u WHERE u.isEnabled = ?1")})
-public class User extends AbstractEntity  {
+public class User extends AbstractEntity {
 
     private static final long serialVersionUID = 1L;
-        
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "username", nullable = false, length = 255)
     private String userName;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "passphrase", nullable = false, length = 255)
-    private String passphrase;
-    
+    private String password;
+
     @Size(max = 255)
     @Column(name = "openid_url", length = 255)
     private String openIdUrl;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "screenname", nullable = false, length = 255)
     private String screenName;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "fullname", nullable = false, length = 255)
     private String fullName;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "emailaddress", nullable = false, length = 255)
-    private String emailAddress
-    ;
+    private String emailAddress;
     @Size(max = 48)
     @Column(name = "activationcode", length = 48)
     private String activationCode;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "datecreated", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
-    
+
     @Size(max = 20)
     @Column(name = "locale", length = 20)
     private String locale;
-    
+
     @Size(max = 50)
     @Column(name = "timezone", length = 50)
     private String timeZone;
-    
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "isenabled", nullable = false)
     private boolean isEnabled;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user_jdbcrealm_groups",
+            joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
+            inverseJoinColumns = @JoinColumn(name = "groupname", referencedColumnName = "groupname"))
+    private List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<JdbcrealmGroup>();
 
     public User() {
     }
 
-    public User(String id, String userName, String passphrase, String screenname, String fullname, String emailaddress, Date datecreated, boolean isenabled) {
-        
+    public User(String id, String userName, String password, String screenname, String fullname, String emailaddress, Date datecreated, boolean isenabled) {
+
         this.userName = userName;
-        this.passphrase = passphrase;
+        this.password = password;
         this.screenName = screenname;
         this.fullName = fullname;
         this.emailAddress = emailaddress;
@@ -138,7 +148,6 @@ public class User extends AbstractEntity  {
         return id;
     }
 
-
     public String getUserName() {
         return userName;
     }
@@ -147,67 +156,67 @@ public class User extends AbstractEntity  {
         this.userName = userName;
     }
 
-    public String getPassphrase() {
-        return passphrase;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPassphrase(String passphrase) {
-        this.passphrase = passphrase;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getOpenIdUrl() {
-		return openIdUrl;
-	}
+        return openIdUrl;
+    }
 
-	public void setOpenIdUrl(String openIdUrl) {
-		this.openIdUrl = openIdUrl;
-	}
+    public void setOpenIdUrl(String openIdUrl) {
+        this.openIdUrl = openIdUrl;
+    }
 
-	public String getScreenName() {
-		return screenName;
-	}
+    public String getScreenName() {
+        return screenName;
+    }
 
-	public void setScreenName(String screenName) {
-		this.screenName = screenName;
-	}
+    public void setScreenName(String screenName) {
+        this.screenName = screenName;
+    }
 
-	public String getFullName() {
-		return fullName;
-	}
+    public String getFullName() {
+        return fullName;
+    }
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
-	}
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-	public String getEmailAddress() {
-		return emailAddress;
-	}
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
 
-	public Date getDateCreated() {
-		return dateCreated;
-	}
+    public Date getDateCreated() {
+        return dateCreated;
+    }
 
-	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
-	}
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
+    }
 
-	public String getTimeZone() {
-		return timeZone;
-	}
+    public String getTimeZone() {
+        return timeZone;
+    }
 
-	public void setTimeZone(String timeZone) {
-		this.timeZone = timeZone;
-	}
+    public void setTimeZone(String timeZone) {
+        this.timeZone = timeZone;
+    }
 
-	public void setEnabled(boolean isEnabled) {
-		this.isEnabled = isEnabled;
-	}
+    public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+    }
 
-	public String getActivationCode() {
+    public String getActivationCode() {
         return activationCode;
     }
 
@@ -229,6 +238,14 @@ public class User extends AbstractEntity  {
 
     public void setIsEnabled(boolean isenabled) {
         this.isEnabled = isenabled;
+    }
+
+    public List<JdbcrealmGroup> getJdbcrealmGroups() {
+        return jdbcrealmGroups;
+    }
+
+    public void setJdbcrealmGroups(List<JdbcrealmGroup> jdbcrealmGroups) {
+        this.jdbcrealmGroups = jdbcrealmGroups;
     }
 
     @Override
@@ -255,5 +272,5 @@ public class User extends AbstractEntity  {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.User[ id=" + id + " ]";
     }
-    
+
 }

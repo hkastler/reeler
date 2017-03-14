@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.weblogger.entities;
+package com.hkstlr.reeler.weblogger.users.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;

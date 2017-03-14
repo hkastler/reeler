@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.boundary.manager;
 
+import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,7 @@ import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.entities.StatCount;
 import com.hkstlr.reeler.weblogger.entities.StatCountCountComparator;
 import com.hkstlr.reeler.weblogger.entities.TagStat;
-import com.hkstlr.reeler.weblogger.entities.User;
+import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
 import com.hkstlr.reeler.weblogger.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.entities.WeblogBookmarkFolder;
@@ -44,12 +45,10 @@ import com.hkstlr.reeler.weblogger.entities.WeblogEntryTagAggregate;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingTargetManager;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
-import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
 //import com.hkstlr.reeler.weblogger.search.entities.WeblogEntrySearchCriteria;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
-import javax.ejb.Stateless;
 
 
 /**

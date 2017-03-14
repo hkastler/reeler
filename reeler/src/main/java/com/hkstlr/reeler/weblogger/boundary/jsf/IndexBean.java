@@ -16,9 +16,9 @@
 package com.hkstlr.reeler.weblogger.boundary.jsf;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,11 +35,11 @@ import javax.inject.Inject;
 @RequestScoped
 public class IndexBean {
     
-    //@Inject
-    //Weblogger weblogger;
-    
     @Inject
-    WeblogManager weblogManager;
+    Weblogger weblogger;
+    
+    //@Inject
+    //WeblogManager weblogManager;
     
     @Inject
     private Logger log;
@@ -68,7 +68,7 @@ public class IndexBean {
     
     public void setWeblogs() throws WebloggerException{
        log.fine("setting weblogs");
-       List<Weblog> blogs = weblogManager.getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
+       List<Weblog> blogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
        //Weblog blog = weblogManager.getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
        //blog.setHandle("test-handle");
        //blog.setName("Test Name");

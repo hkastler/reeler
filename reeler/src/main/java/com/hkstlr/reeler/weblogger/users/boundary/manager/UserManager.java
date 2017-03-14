@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.weblogger.boundary.manager;
+package com.hkstlr.reeler.weblogger.users.boundary.manager;
 
 import java.util.List;
 
@@ -16,7 +16,7 @@ import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.AppPermission;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.entities.WeblogPermission;
-import com.hkstlr.reeler.weblogger.entities.User;
+import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
 
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.Map;
 import javax.annotation.Resource;
 import javax.validation.Validator;
-import javax.ws.rs.DELETE;
 
 /**
  *
@@ -35,7 +34,7 @@ public class UserManager extends AbstractManager<User> {
 
     @Resource
     Validator validator;
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -47,24 +46,22 @@ public class UserManager extends AbstractManager<User> {
     public UserManager() {
         super(User.class);
     }
-   
+
     //--------------------------------------------------------------- user CRUD    
-    
     /**
      * Add a new user.
-     * 
+     *
      * This method is used to provide supplemental data to new user accounts,
-     * such as adding the proper roles for the user.  This method should see if
+     * such as adding the proper roles for the user. This method should see if
      * the new user is the first user and give that user the admin role if so.
      *
      * @param newUser User object to be added.
      * @throws WebloggerException If there is a problem.
      */
     public void addUser(User newUser) throws WebloggerException {
-    	create(newUser);
-	}
-    
-    
+        create(newUser);
+    }
+
     /**
      * Save a user.
      *
@@ -72,9 +69,8 @@ public class UserManager extends AbstractManager<User> {
      * @throws WebloggerException If there is a problem.
      */
     public void saveUser(User user) throws WebloggerException {
-	}
-    
-    
+    }
+
     /**
      * Remove a user.
      *
@@ -82,33 +78,30 @@ public class UserManager extends AbstractManager<User> {
      * @throws WebloggerException If there is a problem.
      */
     public void removeUser(User user) throws WebloggerException {
-    	remove(user);
-	}
-    
-    
+        remove(user);
+    }
+
     /**
      * Get count of enabled users
-     */    
+     */
     public long getUserCount() throws WebloggerException {
-		return count();
-	}
-    
-    
+        return count();
+    }
+
     /**
      * get a user by activation code
+     *
      * @param activationCode
      * @return
      * @throws WebloggerException
      */
     public User getUserByActivationCode(String activationCode)
             throws WebloggerException {
-		User user = findByField("activationCode", activationCode);
-		return user;
-	}
-    
-          
-    //------------------------------------------------------------ user queries
+        User user = findByField("activationCode", activationCode);
+        return user;
+    }
 
+    //------------------------------------------------------------ user queries
     /**
      * Retrieve a user by its internal identifier id.
      *
@@ -117,46 +110,46 @@ public class UserManager extends AbstractManager<User> {
      * @throws WebloggerException
      */
     public User getUser(String id) throws WebloggerException {
-		User user = findById(id);
-		return user;
-	}
+        User user = findById(id);
+        return user;
+    }
 
     /**
      * Lookup a user by UserName.
-     * 
-     * This lookup is restricted to 'enabled' users by default.  So this method
+     *
+     * This lookup is restricted to 'enabled' users by default. So this method
      * will return null if the user is found but is not enabled.
-     * 
+     *
      * @param userName User Name of user to lookup.
      * @return The user, or null if not found or not enabled.
      * @throws WebloggerException If there is a problem.
      */
     public User getUserByUserName(String userName) throws WebloggerException {
-		User user = findByField("userName", userName);
-		return user;
-	}
-    
+        User user = findByField("userName", userName);
+        return user;
+    }
+
     /**
      * Lookup a user by UserName with the given enabled status.
-     * 
+     *
      * @param userName User Name of user to lookup.
      * @param enabled True if user is enabled, false otherwise.
      * @return The user, or null if not found or of the proper enabled status.
      * @throws WebloggerException If there is a problem.
      */
     public User getUserByUserName(String userName, Boolean enabled)
-        throws WebloggerException {
-		Query query = getEntityManager().createNamedQuery("User.getByUserName&Enabled");
-		query.setParameter(1, userName);
-		query.setParameter(2, enabled);
-		User user = (User) query.getSingleResult();
-		return user;
-	}
+            throws WebloggerException {
+        Query query = getEntityManager().createNamedQuery("User.getByUserName&Enabled");
+        query.setParameter(1, userName);
+        query.setParameter(2, enabled);
+        User user = (User) query.getSingleResult();
+        return user;
+    }
 
     /**
      * Lookup a user by Open ID URL.
      *
-     * This lookup is restricted to 'enabled' users by default.  So this method
+     * This lookup is restricted to 'enabled' users by default. So this method
      * will return null if the user is found but is not enabled.
      *
      * @param openIdUrl OpenIdUrl of user to lookup.
@@ -165,20 +158,23 @@ public class UserManager extends AbstractManager<User> {
      */
     public User getUserByOpenIdUrl(String openIdUrl)
             throws WebloggerException {
-		User user = findByField("openIdUrl", openIdUrl);
-		return user;
-	}
+        User user = findByField("openIdUrl", openIdUrl);
+        return user;
+    }
 
     /**
      * Lookup a group of users.
-     * 
-     * The lookup may be constrained to users with a certain enabled status,
-     * to users created within a certain date range, and the results can be
+     *
+     * The lookup may be constrained to users with a certain enabled status, to
+     * users created within a certain date range, and the results can be
      * confined to a certain offset & length for paging abilities.
-     * 
-     * @param enabled True for enabled only, False for disabled only (or null for all)
-     * @param startDate Restrict to those created after startDate (or null for all)
-     * @param endDate Restrict to those created before startDate (or null for all)
+     *
+     * @param enabled True for enabled only, False for disabled only (or null
+     * for all)
+     * @param startDate Restrict to those created after startDate (or null for
+     * all)
+     * @param endDate Restrict to those created before startDate (or null for
+     * all)
      * @param offset The index of the first result to return.
      * @param length The number of results to return.
      * @return List A list of UserDatUsers which match the criteria.
@@ -186,224 +182,210 @@ public class UserManager extends AbstractManager<User> {
      */
     public List<User> getUsers(
             Boolean enabled,
-            Date    startDate,
-            Date    endDate,
-            int     offset,
-            int     length) throws WebloggerException {
-		List<User> userList = new ArrayList<>();
-		Query q = getNamedQuery("User.getByEnabled&EndDate&StartDateOrderByStartDateDesc");
-		q.setParameter(1, enabled);
-		q.setParameter(2, startDate);
-		q.setParameter(3, endDate);
-		List<User> users = (List<User>)q.getResultList();
-		userList = users.subList(offset, length);
-		
-		return userList;
-	}
+            Date startDate,
+            Date endDate,
+            int offset,
+            int length) throws WebloggerException {
+        List<User> userList = new ArrayList<>();
+        Query q = getNamedQuery("User.getByEnabled&EndDate&StartDateOrderByStartDateDesc");
+        q.setParameter(1, enabled);
+        q.setParameter(2, startDate);
+        q.setParameter(3, endDate);
+        List<User> users = (List<User>) q.getResultList();
+        userList = users.subList(offset, length);
+
+        return userList;
+    }
 
     /**
      * Lookup users whose usernames or email addresses start with a string.
      *
      * @param startsWith String to match userNames and emailAddresses against
-     * @param offset     Offset into results (for paging)
-     * @param length     Max to return (for paging)
-     * @param enabled    True for only enalbed, false for disabled, null for all
+     * @param offset Offset into results (for paging)
+     * @param length Max to return (for paging)
+     * @param enabled True for only enalbed, false for disabled, null for all
      * @return List of (up to length) users that match startsWith string
      */
     public List<User> getUsersStartingWith(String startsWith,
             Boolean enabled, int offset, int length) throws WebloggerException {
-		return null;
-	}
-    
-    
+        return null;
+    }
+
     /**
-     * Get map with 26 entries, one for each letter A-Z and
-     * containing Longs reflecting the number of users whose
-     * names start with each letter.
+     * Get map with 26 entries, one for each letter A-Z and containing Longs
+     * reflecting the number of users whose names start with each letter.
      */
     public Map<String, Long> getUserNameLetterMap() throws WebloggerException {
-		return null;
-	}
-    
-    
-    /** 
-     * Get collection of users whose names begin with specified letter 
+        return null;
+    }
+
+    /**
+     * Get collection of users whose names begin with specified letter
      */
     public List<User> getUsersByLetter(char letter, int offset, int length)
-        throws WebloggerException {
-		return null;
-	}
-    
+            throws WebloggerException {
+        return null;
+    }
 
     //-------------------------------------------------------- permissions CRUD
-
-    
     /**
      * Return true if user has permission specified.
      */
     public boolean checkPermission(AppPermission perm, User user)
             throws WebloggerException {
-		return false;
-	}
-    
-    
+        return false;
+    }
+
     /**
-     * Grant to user specific actions in a weblog.
-     * (will create new permission record if none already exists)
-     * @param weblog  Weblog to grant permissions in
-     * @param user    User to grant permissions to
+     * Grant to user specific actions in a weblog. (will create new permission
+     * record if none already exists)
+     *
+     * @param weblog Weblog to grant permissions in
+     * @param user User to grant permissions to
      * @param actions Actions to be granted
      */
     public void grantWeblogPermission(Weblog weblog, User user, List<String> actions)
             throws WebloggerException {
-	}
+    }
 
-    
     /**
      * Grant to user specific actions in a weblog, but pending confirmation.
      * (will create new permission record if none already exists)
-     * @param weblog  Weblog to grant permissions in
-     * @param user    User to grant permissions to
+     *
+     * @param weblog Weblog to grant permissions in
+     * @param user User to grant permissions to
      * @param actions Actions to be granted
      */
     public void grantWeblogPermissionPending(Weblog weblog, User user, List<String> actions)
             throws WebloggerException {
-	}
+    }
 
-    
     /**
-     * Confirm user's permission within specified weblog or throw exception if no pending permission exists.
-     * (changes state of permission record to pending = true)
-     * @param weblog  Weblog to grant permissions in
-     * @param user    User to grant permissions to
+     * Confirm user's permission within specified weblog or throw exception if
+     * no pending permission exists. (changes state of permission record to
+     * pending = true)
+     *
+     * @param weblog Weblog to grant permissions in
+     * @param user User to grant permissions to
      */
     public void confirmWeblogPermission(Weblog weblog, User user)
             throws WebloggerException {
-	}
+    }
 
-    
     /**
-     * Decline permissions within specified weblog or throw exception if no pending permission exists.
-     * (removes permission record)
-     * @param weblog  Weblog to grant permissions in
-     * @param user    User to grant permissions to
+     * Decline permissions within specified weblog or throw exception if no
+     * pending permission exists. (removes permission record)
+     *
+     * @param weblog Weblog to grant permissions in
+     * @param user User to grant permissions to
      */
     public void declineWeblogPermission(Weblog weblog, User user)
             throws WebloggerException {
-	}
+    }
 
-    
     /**
-     * Revoke from user specific actions in a weblog.
-     * (if resulting permission has empty removes permission record)
-     * @param weblog  Weblog to grant permissions in
-     * @param user    User to grant permissions to
+     * Revoke from user specific actions in a weblog. (if resulting permission
+     * has empty removes permission record)
+     *
+     * @param weblog Weblog to grant permissions in
+     * @param user User to grant permissions to
      * @param actions Actions to be granted
      */
     public void revokeWeblogPermission(Weblog weblog, User user, List<String> actions)
             throws WebloggerException {
-	}
+    }
 
-    
     /**
      * Get all of user's weblog permissions.
      */
     public List<WeblogPermission> getWeblogPermissions(User user)
             throws WebloggerException {
-		return null;
-	}
-    
-    
+        return null;
+    }
+
     /**
      * Get all of user's pending weblog permissions.
      */
     public List<WeblogPermission> getPendingWeblogPermissions(User user)
             throws WebloggerException {
-		return null;
-	}
+        return null;
+    }
 
     /**
      * Get all active permissions associated with a weblog.
      */
     public List<WeblogPermission> getWeblogPermissions(Weblog weblog)
             throws WebloggerException {
-		return null;
-	}
+        return null;
+    }
 
     /**
      * Get all pending permissions associated with a weblog.
      */
     public List<WeblogPermission> getPendingWeblogPermissions(Weblog weblog)
             throws WebloggerException {
-		return null;
-	}
+        return null;
+    }
 
     /**
      * Get all permissions (pending or actual) for a weblog.
      */
     public List<WeblogPermission> getWeblogPermissionsIncludingPending(Weblog weblog)
             throws WebloggerException {
-		return null;
-	}
-
+        return null;
+    }
 
     /**
      * Get user's permission within a weblog or null if none.
      */
     public WeblogPermission getWeblogPermission(Weblog weblog, User user)
             throws WebloggerException {
-		return null;
-	}
+        return null;
+    }
 
     /**
      * Get user's permission (pending or actual) for a weblog
      */
     public WeblogPermission getWeblogPermissionIncludingPending(Weblog weblog, User user)
             throws WebloggerException {
-		return null;
-	}
-
+        return null;
+    }
 
     //--------------------------------------------------------------- role CRUD
-
-    
     /**
      * Grant role to user.
      */
     public void grantRole(String roleName, User user) throws WebloggerException {
-	}
-    
-    
+    }
+
     /**
      * Revoke role from user.
      */
     public void revokeRole(String roleName, User user) throws WebloggerException {
-	}
+    }
 
-        
     /**
      * Returns true if user has role specified, should be used only for testing.
+     *
      * @deprecated Use checkPermission() instead.
      */
     public boolean hasRole(String roleName, User user) throws WebloggerException {
-		return false;
-	}
-    
-    
+        return false;
+    }
+
     /**
-     * Get roles associated with user, should be used only for testing.
-     * Get all roles associated with user.
+     * Get roles associated with user, should be used only for testing. Get all
+     * roles associated with user.
+     *
      * @deprecated Use checkPermission() instead.
      */
     public List<String> getRoles(User user) throws WebloggerException {
-		return null;
-	}
+        return null;
+    }
 
-	public void grantWeblogPermission(Weblog newWeblog, String creator, List<String> actions) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void grantWeblogPermission(Weblog newWeblog, String creator, List<String> actions) {
+        // TODO Auto-generated method stub
 
-    
-    
+    }
+
 }

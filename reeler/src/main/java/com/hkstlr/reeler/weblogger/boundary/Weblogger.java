@@ -1,4 +1,4 @@
-package com.hkstlr.reeler.weblogger.boundary.jsf;
+package com.hkstlr.reeler.weblogger.boundary;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -8,7 +8,7 @@ import javax.inject.Named;
 //import com.hkstlr.reeler.weblogger.boundary.manager.MediaFileManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.OAuthManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.PropertiesManager;
-import com.hkstlr.reeler.weblogger.boundary.manager.UserManager;
+import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.WeblogBookmarkManager;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogEntryCommentManager;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogEntryManager;

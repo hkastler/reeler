@@ -25,4 +25,76 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
+    
+    <security-constraint>
+        <display-name>Admin</display-name>
+        <web-resource-collection>
+            <web-resource-name>admin</web-resource-name>
+            <description/>
+            <url-pattern>/weblogger/reeler-ui/admin/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>admin</role-name>
+        </auth-constraint>
+        
+        <!--
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+        -->
+    </security-constraint>
+  
+    
+    <security-constraint>
+        <display-name>User</display-name>
+        <web-resource-collection>
+            <web-resource-name>user</web-resource-name>
+            <description/>
+            <url-pattern>/weblogger/reeler-ui/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <description/>
+            <role-name>user</role-name>
+            <role-name>admin</role-name>
+        </auth-constraint>
+        <!--
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+        -->
+    </security-constraint>
+    
+
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>reelerRealm</realm-name>
+        <form-login-config>
+            <form-login-page>/weblogger/login/index.xhtml</form-login-page>
+            <form-error-page>/weblogger/login/error.xhtml</form-error-page>
+        </form-login-config>
+        
+    </login-config>
+    
+     <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>login</web-resource-name>
+            <url-pattern>/weblogger/login/*</url-pattern>
+        </web-resource-collection>
+        <!--
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+        -->
+    </security-constraint>
+
+    <security-role>
+        <description/>
+        <role-name>admin</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>user</role-name>
+    </security-role>  
+    
 </web-app>

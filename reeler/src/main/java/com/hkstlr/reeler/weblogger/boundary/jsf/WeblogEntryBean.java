@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.boundary.jsf;
 
+import com.hkstlr.reeler.weblogger.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogEntryCommentManager;
 import java.util.List;
 
@@ -33,9 +34,6 @@ public class WeblogEntryBean {
     @EJB
     Weblogger weblogger;
     
-    @EJB
-    WeblogEntryCommentManager wecm;
-
     @ManagedProperty(value = "#{param.handle}")
     private String handle;
 
@@ -147,7 +145,7 @@ public class WeblogEntryBean {
         //this.weblogEntryComment.setWeblogEntry(this.weblogEntry);
         //call this to get around lazy load issues
         this.comments = this.weblogEntryComment.getWeblogEntry().getComments();
-        wecm.saveAndLoadComments(this.weblogEntryComment);
+        weblogger.getWeblogEntryCommentManager().saveAndLoadComments(this.weblogEntryComment);
         this.commentIsPosted = true;
         log.log(Level.FINE, "comment posted, commentIsPosted: " + this.isCommentIsPosted());
         this.comments = getComments(this.weblogEntry);

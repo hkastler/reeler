@@ -14,7 +14,7 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 //import com.hkstlr.reeler.weblogger.boundary.manager.UserManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.entities.ObjectPermission;
-import com.hkstlr.reeler.weblogger.entities.User;
+import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
 
 public class WeblogPermission extends ObjectPermission implements Serializable {

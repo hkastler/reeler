@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.boundary.jsf;
 
+import com.hkstlr.reeler.weblogger.boundary.Weblogger;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

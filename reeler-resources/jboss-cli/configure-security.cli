@@ -1,0 +1,15 @@
+/subsystem=security/security-domain=reelerRealm:add(cache-type="default")  
+/subsystem=security/security-domain=reelerRealm/authentication=classic:add()  
+cd ./subsystem=security/security-domain=reelerRealm/authentication=classic  
+./login-module=database:add(code="Database",flag="required", module-options={ \  
+           dsJndiName="java:/RollerDS", \  
+           principalsQuery="select passphrase from roller_user where username=?", \  
+            rolesQuery="select groupname, 'Roles' \  
+                        from user_jdbcrealm_groups jug inner join roller_user u on jug.username = u.username \  
+                        where u.username = ?", \
+				   hashAlgorithm="SHA", \  
+                   hashEncoding="HEX", \  
+           unauthenticatedIdentity="guest" \  
+          } \  
+        )  
+./login-module=RoleMapping:add(code="RoleMapping", flag="required",module-options={ rolesProperties="file:${jboss.server.config.dir}/reeler.properties",replaceRole="false"})  
