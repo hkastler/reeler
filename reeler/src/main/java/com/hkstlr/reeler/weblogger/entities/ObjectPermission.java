@@ -8,28 +8,21 @@ package com.hkstlr.reeler.weblogger.entities;
 import java.io.Serializable;
 import java.security.Permission;
 import java.util.Date;
-import java.util.List;
-
-import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.hkstlr.reeler.app.control.AppPermission;;
+import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import javax.persistence.DiscriminatorColumn;
 
 /**
  *
  * @author henry.kastler
  */
 @Entity
+@DiscriminatorColumn(name = "ObjectType")
 @Table(name = "roller_permission")
 @XmlRootElement
 @NamedQueries({
@@ -41,119 +34,29 @@ import com.hkstlr.reeler.app.control.AppPermission;;
     , @NamedQuery(name = "ObjectPermission.findByObjectType", query = "SELECT r FROM ObjectPermission r WHERE r.objectType = :objectType")
     , @NamedQuery(name = "ObjectPermission.findByPending", query = "SELECT r FROM ObjectPermission r WHERE r.pending = :pending")
     , @NamedQuery(name = "ObjectPermission.findByDateCreated", query = "SELECT r FROM ObjectPermission r WHERE r.dateCreated = :datecreated")
-    , @NamedQuery(name = "WeblogPermission.getByUserName", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.pending != TRUE")
-    , @NamedQuery(name = "WeblogPermission.getByUserName&Pending", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.pending = TRUE")
-    , @NamedQuery(name = "WeblogPermission.getByWeblogId", query = "SELECT p FROM ObjectPermission p WHERE p.objectId = ?1 AND p.pending <> TRUE")
-    , @NamedQuery(name = "WeblogPermission.getByWeblogId&Pending", query = "SELECT p FROM ObjectPermission p WHERE p.objectId = ?1 AND p.pending = TRUE")
-    , @NamedQuery(name = "WeblogPermission.getByWeblogIdIncludingPending", query = "SELECT p FROM ObjectPermission p WHERE p.objectId = ?1")
-    , @NamedQuery(name = "WeblogPermission.getByUserName&WeblogId", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.objectId = ?2 AND p.pending != true")
-    , @NamedQuery(name = "WeblogPermission.getByUserName&WeblogIdIncludingPending", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.objectId = ?2")})
-public class ObjectPermission extends AppPermission implements Serializable {
+    , @NamedQuery(name = "ObjectPermission.getByUserName", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.pending <> TRUE")
+    , @NamedQuery(name = "ObjectPermission.getByUserName&Pending", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.pending = TRUE")
+    , @NamedQuery(name = "ObjectPermission.getByWeblogId", query = "SELECT p FROM ObjectPermission p WHERE p.objectId = ?1 AND p.pending <> TRUE")
+    , @NamedQuery(name = "ObjectPermission.getByWeblogId&Pending", query = "SELECT p FROM ObjectPermission p WHERE p.objectId = ?1 AND p.pending = TRUE")
+    , @NamedQuery(name = "ObjectPermission.getByWeblogIdIncludingPending", query = "SELECT p FROM ObjectPermission p WHERE p.objectId = ?1")
+    , @NamedQuery(name = "ObjectPermission.getByUserName&WeblogId", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.objectId = ?2 AND p.pending <> true")
+    , @NamedQuery(name = "ObjectPermission.getByUserName&WeblogIdIncludingPending", query = "SELECT p FROM ObjectPermission p WHERE p.userName = ?1 AND p.objectId = ?2")})
+public class ObjectPermission extends AbstractPermissionEntity implements Serializable {
 
     protected static final long serialVersionUID = 1L;
-    
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    protected String id;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "username", nullable = false, length = 255)
-    protected String userName;
-    
-    @Size(max = 255)
-    @Column(name = "actions", length = 255)
-    protected String actions;
-    
-    @Size(max = 48)
-    @Column(name = "objectid", length = 48)
-    protected String objectId;
-    
-    @Size(max = 255)
-    @Column(name = "objecttype", length = 255)
-    protected String objectType;
-    
-    @Column(name = "pending")    
-    protected Boolean pending;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "datecreated", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    protected Date dateCreated;
 
     public ObjectPermission() {
-    	super("");
+        super("");
     }
 
-    public ObjectPermission(String id) {
-        super(id);
+    public ObjectPermission(String name) {
+        super(name);
     }
 
-    public ObjectPermission(String id, String userName, Date datecreated) {
-    	super(id);
+    public ObjectPermission(String userName, Date dateCreated) {
+        super(userName);
         this.userName = userName;
-        this.dateCreated = datecreated;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getActions() {
-        return actions;
-    }
-
-    public void setActions(String actions) {
-        this.actions = actions;
-    }
-
-    public String getObjectId() {
-        return objectId;
-    }
-
-    public void setObjectId(String objectId) {
-        this.objectId = objectId;
-    }
-
-    public String getObjectType() {
-        return objectType;
-    }
-
-    public void setObjectType(String objectType) {
-        this.objectType = objectType;
-    }
-
-    public Boolean getPending() {
-        return pending;
-    }
-
-    public void setPending(Boolean pending) {
-        this.pending = pending;
-    }
-
-    public Date getDatecreated() {
-        return dateCreated;
-    }
-
-    public void setDatecreated(Date datecreated) {
-        this.dateCreated = datecreated;
+        this.dateCreated = dateCreated;
     }
 
     @Override
@@ -181,15 +84,10 @@ public class ObjectPermission extends AppPermission implements Serializable {
         return "com.hkstlr.reeler.weblogger.entities.ObjectPermission[ id=" + id + " ]";
     }
 
-	@Override
-	public boolean implies(Permission permission) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    @Override
+    public boolean implies(Permission permission) {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
-	public List<String> getActionsAsList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    
 }

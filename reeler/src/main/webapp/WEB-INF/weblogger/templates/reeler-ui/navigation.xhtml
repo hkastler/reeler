@@ -19,9 +19,8 @@
                             <a class="nav-link" href="/weblogger/reeler-ui/">Main Menu <span class="sr-only">(current)</span></a>
                         </li>
                         <li jsf:id="li-logout" rendered="#{sessionScope.user ne null}">
-                            <h:form><a jsf:id="link-logout" jsfc="h:commandLink" action="#{loginBean.logout()}">Logout</a></h:form>
+                            <h:form prependId="false"><a jsf:id="link-logout" jsfc="h:commandLink" action="#{loginBean.logout()}">Logout</a></h:form>
                         </li>
-
                     </ul>
                 </div>
             </div>

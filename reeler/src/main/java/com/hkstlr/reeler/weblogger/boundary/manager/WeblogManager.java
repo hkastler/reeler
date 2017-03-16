@@ -30,6 +30,7 @@ import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;
+import com.hkstlr.reeler.weblogger.entities.ObjectPermission;
 import com.hkstlr.reeler.weblogger.entities.StatCount;
 import com.hkstlr.reeler.weblogger.entities.StatCountCountComparator;
 import com.hkstlr.reeler.weblogger.entities.TagStat;
@@ -49,6 +50,7 @@ import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
+import java.util.logging.Level;
 
 
 /**
@@ -79,6 +81,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
     
     @Inject  
     WeblogEntryManager weblogEntryManager;
+    
+    @Inject
+    WeblogPermissionManager weblogPermissionManager;
     
     //@Inject
     //AutoPingManager autoPingMgr;
@@ -200,8 +205,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
         removeCategories.executeUpdate();
 
         // remove permissions
-        for (WeblogPermission perm : userManager.getWeblogPermissions(weblog)) {
-            userManager.revokeWeblogPermission(perm.getWeblog(), perm.getUser(), WeblogPermission.ALL_ACTIONS);
+        for (WeblogPermission perm : weblogPermissionManager.getWeblogPermissions(weblog)) {
+            User permUser = userManager.getUserByUserName(perm.getUserName());
+            weblogPermissionManager.revokeWeblogPermission(weblog, permUser, WeblogPermission.ALL_ACTIONS);
         }
                
     }
@@ -464,9 +470,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
         if (user == null) {
             return weblogs;
         }
-        List<WeblogPermission> perms = userManager.getWeblogPermissions(user);
+        List<WeblogPermission> perms = weblogPermissionManager.getWeblogPermissions(user);
         for (WeblogPermission perm : perms) {
-            Weblog weblog = perm.getWeblog();
+            Weblog weblog = getWeblogByHandle(perm.getObjectId());
+            log.log(Level.INFO,"blog returned:" + weblog.getName());
             if ((!enabledOnly || weblog.isVisible()) && weblog.isActive()) {
                 weblogs.add(weblog);
             }
@@ -476,9 +483,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
     
     public List<User> getWeblogUsers(Weblog weblog, boolean enabledOnly) throws WebloggerException {
         List<User> users = new ArrayList<User>();
-        List<WeblogPermission> perms = userManager.getWeblogPermissions(weblog);
+        List<WeblogPermission> perms = weblogPermissionManager.getWeblogPermissions(weblog);
         for (WeblogPermission perm : perms) {
-            User user = perm.getUser();
+            User user = userManager.getUserByUserName(perm.getUserName());
             if (user == null) {
                 log.warning("ERROR user is null, userName:" + perm.getUserName());
                 continue;
@@ -682,5 +689,33 @@ public class WeblogManager extends AbstractManager<Weblog> {
     // TODO Auto-generated method stub
     return null;
     }*/
+    
+    //needs some refactoring, but WeblogPermissionManager cannot have
+    //WeblogManager in it for circular logic reasons
+        public boolean checkPermission(WeblogPermission perm, User user) throws WebloggerException {
+
+        // if permission a weblog permission
+        if (perm instanceof WeblogPermission) {
+            // if user has specified permission in weblog return true
+            WeblogPermission permToCheck = (WeblogPermission)perm;
+            Weblog weblog = getWeblogByHandle(perm.getObjectId());
+            WeblogPermission existingPerm = weblogPermissionManager.getWeblogPermission(weblog, user);
+            if (existingPerm != null && existingPerm.implies(perm)) {
+                return true;
+            }
+        }
+
+        // if Blog Server admin would still have weblog permission above
+        //ObjectPermission globalPerm = new ObjectPermission(user);
+        ObjectPermission globalPerm = new ObjectPermission();
+        if (globalPerm.implies(perm)) {
+            return true;
+        }
+
+       
+            log.warning("PERM CHECK FAILED: user " + user.getUserName() + " does not have " + perm.toString());
+       
+        return false;
+    }
     
 }

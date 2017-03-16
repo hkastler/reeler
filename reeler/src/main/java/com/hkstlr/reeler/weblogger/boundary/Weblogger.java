@@ -13,6 +13,7 @@ import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogEntryCommentManager;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogEntryManager;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
+import com.hkstlr.reeler.weblogger.boundary.manager.WeblogPermissionManager;
 import com.hkstlr.reeler.weblogger.control.URLStrategy;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.AutoPingManager;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingQueueEntryManager;
@@ -39,6 +40,9 @@ public class Weblogger {
 
     @Inject
     WeblogEntryCommentManager weblogEntryCommentManager;
+    
+    @Inject
+    WeblogPermissionManager weblogPermissionManager;
 
     //@Inject
     //private AutoPingManager autoPingManager;
@@ -133,6 +137,10 @@ public class Weblogger {
      */
     public WeblogEntryCommentManager getWeblogEntryCommentManager() {
         return weblogEntryCommentManager;
+    }
+    
+     public WeblogPermissionManager getWeblogPermissionManager() {
+        return weblogPermissionManager;
     }
 
     /**

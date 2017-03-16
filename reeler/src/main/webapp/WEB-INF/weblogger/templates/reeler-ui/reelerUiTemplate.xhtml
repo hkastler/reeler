@@ -16,7 +16,7 @@
         <meta name="description" content=""/>
         <meta name="author" content=""/>
         <ui:insert name="meta"></ui:insert>
-        <title>#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</title>
+        <title><ui:insert name="title">For Reeler</ui:insert></title>
 
         <!-- Bootstrap Core CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"/>
@@ -58,11 +58,14 @@
         <div class="container">
 
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-md-8">
                     <ui:insert name="content">                   
 
                     </ui:insert>
-                </div>                
+                </div>
+                <div class="col-md-4">
+                    <ui:include src="rightNav.xhtml"/>
+                </div>
             </div>
         </div>
         </main>

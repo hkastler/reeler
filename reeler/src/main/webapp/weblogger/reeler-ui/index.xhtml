@@ -1,4 +1,4 @@
-<ui:composition template="/WEB-INF/weblogger/templates/defaultTemplate.xhtml"
+<ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
@@ -7,37 +7,63 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:ps="http://xmlns.jcp.org/jsf/passthrough">
     <!-- Page Content -->
+    <f:view>
+        <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
+                        xmlns="http://www.w3.org/1999/xhtml"
+                        xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                        xmlns:h="http://xmlns.jcp.org/jsf/html"
+                        xmlns:f="http://xmlns.jcp.org/jsf/core"
+                        xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                        xmlns:jsf="http://xmlns.jcp.org/jsf"
+                        xmlns:ps="http://xmlns.jcp.org/jsf/passthrough">
+            <ui:define name="title">Reeler UI</ui:define>
 
-    <ui:define name="content">
-        <f:view>
-            <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/defaultTemplate.xhtml">
+            <ui:define name="content">
 
-                <ui:define name="title">Reeler UI</ui:define>
+                <div class="panel panel-primary">
+                    <div class="panel-heading panel-title">
+                        <i class="fa fa-user"></i> Welcome to Reeler Admin, #{reelerUiBean.user.fullName}
+                    </div>
 
-                <ui:define name="content">
-                    <f:view>
-                        <div class="panel panel-primary">
-                            <div class="panel-heading panel-title">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <i class="fa fa-user"></i> Welcome to Reeler UI
+                    <div class="panel-body">
+                        Select a Blog to edit, manage, or configure.
+                        <ui:repeat value="#{reelerUiBean.userWeblogs}" var="blog" varStatus="status">
+                            <div class="card my-4">
+                                <h5 class="card-header">#{blog.name}</h5>
+                                <div class="card-block">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <c:set var="link" value="#{request.contextPath}/#{blog.handle}/"/>
+                                            Link: <a href="#{link}" target="_blank">#{link}</a><br/>
+                                            Permission: <h:outputText value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
+                                            Description: #{blog.about}<br/>
+                                            Members: <br/>
+                                            Today's hits:<br/>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/entry.xhtml?weblog=#{blog.handle}">New Entry</a><br/>
+                                            Entries()<br/>
+                                            Comments()<br/>
+                                            Theme<br/>
+                                            <a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/config.xhtml">Settings</a><br/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="panel-body">
-                                Select a Blog to edit, manage, or configure.
-                            </div>
-                            <div class="panel-footer"></div>
-                        </div>
-                    </f:view>
-                </ui:define>
-                <ui:define name="postBody">
-                   
+                        </ui:repeat>
+                    </div>
+                    <div class="panel-footer"></div>
+                </div>    
 
-                </ui:define>
-            </ui:composition>
-        </f:view>        
-    </ui:define>
+
+            </ui:define>
+            <ui:define name="postBody">
+
+
+            </ui:define>
+        </ui:composition>
+    </f:view>
+
 
     <!-- /.container -->
 </ui:composition>

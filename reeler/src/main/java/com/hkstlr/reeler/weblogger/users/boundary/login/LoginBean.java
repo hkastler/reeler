@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
+import javax.faces.bean.ViewScoped;
 
 
 import javax.faces.context.FacesContext;
@@ -172,7 +173,7 @@ public class LoginBean implements Serializable {
         }
 
         //HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        return "/";
+        return "/index?faces-redirect=true";
 
     }
 
