@@ -51,12 +51,14 @@ import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
 import java.util.logging.Level;
+import javax.ejb.Stateless;
 
 
 /**
  *
  * @author henry.kastler
  */
+@Stateless
 public class WeblogManager extends AbstractManager<Weblog> {
 	// cached mapping of weblogHandles -> weblogIds
     private Map<String,String> weblogHandleToIdMap = new Hashtable<String,String>();

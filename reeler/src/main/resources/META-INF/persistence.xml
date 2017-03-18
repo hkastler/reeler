@@ -3,6 +3,9 @@
   <persistence-unit name="rollerPU" transaction-type="JTA">
     <jta-data-source>java:/RollerDS</jta-data-source>
     <properties>
+        <!--
+            <property name="javax.persistence.sql-load-script-source" value="META-INF/insert-on-load.sql"/>
+        -->
       <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.show_sql" value="true"/>
     </properties>   

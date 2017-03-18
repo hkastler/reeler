@@ -10,6 +10,7 @@ import com.hkstlr.reeler.weblogger.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
 import com.hkstlr.reeler.weblogger.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,7 +30,7 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "reelerUiBean")
 @SessionScoped
-public class ReelerUIBean {
+public class ReelerUIBean implements Serializable{
 
     public ReelerUIBean() {
         setUserFromSession();

@@ -34,33 +34,32 @@ import javax.ejb.Stateless;
  *
  * @author henry.kastler
  */
-
 public abstract class AbstractManager<T> {
-	
-	@Inject
-	private Logger log;
-	
+
+    @Inject
+    private Logger log;
+
     private Class<T> entityClass;
-    
-    protected AbstractManager(){}
+
+    protected AbstractManager() {
+    }
 
     public AbstractManager(Class<T> entityClass) {
         this.entityClass = entityClass;
     }
 
     protected abstract EntityManager getEntityManager();
-    
+
     public void create(T entity) {
         persist(entity);
     }
-    
+
     public void save(T entity) {
-    	
-        persist(entity);
+        getEntityManager().merge(entity);
     }
-    
+
     public void persist(T entity) {
-    	getEntityManager().persist(entity);
+        getEntityManager().persist(entity);
     }
 
     public void edit(T entity) {
@@ -74,24 +73,27 @@ public abstract class AbstractManager<T> {
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
     }
-    
-    public T findById(String id){
-       String className = entityClass.getSimpleName();
-       log.log(Level.INFO, "className:" + className);
-       String queryName = className.concat(".findById");
-       Query query = getEntityManager().createNamedQuery(queryName);
-       query.setParameter("id", id);
-       T record = null;
-       try{
-    	    record = (T) query.getSingleResult();
-       } catch (NoResultException e) {
-       		log.log(Level.INFO, className + ".findById:" + id + e.toString());
-           
-       }
-       return record;
+
+    public T findById(String id) {
+        String className = entityClass.getSimpleName();
+        log.log(Level.INFO, "className:" + className);
+        log.log(Level.INFO, "id:" + id);
+        String queryName = className.concat(".findById");
+        Query query = getEntityManager().createNamedQuery(queryName);
+        query.setParameter("id", id);
+        T record = null;
+        try {
+            record = (T) query.getSingleResult();
+            log.log(Level.INFO, "object:" + className + " found for " + id);
+
+        } catch (Exception e) {
+            log.log(Level.INFO, className + ".findById:" + id + e.toString());
+
+        }
+        return record;
     }
-    
-    public T findByField(String fieldName, Object fieldValue){
+
+    public T findByField(String fieldName, Object fieldValue) {
         String className = entityClass.getSimpleName();
         log.log(Level.INFO, "className:" + className);
         String queryNameSuffix = StringChanger.toTitleCase(fieldName);
@@ -100,14 +102,14 @@ public abstract class AbstractManager<T> {
         Query query = getEntityManager().createNamedQuery(queryName);
         query.setParameter(fieldName, fieldValue);
         T record = null;
-        try{
-     	    record = (T) query.getSingleResult();
+        try {
+            record = (T) query.getSingleResult();
         } catch (NoResultException e) {
-        		log.log(Level.INFO, queryName + ":" + e.toString());
-            
+            log.log(Level.INFO, queryName + ":" + e.toString());
+
         }
         return record;
-     }
+    }
 
     public List<T> findAll() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
@@ -131,34 +133,34 @@ public abstract class AbstractManager<T> {
         javax.persistence.Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
     public <T> TypedQuery<T> getNamedQuery(String queryName) {
         TypedQuery<T> q = (TypedQuery<T>) getEntityManager().createNamedQuery(queryName, this.entityClass);
         // For performance, never flush/commit prior to running queries.
         // Roller code assumes this behavior
-        
+
         return q;
-    }  
-    
+    }
 
     //from roller
     public <T> TypedQuery<T> getNamedQuery(String queryName, Class<T> resultClass) {
         TypedQuery<T> q = getEntityManager().createNamedQuery(queryName, resultClass);
         // For performance, never flush/commit prior to running queries.
         // Roller code assumes this behavior
-        
+
         return q;
-    }    
+    }
+
     /**
      * Get named query with default flush mode (usually FlushModeType.AUTO)
      * FlushModeType.AUTO commits changes to DB prior to running statement
      *
-     * @param queryName   the name of the query
+     * @param queryName the name of the query
      * @param resultClass return type of query
      */
     public <T> TypedQuery<T> getNamedQueryCommitFirst(String queryName, Class<T> resultClass) {
         EntityManager em = getEntityManager();
         return em.createNamedQuery(queryName, resultClass);
     }
-    
+
 }

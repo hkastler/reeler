@@ -8,121 +8,93 @@
                 xmlns:ps="http://xmlns.jcp.org/jsf/passthrough">
     <!-- Page Content -->
 
+
     
-        <f:view>
-            <ui:composition template="/WEB-INF/weblogger/templates/pages/defaultTemplate.xhtml">
+        <ui:composition template="/WEB-INF/weblogger/templates/pages/defaultTemplate.xhtml">
 
-                <ui:define name="title">Login</ui:define>
+            <ui:define name="title">Login</ui:define>
 
-                <ui:define name="content">
-                    <f:view>
-                        <div class="panel panel-primary">
-                            <div class="panel-heading panel-title">
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <i class="glyphicon glyphicon-log-in"></i>Sign In</div>
-                                </div>
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-xs-12" id="loginCol">
-                                        <div class="panel panel-info">
-                                            <div class="panel panel-heading panel-title"><i class="glyphicon glyphicon-log-in"></i> Sign In</div>
-                                            <div class="panel-body">
-                                                <h:form id="login" class="form-horizontal" role="form">
-                                                    <h:messages style="color: red"
-                                                                layout="table"
-                                                                globalOnly="false"/>
-                                                    <fieldset id="loginFieldset">
-                                                        <div class="form-group row">
-                                                            <div class="col-xs-12">
-                                                                <label for="username" class="control-label">Username</label>
-                                                                <div>
-                                                                    <input type="text"
-                                                                           jsfc="h:inputText"
-                                                                           id="username"
-                                                                           name="username"
-                                                                           binding="#{username}"
-                                                                           value="#{loginBean.username}"
-                                                                           class="form-control"
-                                                                           required="true"
-                                                                           requiredMessage="Username is required"
-                                                                           ps:required="true"
-                                                                           ps:requiredMessage="Username is required"
-
-                                                                           />
-
-
-                                                                </div>
-                                                            </div>
-                                                        </div>  
-                                                        <div class="form-group row">
-                                                            <div class="col-xs-12">
-                                                                <label for="password" class="control-label">Password</label>
-                                                                <div>
-                                                                    <h:inputSecret id="password"                                                   
-                                                                                   class="form-control"
-                                                                                   value="#{loginBean.password}"
-                                                                                   required="true"
-                                                                                   binding="#{password}"
-                                                                                   requiredMessage="Password is required"/>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="btn-group">
-                                                            <h:commandButton id="submit"
-                                                                             class="btn btn-primary"
-                                                                             value="Sign In"
-                                                                             action="#{loginBean.validateUser}"
-                                                                             />
-                                                        </div>
-                                                    </fieldset>
-
-
-                                                </h:form>
-                                            </div>
-
-                                            <div class="panel-footer">
-                                                <h:link outcome="/weblogger/login/reset-password">Forgot your password?</h:link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--
-                                    <div class="col-xs-6" id="registerCol">
-                                        <div class="panel panel-info" >
-                                            <div class="panel panel-heading panel-title"><i class="fa fa-user"></i> Register</div>
-                                            <div class="panel-body" jsfc="h:panelGroup" 
-                                                 layout="block" 
-                                                 rendered="#{!registerBean.isRegistered}">
-                                                <ui:include src="/register/create.xhtml" />
-                                            </div>
-                                            <div class="panel-footer">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    -->
-                                </div>
-                            </div>
-                            <div class="panel-footer"></div>
+            <ui:define name="content">
+               
+                    <div class="panel panel-primary">
+                        <div class="panel-heading panel-title">
+                            <i class="glyphicon glyphicon-log-in"></i>Sign In
                         </div>
-                    </f:view>
-                </ui:define>
-                <ui:define name="postBody">
-                    <script>
+                    </div>
+                    
+                    <div class="panel-body">
 
-                        $(document.getElementById("login:username")).focus(function () {
-                            console.log("hey");
-                            $('#loginCol').addClass('col-xs-12').removeClass('col-xs-6');
-                            
-                        });
+                        <h:form id="login" class="form-horizontal" role="form">
+                            <h:messages style="color: red"
+                                        layout="table"
+                                        globalOnly="false"/>
+                            <fieldset id="loginFieldset">
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label for="username" class="control-label">Username</label>
+                                        <div>
+                                            <input type="text"
+                                                   jsfc="h:inputText"
+                                                   id="username"
+                                                   name="username"
+                                                   binding="#{username}"
+                                                   value="#{loginBean.username}"
+                                                   class="form-control"
+                                                   required="true"
+                                                   requiredMessage="Username is required"
+                                                   ps:required="true"
+                                                   ps:requiredMessage="Username is required"
 
-                    </script>
+                                                   />
 
-                </ui:define>
-            </ui:composition>
-        </f:view>        
-   
 
+                                        </div>
+                                    </div>
+                                </div>  
+                                <div class="form-group row">
+                                    <div class="col-xs-12">
+                                        <label for="password" class="control-label">Password</label>
+                                        <div>
+                                            <h:inputSecret id="password"                                                   
+                                                           class="form-control"
+                                                           value="#{loginBean.password}"
+                                                           required="true"
+                                                           binding="#{password}"
+                                                           requiredMessage="Password is required"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="btn-group">
+                                    <h:commandButton id="submit"
+                                                     class="btn btn-primary"
+                                                     value="Sign In"
+                                                     action="#{loginBean.validateUser}"
+                                                     />
+                                </div>
+                            </fieldset>
+
+
+                        </h:form>
+                    </div>
+
+                    <div class="panel-footer">
+                        <h:link outcome="/weblogger/login/reset-password">Forgot your password?</h:link>
+                    </div>
+
+               
+            </ui:define>
+            <ui:define name="postBody">
+                <script>
+
+                    $(document.getElementById("login:username")).focus(function () {
+                        
+
+                    });
+
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    
     <!-- /.container -->
 </ui:composition>

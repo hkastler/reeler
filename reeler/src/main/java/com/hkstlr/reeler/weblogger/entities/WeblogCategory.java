@@ -39,30 +39,30 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class WeblogCategory extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-        
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
+
     @Size(max = 255)
     @Column(name = "description", length = 255)
     private String description;
-    
+
     @Size(max = 255)
     @Column(name = "image", length = 255)
     private String image;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "position", nullable = false)
     private int position;
-    
-    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false)
+
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = false)
     @ManyToOne(optional = false)
     private Weblog weblog;
-    
+
     public WeblogCategory() {
     }
 
@@ -72,13 +72,12 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     }
 
     public WeblogCategory(Weblog newWeblog, String split, Object object, Object object2) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public String getId() {
-        return id;
+        // TODO Auto-generated constructor stub
     }
 
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -120,7 +119,6 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.weblog = weblog;
     }
 
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -135,7 +133,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
             return false;
         }
         WeblogCategory other = (WeblogCategory) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;
@@ -145,5 +143,5 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.WeblogCategory[ id=" + id + " ]";
     }
-    
+
 }

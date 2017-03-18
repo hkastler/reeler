@@ -8,7 +8,6 @@ package com.hkstlr.reeler.weblogger.entities;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +17,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -34,9 +32,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
-import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;;
-
-
+import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;
+import com.hkstlr.reeler.weblogger.users.entities.User;
+import java.util.Calendar;
+import javax.annotation.PostConstruct;
 /**
  *
  * @author henry.kastler
@@ -75,134 +74,135 @@ import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;;
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1")
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus&Website", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1 AND e.website = ?2")
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
-    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :weblogCategoryName")})
+    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :weblogCategoryName")
+    , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :weblog ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
-	
-	public enum PubStatus {DRAFT, PUBLISHED, PENDING, SCHEDULED}
 
-    private static final char TITLE_SEPARATOR =
-        WebloggerConfig.getBooleanProperty("weblogentry.title.useUnderscoreSeparator") ? '_' : '-';
+    public enum PubStatus {
+        DRAFT, PUBLISHED, PENDING, SCHEDULED
+    }
+
+    public static final String TITLE_SEPARATOR
+            = WebloggerConfig.getBooleanProperty("weblogentry.title.useUnderscoreSeparator") ? "_" : "-";
 
     private static final long serialVersionUID = 1L;
-    
-    
+
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "{WeblogEntry.anchor.NotNull}")
+    @Size(min = 1, max = 255, message="{WeblogEntry.anchor.NotNull}")
     @Column(name = "anchor", nullable = false, length = 255)
     private String anchor;
-    
+
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{WeblogEntry.creatorUserName.NotNull}")
     @Size(min = 1, max = 255)
     @Column(name = "creator", nullable = false, length = 255)
     private String creatorUserName;
-    
+
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
+    @NotNull(message = "{WeblogEntry.title.NotNull}")
+    @Size(min = 1, max = 255, message="{WeblogEntry.title.NotNull}")
     @Column(name = "title", nullable = false, length = 255)
     private String title;
-    
+
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{WeblogEntry.anchor.NotNull}")
     @Size(min = 1, max = 2147483647)
     @Column(name = "text", nullable = false, length = 2147483647)
-    private String text;
-    
+    private String text = "";
+
     @Column(name = "pubtime")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date pubTime;
-    
+    private Calendar pubTime;
+
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "{WeblogEntry.updateTime.NotNull}")
     @Column(name = "updatetime", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updateTime;
-    
+    private Calendar updateTime;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "publishentry", nullable = false)
-    private boolean publishEntry;
-    
+    private boolean publishEntry = true;
+
     @Size(max = 255)
     @Column(name = "link", length = 255)
     private String link;
-    
+
     @Size(max = 255)
     @Column(name = "plugins", length = 255)
     private String plugins;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "allowcomments", nullable = false)
-    private boolean allowComments;
-    
+    private boolean allowComments = false;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "commentdays", nullable = false)
-    private int commentDays;
-    
+    private int commentDays = 7;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "righttoleft", nullable = false)
-    private boolean rightToLeft;
-    
+    private boolean rightToLeft = false;
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "pinnedtomain", nullable = false)
-    private boolean pinnedToMain;
-    
+    private boolean pinnedToMain = false;
+
     @Size(max = 20)
     @Column(name = "locale", length = 20)
     private String locale;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "status", nullable = false, length = 20)
-    private String status;
-    
+    private String status = "Not Saved";
+
     @Size(max = 2147483647)
     @Column(name = "summary", length = 2147483647)
     private String summary;
-    
+
     @Size(max = 48)
     @Column(name = "content_type", length = 48)
     private String contentType;
-    
+
     @Size(max = 255)
     @Column(name = "content_src", length = 255)
     private String contentSrc;
-    
+
     @Size(max = 255)
     @Column(name = "search_description", length = 255)
     private String searchDescription;
-    
+
     @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
-    private Weblog website;    
-    
+    private Weblog website;
+
+    @NotNull(message = "{WeblogEntry.category.NotNull}")
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "categoryid", referencedColumnName = "id", nullable = true)
-    private WeblogCategory category;
-    
+    @JoinColumn(name = "categoryid", referencedColumnName = "id", nullable = false, updatable = true)
+    private WeblogCategory category = new WeblogCategory();
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblogEntry")
-    private List<WeblogEntryTag> tags;
-    
+    private List<WeblogEntryTag> tags = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblogEntry")
-    private List<WeblogEntryComment> comments;
-    
+    private List<WeblogEntryComment> comments = new ArrayList<>();
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "entry")
-    private List<WeblogEntryAttribute> entryAttributes; 
-    
+    private List<WeblogEntryAttribute> entryAttributes = new ArrayList<>();
+
     @Transient
     private Set<WeblogEntryTag> removedTags;
-    
+
     @Transient
     private Set<WeblogEntryTag> addedTags;
-    
-    
 
     public WeblogEntry() {
         this.removedTags = new HashSet<WeblogEntryTag>();
@@ -212,13 +212,13 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     public WeblogEntry(String id) {
         this.removedTags = new HashSet<WeblogEntryTag>();
         this.addedTags = new HashSet<WeblogEntryTag>();
-        
+
     }
 
-    public WeblogEntry(String id, String anchor, String creator, String title, String text, Date updatetime, boolean publishentry, boolean allowcomments, int commentdays, boolean righttoleft, boolean pinnedtomain, String status) {
+    public WeblogEntry(String id, String anchor, String creator, String title, String text, Calendar updatetime, boolean publishentry, boolean allowcomments, int commentdays, boolean righttoleft, boolean pinnedtomain, String status) {
         this.removedTags = new HashSet<WeblogEntryTag>();
         this.addedTags = new HashSet<WeblogEntryTag>();
-        
+
         this.anchor = anchor;
         this.creatorUserName = creator;
         this.title = title;
@@ -231,217 +231,233 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.pinnedToMain = pinnedtomain;
         this.status = status;
     }
-    
+
     public WeblogEntry(WeblogEntry entry) {
-		// TODO Auto-generated constructor stub
-	}
+        // TODO Auto-generated constructor stub
+    }
+    
+    public WeblogEntry(Weblog weblog) {
+        this.website = weblog;
+        this.locale = weblog.getLocale();
+    }
+    
+    public WeblogEntry(Weblog weblog, User creator) {
+        this.website = weblog;
+        this.creatorUserName = creator.getUserName();
+        this.locale = weblog.getLocale();
+    }
+    
+    @PostConstruct
+    private void init(){
+        
+    }
 
-	public String getId() {
-		return id;
-	}
+    public String getId() {
+        return id;
+    }
 
-	
+    public Weblog getWebsite() {
+        return website;
+    }
 
-	public Weblog getWebsite() {
-		return website;
-	}
+    public void setWebsite(Weblog website) {
+        this.website = website;
+    }
 
-	public void setWebsite(Weblog website) {
-		this.website = website;
-	}
-	
-	public String getAnchor() {
-		return anchor;
-	}
+    public String getAnchor() {
+        return anchor;
+    }
 
-	public void setAnchor(String anchor) {
-		this.anchor = anchor;
-	}
+    public void setAnchor(String anchor) {
+        this.anchor = anchor;
+    }
 
-	public String getCreatorUserName() {
-		return creatorUserName;
-	}
+    public String getCreatorUserName() {
+        return creatorUserName;
+    }
 
-	public void setCreatorUserName(String creatorUserName) {
-		this.creatorUserName = creatorUserName;
-	}
+    public void setCreatorUserName(String creatorUserName) {
+        this.creatorUserName = creatorUserName;
+    }
 
-	public String getTitle() {
-		return title;
-	}
+    public String getTitle() {
+        return title;
+    }
 
-	public void setTitle(String title) {
-		this.title = title;
-	}
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-	public String getText() {
-		return text;
-	}
+    public String getText() {
+        return text;
+    }
 
-	public void setText(String text) {
-		this.text = text;
-	}
+    public void setText(String text) {
+        this.text = text;
+    }
 
-	public Date getPubTime() {
-		return pubTime;
-	}
+    public Calendar getPubTime() {
+        return pubTime;
+    }
 
-	public void setPubTime(Date pubTime) {
-		this.pubTime = pubTime;
-	}
+    public void setPubTime(Calendar pubTime) {
+        this.pubTime = pubTime;
+    }
 
-	public Date getUpdateTime() {
-		return updateTime;
-	}
+    public Calendar getUpdateTime() {
+        return updateTime;
+    }
 
-	public void setUpdateTime(Date updateTime) {
-		this.updateTime = updateTime;
-	}
+    public void setUpdateTime(Calendar updateTime) {
+        this.updateTime = updateTime;
+    }
 
-	public boolean isPublishEntry() {
-		return publishEntry;
-	}
+    public boolean isPublishEntry() {
+        return publishEntry;
+    }
 
-	public void setPublishEntry(boolean publishEntry) {
-		this.publishEntry = publishEntry;
-	}
+    public void setPublishEntry(boolean publishEntry) {
+        this.publishEntry = publishEntry;
+    }
 
-	public String getLink() {
-		return link;
-	}
+    public String getLink() {
+        return link;
+    }
 
-	public void setLink(String link) {
-		this.link = link;
-	}
+    public void setLink(String link) {
+        this.link = link;
+    }
 
-	public String getPlugins() {
-		return plugins;
-	}
+    public String getPlugins() {
+        return plugins;
+    }
 
-	public void setPlugins(String plugins) {
-		this.plugins = plugins;
-	}
+    public void setPlugins(String plugins) {
+        this.plugins = plugins;
+    }
 
-	public boolean isAllowComments() {
-		return allowComments;
-	}
+    public boolean isAllowComments() {
+        return allowComments;
+    }
 
-	public void setAllowComments(boolean allowComments) {
-		this.allowComments = allowComments;
-	}
+    public void setAllowComments(boolean allowComments) {
+        this.allowComments = allowComments;
+    }
 
-	public int getCommentDays() {
-		return commentDays;
-	}
+    public int getCommentDays() {
+        return commentDays;
+    }
 
-	public void setCommentDays(int commentDays) {
-		this.commentDays = commentDays;
-	}
+    public void setCommentDays(int commentDays) {
+        this.commentDays = commentDays;
+    }
 
-	public boolean isRightToLeft() {
-		return rightToLeft;
-	}
+    public boolean isRightToLeft() {
+        return rightToLeft;
+    }
 
-	public void setRightToLeft(boolean rightToLeft) {
-		this.rightToLeft = rightToLeft;
-	}
+    public void setRightToLeft(boolean rightToLeft) {
+        this.rightToLeft = rightToLeft;
+    }
 
-	public boolean isPinnedToMain() {
-		return pinnedToMain;
-	}
+    public boolean isPinnedToMain() {
+        return pinnedToMain;
+    }
 
-	public void setPinnedToMain(boolean pinnedToMain) {
-		this.pinnedToMain = pinnedToMain;
-	}
+    public void setPinnedToMain(boolean pinnedToMain) {
+        this.pinnedToMain = pinnedToMain;
+    }
 
-	public String getLocale() {
-		return locale;
-	}
+    public String getLocale() {
+        return locale;
+    }
 
-	public void setLocale(String locale) {
-		this.locale = locale;
-	}
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-	public String getSummary() {
-		return summary;
-	}
+    public String getSummary() {
+        return summary;
+    }
 
-	public void setSummary(String summary) {
-		this.summary = summary;
-	}
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
 
-	public String getContentType() {
-		return contentType;
-	}
+    public String getContentType() {
+        return contentType;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-	public String getContentSrc() {
-		return contentSrc;
-	}
+    public String getContentSrc() {
+        return contentSrc;
+    }
 
-	public void setContentSrc(String contentSrc) {
-		this.contentSrc = contentSrc;
-	}
+    public void setContentSrc(String contentSrc) {
+        this.contentSrc = contentSrc;
+    }
 
-	public String getSearchDescription() {
-		return searchDescription;
-	}
+    public String getSearchDescription() {
+        return searchDescription;
+    }
 
-	public void setSearchDescription(String searchDescription) {
-		this.searchDescription = searchDescription;
-	}
+    public void setSearchDescription(String searchDescription) {
+        this.searchDescription = searchDescription;
+    }
 
-	public WeblogCategory getCategory() {
-		return category;
-	}
+    public WeblogCategory getCategory() {
+        return category;
+    }
 
-	public void setCategory(WeblogCategory category) {
-		this.category = category;
-	}
+    public void setCategory(WeblogCategory category) {
+        this.category = category;
+    }
 
-	public List<WeblogEntryAttribute> getEntryAttributes() {
-		return entryAttributes;
-	}
+    public List<WeblogEntryAttribute> getEntryAttributes() {
+        return entryAttributes;
+    }
 
-	public void setEntryAttributes(List<WeblogEntryAttribute> entryAttributes) {
-		this.entryAttributes = entryAttributes;
-	}
+    public void setEntryAttributes(List<WeblogEntryAttribute> entryAttributes) {
+        this.entryAttributes = entryAttributes;
+    }
 
-	public Set<WeblogEntryTag> getRemovedTags() {
-		return removedTags;
-	}
+    public Set<WeblogEntryTag> getRemovedTags() {
+        return removedTags;
+    }
 
-	public void setRemovedTags(Set<WeblogEntryTag> removedTags) {
-		this.removedTags = removedTags;
-	}
+    public void setRemovedTags(Set<WeblogEntryTag> removedTags) {
+        this.removedTags = removedTags;
+    }
 
-	public List<WeblogEntryTag> getTags() {
-		return tags;
-	}
+    public List<WeblogEntryTag> getTags() {
+        return tags;
+    }
 
-	public void setTags(List<WeblogEntryTag> tags) {
-		this.tags = tags;
-	}
+    public void setTags(List<WeblogEntryTag> tags) {
+        this.tags = tags;
+    }
 
-	@XmlTransient
+    @XmlTransient
     public List<WeblogEntryComment> getComments() {
         return comments;
     }
 
-    public void setRollerCommentList(List<WeblogEntryComment> rollerCommentList) {
-        this.comments = rollerCommentList;
+    public void setComments(List<WeblogEntryComment> comments) {
+        this.comments = comments;
     }
+    
+    
 
     @Override
     public int hashCode() {
@@ -472,7 +488,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
      * Set bean properties based on other bean.
      */
     public void setData(WeblogEntry other) {
-        
+
         this.setCategory(other.getCategory());
         this.setWebsite(other.getWebsite());
         this.setCreatorUserName(other.getCreatorUserName());
@@ -495,16 +511,14 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
 
     /**
      * Convenience method to transform mPlugins to a List
+     *
      * @return
      */
     public List<String> getPluginsList() {
         if (getPlugins() != null) {
-            return Arrays.asList( getPlugins().split(",") );
+            return Arrays.asList(getPlugins().split(","));
         }
         return new ArrayList<String>();
     }
-
-	
-	
     
 }

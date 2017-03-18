@@ -155,6 +155,8 @@ public class LoginBean implements Serializable {
             //return null;
         } catch (WebloggerException ex) {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException npe){
+            Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, null, npe);
         }
         return userToGet;
     }

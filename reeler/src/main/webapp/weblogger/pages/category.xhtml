@@ -21,7 +21,10 @@
         <!-- Author -->
         by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
         <!-- Date/Time -->
-        <p>Posted on <h:outputText value="#{weblogEntry.pubTime}"/></p>
+        <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
+                        <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
+                                           timeZone="#{weblogBean.weblog.timeZone}"/>
+                    </h:outputText></p>
         <!-- Post Content -->
         <h:outputText value="#{weblogEntry.text}" escape="false" />
         <hr/>

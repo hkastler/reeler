@@ -19,7 +19,6 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@DiscriminatorColumn(name = "ObjectType")
 @DiscriminatorValue(value = "Weblog")
 @XmlRootElement
 @NamedQueries({

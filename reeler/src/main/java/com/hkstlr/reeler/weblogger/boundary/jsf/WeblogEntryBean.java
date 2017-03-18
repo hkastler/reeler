@@ -6,7 +6,6 @@
 package com.hkstlr.reeler.weblogger.boundary.jsf;
 
 import com.hkstlr.reeler.weblogger.boundary.Weblogger;
-import com.hkstlr.reeler.weblogger.boundary.manager.WeblogEntryCommentManager;
 import java.util.List;
 
 
@@ -60,6 +59,7 @@ public class WeblogEntryBean {
     private void init() {
         try {
             this.weblogEntry = getEntryByHandleAndAnchor(handle, anchor);
+            log.log(Level.INFO,"weblogEntry:" + weblogEntry.getAnchor());
             this.weblogEntryComment.setWeblogEntry(weblogEntry);
             this.weblog = weblogEntry.getWebsite();
             this.comments = getComments(weblogEntry);

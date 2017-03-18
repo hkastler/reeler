@@ -21,7 +21,10 @@
             <hr/>
 
             <!-- Date/Time -->
-            <p>Posted on <h:outputText value="#{weblogBean.latestWeblogEntryForWeblog.pubTime}"/></p>
+            <p>Posted on <h:outputText value="#{weblogEntryBean.weblogEntry.pubTime.time}" >
+                        <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
+                                           timeZone="#{weblogEntryBean.weblog.timeZone}"/>
+                    </h:outputText></p>
 
             <hr/>
 

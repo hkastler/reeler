@@ -99,12 +99,15 @@ public class WeblogBean {
         if (handle == null) {
             WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().findByPinnedToMain().get(0);
             Weblog weblog = weblogEntry.getWebsite();
+            return weblog;
         }
         log.log(Level.FINE, "handle:{0}", handle);
         Weblog weblog = null;
         try {
             weblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
             //lazy hibernate load
+            //might need some refactoring here, for larger installations
+            //for personal use it should be no problem
             List<WeblogEntry> weblogEntries = weblogger.getWeblogEntryManager().getWeblogEntriesForWeblog(weblog);
             weblog.setWeblogEntries(weblogEntries);
             log.log(Level.FINE, "weblog retrieved:" + weblog.getName());
@@ -120,10 +123,10 @@ public class WeblogBean {
 
         if (this.weblog.getWeblogEntries() != null && !this.weblog.getWeblogEntries().isEmpty()) {
             log.fine("latestWeblogEntry returning from getWeblogEntries");
-            return this.weblog.getWeblogEntries().get(0);
+            return this.weblog.getWeblogEntries().get(this.weblog.getWeblogEntries().size()-1);
         }
         log.fine("finding top 1 weblogEntry");
-        WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().findRange(new int[]{0, 1}).get(0);
+        WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().getLatestEntryForWeblog(weblog);
         if (weblogEntry == null) {
             weblogEntry = new WeblogEntry();
             weblogEntry.setText("not found");

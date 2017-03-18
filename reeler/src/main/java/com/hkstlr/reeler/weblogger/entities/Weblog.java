@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
+import com.hkstlr.reeler.weblogger.control.entitylisteners.WeblogEntityListener;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
+import javax.persistence.EntityListeners;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -37,6 +39,7 @@ import javax.validation.constraints.Pattern;
  * @author henry.kastler
  */
 @Entity
+@EntityListeners(WeblogEntityListener.class)
 @Table(name = "weblog", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"handle"})})
 @XmlRootElement
@@ -49,7 +52,7 @@ import javax.validation.constraints.Pattern;
     , @NamedQuery(name = "Weblog.findByCreator", query = "SELECT w FROM Weblog w WHERE w.creator = :creator")
     , @NamedQuery(name = "Weblog.findByEnableBloggerApi", query = "SELECT w FROM Weblog w WHERE w.enableBloggerApi = :enablebloggerapi")
     , @NamedQuery(name = "Weblog.findByEditorPage", query = "SELECT w FROM Weblog w WHERE w.editorPage = :editorpage")
-    , @NamedQuery(name = "Weblog.findByBloggerCategory", query = "SELECT w FROM Weblog w WHERE w.bloggerCategory = :bloggerCategory")
+    , @NamedQuery(name = "Weblog.findBybloggerCategory", query = "SELECT w FROM Weblog w WHERE w.bloggerCategory = :bloggerCategory")
     , @NamedQuery(name = "Weblog.findByAllowComments", query = "SELECT w FROM Weblog w WHERE w.allowComments = :allowcomments")
     , @NamedQuery(name = "Weblog.findByEmailComments", query = "SELECT w FROM Weblog w WHERE w.emailComments = :emailcomments")
     , @NamedQuery(name = "Weblog.findByEmailAddress", query = "SELECT w FROM Weblog w WHERE w.emailAddress = :emailaddress")
@@ -106,8 +109,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "editorpage", length = 255)
     private String editorPage;
 
-    @Size(max = 48)
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "bloggercatid")
     private WeblogCategory bloggerCategory;
 

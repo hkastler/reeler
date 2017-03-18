@@ -18,7 +18,6 @@ import javax.persistence.Query;
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.weblogger.entities.TagStat;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
-import com.hkstlr.reeler.weblogger.entities.WeblogCategory;
 import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
 import javax.ejb.Stateless;
@@ -69,7 +68,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
         }
 
-        log.fine("weblog: " + weblog.getHandle());
+        log.info("weblog: " + weblog.getHandle());
 
         Query query = em.createNamedQuery("WeblogEntry.findByWebsiteAndAnchor");
         query.setParameter("website", weblog);
@@ -82,6 +81,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             weblogEntry.setText("not found");
             log.log(Level.WARNING, "weblog: {0} not found, reason: {1}", new Object[]{anchor, e.getMessage()});
         }
+        
+        log.log(Level.INFO,"weblogEntry found:" + weblogEntry.getAnchor());
 
         return weblogEntry;
     }
@@ -127,11 +128,20 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         
         List<WeblogEntry> categoryEntries =  new ArrayList<>();
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByWeblogCategoryName");
-        System.out.print("weblogCategoryName:" + weblogCategoryName);
+        log.log(Level.FINE,"weblogCategoryName:" + weblogCategoryName);
         String trimmed = weblogCategoryName.trim();
         q.setParameter("weblogCategoryName", trimmed);
         categoryEntries = q.getResultList();
         return categoryEntries;
+    }
+    
+    public WeblogEntry getLatestEntryForWeblog(Weblog weblog){
+               
+        Query q = em.createNamedQuery("WeblogEntry.getLatestEntryForWeblog")
+                        .setParameter("weblog", weblog)
+                        .setMaxResults(1);
+        WeblogEntry we = (WeblogEntry) q.getResultList();
+        return we;
     }
 
 }

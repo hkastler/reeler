@@ -31,8 +31,7 @@ import javax.validation.constraints.Size;
  *
  * @author henry.kastler
  */
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
 public abstract class AbstractEntity implements Serializable {
 
     protected static final long serialVersionUID = 1L;
