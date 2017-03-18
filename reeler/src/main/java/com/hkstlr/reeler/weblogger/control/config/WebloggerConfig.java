@@ -54,7 +54,7 @@ public class WebloggerConfig {
     
     public WebloggerConfig() {
         //log.setLevel(Level.FINE);
-        //System.out.println(log.getLevel());
+        //log.fine(log.getLevel());
         log.log(Level.FINE, "init WebloggerConfig");
         try {
             // we'll need this to get at our properties files in the classpath
@@ -100,10 +100,10 @@ public class WebloggerConfig {
                 if (custom_config_file != null && custom_config_file.exists()) {
                     is = new FileInputStream(custom_config_file);
                     config.load(is);
-                    System.out.println("Roller Weblogger: Successfully loaded custom properties from "
+                    log.fine("Roller Weblogger: Successfully loaded custom properties from "
                             + custom_config_file.getAbsolutePath());
                 } else {
-                    System.out.println("Roller Weblogger: Failed to load custom properties from "
+                    log.fine("Roller Weblogger: Failed to load custom properties from "
                             + custom_config_file.getAbsolutePath());
                 }
 
@@ -162,11 +162,11 @@ public class WebloggerConfig {
             String newValue = value;
             newValue = value.substring(2,value.indexOf("}"));
             String theEndPart = value.split("}")[1];
-            System.out.println("theEndPart:" + theEndPart);
+            log.fine("theEndPart:" + theEndPart);
             //newSearchIndexDir = newSearchIndexDir.concat(theEndPart);
-            System.out.println("SystemPropertyKey:" + newValue);
+            log.fine("SystemPropertyKey:" + newValue);
             newValue = System.getProperty(newValue);
-            System.out.println("SystemPropertyValue:" + newValue);
+            log.fine("SystemPropertyValue:" + newValue);
             newValue = newValue.concat(theEndPart);
             newValue = newValue.replace('/', File.separatorChar);
             value = newValue;

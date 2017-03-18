@@ -36,11 +36,13 @@ import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import java.util.Calendar;
 import javax.annotation.PostConstruct;
+import javax.persistence.Cacheable;
 /**
  *
  * @author henry.kastler
  */
 @Entity
+@Cacheable
 @Table(name = "weblogentry")
 @XmlRootElement
 @NamedQueries({

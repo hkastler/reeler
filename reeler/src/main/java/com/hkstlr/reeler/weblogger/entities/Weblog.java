@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
+import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
 import javax.validation.constraints.Pattern;
 
@@ -40,6 +41,7 @@ import javax.validation.constraints.Pattern;
  */
 @Entity
 @EntityListeners(WeblogEntityListener.class)
+@Cacheable
 @Table(name = "weblog", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"handle"})})
 @XmlRootElement

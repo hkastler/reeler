@@ -31,15 +31,10 @@ import javax.inject.Inject;
 @ManagedBean(name = "reelerUiBean")
 @SessionScoped
 public class ReelerUIBean implements Serializable{
+    
+    private Logger log = Logger.getLogger(ReelerUIBean.class.getName());
 
-    public ReelerUIBean() {
-        setUserFromSession();
-        System.out.println("reelerUiBean user:" + this.user.getUserName());
-    }
-
-    @Inject
-    private Logger log;
-
+    
     @Inject
     Weblogger weblogger;
 
@@ -50,6 +45,12 @@ public class ReelerUIBean implements Serializable{
     private Map<String, String> userWeblogPermissions;
     
     private final String reelerUiPath = "/weblogger/reeler-ui";
+
+    
+    public ReelerUIBean() {
+        setUserFromSession();
+        log.fine("reelerUiBean user:" + this.user.getUserName());
+    }
 
     
     @PostConstruct
