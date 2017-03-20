@@ -26,6 +26,7 @@
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
     
+    
     <security-constraint>
         <display-name>Admin</display-name>
         <web-resource-collection>
@@ -76,7 +77,7 @@
         
     </login-config>
     
-     <security-constraint>
+    <security-constraint>
         <web-resource-collection>
             <web-resource-name>login</web-resource-name>
             <url-pattern>/weblogger/login/*</url-pattern>

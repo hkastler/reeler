@@ -5,7 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.boundary.manager;
 
-import com.hkstlr.reeler.weblogger.boundary.jsf.WeblogEntryBean;
+import com.hkstlr.reeler.weblogger.boundary.jsf.pages.WeblogEntryBean;
 import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

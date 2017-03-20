@@ -12,7 +12,9 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="container">
-                <a class="navbar-brand" href="#{request.contextPath}/#{weblogBean.handle}/">#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</a>
+                <ui:insert name="navbar-brand">
+                    <a class="navbar-brand" href="#{request.contextPath}/">Get Reeler</a>
+                </ui:insert>
                 <div class="collapse navbar-collapse" id="navbarExample">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item active">

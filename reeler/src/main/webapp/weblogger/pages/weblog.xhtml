@@ -6,6 +6,12 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <!-- Page Content -->
+    <ui:define name="title">#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</ui:define>
+    <ui:define name="navbar-brand">
+        <a class="navbar-brand" href="#{request.contextPath}/#{weblogBean.handle}/">
+            #{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}
+        </a>
+    </ui:define>
     <ui:define name="content">        
             <!-- Title -->
             <h1 class="mt-4">

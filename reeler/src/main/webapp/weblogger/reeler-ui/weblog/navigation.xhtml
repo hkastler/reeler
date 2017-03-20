@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+
+
+    <f:view>
+        <div class="row">   
+            <div class="col-lg-12">
+                <ul class="nav nav-tabs">
+                    <li class="#{page == 'entry'? 'active': ''}" ><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/entry.xhtml?weblog=#{weblogBean.handle}">New Entry</a></li>
+                    <li class="#{page == 'entries'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/entries.xhtml">Entries</a></li>
+                    <li class="#{page == 'comments'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/comments.xhtml">Comments</a></li>
+                    <li class="#{page == 'categories'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/categories.xhtml">Categories</a></li>
+                    <li class="#{page == 'blogrolls'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/blogrolls.xhtml">Blogroll</a></li>
+                    <li class="#{page == 'mediafiles'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/mediafiles.xhtml">Media Files</a></li>
+                </ul>
+            </div>
+        </div>
+    </f:view>
+
+</ui:composition>

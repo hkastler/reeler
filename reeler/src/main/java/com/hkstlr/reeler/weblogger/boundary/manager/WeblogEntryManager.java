@@ -140,7 +140,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         Query q = em.createNamedQuery("WeblogEntry.getLatestEntryForWeblog")
                         .setParameter("weblog", weblog)
                         .setMaxResults(1);
-        WeblogEntry we = (WeblogEntry) q.getResultList();
+        WeblogEntry we = (WeblogEntry) q.getSingleResult();
         return we;
     }
 

@@ -27,8 +27,8 @@ public class ApplicationConfigurationProvider extends HttpConfigurationProvider
         
         // Join a URL to an internal resource that accepts a parameter
         .addRule(Join.path("/").to("/index.xhtml"))
-        .addRule(Join.path("/{handle}").to("/weblogger/pages/handle.xhtml"))
-        .addRule(Join.path("/{handle}/").to("/weblogger/pages/handle.xhtml"))
+        .addRule(Join.path("/{handle}").to("/weblogger/pages/weblog.xhtml"))
+        .addRule(Join.path("/{handle}/").to("/weblogger/pages/weblog.xhtml"))
         .addRule(Join.path("/{handle}/entry/{anchor}").to("/weblogger/pages/entry.xhtml"))
         .addRule(Join.path("/{handle}/category/{categoryName}").to("/weblogger/pages/category.xhtml"))
         .addRule(Join.path("/{handle}/search").to("/weblogger/pages/search.xhtml"))

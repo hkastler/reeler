@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.weblogger.boundary.jsf;
+package com.hkstlr.reeler.weblogger.boundary.jsf.reelerui;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
 import com.hkstlr.reeler.weblogger.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
@@ -30,11 +32,10 @@ import javax.inject.Inject;
  */
 @ManagedBean(name = "reelerUiBean")
 @SessionScoped
-public class ReelerUIBean implements Serializable{
-    
+public class ReelerUIBean implements Serializable {
+
     private Logger log = Logger.getLogger(ReelerUIBean.class.getName());
 
-    
     @Inject
     Weblogger weblogger;
 
@@ -43,18 +44,18 @@ public class ReelerUIBean implements Serializable{
     private List<Weblog> userWeblogs;
 
     private Map<String, String> userWeblogPermissions;
-    
+
     private final String reelerUiPath = "/weblogger/reeler-ui";
 
-    
+    private Weblog currentWeblog;
+
     public ReelerUIBean() {
         setUserFromSession();
         log.fine("reelerUiBean user:" + this.user.getUserName());
     }
 
-    
     @PostConstruct
-    private void init(){
+    private void init() {
         setUserWeblogs();
         try {
             setWeblogPermissions();
@@ -62,7 +63,7 @@ public class ReelerUIBean implements Serializable{
             Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     /**
      * Get the value of user
      *
@@ -71,17 +72,17 @@ public class ReelerUIBean implements Serializable{
     public User getUser() {
         return user;
     }
-    
-    public Map<String, String> getUserWeblogPermissions(){
+
+    public Map<String, String> getUserWeblogPermissions() {
         return userWeblogPermissions;
     }
 
     public List<Weblog> getUserWeblogs() {
         return userWeblogs;
     }
-    
+
     public void setUserWeblogs(User user) {
-        
+
         List<Weblog> ublogs = null;
         try {
             ublogs = weblogger.getWeblogManager().getUserWeblogs(this.user, true);
@@ -101,30 +102,30 @@ public class ReelerUIBean implements Serializable{
     }
 
     public void setWeblogPermissions(List<Weblog> blogs) {
-        
+
         Map<String, String> weblogPermissionMap = new HashMap<>();
         StringBuilder permString = new StringBuilder();
-        for(Weblog blog : blogs){
-            List<WeblogPermission> perms = new ArrayList<>();
+        for (Weblog blog : blogs) {
+            List<WeblogPermission> perms;
             try {
                 perms = weblogger.getWeblogPermissionManager().getWeblogPermissions(blog);
-                log.info("perms:" + perms.size());
-                
+                log.info("perms for blog:" + blog.getHandle() + ":" + perms.size());
+
                 for (WeblogPermission perm : perms) {
                     permString.append(perm.getActions());
                 }
-        
+
             } catch (WebloggerException ex) {
                 Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
             }
             //log.info("permissions:" + perms.toString());
             weblogPermissionMap.put(blog.getHandle(), permString.toString());
         }
-        
+
         this.userWeblogPermissions = weblogPermissionMap;
     }
-    
-    public void setWeblogPermissions() throws WebloggerException{
+
+    public void setWeblogPermissions() throws WebloggerException {
         setWeblogPermissions(this.userWeblogs);
     }
 
@@ -144,7 +145,29 @@ public class ReelerUIBean implements Serializable{
     public String getReelerUiPath() {
         return reelerUiPath;
     }
+
+    public Weblog getCurrentWeblog() {
+        return currentWeblog;
+    }
+
+    public void setCurrentWeblog(Weblog currentWeblog) {
+        this.currentWeblog = currentWeblog;
+    }
     
     
+
+    public void goCreate(String handle) throws WebloggerException {
+        log.info("setting weblog and redirecting...");
+        this.currentWeblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        try {
+            StringBuilder path = new StringBuilder(context.getRequestContextPath());
+            path.append(reelerUiPath);
+            path.append("/weblog/entry.xhtml");            
+            context.redirect( path.toString() );
+        } catch (IOException ex) {
+            log.severe(ex.getMessage());
+        }
+    }
 
 }

@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <f:view>
+        <form id="globalConfig" name="globalConfig" jsfc="h:form" class="form">
+
+            <input type="hidden" name="salt" value="6XMsgXdouSFZsaPjIA4X" id="globalConfig_salt"/>
+            <ui:repeat value="#{configBean.runtimeConfigManager.runtimeConfigDefs.configDefs}"
+                       var="configDef">
+                <ui:repeat value="#{configDef.displayGroups}" var="displayGroup">
+                    
+                    <h2>#{configBean.res.getString(displayGroup.key)}</h2><br/>
+                    <ui:repeat value="#{displayGroup.propertyDefs}" var="propertyDef">
+                        <div class="form-group">
+                        <label jsf:for="#{propertyDef.name}" class="control-label">
+                            #{configBean.res.getString(propertyDef.key)}
+                        </label>              
+                         
+                            <input 
+                               jsfc="h:inputText"
+                               type="text" 
+                               name="#{propertyDef.name}" 
+                               value=""
+                               class="form-control" 
+                               rendered="#{propertyDef.type eq 'string'}"/>
+                        
+                        <textarea 
+                            class="form-control"
+                            jsfc="h:inputTextarea"
+                            name="#{propertyDef.name}"
+                            rendered="#{propertyDef.type eq 'text'}">
+                        </textarea>
+                        
+                        <input jsfc="h:selectBooleanCheckbox"
+                              type="checkbox"
+                              class="checkbox-inline"
+                              name="#{propertyDef.name}"
+                              rendered="#{propertyDef.type eq 'boolean'}"/>
+                        </div>
+                    </ui:repeat>
+                </ui:repeat>
+                <hr/>
+            </ui:repeat>
+            <div class="">
+                <h2>Site Settings</h2>
+                <label jsf:for="" class="control-label">Site Name (for main page and RSS feed)</label>
+                <input jsfc="h:inputText"
+                       type="text" 
+                       name="site.name" 
+                       value="" 
+                       size="35" 
+                       class="form-control" />
+
+
+                <div class="form-group">
+                    <div>
+                        <label jsf:for="" class="control-label">Short name (shown in site banner)</label>
+                        <input type="text" name="site.shortName"
+                               value="Front Page" size="35" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Site Description (for main page and RSS feed)</label>
+
+                    <textarea name="site.description"
+                              rows="5"
+                              cols="25">A default install of the Roller Weblogger open source blog server
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Weblog to serve as frontpage blog</label>
+
+                    <select name="site.frontpage.weblog.handle">
+                        <option value="">
+                            None specified
+                        </option>                              
+                        <option value="hkastler"
+                                selected="true" >
+                            So Good
+                        </option>
+
+                    </select>
+
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Enable aggregated site-wide frontpage</label>
+
+
+                    <input type="checkbox"
+                           name="site.frontpage.weblog.aggregated"/>
+
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Site Administrator"s email address</label>
+                    <input type="text" name="site.adminemail"
+                           value="" size="35" />
+
+
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Absolute URL to site (if required)</label>
+                    <input type="text" name="site.absoluteurl"
+                           value="" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Suspend all ping processing?</label>
+                    <input type="checkbox"
+                           name="pings.suspendPingProcessing"/>
+                </div>
+                <hr/>
+                <h2>User Settings</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow New Users?</label>
+                    <input type="checkbox"
+                           name="users.registration.enabled"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Require new users to activate accounts via email</label>
+                    <input type="checkbox"
+                           name="user.account.email.activation"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Registration URL override (optional)</label>
+                    <input type="text" name="users.registration.url"
+                           value="" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow users to create new weblogs?</label>
+                    <input type="checkbox" 
+                           name="site.allowUserWeblogCreation" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Editor Pages</label>
+                    <textarea name="users.editor.pages"
+                              rows="3"
+                              cols="40">editor-text.jsp,editor-xinha.jsp
+                    </textarea>
+                </div>
+                <hr/>
+                <h2>Web Services Settings</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Enable Blogger / MetaWeblog API</label>
+                    <input type="checkbox"
+                           name="webservices.enableXmlRpc"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Enable Atom Publishing Protocol</label>
+                    <input type="checkbox"
+                           name="webservices.enableAtomPub"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">AtomPub authentication (basic, oauth, or wsse)</label>
+                    <input type="text" name="webservices.atomPubAuth"
+                           value="basic" size="35" />
+                </div>
+                <hr/>
+                <h2>Weblog Rendering Settings</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Max number of entries to allow per page</label>
+                    <input type="text" name="site.pages.maxEntries"
+                           value="30" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Number of entries to provide in newsfeeds</label>
+                    <input type="text" name="site.newsfeeds.defaultEntries"
+                           value="30" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Display styled newsfeeds for browsers</label>
+                    <input type="checkbox" 
+                           name="site.newsfeeds.styledFeeds" />
+                </div>
+                <hr/>
+                <h2>Comment and Trackback Settings</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow weblog comments?</label>
+                    <input type="checkbox" 
+                           name="users.comments.enabled" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Don"t save comments thought to be spam</label>
+                    <input type="checkbox"
+                           name="comments.ignoreSpam.enabled"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow weblog trackbacks?</label>
+                    <input type="checkbox" 
+                           name="users.trackbacks.enabled" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Don"t save trackbacks thought to be spam</label>
+                    <input type="checkbox" 
+                           name="trackbacks.ignoreSpam.enabled" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow html in comments?</label>
+                    <input type="checkbox"
+                           name="users.comments.htmlenabled"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Enabled/Disable comment formatting plugins</label>
+                    <input type="checkbox" name="commentPlugins" value="LinkMarkup"
+                           id="commentPlugins-1"        />
+                    <label for="commentPlugins-1" class="checkboxLabel">Link Markup</label><br/>
+                    <input type="checkbox" name="commentPlugins" value="AutoFormat"
+                           id="commentPlugins-2"        />
+                    <label for="commentPlugins-2" class="checkboxLabel">Auto Format</label><br/>
+                    <input type="checkbox" name="commentPlugins" value="HTMLSubset"
+                           id="commentPlugins-3"       checked="checked"        />
+                    <label for="commentPlugins-3" class="checkboxLabel">HTML Subset Restriction</label><br/>
+                    <input type="hidden" id="__multiselect_globalConfig_commentPlugins" name="__multiselect_commentPlugins"
+                           value=""        />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow email notification of comments?</label>
+                    <input type="checkbox"
+                           name="users.comments.emailnotify"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Require comment moderation for all weblogs</label>
+                    <input type="checkbox"
+                           name="users.moderation.required"/>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Enable verification of trackback links?</label>
+                    <input type="checkbox"
+                           name="site.trackbackVerification.enabled"/>
+                </div>
+                <hr/>
+                <h2>File Upload Settings</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Enable File Uploads?</label>
+                    <input type="checkbox" 
+                           name="uploads.enabled" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allowed Extensions</label>
+                    <input type="text" name="uploads.types.allowed"
+                           value="" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Forbidden Extensions</label>
+                    <input type="text" name="uploads.types.forbid"
+                           value="exe" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Max File Size (MB)</label>
+                    <input type="text" name="uploads.file.maxsize"
+                           value="2.00" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Max Directory Size (MB)</label>
+                    <input type="text" name="uploads.dir.maxsize"
+                           value="20.00" size="35" />
+                </div>
+                <hr/>
+                <h2>Theme Settings</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Themes Directory</label>
+                    <input type="text" name="users.themes.path"
+                           value="/themes" size="35" />
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow Custom Themes?</label>
+                    <input type="checkbox" 
+                           name="themes.customtheme.allowed" />
+                </div>
+                <hr/>
+                <h2>Spam Prevention</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">List of words and regex expressions listed one per line to be added to the blacklist used to check comments, trackbacks and referrers.</label>
+                    <textarea name="spam.blacklist"
+                              rows="7"
+                              cols="40">
+                    </textarea>
+                </div>
+                <hr/>
+                <h2>Web Analytics</h2>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Default tracking code</label>
+                    <textarea name="analytics.default.tracking.code"
+                              rows="10"
+                              cols="70">
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="" class="control-label">Allow individual blogs to override?</label>
+                    <input type="checkbox" 
+                           name="analytics.code.override.allowed" />
+                </div>
+                <div class="control">
+                    <input class="buttonBox" type="submit" value="Save"/>
+                </div>
+            </div>
+        </form>
+    </f:view>
+</ui:composition>
+

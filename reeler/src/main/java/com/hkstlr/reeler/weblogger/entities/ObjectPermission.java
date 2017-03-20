@@ -15,15 +15,21 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
+import static javax.persistence.DiscriminatorType.STRING;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Inheritance;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
+import javax.validation.constraints.Size;
 
 /**
  *
  * @author henry.kastler
  */
 @Entity
-@DiscriminatorColumn(name = "ObjectType")
 @Table(name = "roller_permission")
+@DiscriminatorValue("Global")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ObjectPermission.findAll", query = "SELECT r FROM ObjectPermission r")
@@ -44,7 +50,7 @@ import javax.persistence.DiscriminatorColumn;
 public class ObjectPermission extends AbstractPermissionEntity implements Serializable {
 
     protected static final long serialVersionUID = 1L;
-
+    
     public ObjectPermission() {
         super("");
     }
@@ -55,9 +61,10 @@ public class ObjectPermission extends AbstractPermissionEntity implements Serial
 
     public ObjectPermission(String userName, Date dateCreated) {
         super(userName);
-        this.userName = userName;
-        this.dateCreated = dateCreated;
+        super.dateCreated = dateCreated;
     }
+    
+     
 
     @Override
     public int hashCode() {

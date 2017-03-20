@@ -17,8 +17,15 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import static javax.persistence.DiscriminatorType.STRING;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import static javax.persistence.InheritanceType.SINGLE_TABLE;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -29,6 +36,10 @@ import javax.validation.constraints.Size;
  *
  * @author henry.kastler
  */
+
+@Inheritance(strategy=SINGLE_TABLE)
+@DiscriminatorColumn(name = "objecttype")
+@DiscriminatorValue(value = "objecttype")
 @MappedSuperclass
 public class AbstractPermissionEntity extends java.security.Permission implements AppPermissionInterface {
 
@@ -57,8 +68,9 @@ public class AbstractPermissionEntity extends java.security.Permission implement
     @Column(name = "objectid", length = 48)
     protected String objectId;
 
+    
     @Size(max = 255)
-    @Column(name = "objecttype", length = 255)
+    @Column(name = "objecttype", length = 255, insertable = true, updatable = false )
     protected String objectType;
 
     @Column(name = "pending")
@@ -68,7 +80,7 @@ public class AbstractPermissionEntity extends java.security.Permission implement
     @NotNull
     @Column(name = "datecreated", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date dateCreated;    
+    protected Date dateCreated = new Date();    
     
     @Size(max = 255)
     @Column(name = "actions", length = 255)

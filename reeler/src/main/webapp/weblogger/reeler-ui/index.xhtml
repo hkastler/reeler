@@ -40,13 +40,16 @@
                                             Members: <br/>
                                             Today's hits:<br/>
                                         </div>
+                                        
                                         <div class="col-6">
-                                            <a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/entry.xhtml?weblog=#{blog.handle}">New Entry</a><br/>
+                                            <form jsfc="h:form"><a action="#{reelerUiBean.goCreate(blog.handle)}"
+                                               jsfc="h:commandLink">New Entry</a></form><br/>
                                             Entries()<br/>
                                             Comments()<br/>
                                             Theme<br/>
-                                            <a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/config.xhtml">Settings</a><br/>
+                                            <a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/settings/config.xhtml">Settings</a><br/>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>

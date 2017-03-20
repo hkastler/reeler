@@ -8,7 +8,7 @@
 
     <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
         <ui:define name="title">
-            <h:outputText value="New Entry"></h:outputText>            
+            <h:outputText value="Create Entry"></h:outputText>            
         </ui:define>
 
         <ui:define name="head">
@@ -16,16 +16,24 @@
             <script type="text/javascript" src="#{request.contextPath}/js/vendor/ckeditor_4.4.7_full/ckeditor/ckeditor.js"></script>  
         </ui:define>
 
+
+        <ui:define name="navigation">
+            <ui:include src="navigation.xhtml">
+                <ui:param name="page" value="entry"/>
+            </ui:include>
+        </ui:define>
         <ui:define name="content">
             <f:view>
-                <h2>Create Entry</h2>
+                <h2>Create Entry for #{weblogEntryAuthorBean.weblog.name}</h2>
                 <div id="weblogEntryDiv">
                     <h:form id="weblogEntryForm" class="form" prependId="false">   
 
-                        <h:messages errorStyle="color: red" 
-                                    infoStyle="color: green" 
-                                    layout="table"
-                                    for="weblogEntryForm"/>
+                        <h:panelGroup id="messagePanel" layout="block">
+                            <h:messages 
+                                errorStyle="color: red" 
+                                infoStyle="color: green" 
+                                layout="table"/>
+                        </h:panelGroup>
 
 
                         <div class="form-group">
@@ -72,14 +80,14 @@
                                                 var="category" 
                                                 itemValue="#{category}"
                                                 itemLabel="#{category.name}" />
-                                        
+
                                     </select>
                                     <h:message for="weblogEntryForm:weblogEntryCategory" style="color: red"/>
                                 </div>  
                             </div>                            
                         </div>
-                        
-                        
+
+
                         <div class="form-group">
                             <div>
                                 <label jsf:for="tags" 
@@ -92,8 +100,8 @@
                                 <h:message for="weblogEntryForm:tags" style="color: red"/>
                             </div>
                         </div>
-                        
-                        
+
+
 
                         <div class="form-group">
                             <div>
@@ -122,7 +130,7 @@
                                     #{reelerUiBean.user.timeZone}                                
                                 </div>
                             </div>
-                            
+
                         </div>
 
 
@@ -140,17 +148,17 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <div>
                                 <div class="checkbox-inline">
                                     <h:selectBooleanCheckbox id="rightToLeft" value="#{weblogEntryAuthorBean.weblogEntry.rightToLeft}"/>
                                     <label jsf:for="rightToLeft">Text reads right to left</label>
-                                    
+
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <div>
                                 <div class="checkbox-inline">
@@ -158,11 +166,11 @@
                                         id="pinnedToMain" 
                                         value="#{weblogEntryAuthorBean.weblogEntry.pinnedToMain}"/>
                                     <label jsf:for="rightToLeft">Pinned to main</label>
-                                    
+
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-group">
                             <div>
                                 <label jsf:for="searchDescription" 
@@ -176,8 +184,8 @@
                                 <h:message for="weblogEntryForm:searchDescription" style="color: red"/>
                             </div>
                         </div>
-                        
-                                             
+
+
                         <div class="form-group">
                             <div>
                                 <label jsf:for="enclosureURL" 
@@ -190,21 +198,20 @@
                                 <h:message for="weblogEntryForm:enclosureURL" style="color: red"/>
                             </div>
                         </div>
-                        <input type="hidden" name="weblog" value="#{weblogEntryAuthorBean.handle}"/>
-                               
+
                         <div class="form-group">
                             <div>
                                 <h:commandButton id="submitDraft" 
                                                  value="Save as Draft"
                                                  action="#{weblogEntryAuthorBean.saveAsDraft}"
                                                  styleClass="btn btn-info">
-                                    
+
                                 </h:commandButton>
                                 <h:commandButton id="submitPost" 
                                                  value="Post to Weblog"
                                                  action="#{weblogEntryAuthorBean.postToWeblog}"
                                                  styleClass="btn btn-info">
-                                    
+
                                 </h:commandButton>
                             </div>
                         </div>

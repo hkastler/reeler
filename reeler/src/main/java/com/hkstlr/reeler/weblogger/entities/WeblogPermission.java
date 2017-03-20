@@ -1,5 +1,6 @@
 package com.hkstlr.reeler.weblogger.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
 import java.io.Serializable;
 import java.security.Permission;
 import java.util.ArrayList;
@@ -10,15 +11,18 @@ import java.util.List;
 //import com.hkstlr.reeler.weblogger.boundary.manager.UserManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
+@Table(name = "roller_permission")
 @DiscriminatorValue(value = "Weblog")
 @XmlRootElement
 @NamedQueries({
@@ -38,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogPermission.getByUserName&WeblogId", query = "SELECT p FROM WeblogPermission p WHERE p.userName = ?1 AND p.objectId = ?2 AND p.pending <> true")
     , @NamedQuery(name = "WeblogPermission.getByUserName&WeblogIdIncludingPending", query = "SELECT p FROM WeblogPermission p WHERE p.userName = ?1 AND p.objectId = ?2")})
 
-public class WeblogPermission extends ObjectPermission implements Serializable {
+public class WeblogPermission extends AbstractPermissionEntity implements Serializable {
 
     public static final String EDIT_DRAFT = "edit_draft";
     public static final String POST = "post";
@@ -47,7 +51,6 @@ public class WeblogPermission extends ObjectPermission implements Serializable {
 
     protected static final long serialVersionUID = 1L;
 
-    
     static {
         ALL_ACTIONS.add(EDIT_DRAFT);
         ALL_ACTIONS.add(POST);
@@ -63,21 +66,21 @@ public class WeblogPermission extends ObjectPermission implements Serializable {
     }
 
     public WeblogPermission(Weblog weblog, User user, String actions) {
-        //super("WeblogPermission user: " + user.getUserName());
-        setActions(actions);
-        setObjectType("Weblog");
-        setObjectId(weblog.getHandle());
-        setUserName(user.getUserName());
+        super("WeblogPermission user: " + user.getUserName());
+        super.setActions(actions);
+        super.setObjectType("Weblog");
+        super.setObjectId(weblog.getHandle());
+        super.setUserName(user.getUserName());
     }
 
     public WeblogPermission(Weblog weblog, User user, List<String> actions) {
         super("WeblogPermission user: " + user.getUserName());
-        setActionsAsList(actions);
-        setObjectType("Weblog");
-        setObjectId(weblog.getHandle());
-        setUserName(user.getUserName());
+        super.setActionsAsList(actions);
+        super.setObjectType("Weblog");
+        super.setObjectId(weblog.getHandle());
+        super.setUserName(user.getUserName());
     }
-
+    
     public List<WeblogPermission> getWeblogPermissions(Weblog weblog) {
         // TODO Auto-generated method stub
         return null;
@@ -102,10 +105,12 @@ public class WeblogPermission extends ObjectPermission implements Serializable {
 
     public WeblogPermission(Weblog weblog, List<String> actions) {
         super("WeblogPermission user: N/A");
-        setActionsAsList(actions);
-        setObjectType("Weblog");
-        setObjectId(weblog.getHandle());
+        super.setActionsAsList(actions);
+        super.setObjectType("Weblog");
+        super.setObjectId(weblog.getHandle());
     }
+    
+    
 
     /*public User getUser() throws WebloggerException {
     if (getUserName() != null) {

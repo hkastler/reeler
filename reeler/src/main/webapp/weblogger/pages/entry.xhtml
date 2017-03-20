@@ -8,7 +8,12 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
     <!-- Page Content -->
-    
+    <ui:define name="title">#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</ui:define>
+    <ui:define name="navbar-brand">
+        <a class="navbar-brand" href="#{request.contextPath}/#{weblogBean.handle}/">
+            #{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}
+        </a>
+    </ui:define>
     <ui:define name="content">
     <f:view>
         <!-- Title -->
@@ -40,7 +45,7 @@
         <hr/>
 
         <!-- Comments Form -->
-        <h:panelGroup id="commentWrapper">
+        <h:panelGroup id="commentWrapper" rendered="#{weblogEntryBean.weblogEntry.allowComments}">
             <div class="card my-4" 
                  id="commentBlock" 
                  jsfc="h:panelGroup" 

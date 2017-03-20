@@ -29,6 +29,7 @@ import java.io.InputStream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.DOMException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -123,18 +124,25 @@ public class RuntimeConfigDefsParser {
         prop.setName(element.getAttribute("name"));
         prop.setKey(element.getAttribute("key"));
         
-        prop.setType(element.getElementsByTagName("type").item(0).getNodeValue());
-        prop.setDefaultValue(element.getElementsByTagName("default-value").item(0).getNodeValue());
         
+        prop.setType(element.getElementsByTagName("type").item(0).getTextContent());
+        
+        System.out.println("name:" + element.getAttribute("name"));
+        System.out.println("defaultValue:" + element.getElementsByTagName("default-value").item(0).getTextContent());
+        prop.setDefaultValue(element.getElementsByTagName("default-value").item(0).getTextContent());
+        
+        try {
         // optional elements
-        if (element.getElementsByTagName("rows") != null) {
-            prop.setRows(element.getElementsByTagName("rows").item(0).getNodeValue());
+        if (element.getElementsByTagName("rows").getLength() > 0) {
+        prop.setRows(element.getElementsByTagName("rows").item(0).getTextContent());
         }
         
-        if (element.getElementsByTagName("cols") != null) {
-            prop.setCols(element.getElementsByTagName("cols").item(0).getNodeValue());
+        if (element.getElementsByTagName("cols").getLength() > 0) {
+        prop.setCols(element.getElementsByTagName("cols").item(0).getTextContent());
         }
-        
+        } catch (DOMException dOMException) {
+        dOMException.printStackTrace();
+        }
         return prop;
     }
     

@@ -1,0 +1,150 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <form id="createWeblog" name="createWeblog" class="form" jsfc="h:form">
+
+        <input type="hidden" name="salt" value="0HS75ZzFjTwYk2dqfs9z" id="createWeblog_salt"/>
+
+        <div class="formdiv">
+            <div jsf:id="messagePanel" layout="block">
+                <h:messages 
+                    errorStyle="color: red" 
+                    infoStyle="color: green" 
+                    layout="table"/>
+            </div>
+            <div class="form-group">
+                <label jsf:for="name" class="control-label" >Name</label>
+
+                <input type="text" 
+                       jsf:id="name" 
+                       class="form-control"
+                       value="#{weblogAuthorBean.weblog.name}"/>
+
+                <div>The name is the title of your weblog, 
+                    it will be displayed at the top of your weblog page, 
+                    and in the title field of your weblog's newsfeed. 
+                    This field should not include HTML.</div>
+            </div>
+
+            <div class="form-group">
+                <label jsf:for="description">Tagline</label>
+                <input type="text" 
+                       jsf:id="description" 
+                       class="form-control"
+                       value="#{weblogAuthorBean.weblog.tagline}"/>
+                <div>The description of your weblog may be 
+                    displayed at the top of your weblog 
+                    (depending on the theme you choose), and it will be used 
+                    in description or subtitle field of your newsfeed. 
+                    This field should not include HTML.</div>
+            </div>
+
+            <div class="form-group">
+                <label jsf:for="handle" >Handle</label>
+
+                <input type="text" 
+                       jsf:id="handle" 
+                       class="form-control" 
+                       value="#{weblogAuthorBean.weblog.handle}"
+                       onkeyup="handlePreview(this)"/><br />
+                <span style="text-size:70%">
+                    URL:&#160;
+                    http://localhost:10080/roller/<span id="handlePreview" style="color:red">handle</span>
+                </span>
+                <div>The handle is a short one-word name for your weblog. It will be used in your URL, so please limit it to simple ASCII alphanumeric characters (a-z, A-Z and 0-9), and do not use HTML.</div>
+            </div>
+
+            <div class="form-group">
+                <label jsf:for="emailAddress" >Email Address</label></div>
+            <input type="text" 
+                   jsf:id="emailAddress" 
+                   class="form-control" 
+                   value="#{weblogAuthorBean.weblog.emailAddress}" />
+
+            <div>Your email address or the email address of the person responsible for the weblog that you are creating. </div>
+        </div>
+
+        <div class="form-group">
+            <label jsf:for="locale" >Locale</label>
+
+            <select
+                id="locale"
+                name="locale"
+                jsfc="h:selectOneMenu"
+                title="Locale" 
+                class="form-control" 
+                value="#{weblogAuthorBean.weblog.locale}"
+                required="true">
+                <option jsfc="f:selectItems" 
+                        value="#{selectItemBean.localeItems}" 
+                        var="locale" 
+                        itemValue="#{locale.value}"
+                        itemLabel="#{locale.label}" />
+
+            </select>
+            <h:message for="locale" style="color: red"/>
+
+
+
+            <div>The default locale to be used for the display of this weblog when the browser does not specify a locale.</div>
+        </div>
+
+        <div class="form-group">
+            <label jsf:for="timeZone" >Timezone</label>
+
+             <select
+                id="timeZone"
+                name="timeZone"
+                jsfc="h:selectOneMenu"
+                title="Time Zone" 
+                class="form-control" 
+                value="#{weblogAuthorBean.weblog.timeZone}"
+                required="true">
+                <option jsfc="f:selectItems" 
+                        value="#{selectItemBean.timeZoneItems}" 
+                        var="tz" 
+                        itemValue="#{tz.value}"
+                        itemLabel="#{tz.label}" />
+
+            </select>
+            <h:message for="timeZone" style="color: red"/>
+            <div>The timezone to be used for entry and display of this weblog.</div>
+        </div>
+        <ui:remove>
+            <div class="form-group">
+                <label for="theme" >Theme</label>
+                <div class="field" ng-app="themeSelectModule" ng-controller="themeController">
+                    <select id="themeSelector" name="bean.theme" size="1"
+                            ng-model="selectedTheme" ng-options="theme as theme.name for theme in themes track by theme.id"></select>
+                    <br />
+                    <br />
+                    <p>{{ selectedTheme.description}}</p>
+                    <br />
+                    <img ng-src="/roller{{ selectedTheme.previewPath}}"/>
+
+                    <div>The theme to be used to display this weblog. Later, you can easily switch to another theme or edit the themes templates to customize it to your liking.</div>
+                </div>
+
+            </div>
+        </ui:remove>
+        <br />
+
+        <input type="submit" 
+               jsfc="h:commandButton"
+               id="createWeblog" 
+               class="btn btn-primary"
+               action="#{weblogAuthorBean.createWeblog}"
+               value="Create Weblog"/>
+
+        <input type="button" 
+               class="btn btn-secondary"
+               value="Cancel" 
+               onclick="window.location = '#{reelerUiBean.reelerUiPath}'" />
+
+    </form>
+</ui:composition>

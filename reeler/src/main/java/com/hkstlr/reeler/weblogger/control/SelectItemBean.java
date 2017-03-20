@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -39,6 +40,7 @@ public class SelectItemBean {
     private SelectItem[] minuteItems;
     private SelectItem[] secondItems;
     private SelectItem[] commentDaysItems;
+    private SelectItem[] localeItems;
 
     @Inject
     private transient Logger log;
@@ -53,51 +55,16 @@ public class SelectItemBean {
     private void init(){
         log.fine("SelItemBean init");        
         
-        countryItems = getCountrySelectItems();
         monthItems = getMonthSelectItems();
         yearItems = getYearSelectItems();
         hourItems = getHourSelectItems();
         minuteItems = getMinuteSelectItems();
         secondItems = getSecondSelectItems();
         commentDaysItems = getCommentDaysSelectItems();
+        localeItems = getLocaleItems();
     }
     
     
-    private SelectItem[] getCountrySelectItems() {
-       
-       String[] locales = Locale.getISOCountries(); 
-       
-       List<SelectItem> ftLocale = new ArrayList<SelectItem>();
-        
-       for (String countryCode : locales) { 
-		Locale obj = new Locale("", countryCode); 
-                ftLocale.add(new SelectItem(obj.getCountry(),obj.getDisplayCountry()) );               
-        }
-              
-        log.log(Level.INFO, "ftLocale size:{0}", ftLocale.size());
-        
-       
-        Comparator<SelectItem> localeNameSort = new Comparator<SelectItem>() {
-                @Override
-                public int compare(SelectItem si1, SelectItem si2) {
-                        return  si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0, 1));
-                }
-        };
-                
-        Collections.sort(ftLocale,localeNameSort);
-       
-        SelectItem[] cItems = ftLocale.toArray(new SelectItem[ftLocale.size()]);
-        return cItems;
-    }
-
-    public SelectItem[] getCountryItems() {
-        return countryItems;
-    }
-
-    public void setCountryItems(SelectItem[] countryItems) {
-        this.countryItems = countryItems;
-    }
-
     public SelectItem[] getCommentDaysItems() {
         return commentDaysItems;
     }
@@ -105,10 +72,6 @@ public class SelectItemBean {
     public void setCommentDaysItems(SelectItem[] commentDaysItems) {
         this.commentDaysItems = commentDaysItems;
     }
-
-   
-    
-    
     
     public SelectItem[] getMonthItems() {
         return monthItems;
@@ -292,4 +255,51 @@ public class SelectItemBean {
         return items;
     }
     
+    
+    
+    public SelectItem[] getLocaleItems() {
+       
+       Locale[] locales = Calendar.getAvailableLocales();       
+       List<SelectItem> ftLocale = new ArrayList<SelectItem>();        
+       for (Locale locale : locales) { 
+            if(locale.getDisplayCountry().length() > 0){
+                ftLocale.add(new SelectItem(locale.toString(),locale.getDisplayCountry()) );
+            }
+       }              
+       log.log(Level.INFO, "ftLocale size:{0}", ftLocale.size());        
+       
+        Comparator<SelectItem> localeNameSort = new Comparator<SelectItem>() {
+            @Override
+            public int compare(SelectItem si1, SelectItem si2) {
+            return  si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0,1));
+        }
+        };
+        
+        Collections.sort(ftLocale,localeNameSort);
+       
+        SelectItem[] cItems = ftLocale.toArray(new SelectItem[ftLocale.size()]);
+        return cItems;
+    }
+    
+     public SelectItem[] getTimeZoneItems() {
+       
+       String[] timeZones = TimeZone.getAvailableIDs();
+       List<SelectItem> ftZones = new ArrayList<SelectItem>();        
+       for (String tz : timeZones) { 
+           ftZones.add(new SelectItem(tz,tz) );
+       }              
+       log.log(Level.INFO, "ftZones size:{0}", ftZones.size());        
+       
+        Comparator<SelectItem> timeZoneNameSort = new Comparator<SelectItem>() {
+            @Override
+            public int compare(SelectItem si1, SelectItem si2) {
+            return  si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0,1));
+        }
+        };
+        
+        Collections.sort(ftZones,timeZoneNameSort);
+       
+        SelectItem[] cItems = ftZones.toArray(new SelectItem[ftZones.size()]);
+        return cItems;
+    }
 }

@@ -47,7 +47,7 @@ public final class WebloggerRuntimeConfig {
     
     private static Logger log = Logger.getLogger(WebloggerRuntimeConfig.class.getName());
     
-    private static String RUNTIME_CONFIG = "/org/apache/roller/weblogger/config/runtimeConfigDefs.xml";
+    private static String RUNTIME_CONFIG = "/com/hkstlr/reeler/weblogger/control/config/runtime/runtimeConfigDefs.xml";
     private static RuntimeConfigDefs configDefs = null;
     
     // special case for our context urls
@@ -139,7 +139,7 @@ public final class WebloggerRuntimeConfig {
                 
             } catch(Exception e) {
                 // error while parsing :(
-                //log.log(Level.SEVERE,"Error parsing runtime config defs", e);
+                log.log(Level.SEVERE,"Error parsing runtime config defs", e);
             }
             
         }

@@ -7,8 +7,7 @@ package com.hkstlr.reeler.weblogger.control.entitylisteners;
 
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogCategoryManager;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
-import com.hkstlr.reeler.weblogger.entities.WeblogCategory;
-import java.util.List;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.persistence.PostLoad;
 import javax.persistence.PostPersist;
@@ -17,6 +16,7 @@ import javax.persistence.PostUpdate;
 import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
+import javax.validation.Validator;
 import org.ocpsoft.logging.Logger;
 
 /**
@@ -27,6 +27,7 @@ public class WeblogEntityListener {
     
     @EJB
     WeblogCategoryManager wcm;
+    
     
     Logger log = Logger.getLogger(WeblogEntityListener.class.getName());
 

@@ -5,29 +5,43 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-     <f:metadata>
+    <f:metadata>
         <f:viewParam id="category" name="categoryName" value="#{weblogBean.categoryName}"/>
         <f:viewAction action="#{weblogBean.categoryViewAction}"/>
     </f:metadata>
+    <ui:define name="title">#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</ui:define>
+    <ui:define name="navbar-brand">
+        <a class="navbar-brand" href="#{request.contextPath}/#{weblogBean.handle}/">
+            #{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}
+        </a>
+    </ui:define>
     <ui:define name="content">
-        
-        <ui:repeat value="#{weblogBean.categoryEntries}" var="weblogEntry" varStatus="status">
-        <!-- Title -->
-        <h3 class="mt-4">
-            <a href="#{request.contextPath}/#{weblogBean.handle}/entry/#{weblogEntry.anchor}">
-                <h:outputText value="#{weblogEntry.title}" />
-            </a>
-        </h3>
-        <!-- Author -->
-        by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
-        <!-- Date/Time -->
-        <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
-                        <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
-                                           timeZone="#{weblogBean.weblog.timeZone}"/>
-                    </h:outputText></p>
-        <!-- Post Content -->
-        <h:outputText value="#{weblogEntry.text}" escape="false" />
-        <hr/>
-        </ui:repeat>
+        <f:view>
+            <h2 style="padding-top: 20px">Category: #{weblogBean.categoryName}</h2>
+            <hr/>
+            <div jsfc="h:panelGroup" rendered="#{weblogBean.categoryEntries.size() eq 0}">
+                No entries found for category #{weblogBean.categoryName}
+            </div>
+            <div jsfc="h:panelGroup" rendered="#{weblogBean.categoryEntries.size() gt 0}">
+                <ui:repeat value="#{weblogBean.categoryEntries}" var="weblogEntry" varStatus="status">
+                    <!-- Title -->
+                    <h3 class="mt-4">
+                        <a href="#{request.contextPath}/#{weblogBean.handle}/entry/#{weblogEntry.anchor}">
+                            <h:outputText value="#{weblogEntry.title}" />
+                        </a>
+                    </h3>
+                    <!-- Author -->
+                    by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
+                    <!-- Date/Time -->
+                    <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
+                            <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
+                                               timeZone="#{weblogBean.weblog.timeZone}"/>
+                        </h:outputText></p>
+                    <!-- Post Content -->
+                    <h:outputText value="#{weblogEntry.text}" escape="false" />
+                    <hr/>
+                </ui:repeat>
+            </div>
+        </f:view>
     </ui:define>
 </ui:composition>
