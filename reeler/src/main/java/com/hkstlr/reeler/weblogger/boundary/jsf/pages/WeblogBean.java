@@ -49,7 +49,7 @@ public class WeblogBean {
 
     @PostConstruct
     public void init() {
-        log.log(Level.WARNING,"hello from WeblogBean");
+        //log.log(Level.WARNING,"hello from WeblogBean");
         try {
             this.weblog = getWeblogByHandle(handle);
         } catch (Exception e) {

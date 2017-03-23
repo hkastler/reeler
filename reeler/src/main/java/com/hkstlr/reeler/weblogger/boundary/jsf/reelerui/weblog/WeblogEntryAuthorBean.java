@@ -13,6 +13,7 @@ import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.entities.Weblog;
 import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -27,6 +28,8 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 /**
@@ -53,9 +56,11 @@ public class WeblogEntryAuthorBean implements Serializable {
     @Inject
     private ReelerUIBean reelerUiBean;
     
-    
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
+    
+    @ManagedProperty(value = "#{param.action}")
+    private String action = "create";
 
     private WeblogEntry weblogEntry;
     
@@ -82,7 +87,9 @@ public class WeblogEntryAuthorBean implements Serializable {
         //this.weblog = currentWeblog;//weblogManager.findByHandle(handle);
         this.handle = weblog.getHandle();
         this.cal = Calendar.getInstance(TimeZone.getTimeZone(weblog.getTimeZone()));
-        this.weblogEntry = new WeblogEntry(weblog,reelerUiBean.getUser());   
+        if(this.weblogEntry == null){
+            this.weblogEntry = new WeblogEntry(weblog,reelerUiBean.getUser());   
+        }
     }
 
     public Weblog getWeblog() {
@@ -181,7 +188,16 @@ public class WeblogEntryAuthorBean implements Serializable {
         cal.setTime(dateToSet);
         return cal;
      }
-   
+
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
+    
+    
     
     private void setupAndSave(String facesMsg){
         String anchor = weblogEntry.getTitle().replace(" ", WeblogEntry.TITLE_SEPARATOR);

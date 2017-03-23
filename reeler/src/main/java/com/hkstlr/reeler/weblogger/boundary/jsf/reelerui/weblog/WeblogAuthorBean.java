@@ -46,8 +46,7 @@ public class WeblogAuthorBean {
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
     }
-    
-    
+       
 
     public void createWeblog() {
         weblog.setDateCreated(new Date());

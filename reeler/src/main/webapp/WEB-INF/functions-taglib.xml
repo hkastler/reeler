@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<namespace>http://example.com/util</namespace> 
-
-<function>
-    <function-name>mapToList</function-name>
-    <function-class>com.hkstlr.reeler.app.control.MapTransformer</function-class>
-    <function-signature>java.util.List mapToList(java.util.Map)</function-signature>
-</function>

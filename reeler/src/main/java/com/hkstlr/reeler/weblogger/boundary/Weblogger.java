@@ -1,5 +1,6 @@
 package com.hkstlr.reeler.weblogger.boundary;
 
+import com.hkstlr.reeler.weblogger.boundary.manager.WeblogBookmarkManager;
 import com.hkstlr.reeler.weblogger.boundary.manager.WeblogCategoryManager;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -47,6 +48,9 @@ public class Weblogger {
     
     @Inject
     private WeblogCategoryManager weblogCategoryManager;
+    
+    @Inject
+    private WeblogBookmarkManager weblogBookmarkManager;
 
     //@Inject
     //private AutoPingManager autoPingManager;
@@ -149,6 +153,10 @@ public class Weblogger {
     
     public WeblogCategoryManager getWeblogCategoryManager() {
         return weblogCategoryManager;
+    }
+    
+    public WeblogBookmarkManager getWeblogBookmarkManager() {
+        return weblogBookmarkManager;
     }
 
     /**

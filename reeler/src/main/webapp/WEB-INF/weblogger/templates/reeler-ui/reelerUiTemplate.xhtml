@@ -73,7 +73,9 @@
                         </ui:insert>
                     </div>
                     <div class="col-md-4">
-                        <ui:include src="rightNav.xhtml"/>
+                        <ui:insert name="sideNav">
+                            <ui:include src="rightNav.xhtml"/>
+                        </ui:insert>
                     </div>
                 </div>
             </div>

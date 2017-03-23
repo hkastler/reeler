@@ -5,14 +5,18 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-    
-    
-         <ui:define name="navigation">
-            <ui:include src="configNavigation.xhtml">
-                <ui:param name="page" value="maintenance"/>
-            </ui:include>
-        </ui:define>
-        
-    
+
+
+    <ui:define name="navigation">
+        <ui:include src="configNavigation.xhtml">
+            <ui:param name="page" value="maintenance"/>
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="content">
+        <ui:include src="maintenanceContent.xhtml"/>
+    </ui:define>
+
+
 </ui:composition>
 

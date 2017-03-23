@@ -1,0 +1,266 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-title">
+            Manage Settings for  weblog #{reelerUiBean.currentWeblog.name}
+        </div>
+
+        <div class="panel-body">
+            <form id="editWeblog" name="editWeblog" class="form" jsfc="h:form">
+                <div class="row">
+                    <div class="col-lg-12"> 
+
+                        <input type="hidden" name="salt" value="0HS75ZzFjTwYk2dqfs9z" id="createWeblog_salt"/>
+
+                        <div class="formdiv">
+                            <h2>General Settings</h2>
+                            <div jsf:id="messagePanel" layout="block">
+                                <h:messages 
+                                    errorStyle="color: red" 
+                                    infoStyle="color: green" 
+                                    layout="table"/>
+                            </div>
+                            <div class="form-group">
+                                <label jsf:for="name" class="control-label" >Name</label>
+
+                                <input type="text" 
+                                       jsf:id="name" 
+                                       class="form-control"
+                                       value="#{weblogAuthorBean.weblog.name}"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="tagline">Tagline</label>
+                                <input type="text" 
+                                       jsf:id="tagline" 
+                                       class="form-control"
+                                       value="#{weblogAuthorBean.weblog.tagline}"/>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="icon">Icon</label>
+                                <input type="text" 
+                                       jsf:id="icon" 
+                                       class="form-control"
+                                       value="#{weblogAuthorBean.weblog.iconPath}"/>
+
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="about">About your blog</label>
+                                <textarea  
+                                    jsf:id="about" 
+                                    class="form-control"
+                                    value="#{weblogAuthorBean.weblog.about}"></textarea>
+
+                            </div>                      
+
+                            <div class="form-group">
+                                <label jsf:for="emailAddress" >Email Address of weblog owner</label>
+                                <input type="text" 
+                                       jsf:id="emailAddress" 
+                                       class="form-control" 
+                                       value="#{weblogAuthorBean.weblog.emailAddress}" />
+
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="entryDisplayCount" >Number of entries to display on weblog</label>
+                                <input type="text" 
+                                       jsf:id="entryDisplayCount" 
+                                       class="form-control" 
+                                       value="#{weblogAuthorBean.weblog.entryDisplayCount}" />
+
+                            </div>
+                            <h2>Internationalization Settings</h2>
+                            <div class="form-group">                                
+                                    <label jsf:for="enableMultiLang" class="checkbox-inline">I publish my weblog in multiple languages</label>  
+
+                                        <h:selectBooleanCheckbox id="enableMultiLang"
+                                                                 value="#{weblogAuthorBean.weblog.enableMultiLang}"
+                                                                 class="checkbox-inline"/>
+                                                                  
+                            </div>
+                            
+                            <div class="form-group">
+                                
+                                    <label jsf:for="showAllLangs" class="checkbox-inline">I publish my weblog in multiple languages</label>
+
+                                    <h:selectBooleanCheckbox id="showAllLangs"
+                                                             value="#{weblogAuthorBean.weblog.showAllLangs}"
+                                                             class="checkbox-inline"/>
+                                
+                            </div>
+                            <div class="form-group">
+                                <label jsf:for="locale" >Locale</label>
+                                <select
+                                    id="locale"
+                                    name="locale"
+                                    jsfc="h:selectOneMenu"
+                                    title="Locale" 
+                                    class="form-control" 
+                                    value="#{weblogAuthorBean.weblog.locale}"
+                                    required="true">
+                                    <option jsfc="f:selectItems" 
+                                            value="#{selectItemBean.localeItems}" 
+                                            var="locale" 
+                                            itemValue="#{locale.value}"
+                                            itemLabel="#{locale.label}" />
+
+                                </select>
+                                <h:message for="locale" style="color: red"/>
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="timeZone" >Timezone</label>
+                                <select
+                                    id="timeZone"
+                                    name="timeZone"
+                                    jsfc="h:selectOneMenu"
+                                    title="Time Zone" 
+                                    class="form-control" 
+                                    value="#{weblogAuthorBean.weblog.timeZone}"
+                                    required="true">
+                                    <option jsfc="f:selectItems" 
+                                            value="#{selectItemBean.timeZoneItems}" 
+                                            var="tz" 
+                                            itemValue="#{tz.value}"
+                                            itemLabel="#{tz.label}" />
+
+                                </select>
+                                <h:message for="timeZone" style="color: red"/>
+                            </div>
+                            <hr/>
+
+                            <h2>Comments</h2>
+
+                            <div class="form-group">
+                                <label jsf:for="allowComments" class="checkbox-inline">Allow comments for your weblog?</label>
+
+                                <h:selectBooleanCheckbox id="allowComments"
+                                                         value="#{weblogAuthorBean.weblog.allowComments}"
+                                                         class="checkbox-inline"/>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label jsf:for="moderateComments" class="checkbox-inline">Moderate comments before posting</label>
+
+                                <h:selectBooleanCheckbox id="moderateComments"
+                                                         value="#{weblogAuthorBean.weblog.moderateComments}"
+                                                         class="checkbox-inline"/>
+                            </div>
+
+                            <hr/>
+
+                            <h2>Default comment settings</h2>
+
+                            <div class="form-group">
+                                <label jsf:for="defaultAllowComments" class="checkbox-inline">By default, allow comments for new entries</label>
+
+                                    <h:selectBooleanCheckbox id="defaultAllowComments"
+                                                             value="#{weblogAuthorBean.weblog.defaultAllowComments}"
+                                                             class="checkbox-inline"/>
+                                
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="commentDays">Default time to allow comments for new entries</label>
+                                <h:selectOneMenu 
+                                    id="commentDays"
+                                    class="form-control"
+                                    value="#{weblogEntryAuthorBean.weblogEntry.commentDays}">
+                                    <f:selectItems value="#{selectItemBean.commentDaysItems}"/>                                    
+                                </h:selectOneMenu>
+                            </div>
+
+                            <div class="form-group">
+                                <label jsf:for="applyCommentDefaults"
+                                       class="checkbox-inline">Apply comment defaults to existing entries(this time only)?</label>
+                                    <h:selectBooleanCheckbox id="applyCommentDefaults"
+                                                             class="checkbox-inline"/>
+                                
+                            </div>
+
+                            <hr/>
+
+                            <h2>Weblog Client API</h2>
+
+                            <div class="form-group">
+                                <label jsf:for="enableBloggerApi" class="checkbox-inline">Enable weblog client support?</label>
+
+                                <h:selectBooleanCheckbox id="enableBloggerApi"
+                                                         class="checkbox-inline"
+                                                         value="#{weblogAuthorBean.weblog.enableBloggerApi}"/>
+                            </div>
+
+                            <hr/>
+
+                            <h2>Formatting</h2>
+                            <div class="form-group">
+                                <label jsf:for="defaultPlugins">
+                                    Default Entry Formatters
+                                    (applied in the listed order)
+                                </label>
+                                <input type="text"
+                                       class="form-control"
+                                       jsf:id="defaultPlugins"
+                                       value="#{weblogAuthorBean.weblog.defaultPlugins}"/>
+                            </div>
+                            <hr/>
+
+                            <h2>Spam Prevention</h2>
+                            <div class="form-group">
+                                <label jsf:for="blacklist">
+                                    List of words and regex expressions listed one per line to be added 
+                                    to the blacklist used to check comments, trackbacks and referrers.
+                                </label>
+                                <textarea
+                                    jsf:id="blacklist"
+                                    class="form-control"
+                                    value="#{weblogAuthorBean.weblog.blacklist}"></textarea>
+                            </div>
+                            <hr/>
+
+
+                            <h2>Web Analytics</h2>
+                            <div class="form-group">
+                                <label jsf:for="analyticsCode">
+                                    Tracking Code
+                                </label>
+                                <textarea
+                                    jsf:id="analyticsCode"
+                                    class="form-control"
+                                    value="#{weblogAuthorBean.weblog.analyticsCode}"></textarea>
+                            </div>
+                            <hr/>
+
+                            <input type="submit" 
+                                   jsfc="h:commandButton"
+                                   id="manageWeblog" 
+                                   class="btn btn-primary"
+                                   action="#{weblogAuthorBean.updateWeblog}"
+                                   value="Update Weblog"/>
+
+                            <input type="button" 
+                                   class="btn btn-secondary"
+                                   value="Cancel" 
+                                   onclick="window.location = '#{reelerUiBean.path}'" />
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+            <div class="panel-footer"></div>
+        </div>
+    </div>
+</ui:composition>

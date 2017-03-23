@@ -52,7 +52,7 @@ public class ConfigBean {
         pages.put("members", "Members");
         pages.put("pings", "Pings");
         pages.put("maintenance", "Maintenance");
-        this.path = reelerUiBean.getReelerUiPath() + "/weblog/settings";
+        this.path = reelerUiBean.getPath() + "/weblog/settings";
         setRes("/ApplicationResources");
     }
     

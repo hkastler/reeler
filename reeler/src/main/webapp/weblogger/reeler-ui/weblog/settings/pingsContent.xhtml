@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-title">
+            Setup automatic pings for weblog #{reelerUiBean.currentWeblog.name}
+        </div>
+
+        <div class="panel-body">
+            <p>#{labels.res.getString("commentManagement.tip")}</p>
+            <h2>Common Ping Targets</h2>
+            <div class="row">
+                <div class="col-lg-12">                    
+                    <h:form styleClass="form">
+                        <h:panelGroup id="messagePanel" layout="block" styleClass="control-label">
+                            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{weblogBookmarkBean.bookmarks.size() > 0}">
+                            <div class="row">
+                                <div class="col-lg-3">Name</div>
+                                <div class="col-lg-5">Ping URL</div>
+                                <div class="col-lg-2">Automatic</div>
+                                <div class="col-lg-2">Manual</div>
+                            </div>
+                            <ui:repeat value="#{weblogBookmarkBean.bookmarks}" var="bookmark">
+                                <div class="row">
+                                    <div class="col-lg-3">#{bookmark.name}</div>
+                                    <div class="col-lg-4">#{bookmark.url}</div>
+                                    <div class="col-lg-1">OFF</div>
+                                    <div class="col-lg-1"><a href="#">Enable</a></div>
+                                    <div class="col-lg-2"><a href="#{bookmark.url}" target="_blank">Send Ping Now</a></div>
+                                </div>
+                            </ui:repeat>
+                        </h:panelGroup>
+
+                    </h:form>     
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer"></div>
+    </div>
+</ui:composition>

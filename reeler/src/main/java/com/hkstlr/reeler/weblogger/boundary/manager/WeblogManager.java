@@ -52,6 +52,7 @@ import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
+import javax.transaction.Transactional;
 
 
 /**
@@ -467,6 +468,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         return query.getResultList();
     }
 
+    @Transactional
     public List<Weblog> getUserWeblogs(User user, boolean enabledOnly) throws WebloggerException {
         List<Weblog> weblogs = new ArrayList<Weblog>();
         if (user == null) {
@@ -475,6 +477,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
         List<WeblogPermission> perms = weblogPermissionManager.getWeblogPermissions(user);
         for (WeblogPermission perm : perms) {
             Weblog weblog = getWeblogByHandle(perm.getObjectId());
+            List<WeblogEntry> entries = weblog.getWeblogEntries();
+            log.log(Level.INFO,"number of entries:"  + weblog.getWeblogEntries().size());
             log.log(Level.INFO,"blog returned:" + weblog.getName());
             if ((!enabledOnly || weblog.isVisible()) && weblog.isActive()) {
                 weblogs.add(weblog);

@@ -1,0 +1,82 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-title">
+            Manage comments in weblog #{reelerUiBean.currentWeblog.name}
+        </div>
+
+        <div class="panel-body">
+            <p>#{labels.res.getString("commentManagement.tip")}</p>
+            <div class="row">
+                <div class="col-lg-6">
+
+                </div>
+                <div class="col-lg-6">
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">                    
+                    <h:form styleClass="form">
+                        <h:panelGroup id="messagePanel" layout="block" styleClass="control-label">
+                            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                        </h:panelGroup>
+
+
+
+                        <h:panelGroup rendered="#{weblogEntryCommentBean.weblogEntryComments.size() > 0}">
+
+                            <h:dataTable value="#{weblogEntryCommentBean.weblogEntryComments}" 
+                                         var="comment" 
+                                         rules="all" 
+                                         styleClass="table table-bordered table-striped">
+                                
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{labels.res.getObject('commentManagement.columnApproved')}"/>
+                                        </f:facet>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{labels.res.getString('commentManagement.columnSpam')}"/>
+                                        </f:facet>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Delete"/>
+                                        </f:facet>
+
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="#{labels.res.getString('commentManagement.columnComment')}"/>
+                                        </f:facet>
+                                        <p>Regarding: #{comment.weblogEntry.title}<br/>
+                                            Posted by: #{comment.name}<br/>
+                                            Posted url: <br/>
+                                            Posted at: </p>
+                                        <h:inputText value="#{comment.content}"/>
+                                                      
+                                    </h:column> 
+                                
+                            </h:dataTable>
+                            <h:commandButton value="Save Changes" />
+                    
+                        </h:panelGroup>
+
+                    </h:form>     
+                </div>
+            </div>
+
+        </div>
+        <div class="panel-footer"></div>
+    </div>
+</ui:composition>

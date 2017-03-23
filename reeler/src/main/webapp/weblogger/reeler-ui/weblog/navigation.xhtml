@@ -12,12 +12,23 @@
         <div class="row">   
             <div class="col-lg-12">
                 <ul class="nav nav-tabs">
-                    <li class="#{page == 'entry'? 'active': ''}" ><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/entry.xhtml?weblog=#{weblogBean.handle}">New Entry</a></li>
-                    <li class="#{page == 'entries'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/entries.xhtml">Entries</a></li>
-                    <li class="#{page == 'comments'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/comments.xhtml">Comments</a></li>
-                    <li class="#{page == 'categories'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/categories.xhtml">Categories</a></li>
-                    <li class="#{page == 'blogrolls'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/blogrolls.xhtml">Blogroll</a></li>
-                    <li class="#{page == 'mediafiles'? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.reelerUiPath}/weblog/mediafiles.xhtml">Media Files</a></li>
+                    <li class="#{reelerUiBean.pages.containsKey(page)? 'active': ''}" ><a href="#{request.contextPath}#{reelerUiBean.path}/weblog/entry.xhtml?weblog=#{weblogBean.handle}">Create &amp; Edit</a></li>
+                    <li class="#{configBean.pages.containsKey(page)? 'active': ''}"><a href="#{request.contextPath}#{reelerUiBean.path}/weblog/settings/config.xhtml">Preferences</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">   
+            <div class="col-lg-12">
+                <ul class="nav nav-tabs">
+                    <ui:repeat value="#{reelerUiBean.pages.keySet().toArray()}" var="key">
+                        <li class="#{page == key ? 'active': ''}" >
+                                                        
+                            <a href="#{request.contextPath}#{reelerUiBean.path}/weblog/#{key}.xhtml"
+                               jsf:id="nav">
+                                #{reelerUiBean.pages[key]}
+                            </a>
+                        </li>
+                    </ui:repeat>
                 </ul>
             </div>
         </div>

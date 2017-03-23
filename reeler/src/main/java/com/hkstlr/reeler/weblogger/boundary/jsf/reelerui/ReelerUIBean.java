@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -45,21 +46,32 @@ public class ReelerUIBean implements Serializable {
 
     private Map<String, String> userWeblogPermissions;
 
-    private final String reelerUiPath = "/weblogger/reeler-ui";
+    private Map<String, String> pages = new LinkedHashMap<>();
+
+    private final String path = "/weblogger/reeler-ui";
 
     private Weblog currentWeblog;
 
     public ReelerUIBean() {
         setUserFromSession();
         log.fine("reelerUiBean user:" + this.user.getUserName());
+
     }
 
     @PostConstruct
     private void init() {
+        log.log(Level.INFO, "expected that a session bean would init only once");
+        pages.put("entry", "New Entry");
+        pages.put("entries", "Entries");
+        pages.put("comments", "Comments");
+        pages.put("categories", "Categories");
+        pages.put("blogrolls", "Blogrolls");
+        pages.put("mediafiles", "Media Files");
+
         setUserWeblogs();
         try {
             setWeblogPermissions();
-        } catch (WebloggerException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -84,7 +96,9 @@ public class ReelerUIBean implements Serializable {
     public void setUserWeblogs(User user) {
 
         List<Weblog> ublogs = null;
+        List<Weblog> finalUblogs = new ArrayList<>();
         try {
+
             ublogs = weblogger.getWeblogManager().getUserWeblogs(this.user, true);
         } catch (WebloggerException ex) {
             Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -92,7 +106,11 @@ public class ReelerUIBean implements Serializable {
         if (ublogs == null) {
             ublogs = new ArrayList<>();
         }
-        this.userWeblogs = ublogs;
+        for (Weblog blog : ublogs) {
+            log.info("weblog:" + blog.getHandle() + " has " + blog.getWeblogEntries().size() + " entries");
+            finalUblogs.add(blog);
+        }
+        this.userWeblogs = finalUblogs;
     }
 
     public void setUserWeblogs() {
@@ -142,8 +160,8 @@ public class ReelerUIBean implements Serializable {
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
     }
 
-    public String getReelerUiPath() {
-        return reelerUiPath;
+    public String getPath() {
+        return path;
     }
 
     public Weblog getCurrentWeblog() {
@@ -153,18 +171,24 @@ public class ReelerUIBean implements Serializable {
     public void setCurrentWeblog(Weblog currentWeblog) {
         this.currentWeblog = currentWeblog;
     }
-    
-    
 
-    public void goCreate(String handle) throws WebloggerException {
+    public Map<String, String> getPages() {
+        return pages;
+    }
+
+    public void setPages(Map<String, String> pages) {
+        this.pages = pages;
+    }
+
+    public void action(Weblog weblog, String page) throws WebloggerException {
         log.info("setting weblog and redirecting...");
-        this.currentWeblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
+        this.currentWeblog = weblog;
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             StringBuilder path = new StringBuilder(context.getRequestContextPath());
-            path.append(reelerUiPath);
-            path.append("/weblog/entry.xhtml");            
-            context.redirect( path.toString() );
+            path.append(this.path);
+            path.append("/weblog/").append(page).append(".xhtml");
+            context.redirect(path.toString());
         } catch (IOException ex) {
             log.severe(ex.getMessage());
         }

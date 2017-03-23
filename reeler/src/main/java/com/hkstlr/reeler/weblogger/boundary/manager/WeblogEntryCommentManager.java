@@ -5,13 +5,14 @@
  */
 package com.hkstlr.reeler.weblogger.boundary.manager;
 
-import com.hkstlr.reeler.weblogger.boundary.jsf.pages.WeblogEntryBean;
-import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.entities.Weblog;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 
 /**
  *
@@ -30,24 +31,46 @@ public class WeblogEntryCommentManager {
     public WeblogEntryCommentManager() {
         //super(WeblogEntryComment.class);
     }
-    
+
     public void create(WeblogEntryComment entity) {
         persist(entity);
     }
-    
-    public void save(WeblogEntryComment entity) {    	
+
+    public void save(WeblogEntryComment entity) {
         persist(entity);
     }
-    
+
     public void persist(WeblogEntryComment entity) {
-    	getEntityManager().persist(entity);
+        getEntityManager().persist(entity);
     }
-    
-    public void saveAndLoadComments(WeblogEntryComment comment){
+
+    public List<WeblogEntryComment> getCommentsForWeblog(Weblog weblog){
+        /*String sqlString = "SELECT rc.*, re.*" +
+        "	FROM public.roller_comment rc" +
+        "    INNER JOIN weblogentry re" +
+        "    ON re.id = rc.entryid" +
+        "    INNER JOIN weblog rb" +
+        "    ON rb.id = re.websiteid" +
+        "    where rb.id =?1";
+        Query query = getEntityManager().createNativeQuery(sqlString);
+        */
         
+        //System.out.println("weblog:" + weblog.getName());
+        String qlString = "SELECT wec FROM WeblogEntryComment wec LEFT JOIN FETCH wec.weblogEntry we WHERE we.website = ?1";
+        //qlString.concat("");
+        //qlString.concat("JOIN Weblog rb");
+        //qlString.concat("WHERE rb = :weblog ");                
+        Query query = getEntityManager().createQuery(qlString);
+        query.setParameter(1, weblog);
+        List<WeblogEntryComment> results = query.getResultList();
+        return results;
+    }
+
+    public void saveAndLoadComments(WeblogEntryComment comment) {
+
         persist(comment);
         //WeblogEntry entry = comment.getWeblogEntry();
         //web.setComments(entry.getComments());
     }
-    
+
 }
