@@ -27,7 +27,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
-import com.hkstlr.reeler.weblogger.control.StringChanger;
+import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import javax.ejb.Stateless;
 
 /**

@@ -5,7 +5,7 @@
  */
 package com.hkstlr.reeler.app.control;
 
-import com.hkstlr.reeler.weblogger.entities.WeblogPermission;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.util.List;
 
 /**

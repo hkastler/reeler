@@ -10,7 +10,7 @@ import java.util.UUID;
 //import org.apache.commons.lang3.builder.EqualsBuilder;
 //import org.apache.commons.lang3.builder.HashCodeBuilder;
 
-import com.hkstlr.reeler.weblogger.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.control.RenditionType;
 

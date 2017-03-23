@@ -21,7 +21,7 @@ package com.hkstlr.reeler.weblogger.plugins.comment.control;
 import java.io.BufferedReader;
 import java.io.StringReader;
 
-import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 
 
 /**

@@ -2,7 +2,7 @@ package com.hkstlr.reeler.weblogger.themes.entities;
 
 import java.util.List;
 
-import com.hkstlr.reeler.weblogger.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 
 public abstract class WeblogTheme extends Theme {

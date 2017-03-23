@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.users.boundary.login;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.User;
@@ -109,7 +110,7 @@ public class LoginBean implements Serializable {
             try {
                 request.login(this.username, this.password);
                 log.info("user authenticated at request level");
-                outcome = "/weblogger/reeler-ui/index?faces-redirect=true"; // Do your thing?
+                outcome = URLStrategy.getLoginSuccessOutcome(); // Do your thing?
             } catch (ServletException e) {
                 log.log(Level.SEVERE,"user not realm authenticated:",e);
                 context.addMessage(null, new FacesMessage("Login failed." + e.getMessage()));

@@ -13,10 +13,10 @@ import javax.inject.Inject;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
-import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;
-import com.hkstlr.reeler.weblogger.entities.Weblog;
-import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
-import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import com.hkstlr.reeler.weblogger.plugins.comment.control.WeblogEntryCommentPlugin;
 import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
 import javax.annotation.PostConstruct;

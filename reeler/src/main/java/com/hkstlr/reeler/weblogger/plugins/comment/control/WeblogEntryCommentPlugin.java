@@ -1,6 +1,6 @@
 package com.hkstlr.reeler.weblogger.plugins.comment.control;
 
-import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 
 public abstract class WeblogEntryCommentPlugin {
 	

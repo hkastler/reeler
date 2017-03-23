@@ -1,8 +1,8 @@
 package com.hkstlr.reeler.weblogger.plugins.entry.control;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.entities.Weblog;
-import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.plugins.entities.AbstractPlugin;
 import com.hkstlr.reeler.weblogger.plugins.entities.PluginInterface;
 

@@ -1,6 +1,6 @@
 package com.hkstlr.reeler.app.control;
 
-import com.hkstlr.reeler.weblogger.entities.ObjectPermission;
+import com.hkstlr.reeler.weblogger.weblogs.entities.ObjectPermission;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;

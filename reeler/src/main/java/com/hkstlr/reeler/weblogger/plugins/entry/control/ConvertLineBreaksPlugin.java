@@ -25,8 +25,8 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.entities.Weblog;
-import com.hkstlr.reeler.weblogger.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 
 
 /**

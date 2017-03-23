@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 
 /**
  * Comment plugin which turns plain text URLs into hyperlinks using the html

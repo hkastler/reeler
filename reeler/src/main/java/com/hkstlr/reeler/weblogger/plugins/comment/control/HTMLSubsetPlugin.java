@@ -22,7 +22,7 @@ package com.hkstlr.reeler.weblogger.plugins.comment.control;
 
 //import static org.apache.commons.lang3.StringEscapeUtils.escapeHtml4;
 
-import com.hkstlr.reeler.weblogger.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import com.hkstlr.reeler.weblogger.plugins.control.StringFixer;
 
 

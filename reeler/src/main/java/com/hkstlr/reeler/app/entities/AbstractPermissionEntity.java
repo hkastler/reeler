@@ -6,9 +6,8 @@
 package com.hkstlr.reeler.app.entities;
 
 import com.hkstlr.reeler.app.control.AppPermissionInterface;
-import com.hkstlr.reeler.weblogger.control.StringChanger;
-
-import com.hkstlr.reeler.weblogger.entities.WeblogPermission;
+import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.security.Permission;
 import java.util.Date;
 import java.util.List;

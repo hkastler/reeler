@@ -23,7 +23,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.hkstlr.reeler.weblogger.entities.Weblog;;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;;
 
 /**
  *

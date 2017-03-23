@@ -5,7 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.users.control;
 
-import com.hkstlr.reeler.weblogger.control.config.WebloggerConfig;
+import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
