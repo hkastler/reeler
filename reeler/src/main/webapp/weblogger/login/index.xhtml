@@ -9,28 +9,34 @@
     <!-- Page Content -->
 
 
-    
-        <ui:composition template="/WEB-INF/weblogger/templates/pages/defaultTemplate.xhtml">
 
-            <ui:define name="title">Login</ui:define>
+    <ui:composition template="/WEB-INF/weblogger/templates/pages/defaultTemplate.xhtml">
 
-            <ui:define name="content">
-               
+        <ui:define name="title">Login</ui:define>
+
+        <ui:define name="content">
+            <div class="row">
+                <div class="col-lg-12"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-3"></div>
+                <div class="col-lg-6">
                     <div class="panel panel-primary">
-                        <div class="panel-heading panel-title">
+
+                        <div class="panel-heading panel-title panel-primary">
                             <i class="glyphicon glyphicon-log-in"></i>Sign In
                         </div>
-                    </div>
-                    
-                    <div class="panel-body">
 
-                        <h:form id="login" class="form-horizontal" role="form">
-                            <h:messages style="color: red"
-                                        layout="table"
-                                        globalOnly="false"/>
-                            <fieldset id="loginFieldset">
+
+                        <div class="panel-body">
+
+                            <h:form id="login" class="form-horizontal" role="form">
+                                <h:messages style="color: red"
+                                            layout="table"
+                                            globalOnly="false"/>
+
                                 <div class="form-group row">
-                                    <div class="col-xs-12">
+                                    <div class="col-lg-12">
                                         <label for="username" class="control-label">Username</label>
                                         <div>
                                             <input type="text"
@@ -52,7 +58,7 @@
                                     </div>
                                 </div>  
                                 <div class="form-group row">
-                                    <div class="col-xs-12">
+                                    <div class="col-lg-12">
                                         <label for="password" class="control-label">Password</label>
                                         <div>
                                             <h:inputSecret id="password"                                                   
@@ -71,30 +77,32 @@
                                                      action="#{loginBean.validateUser}"
                                                      />
                                 </div>
-                            </fieldset>
 
 
-                        </h:form>
+
+                            </h:form>
+                        </div>
+
+                        <div class="panel-footer">
+                            <h:link outcome="/weblogger/login/reset-password">Forgot your password?</h:link>
+                        </div>
                     </div>
+                </div>
+                <div class="col-lg-3"></div>
+            </div>
+        </ui:define>
+        <ui:define name="postBody">
+            <script>
 
-                    <div class="panel-footer">
-                        <h:link outcome="/weblogger/login/reset-password">Forgot your password?</h:link>
-                    </div>
+                $(document.getElementById("login:username")).focus(function () {
 
-               
-            </ui:define>
-            <ui:define name="postBody">
-                <script>
 
-                    $(document.getElementById("login:username")).focus(function () {
-                        
+                });
 
-                    });
+            </script>
 
-                </script>
+        </ui:define>
+    </ui:composition>
 
-            </ui:define>
-        </ui:composition>
-    
     <!-- /.container -->
 </ui:composition>

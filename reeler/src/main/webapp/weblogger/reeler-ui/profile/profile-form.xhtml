@@ -2,25 +2,24 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
 
-    <form id="profile" name="profile">
+    <form jsf:id="profile" name="profile">
 
         <input type="hidden" name="salt" value="s8EvQ5BNIwL2PwXGshcO" id="profile_salt"/>
 
         <div class="formdiv">
-
+            <h2>Edit Profile</h2>
+            
             <div class="form-group">
                 <label jsf:for="userName" class="control-label" >Username</label>
                 <input type="text"
                        class="form-control"
                        jsf:id="userName" 
-                       value="" 
-                       readonly="readonly" 
-                       id="profile_bean_userName"
-                       />
+                       value="#{reelerUiBean.user.userName}" 
+                       readonly="readonly" />
                 Usernames can't be changed.
             </div>
 
@@ -29,7 +28,7 @@
                 <input type="text"
                        class="form-control"
                        jsf:id="screenName" 
-                       value=""/>
+                       jsf:value="#{reelerUiBean.user.screenName}"/>
                 <div>
                     Your desired screen name (with no HTML). This is is what will be displayed 
                     in your weblog and on weblog entries that you write.
@@ -41,7 +40,7 @@
                 <input type="text"
                        class="form-control"
                        jsf:id="fullName"
-                       value="Henry Kastler"/>
+                       jsf:value="#{reelerUiBean.user.fullName}"/>
                 <div>
                     Your full name (with no HTML), first and last. 
                     Some weblog themes will display this instead of (or in addition to) your screenname.
@@ -53,7 +52,7 @@
                 <input type="text" 
                        class="form-control"
                        jsf:id="emailAddress" 
-                       value=""/>
+                       jsf:value="#{reelerUiBean.user.emailAddress}"/>
                 <div>
                     Please enter valid email address, the site administrator may disable your account 
                     if he/she cannot reach you via email.

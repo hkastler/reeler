@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -34,17 +35,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogBookmark.findByUrl", query = "SELECT b FROM WeblogBookmark b WHERE b.url = :url")
     , @NamedQuery(name = "WeblogBookmark.findByPriority", query = "SELECT b FROM WeblogBookmark b WHERE b.priority = :priority")
     , @NamedQuery(name = "WeblogBookmark.findByImage", query = "SELECT b FROM WeblogBookmark b WHERE b.image = :image")
-    , @NamedQuery(name = "WeblogBookmark.findByFeedurl", query = "SELECT b FROM WeblogBookmark b WHERE b.feedurl = :feedurl")
+    , @NamedQuery(name = "WeblogBookmark.findByFeedUrl", query = "SELECT b FROM WeblogBookmark b WHERE b.feedUrl = :feedUrl")
     , @NamedQuery(name = "BookmarkData.getByFolder", query = "SELECT b FROM WeblogBookmark b WHERE b.folder = ?1 order by b.priority")})
-public class WeblogBookmark implements Serializable {
+public class WeblogBookmark extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    private String id;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -61,43 +57,42 @@ public class WeblogBookmark implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "priority", nullable = false)
-    private int priority;
+    private int priority = 0;
     @Size(max = 255)
     @Column(name = "image", length = 255)
     private String image;
     @Size(max = 255)
     @Column(name = "feedurl", length = 255)
-    private String feedurl;
-    
-    @JoinColumn(name = "folderid", referencedColumnName = "id", nullable = false)
+    private String feedUrl;
+
+    @JoinColumn(name = "folderid", referencedColumnName = "id", nullable = false, insertable=true, updatable=true)
     @ManyToOne(optional = false)
     private WeblogBookmarkFolder folder;
 
     public WeblogBookmark() {
     }
 
-    public WeblogBookmark(String id) {
-        this.id = id;
-    }
-
-    public WeblogBookmark(String id, String name, String url, int priority) {
-        this.id = id;
+    public WeblogBookmark(String name, String url, int priority) {
         this.name = name;
         this.url = url;
         this.priority = priority;
     }
 
-    public WeblogBookmark(WeblogBookmarkFolder defaultFolder, String string, String string2, String trim, Object object,
-			Object object2) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+     public WeblogBookmark(
+            WeblogBookmarkFolder parent,
+            String name,
+            String desc,
+            String url,
+            String feedUrl,
+            String image) {
+        this.folder = parent;
+        this.name = name;
+        this.description = desc;
+        this.url = url;
+        this.feedUrl = feedUrl;
+        this.image = image;
+        //folder.addBookmark(this);
+        //calculatePriority();
     }
 
     public String getName() {
@@ -140,12 +135,12 @@ public class WeblogBookmark implements Serializable {
         this.image = image;
     }
 
-    public String getFeedurl() {
-        return feedurl;
+    public String getFeedUrl() {
+        return feedUrl;
     }
 
-    public void setFeedurl(String feedurl) {
-        this.feedurl = feedurl;
+    public void setFeedUrl(String feedurl) {
+        this.feedUrl = feedurl;
     }
 
     public WeblogBookmarkFolder getFolder() {
@@ -180,5 +175,5 @@ public class WeblogBookmark implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.WeblogBookmark[ id=" + id + " ]";
     }
-    
+
 }

@@ -69,10 +69,15 @@ public class IndexBean {
     public void setWeblogs() throws WebloggerException{
        log.fine("setting weblogs");
        List<Weblog> blogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
-       //Weblog blog = weblogManager.getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
-       //blog.setHandle("test-handle");
-       //blog.setName("Test Name");
-       //blogs.add(blog);
+        //Weblog blog = weblogManager.getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
+        //blog.setHandle("test-handle");
+        //blog.setName("Test Name");
+        //blogs.add(blog);
+        blogs.forEach((blog) -> {
+            blog.getWeblogEntries();
+            blog.getWeblogEntries().size();
+        });
+       
        this.weblogs = blogs;
     }
     

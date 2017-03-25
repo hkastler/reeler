@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.pings.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
@@ -12,7 +13,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,66 +40,49 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "PingTarget.findByLastsuccess", query = "SELECT p FROM PingTarget p WHERE p.lastsuccess = :lastsuccess")
     , @NamedQuery(name = "PingTarget.findByAutoenabled", query = "SELECT p FROM PingTarget p WHERE p.autoEnabled = :autoenabled")
     , @NamedQuery(name = "PingTarget.getPingTargetsOrderByName", query = "SELECT p FROM PingTarget p ORDER BY p.name")})
-public class PingTarget implements Serializable {
+public class PingTarget extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    private String id;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "pingurl", nullable = false, length = 255)
     private String pingurl;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "conditioncode", nullable = false)
     private int conditioncode;
-    
+
     @Column(name = "lastsuccess")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastsuccess;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "autoenabled", nullable = false)
     private boolean autoEnabled;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "pingTarget")
     private Collection<AutoPing> autopingCollection;
 
     public PingTarget() {
     }
 
-    public PingTarget(String id) {
-        this.id = id;
-    }
-
-    public PingTarget(String id, String name, String pingurl, int conditioncode, boolean autoenabled) {
-        this.id = id;
+    public PingTarget(String name, String pingurl, int conditioncode, boolean autoenabled) {
         this.name = name;
         this.pingurl = pingurl;
         this.conditioncode = conditioncode;
         this.autoEnabled = autoenabled;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public PingTarget(Object object, String name, String url, boolean b) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getName() {
@@ -135,14 +118,14 @@ public class PingTarget implements Serializable {
     }
 
     public boolean isAutoEnabled() {
-		return autoEnabled;
-	}
+        return autoEnabled;
+    }
 
-	public void setAutoEnabled(boolean autoEnabled) {
-		this.autoEnabled = autoEnabled;
-	}
+    public void setAutoEnabled(boolean autoEnabled) {
+        this.autoEnabled = autoEnabled;
+    }
 
-	@XmlTransient
+    @XmlTransient
     public Collection<AutoPing> getAutopingCollection() {
         return autopingCollection;
     }
@@ -173,7 +156,7 @@ public class PingTarget implements Serializable {
 
     @Override
     public String toString() {
-        return "com.reltask.kastleblog.weblogger.entities.PingTarget[ id=" + id + " ]";
+        return "com.hkstlr.reeler.weblogger.entities.PingTarget[ id=" + id + " ]";
     }
-    
+
 }

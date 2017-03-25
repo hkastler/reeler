@@ -80,6 +80,14 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
     }
+     public WeblogPermission(Weblog weblog, User user, List<String> actions, boolean pending) {
+        super("WeblogPermission user: " + user.getUserName());
+        super.setActionsAsList(actions);
+        super.setObjectType("Weblog");
+        super.setObjectId(weblog.getHandle());
+        super.setUserName(user.getUserName());
+        super.setPending(pending);
+    }
     
     public List<WeblogPermission> getWeblogPermissions(Weblog weblog) {
         // TODO Auto-generated method stub

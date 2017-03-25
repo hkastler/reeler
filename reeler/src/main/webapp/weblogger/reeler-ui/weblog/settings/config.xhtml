@@ -7,13 +7,16 @@
       xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
-        
+        <f:metadata>
+           
+            <f:viewAction action="#{weblogAuthorBean.configViewAction}"/>
+        </f:metadata>
         <ui:define name="title">
-            <h:outputText value="Weblog Settings Admin"></h:outputText>            
+            <h:outputText value="Weblog Settings Admin #{reelerUiBean.currentWeblog.id}"></h:outputText>            
         </ui:define>
 
         <ui:define name="head">
-           
+
         </ui:define>
 
         <ui:define name="navigation">
@@ -23,17 +26,16 @@
         </ui:define>
         <ui:define name="content">
             <f:view>
-                <ui:include src="configContent.xhtml"/>
-                
+                <ui:include src="configContent.xhtml"/>                
             </f:view>
         </ui:define>
 
         <ui:define name="postBody">
-            
+
         </ui:define>
-        
+
     </ui:composition>
-    
+
 </html>
 
 

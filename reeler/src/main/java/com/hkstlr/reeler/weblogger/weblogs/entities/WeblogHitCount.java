@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -34,62 +35,46 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogHitCount.getByWeblog", query = "SELECT h FROM WeblogHitCount h WHERE h.weblog = ?1")
     , @NamedQuery(name = "WeblogHitCount.getByWeblogEnabledTrueAndActiveTrue&DailyHitsGreaterThenZero&WeblogLastModifiedGreaterOrderByDailyHitsDesc", query = "SELECT h FROM WeblogHitCount h WHERE h.weblog.visible = true AND h.weblog.isActive = true AND h.weblog.lastModified > ?1 AND h.dailyHits > 0 ORDER BY h.dailyHits DESC")
     , @NamedQuery(name = "WeblogHitCount.updateDailyHitCountZero", query = "UPDATE WeblogHitCount h SET h.dailyHits = 0")})
-public class WeblogHitCount implements Serializable {
+public class WeblogHitCount extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    private String id;
     
+
     @Basic(optional = false)
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "websiteid", nullable = false)
+    @JoinColumn(name = "websiteid", nullable = false, insertable=true, updatable=true )
     private Weblog weblog;
-    
+
     @Column(name = "dailyhits")
     private Integer dailyHits;
 
     public WeblogHitCount() {
+        super();
+    }
+    
+    public WeblogHitCount(Weblog weblog) {
+        super();
+        this.weblog = weblog;
+    }
+    
+    public Weblog getWeblog() {
+        return weblog;
     }
 
-    public WeblogHitCount(String id) {
-        this.id = id;
-    }
-
-    public WeblogHitCount(String id, Weblog weblog) {
-        this.id = id;
+    public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
     }
 
-    public String getId() {
-        return id;
+    public Integer getDailyHits() {
+        return dailyHits;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setDailyHits(Integer dailyHits) {
+        this.dailyHits = dailyHits;
     }
 
-    public Weblog getWeblog() {
-		return weblog;
-	}
-
-	public void setWeblog(Weblog weblog) {
-		this.weblog = weblog;
-	}
-
-	public Integer getDailyHits() {
-		return dailyHits;
-	}
-
-	public void setDailyHits(Integer dailyHits) {
-		this.dailyHits = dailyHits;
-	}
-
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -113,5 +98,5 @@ public class WeblogHitCount implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.WeblogHitCount[ id=" + id + " ]";
     }
-    
+
 }

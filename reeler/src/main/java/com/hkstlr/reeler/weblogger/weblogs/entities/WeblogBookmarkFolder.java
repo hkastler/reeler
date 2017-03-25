@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Collection;
 import javax.persistence.Basic;
@@ -36,51 +37,31 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "WeblogBookmarkFolder.findByName", query = "SELECT b FROM WeblogBookmarkFolder b WHERE b.name = :name")
     , @NamedQuery(name = "WeblogBookmarkFolder.getByWebsite", query = "SELECT f FROM WeblogBookmarkFolder f WHERE f.weblog = ?1")
     , @NamedQuery(name = "WeblogBookmarkFolder.getByWebsite&amp;Name", query = "SELECT f FROM WeblogBookmarkFolder f WHERE f.weblog = ?1 AND f.name = ?2")})
-public class WeblogBookmarkFolder implements Serializable {
+public class WeblogBookmarkFolder extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    private String id;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
-    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false)
+
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable=true, updatable = true)
     @ManyToOne(optional = false)
     private Weblog weblog;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "folder")
     private Collection<WeblogBookmark> bookmarkCollection;
 
     public WeblogBookmarkFolder() {
     }
 
-    public WeblogBookmarkFolder(String id) {
-        this.id = id;
-    }
-
-    public WeblogBookmarkFolder(String id, String name) {
-        this.id = id;
+    public WeblogBookmarkFolder(String name) {
         this.name = name;
     }
 
-    public WeblogBookmarkFolder(String string, Weblog newWeblog) {
-		// TODO Auto-generated constructor stub
-	}
-
-	public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public WeblogBookmarkFolder(String name, Weblog newWeblog) {
+        this.name = name;
+        this.weblog = newWeblog;
     }
 
     public String getName() {
@@ -132,5 +113,5 @@ public class WeblogBookmarkFolder implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.BookmarkFolder[ id=" + id + " ]";
     }
-    
+
 }

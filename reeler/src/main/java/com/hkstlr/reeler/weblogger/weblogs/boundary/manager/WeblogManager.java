@@ -28,6 +28,8 @@ import javax.persistence.TypedQuery;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.pings.boundary.AutoPingManager;
+import com.hkstlr.reeler.weblogger.pings.boundary.PingTargetManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.ObjectPermission;
@@ -46,6 +48,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTagAggregate;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingTargetManager;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
+import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
 //import com.hkstlr.reeler.weblogger.search.entities.WeblogEntrySearchCriteria;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
@@ -88,11 +91,11 @@ public class WeblogManager extends AbstractManager<Weblog> {
     @Inject
     WeblogPermissionManager weblogPermissionManager;
     
-    //@Inject
-    //AutoPingManager autoPingMgr;
+    @Inject
+    AutoPingManager autoPingMgr;
     
-    //@Inject
-    //PingTargetManager pingTargetMgr;
+    @Inject
+    PingTargetManager pingTargetMgr;
     
     //@Inject
     //MediaFileManager mediaFileManager;
@@ -101,16 +104,102 @@ public class WeblogManager extends AbstractManager<Weblog> {
     private Logger log;
     
     /**
-     * Update existing weblog.
+     * add weblog.
      */
-    public void saveWeblog(Weblog weblog) throws WebloggerException {
-    	
+    public void addWeblog(Weblog weblog, User user) throws WebloggerException {
+    	weblog.setCreator(user.getUserName());
+        weblog.setDateCreated(new Date());
         weblog.setLastModified(new java.util.Date());
-        em.persist(weblog);
+        //for backwards compatibility with roller
+        weblog.setEditorTheme("basic");
+        em.merge(weblog);
+        log.info("Weblog " + weblog.getName() + " persisted");
+        log.info("adding contents");
+        addWeblogContents(weblog, user);
     }
     
-    public void removeWeblog(Weblog weblog) throws WebloggerException {
+    private void addWeblogContents(Weblog newWeblog, User user)
+    throws WebloggerException {
         
+        // grant weblog creator ADMIN permission
+        List<String> actions = new ArrayList<String>();
+        actions.add(WeblogPermission.ADMIN);
+        weblogPermissionManager.grantWeblogPermission(
+                newWeblog, user, actions, false);
+        
+        String cats = WebloggerConfig.getProperty("newuser.categories");
+        WeblogCategory firstCat = null;
+        if (cats != null) {
+            String[] splitcats = cats.split(",");
+            int counter = 0;
+            for (String cat : splitcats) {
+                if (cat.trim().length() == 0) {
+                    continue;
+                }
+                log.info("weblog:" + newWeblog.getId());
+                WeblogCategory c = new WeblogCategory(
+                                            newWeblog,
+                                            cat,
+                                            "description",
+                                            "image");
+                if (firstCat == null) {
+                    firstCat = c;
+                }
+                newWeblog.getWeblogCategories().add(c);
+                //this.em.merge(c);
+                
+                counter++;
+            }
+        }
+
+        // Use first category as default for Blogger API
+        if (firstCat != null) {
+            newWeblog.setBloggerCategory(firstCat);
+        }
+
+        this.em.merge(newWeblog);
+
+        // add default bookmarks
+        WeblogBookmarkFolder defaultFolder = new WeblogBookmarkFolder(
+                "default", newWeblog);
+        this.em.merge(defaultFolder);
+        
+        String blogroll = WebloggerConfig.getProperty("newuser.blogroll");
+        if (blogroll != null) {
+            String[] splitroll = blogroll.split(",");
+            for (String splitItem : splitroll) {
+                String[] rollitems = splitItem.split("\\|");
+                if (rollitems.length > 1) {
+                    WeblogBookmark b = new WeblogBookmark(
+                            defaultFolder,
+                            rollitems[0],
+                            "",
+                            rollitems[1].trim(),
+                            null,
+                            null);
+                    this.em.merge(b);
+                }
+            }
+        }
+
+        //roller.getMediaFileManager().createDefaultMediaFileDirectory(newWeblog);
+
+        // flush so that all data up to this point can be available in db
+        //this.strategy.flush();
+
+        // add any auto enabled ping targets
+        
+        
+        for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
+            if(pingTarget.isAutoEnabled()) {
+                AutoPing autoPing = new AutoPing(pingTarget, newWeblog);
+                autoPingMgr.saveAutoPing(autoPing);
+            }
+        }
+        em.flush();
+    }
+    
+    public void removeWeblog(Weblog weblog) throws WebloggerException {        
         // remove contents first, then remove weblog
         this.removeWeblogContents(weblog);
         this.em.remove(weblog);
@@ -228,7 +317,11 @@ public class WeblogManager extends AbstractManager<Weblog> {
             }
         }
     }
-    
+    public void saveWeblog(Weblog weblog) throws WebloggerException {
+    	
+        weblog.setLastModified(new java.util.Date());
+        em.merge(weblog);
+    }
     /**
      * @see org.apache.roller.weblogger.business.WeblogManager#saveTemplate(WeblogTemplate)
      */
@@ -241,13 +334,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
     public void saveTemplateRendition(CustomTemplateRendition rendition) throws WebloggerException {
         this.em.persist(rendition);
 
-       saveWeblog(rendition.getWeblogCustomTemplate().getWeblog());
+       //saveWeblog(rendition.getWeblogCustomTemplate().getWeblog());
     }
     
     public void removeTemplate(WeblogTemplate template) throws WebloggerException {
         this.em.remove(template);
         // update weblog last modified date.  date updated by saveWeblog()
-        saveWeblog(template.getWeblog());
+        //saveWeblog(template.getWeblog());
     }
     
     public void addWeblog(Weblog newWeblog) throws WebloggerException {
@@ -256,14 +349,15 @@ public class WeblogManager extends AbstractManager<Weblog> {
         this.addWeblogContents(newWeblog);
     }
     
-    private void addWeblogContents(Weblog newWeblog)
+     private void addWeblogContents(Weblog newWeblog)
     throws WebloggerException {
         
         // grant weblog creator ADMIN permission
         List<String> actions = new ArrayList<String>();
         actions.add(WeblogPermission.ADMIN);
-        userManager.grantWeblogPermission(
-                newWeblog, newWeblog.getCreator(), actions);
+        User user = userManager.getUserByUserName(newWeblog.getCreator());
+        weblogPermissionManager.grantWeblogPermission(
+                newWeblog, user, actions);
         
         String cats = WebloggerConfig.getProperty("newuser.categories");
         WeblogCategory firstCat = null;
@@ -281,7 +375,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 if (firstCat == null) {
                     firstCat = c;
                 }
-                this.em.persist(c);
+                this.em.merge(c);
             }
         }
 
@@ -290,12 +384,12 @@ public class WeblogManager extends AbstractManager<Weblog> {
             newWeblog.setBloggerCategory(firstCat);
         }
 
-        this.em.persist(newWeblog);
+        this.em.merge(newWeblog);
 
         // add default bookmarks
         WeblogBookmarkFolder defaultFolder = new WeblogBookmarkFolder(
                 "default", newWeblog);
-        this.em.persist(defaultFolder);
+        this.em.merge(defaultFolder);
         
         String blogroll = WebloggerConfig.getProperty("newuser.blogroll");
         if (blogroll != null) {
@@ -310,29 +404,28 @@ public class WeblogManager extends AbstractManager<Weblog> {
                             rollitems[1].trim(),
                             null,
                             null);
-                    this.em.persist(b);
+                    this.em.merge(b);
                 }
             }
         }
 
-        //mediaFileManager.createDefaultMediaFileDirectory(newWeblog);
+        //roller.getMediaFileManager().createDefaultMediaFileDirectory(newWeblog);
 
         // flush so that all data up to this point can be available in db
-        this.em.flush();
+        //this.strategy.flush();
 
         // add any auto enabled ping targets
-        //PingTargetManager pingTargetMgr = roller.getPingTargetManager();
         
         
-        /* for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
-        if(pingTarget.isAutoEnabled()) {
-        AutoPing autoPing = new AutoPing(
-        null, pingTarget, newWeblog);
-        autoPingMgr.saveAutoPing(autoPing);
+        for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
+            if(pingTarget.isAutoEnabled()) {
+                AutoPing autoPing = new AutoPing( pingTarget, newWeblog);
+                autoPingMgr.saveAutoPing(autoPing);
+            }
         }
-        }*/
 
     }
+   
     
     public Weblog getWeblog(String id) throws WebloggerException {
         return (Weblog) this.em.find(Weblog.class, id);

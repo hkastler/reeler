@@ -20,6 +20,9 @@ import com.hkstlr.reeler.weblogger.weblogs.control.TagStat;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import javax.ejb.Stateless;
 
 /**
@@ -81,8 +84,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             weblogEntry.setText("not found");
             log.log(Level.WARNING, "weblog: {0} not found, reason: {1}", new Object[]{anchor, e.getMessage()});
         }
-        
-        log.log(Level.INFO,"weblogEntry found:" + weblogEntry.getAnchor());
+
+        log.log(Level.INFO, "weblogEntry found:" + weblogEntry.getAnchor());
 
         return weblogEntry;
     }
@@ -124,22 +127,58 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         }
         return entry;
     }
-    public List<WeblogEntry> getWeblogEntriesByCategoryName(String weblogCategoryName){
-        
-        List<WeblogEntry> categoryEntries =  new ArrayList<>();
+
+    public List<WeblogEntry> getWeblogEntriesByCategoryName(String weblogCategoryName) {
+
+        List<WeblogEntry> categoryEntries = new ArrayList<>();
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByWeblogCategoryName");
-        log.log(Level.FINE,"weblogCategoryName:" + weblogCategoryName);
+        log.log(Level.FINE, "weblogCategoryName:" + weblogCategoryName);
         String trimmed = weblogCategoryName.trim();
         q.setParameter("weblogCategoryName", trimmed);
         categoryEntries = q.getResultList();
         return categoryEntries;
     }
-    
-    public WeblogEntry getLatestEntryForWeblog(Weblog weblog){
-               
+
+    public List<WeblogEntry> getWeblogEntriesByCategoryNameAndWeblog(String weblogCategoryName, Weblog weblog) {
+
+        List<WeblogEntry> categoryEntries = new ArrayList<>();
+        Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog");
+        log.log(Level.FINE, "weblogCategoryName:" + weblogCategoryName);
+        String trimmed = weblogCategoryName.trim();
+        q.setParameter("weblogCategoryName", trimmed);
+        q.setParameter("weblog", weblog);
+        categoryEntries = q.getResultList();
+        return categoryEntries;
+    }
+
+    public List<WeblogEntry> getWeblogEntriesByDateAndWeblog(String dateString, Weblog weblog) {
+        log.fine("dateString:" + dateString);
+        Integer year = Integer.parseInt(dateString.substring(0, 4));
+        log.info("year: " + year);
+        Integer month = Integer.parseInt(dateString.substring(4, 6));
+        log.info("month: " + month);
+        Integer date = Integer.parseInt(dateString.substring(6, 8));
+        log.info("date: " + date);
+        Calendar pubTimeBefore = Calendar.getInstance(new Locale(weblog.getLocale()));
+        pubTimeBefore.set(year, month-1, date-1);
+        log.info("pubTimeBefore" + pubTimeBefore.getTime().toString());
+        Calendar pubTimeAfter = Calendar.getInstance(new Locale(weblog.getLocale()));
+        pubTimeAfter.set(year, month-1, date+1);
+        log.info("pubTimeAfter" + pubTimeAfter.getTime().toString());
+        List<WeblogEntry> entries = new ArrayList<>();
+        Query q = getEntityManager().createNamedQuery("WeblogEntry.getWeblogEntriesByDateAndWeblog");
+        q.setParameter("pubTimeBefore", pubTimeBefore);
+        q.setParameter("pubTimeAfter", pubTimeAfter);
+        q.setParameter("weblog", weblog);
+        entries = q.getResultList();
+        return entries;
+    }
+
+    public WeblogEntry getLatestEntryForWeblog(Weblog weblog) {
+
         Query q = em.createNamedQuery("WeblogEntry.getLatestEntryForWeblog")
-                        .setParameter("weblog", weblog)
-                        .setMaxResults(1);
+                .setParameter("weblog", weblog)
+                .setMaxResults(1);
         WeblogEntry we = (WeblogEntry) q.getSingleResult();
         return we;
     }

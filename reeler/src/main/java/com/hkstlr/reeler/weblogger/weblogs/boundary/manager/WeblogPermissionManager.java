@@ -88,10 +88,35 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         // permission already exists, so add any actions specified in perm argument
         if (existingPerm != null) {
             existingPerm.addActions(actions);
+            
             save(existingPerm);
         } else {
             // it's a new permission, so store it
             WeblogPermission perm = new WeblogPermission(weblog, user, actions);
+            save(perm);
+        }
+    }
+    
+    public void grantWeblogPermission(Weblog weblog, User user, List<String> actions, boolean pending) throws WebloggerException {
+
+        // first, see if user already has a permission for the specified object
+        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
+                WeblogPermission.class);
+        q.setParameter(1, user.getUserName());
+        q.setParameter(2, weblog.getHandle());
+        WeblogPermission existingPerm = null;
+        try {
+            existingPerm = q.getSingleResult();
+        } catch (NoResultException ignored) {}
+
+        // permission already exists, so add any actions specified in perm argument
+        if (existingPerm != null) {
+            existingPerm.addActions(actions);
+            
+            save(existingPerm);
+        } else {
+            // it's a new permission, so store it
+            WeblogPermission perm = new WeblogPermission(weblog, user, actions, pending);
             save(perm);
         }
     }
@@ -116,7 +141,6 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         } else {
             // it's a new permission, so store it
             WeblogPermission perm = new WeblogPermission(weblog, user, actions);
-            perm.setPending(true);
             save(perm);
         }
     }

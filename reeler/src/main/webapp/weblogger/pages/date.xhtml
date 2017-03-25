@@ -6,8 +6,8 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <f:metadata>
-        <f:viewParam id="category" name="categoryName" value="#{weblogBean.categoryName}"/>
-        <f:viewAction action="#{weblogBean.categoryViewAction}"/>
+        <f:viewParam id="dateString" name="dateString" value="#{weblogBean.dateString}"/>
+        <f:viewAction action="#{weblogBean.dateViewAction}"/>
     </f:metadata>
     <ui:define name="title">#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</ui:define>
     <ui:define name="navbar-brand">
@@ -17,10 +17,10 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <h2 style="padding-top: 20px">Category: #{weblogBean.categoryName}</h2>
+            <h2 style="padding-top: 20px">Date #{weblogBean.dateString}</h2>
             <hr/>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() eq 0}">
-                No entries found for category #{weblogBean.categoryName}
+                No entries found for Date #{weblogBean.dateString}
             </div>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() gt 0}">
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
@@ -45,3 +45,4 @@
         </f:view>
     </ui:define>
 </ui:composition>
+

@@ -31,10 +31,15 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
+import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
+import java.util.ArrayList;
+import java.util.Map;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -100,7 +105,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     private String tagline;
 
     @Size(max = 255)
-    @Column(name = "creator", length = 255)
+    @Column(name = "creator", length = 255, nullable=false)
     private String creator;
 
     @Basic(optional = false)
@@ -180,7 +185,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "defaultcommentdays", nullable = false)
-    private int defaultCommentDays = 7;
+    private int defaultCommentDays = 0;
 
     @Basic(optional = false)
     @NotNull
@@ -219,15 +224,15 @@ public class Weblog extends AbstractEntity implements Serializable {
     private String analyticsCode;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog", fetch = FetchType.EAGER)
-    private List<WeblogCategory> weblogCategories;
+    private List<WeblogCategory> weblogCategories = new ArrayList<WeblogCategory>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
-    private List<WeblogBookmarkFolder> bookmarkFolders;
+    private List<WeblogBookmarkFolder> bookmarkFolders  = new ArrayList<WeblogBookmarkFolder>();
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
     private List<WeblogCustomTemplate> weblogCustomTemplates;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "website")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "website", fetch = FetchType.EAGER)
     private List<WeblogEntry> weblogEntries;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
@@ -238,7 +243,10 @@ public class Weblog extends AbstractEntity implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "website")
     private List<AutoPing> autopings;
-
+    
+    @Transient
+    private Map<String, WeblogEntryPlugin> initializedPlugins = null;
+    
     public Weblog() {
     }
 

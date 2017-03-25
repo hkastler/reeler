@@ -259,9 +259,5 @@ public class UserManager extends AbstractManager<User> {
         return null;
     }
 
-    public void grantWeblogPermission(Weblog newWeblog, String creator, List<String> actions) {
-        // TODO Auto-generated method stub
-
-    }
 
 }

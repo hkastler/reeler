@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.util.Comparator;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,20 +60,28 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     @Column(name = "position", nullable = false)
     private int position;
 
-    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = false)
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = true, updatable = true)
     @ManyToOne(optional = false)
     private Weblog weblog;
 
     public WeblogCategory() {
+        super();
     }
 
-    public WeblogCategory(String id, String name, int position) {
+    public WeblogCategory(String name, int position) {
+        super();
         this.name = name;
         this.position = position;
     }
 
-    public WeblogCategory(Weblog newWeblog, String split, Object object, Object object2) {
-        // TODO Auto-generated constructor stub
+    public WeblogCategory(Weblog newWeblog, String name, String description, String image) {
+        super();
+        this.weblog = newWeblog;
+        this.name = name;
+        this.description = description;
+        this.image = image;
+        //weblog.getWeblogCategories().add(this);
+        calculatePosition();
     }
 
     public String getId() {
@@ -117,6 +126,23 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
 
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
+    }
+    
+    public void calculatePosition() {
+        int size = weblog.getWeblogCategories().size();
+        if(size==0){
+            this.position = 0;
+        }
+       
+        if (size == 0) {
+            this.position = 0;
+        } else {
+             Integer maxPosition = weblog.getWeblogCategories().stream()
+                .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
+                .get()
+                .getPosition();
+            this.position = maxPosition + 1;
+        }
     }
 
     @Override

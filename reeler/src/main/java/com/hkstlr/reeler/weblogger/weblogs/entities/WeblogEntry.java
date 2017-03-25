@@ -77,6 +77,8 @@ import javax.persistence.Cacheable;
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus&Website", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1 AND e.website = ?2")
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
     , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :weblogCategoryName")
+    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :weblogCategoryName ")
+    , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime BETWEEN :pubTimeBefore AND :pubTimeAfter AND w.publishEntry = true")    
     , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :weblog ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
 
@@ -182,8 +184,8 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Column(name = "search_description", length = 255)
     private String searchDescription;
 
-    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false)
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, updatable = true, insertable = true)
+    @ManyToOne(optional = false)
     private Weblog website;
 
     @NotNull(message = "{WeblogEntry.category.NotNull}")

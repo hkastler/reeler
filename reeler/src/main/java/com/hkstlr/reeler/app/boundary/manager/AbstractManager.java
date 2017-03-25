@@ -28,6 +28,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaQuery;
 
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
+import java.util.Collection;
 import javax.ejb.Stateless;
 
 /**
@@ -36,8 +37,8 @@ import javax.ejb.Stateless;
  */
 public abstract class AbstractManager<T> {
 
-    @Inject
-    private Logger log;
+   
+    private Logger log = Logger.getLogger(AbstractManager.class.getName());
 
     private Class<T> entityClass;
 
@@ -56,6 +57,7 @@ public abstract class AbstractManager<T> {
 
     public void save(T entity) {
         getEntityManager().merge(entity);
+        getEntityManager().flush();
     }
 
     public void persist(T entity) {
@@ -69,6 +71,18 @@ public abstract class AbstractManager<T> {
     public void remove(T entity) {
         getEntityManager().remove(getEntityManager().merge(entity));
     }
+    
+    /**
+     * Remove object from persistence storage.
+     * @param pos the persistent objects to remove
+     * @throws org.apache.roller.weblogger.WebloggerException on any error
+     */
+    public void removeAll(Collection pos){
+        EntityManager em = getEntityManager();
+        for (Object obj : pos) {
+            em.remove(obj);
+        }
+    }
 
     public T find(Object id) {
         return getEntityManager().find(entityClass, id);
@@ -79,6 +93,7 @@ public abstract class AbstractManager<T> {
         log.log(Level.INFO, "className:" + className);
         log.log(Level.INFO, "id:" + id);
         String queryName = className.concat(".findById");
+        log.log(Level.INFO, "queryName:" + queryName);
         Query query = getEntityManager().createNamedQuery(queryName);
         query.setParameter("id", id);
         T record = null;

@@ -54,6 +54,7 @@ public class ReelerUIBean implements Serializable {
 
     public ReelerUIBean() {
         setUserFromSession();
+        //setUserWeblogs();
         log.fine("reelerUiBean user:" + this.user.getUserName());
 
     }
@@ -68,12 +69,8 @@ public class ReelerUIBean implements Serializable {
         pages.put("blogrolls", "Blogrolls");
         pages.put("mediafiles", "Media Files");
 
-        setUserWeblogs();
-        try {
-            setWeblogPermissions();
-        } catch (Exception ex) {
-            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        
     }
 
     /**
@@ -110,6 +107,7 @@ public class ReelerUIBean implements Serializable {
             log.info("weblog:" + blog.getHandle() + " has " + blog.getWeblogEntries().size() + " entries");
             finalUblogs.add(blog);
         }
+        this.userWeblogs = null;
         this.userWeblogs = finalUblogs;
     }
 
@@ -122,8 +120,9 @@ public class ReelerUIBean implements Serializable {
     public void setWeblogPermissions(List<Weblog> blogs) {
 
         Map<String, String> weblogPermissionMap = new HashMap<>();
-        StringBuilder permString = new StringBuilder();
+       
         for (Weblog blog : blogs) {
+            StringBuilder permString = new StringBuilder();
             List<WeblogPermission> perms;
             try {
                 perms = weblogger.getWeblogPermissionManager().getWeblogPermissions(blog);
@@ -187,10 +186,23 @@ public class ReelerUIBean implements Serializable {
         try {
             StringBuilder path = new StringBuilder(context.getRequestContextPath());
             path.append(this.path);
-            path.append("/weblog/").append(page).append(".xhtml");
+            path.append("/weblog/");
+            if(page.equals("config")){
+                path.append("settings/");
+            }
+            path.append(page).append(".xhtml");
             context.redirect(path.toString());
         } catch (IOException ex) {
             log.severe(ex.getMessage());
+        }
+    }
+    
+    public void indexViewAction(){
+        setUserWeblogs();
+        try {
+            setWeblogPermissions();
+        } catch (Exception ex) {
+            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

@@ -172,7 +172,7 @@ public class PingQueueEntry implements Serializable {
 
     @Override
     public String toString() {
-        return "com.reltask.kastleblog.weblogger.entities.PingQueueEntry[ id=" + id + " ]";
+        return "com.hkstlr.reeler.weblogger.entities.PingQueueEntry[ id=" + id + " ]";
     }
     
 }

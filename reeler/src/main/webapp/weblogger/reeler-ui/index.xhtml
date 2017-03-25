@@ -8,6 +8,10 @@
                 xmlns:ps="http://xmlns.jcp.org/jsf/passthrough">
     <!-- Page Content -->
     <f:view>
+        
+        <f:metadata>        
+            <f:viewAction action="#{reelerUiBean.indexViewAction}"/>
+        </f:metadata>
         <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
                         xmlns="http://www.w3.org/1999/xhtml"
                         xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -48,8 +52,9 @@
                                                                    jsfc="h:commandLink">Entries(#{blog.weblogEntries.size()})</a></form><br/>
                                             <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'comments')}"
                                                                    jsfc="h:commandLink">Comments()</a></form><br/>
-                                           
-                                            <a href="#{request.contextPath}#{reelerUiBean.path}/weblog/settings/config.xhtml">Settings</a><br/>
+                                            <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'config')}"
+                                                                   jsfc="h:commandLink">Settings</a></form><br/>
+                                            
                                         </div>
                                         
                                     </div>

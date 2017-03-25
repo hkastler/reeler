@@ -34,7 +34,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.plugins.entities.PluginInterface;
 import java.io.IOException;
-//import com.reltask.kastleblog.weblogger.control.config.WebloggerRuntimeConfig;
+//import com.hkstlr.reeler.weblogger.control.config.WebloggerRuntimeConfig;
 
 
 /**

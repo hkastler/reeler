@@ -18,7 +18,11 @@ import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogHitCount;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -37,12 +41,19 @@ public class WeblogBean {
     @ManagedProperty(value = "#{param.categoryName}")
     private String categoryName;
     
-    private List<WeblogEntry> categoryEntries;
+    @ManagedProperty(value = "#{param.dateString}")
+    private String dateString = new String();
+    
+    private List<WeblogEntry> viewEntries;
+    
+    private List<WeblogBookmark> bookmarks;
 
     @Inject
     private Logger log;
 
     private Weblog weblog;
+    
+    private WeblogHitCount weblogHitCount;
 
     public WeblogBean() {
     }
@@ -52,6 +63,7 @@ public class WeblogBean {
         //log.log(Level.WARNING,"hello from WeblogBean");
         try {
             this.weblog = getWeblogByHandle(handle);
+            
         } catch (Exception e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
@@ -82,14 +94,29 @@ public class WeblogBean {
     public void setCategoryName(String categoryName){
         this.categoryName = categoryName;
     }
-    
 
-    public List<WeblogEntry> getCategoryEntries() {
-        return categoryEntries;
+    public List<WeblogEntry> getViewEntries() {
+        return viewEntries;
     }
 
-    public void setCategoryEntries(List<WeblogEntry> categoryEntries) {
-        this.categoryEntries = categoryEntries;
+    public void setViewEntries(List<WeblogEntry> viewEntries) {
+        this.viewEntries = viewEntries;
+    }   
+   
+    public String getDateString() {
+        return dateString;
+    }
+
+    public void setDateString(String dateString) {
+        this.dateString = dateString;
+    }
+
+    public List<WeblogBookmark> getBookmarks() {
+        return bookmarks;
+    }
+
+    public void setBookmarks(List<WeblogBookmark> bookmarks) {
+        this.bookmarks = bookmarks;
     }
     
     
@@ -105,11 +132,10 @@ public class WeblogBean {
         Weblog weblog = null;
         try {
             weblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
-            //lazy hibernate load
-            //might need some refactoring here, for larger installations
-            //for personal use it should be no problem
-            List<WeblogEntry> weblogEntries = weblogger.getWeblogEntryManager().getWeblogEntriesForWeblog(weblog);
-            weblog.setWeblogEntries(weblogEntries);
+            //List<WeblogEntry> weblogEntries = weblogger.getWeblogEntryManager().getWeblogEntriesForWeblog(weblog);
+            //weblog.setWeblogEntries(weblogEntries);
+            List<WeblogBookmark> weblogBookmarks = weblogger.getWeblogBookmarkManager().getBookmarksForWeblog(weblog);
+            setBookmarks(weblogBookmarks);
             log.log(Level.FINE, "weblog retrieved:" + weblog.getName());
 
         } catch (WebloggerException ex) {
@@ -139,8 +165,14 @@ public class WeblogBean {
        if(this.categoryName == null){
            this.categoryName = "Technology";
        }
-        this.categoryEntries = weblogger.getWeblogEntryManager()
-                .getWeblogEntriesByCategoryName(categoryName);
-       log.fine("number of categoryEntries:" + this.categoryEntries.size());
+        this.viewEntries = weblogger.getWeblogEntryManager()
+                .getWeblogEntriesByCategoryNameAndWeblog(categoryName,weblog);
+       log.fine("number of viewEntries:" + this.viewEntries.size());
+    }
+    
+    public void dateViewAction(){       
+       this.viewEntries = weblogger.getWeblogEntryManager()
+                .getWeblogEntriesByDateAndWeblog(this.dateString,weblog);
+       log.fine("number of viewEntries:" + this.viewEntries.size());
     }
 }
