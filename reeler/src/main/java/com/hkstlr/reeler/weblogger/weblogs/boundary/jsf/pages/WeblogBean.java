@@ -175,4 +175,10 @@ public class WeblogBean {
                 .getWeblogEntriesByDateAndWeblog(this.dateString,weblog);
        log.fine("number of viewEntries:" + this.viewEntries.size());
     }
+    
+    public void weblogViewAction(){
+        this.viewEntries = weblogger.getWeblogEntryManager()
+                .getWeblogEntriesForWeblog(weblog);
+        log.fine("number of viewEntries:" + this.viewEntries.size());
+    }
 }

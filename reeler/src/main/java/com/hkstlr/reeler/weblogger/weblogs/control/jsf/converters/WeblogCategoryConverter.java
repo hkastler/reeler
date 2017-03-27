@@ -35,7 +35,7 @@ public class WeblogCategoryConverter implements Converter {
 
     @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
-        log.info("jsf doomed to oblivion");
+        
         try {
             String id = value;
             //.find apparently only works with numeric fields

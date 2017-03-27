@@ -8,7 +8,7 @@
 
     <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
         <ui:define name="title">
-            <h:outputText value="Create Entry"></h:outputText>            
+            <h:outputText value="#{weblogEntryAuthorBean.actionLabel} Entry"></h:outputText>            
         </ui:define>
 
         <ui:define name="head">
@@ -24,7 +24,8 @@
         </ui:define>
         <ui:define name="content">
             <f:view>
-                <h2>Create Entry for #{weblogEntryAuthorBean.weblog.name}</h2>
+                <h2>#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
+                    for #{weblogEntryAuthorBean.weblog.name}</h2>
                 <div id="weblogEntryDiv">
                     <h:form id="weblogEntryForm" class="form" prependId="false">   
 
@@ -137,7 +138,8 @@
                         <div class="form-group">
                             <div>
                                 <div class="checkbox-inline">
-                                    <h:selectBooleanCheckbox id="allowComments"/>
+                                    <h:selectBooleanCheckbox id="allowComments"
+                                                             value="#{weblogEntryAuthorBean.weblogEntry.allowComments}"/>
                                     <label jsf:for="allowComments">Allow Comments for</label>
                                     &nbsp;
                                     <h:selectOneMenu 
@@ -198,19 +200,29 @@
                                 <h:message for="weblogEntryForm:enclosureURL" style="color: red"/>
                             </div>
                         </div>
-
+                        <input type="hidden" name="id" value="#{weblogEntryAuthorBean.id}"/>
+                        <input type="hidden" name="action" value="#{weblogEntryAuthorBean.action}"/>
                         <div class="form-group">
                             <div>
                                 <h:commandButton id="submitDraft" 
                                                  value="Save as Draft"
                                                  action="#{weblogEntryAuthorBean.saveAsDraft}"
-                                                 styleClass="btn btn-info">
+                                                 styleClass="btn btn-info"
+                                                 rendered="#{weblogEntryAuthorBean.action eq 'create'}">
 
                                 </h:commandButton>
                                 <h:commandButton id="submitPost" 
                                                  value="Post to Weblog"
                                                  action="#{weblogEntryAuthorBean.postToWeblog}"
-                                                 styleClass="btn btn-info">
+                                                 styleClass="btn btn-primary"
+                                                 rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+
+                                </h:commandButton>
+                                 <h:commandButton id="editWeblogEntry" 
+                                                 value="Update Weblog Entry"
+                                                 action="#{weblogEntryAuthorBean.updateWeblogEntry}"
+                                                 styleClass="btn btn-primary"
+                                                 rendered="#{weblogEntryAuthorBean.action eq 'edit'}">
 
                                 </h:commandButton>
                             </div>

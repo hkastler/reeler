@@ -8,6 +8,7 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -50,7 +51,7 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
     private Weblog weblog;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "folder")
-    private Collection<WeblogBookmark> bookmarkCollection;
+    private List<WeblogBookmark> bookmarks;
 
     public WeblogBookmarkFolder() {
     }
@@ -81,12 +82,12 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
     }
 
     @XmlTransient
-    public Collection<WeblogBookmark> getBookmarkCollection() {
-        return bookmarkCollection;
+    public List<WeblogBookmark> getBookmarks() {
+        return bookmarks;
     }
 
-    public void setBookmarkCollection(Collection<WeblogBookmark> bookmarkCollection) {
-        this.bookmarkCollection = bookmarkCollection;
+    public void setBookmarks(List<WeblogBookmark> bookmarks) {
+        this.bookmarks = bookmarks;
     }
 
     @Override

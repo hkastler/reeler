@@ -5,13 +5,13 @@
  */
 package com.hkstlr.reeler.weblogger.pings.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -23,25 +23,16 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import java.sql.Timestamp;
+import java.util.Calendar;
+
+;
 
 /**
  *
  * @author henry.kastler
- * 
- * <named-query name="">
-            <query></query>
-        </named-query>
-        <named-query name="">
-            <query>
-            </query>
-        </named-query>
-        <named-query name="PingQueueEntry.getByWebsite">
-            <query>SELECT p FROM PingQueueEntry p WHERE p.website = ?1</query>
-        </named-query>
-        <named-query name="PingQueueEntry.removeByPingTarget">
-            <query>DELETE FROM PingQueueEntry p WHERE p.pingTarget = ?1</query>
-        </named-query>
+ *
  */
 @Entity
 @Table(name = "pingqueueentry")
@@ -52,43 +43,37 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;;
     , @NamedQuery(name = "PingQueueEntry.findByEntryTime", query = "SELECT p FROM PingQueueEntry p WHERE p.entryTime = :entryTime")
     , @NamedQuery(name = "PingQueueEntry.findByPingTarget", query = "SELECT p FROM PingQueueEntry p WHERE p.pingTarget = :pingTarget")
     , @NamedQuery(name = "PingQueueEntry.findByWebsite", query = "SELECT p FROM PingQueueEntry p WHERE p.website = :websiteId")
-    , @NamedQuery(name = "PingQueueEntry.findByPingTargetAndWebsite" , query = "SELECT p FROM PingQueueEntry p WHERE p.pingTarget = :pingTarget AND p.website = :website")
+    , @NamedQuery(name = "PingQueueEntry.findByPingTargetAndWebsite", query = "SELECT p FROM PingQueueEntry p WHERE p.pingTarget = :pingTarget AND p.website = :website")
     , @NamedQuery(name = "PingQueueEntry.findByAttempts", query = "SELECT p FROM PingQueueEntry p WHERE p.attempts = :attempts")
-    , @NamedQuery(name = "PingQueueEntry.removeByPingTarget", query ="DELETE FROM PingQueueEntry p WHERE p.pingTarget = ?1")
+    , @NamedQuery(name = "PingQueueEntry.removeByPingTarget", query = "DELETE FROM PingQueueEntry p WHERE p.pingTarget = ?1")
     , @NamedQuery(name = "PingQueueEntry.getByPingTargetAndWebsite", query = "SELECT p FROM PingQueueEntry p WHERE p.pingTarget = :pingTarget AND p.website = :website")
     , @NamedQuery(name = "PingQueueEntry.getAllOrderByEntryTime", query = "SELECT p FROM PingQueueEntry p ORDER BY p.entryTime")
     , @NamedQuery(name = "PingQueueEntry.getByPingTarget&Website", query = "SELECT p FROM PingQueueEntry p WHERE p.pingTarget = ?1 AND p.website = ?2")
     , @NamedQuery(name = "PingQueueEntry.getByWebsite", query = "SELECT p FROM PingQueueEntry p WHERE p.website = ?1")})
-public class PingQueueEntry implements Serializable {
+public class PingQueueEntry extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    private String id;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "entrytime", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date entryTime;
-    
+    private Calendar entryTime;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 48)
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pingtargetid", referencedColumnName = "id", nullable = false)
     private PingTarget pingTarget;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 48)
-    @ManyToOne(cascade = CascadeType.ALL )
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false)
     private Weblog website;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "attempts", nullable = false)
@@ -97,52 +82,40 @@ public class PingQueueEntry implements Serializable {
     public PingQueueEntry() {
     }
 
-    public PingQueueEntry(String id) {
-        this.id = id;
-    }
+    public PingQueueEntry(Calendar entryTime, PingTarget pingTarget,
+            Weblog website, int attempts) {
 
-    public PingQueueEntry(String id, Date entryTime, PingTarget pingTarget, 
-    		Weblog website, int attempts) {
-        this.id = id;
         this.entryTime = entryTime;
         this.pingTarget = pingTarget;
         this.website = website;
         this.attempts = attempts;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Date getEntryTime() {
+    public Calendar getEntryTime() {
         return entryTime;
     }
 
-    public void setEntryTime(Date entryTime) {
+    public void setEntryTime(Calendar entryTime) {
         this.entryTime = entryTime;
     }
-    
+
     public PingTarget getPingTarget() {
-		return pingTarget;
-	}
+        return pingTarget;
+    }
 
-	public void setPingTarget(PingTarget pingTarget) {
-		this.pingTarget = pingTarget;
-	}
+    public void setPingTarget(PingTarget pingTarget) {
+        this.pingTarget = pingTarget;
+    }
 
-	public Weblog getWebsite() {
-		return website;
-	}
+    public Weblog getWebsite() {
+        return website;
+    }
 
-	public void setWebsite(Weblog website) {
-		this.website = website;
-	}
+    public void setWebsite(Weblog website) {
+        this.website = website;
+    }
 
-	public int getAttempts() {
+    public int getAttempts() {
         return attempts;
     }
 
@@ -174,5 +147,5 @@ public class PingQueueEntry implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.PingQueueEntry[ id=" + id + " ]";
     }
-    
+
 }

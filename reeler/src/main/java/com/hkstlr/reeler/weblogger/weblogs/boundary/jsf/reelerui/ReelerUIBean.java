@@ -67,10 +67,7 @@ public class ReelerUIBean implements Serializable {
         pages.put("comments", "Comments");
         pages.put("categories", "Categories");
         pages.put("blogrolls", "Blogrolls");
-        pages.put("mediafiles", "Media Files");
-
-        
-        
+        pages.put("mediafiles", "Media Files");       
     }
 
     /**
@@ -105,6 +102,7 @@ public class ReelerUIBean implements Serializable {
         }
         for (Weblog blog : ublogs) {
             log.info("weblog:" + blog.getHandle() + " has " + blog.getWeblogEntries().size() + " entries");
+            //blog.getBookmarkFolders().forEach(f -> f.getBookmarks());
             finalUblogs.add(blog);
         }
         this.userWeblogs = null;
@@ -198,6 +196,15 @@ public class ReelerUIBean implements Serializable {
     }
     
     public void indexViewAction(){
+        setUserWeblogs();
+        try {
+            setWeblogPermissions();
+        } catch (Exception ex) {
+            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public void blogrollsViewAction(){
         setUserWeblogs();
         try {
             setWeblogPermissions();

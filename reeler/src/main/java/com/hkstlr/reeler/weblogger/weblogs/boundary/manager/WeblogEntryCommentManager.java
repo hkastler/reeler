@@ -5,11 +5,14 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
+import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment.ApprovalStatus;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -19,7 +22,7 @@ import javax.persistence.Query;
  * @author henry.kastler
  */
 @Stateless
-public class WeblogEntryCommentManager {
+public class WeblogEntryCommentManager extends AbstractManager {
 
     @PersistenceContext
     private EntityManager em;
@@ -31,20 +34,8 @@ public class WeblogEntryCommentManager {
     public WeblogEntryCommentManager() {
         //super(WeblogEntryComment.class);
     }
-
-    public void create(WeblogEntryComment entity) {
-        persist(entity);
-    }
-
-    public void save(WeblogEntryComment entity) {
-        persist(entity);
-    }
-
-    public void persist(WeblogEntryComment entity) {
-        getEntityManager().persist(entity);
-    }
-
-    public List<WeblogEntryComment> getCommentsForWeblog(Weblog weblog){
+   
+    public List<WeblogEntryComment> getCommentsForWeblog(Weblog weblog, ApprovalStatus status){
         /*String sqlString = "SELECT rc.*, re.*" +
         "	FROM public.roller_comment rc" +
         "    INNER JOIN weblogentry re" +
@@ -56,12 +47,16 @@ public class WeblogEntryCommentManager {
         */
         
         //System.out.println("weblog:" + weblog.getName());
-        String qlString = "SELECT wec FROM WeblogEntryComment wec LEFT JOIN FETCH wec.weblogEntry we WHERE we.website = ?1";
+        String qlString = "SELECT wec FROM WeblogEntryComment wec "
+                + "LEFT JOIN FETCH wec.weblogEntry we "
+                + "WHERE we.website = ?1 "
+                + "AND wec.status = ?2";
         //qlString.concat("");
         //qlString.concat("JOIN Weblog rb");
         //qlString.concat("WHERE rb = :weblog ");                
         Query query = getEntityManager().createQuery(qlString);
         query.setParameter(1, weblog);
+        query.setParameter(2, status);
         List<WeblogEntryComment> results = query.getResultList();
         return results;
     }

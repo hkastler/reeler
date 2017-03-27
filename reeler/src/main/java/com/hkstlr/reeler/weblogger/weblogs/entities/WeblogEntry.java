@@ -72,7 +72,7 @@ import javax.persistence.Cacheable;
     , @NamedQuery(name = "WeblogEntry.getByPinnedToMain&statusOrderByPubTimeDesc", query = "SELECT w FROM WeblogEntry w WHERE w.pinnedToMain = ?1 AND w.status = ?2 ORDER BY w.pubTime DESC")
     , @NamedQuery(name = "WeblogEntry.getByWebsite&AnchorOrderByPubTimeDesc", query = "SELECT w FROM WeblogEntry w WHERE w.website = ?1 AND w.anchor = ?2 ORDER BY w.pubTime DESC")
     , @NamedQuery(name = "WeblogEntry.getByWebsite&Anchor", query = "SELECT w FROM WeblogEntry w WHERE w.website = ?1 AND w.anchor = ?2")
-    , @NamedQuery(name = "WeblogEntry.getByWebsite", query = "SELECT w FROM WeblogEntry w WHERE w.website = ?1")
+    , @NamedQuery(name = "WeblogEntry.getByWebsite", query = "SELECT w FROM WeblogEntry w WHERE w.website = ?1 ORDER BY w.pubTime DESC")
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1")
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus&Website", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1 AND e.website = ?2")
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
@@ -146,7 +146,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "commentdays", nullable = false)
-    private int commentDays = 7;
+    private int commentDays = 0;
 
     @Basic(optional = false)
     @NotNull
@@ -203,21 +203,15 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     private List<WeblogEntryAttribute> entryAttributes = new ArrayList<>();
 
     @Transient
-    private Set<WeblogEntryTag> removedTags;
+    private Set<WeblogEntryTag> removedTags = new HashSet<WeblogEntryTag>();;
 
     @Transient
-    private Set<WeblogEntryTag> addedTags;
+    private Set<WeblogEntryTag> addedTags = new HashSet<WeblogEntryTag>();
 
     public WeblogEntry() {
-        this.removedTags = new HashSet<WeblogEntryTag>();
-        this.addedTags = new HashSet<WeblogEntryTag>();
+       
     }
 
-    public WeblogEntry(String id) {
-        this.removedTags = new HashSet<WeblogEntryTag>();
-        this.addedTags = new HashSet<WeblogEntryTag>();
-
-    }
 
     public WeblogEntry(String id, String anchor, String creator, String title, String text, Calendar updatetime, boolean publishentry, boolean allowcomments, int commentdays, boolean righttoleft, boolean pinnedtomain, String status) {
         this.removedTags = new HashSet<WeblogEntryTag>();

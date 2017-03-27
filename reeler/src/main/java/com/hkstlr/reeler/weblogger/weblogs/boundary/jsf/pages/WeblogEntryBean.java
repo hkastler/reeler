@@ -142,8 +142,12 @@ public class WeblogEntryBean {
     public void postComment() {
         log.info("postingComment");
         log.info("numberOfComments:" + getComments(this.weblogEntry).size());
-        //this.weblogEntryComment.setWeblogEntry(this.weblogEntry);
-        //call this to get around lazy load issues
+        
+        //ApprovalStatus.PENDING is the default
+        boolean moderated = weblog.isModerateComments();
+        if(!moderated){
+             this.weblogEntryComment.setStatus(WeblogEntryComment.ApprovalStatus.APPROVED);
+        }
         this.comments = this.weblogEntryComment.getWeblogEntry().getComments();
         weblogger.getWeblogEntryCommentManager().saveAndLoadComments(this.weblogEntryComment);
         this.commentIsPosted = true;

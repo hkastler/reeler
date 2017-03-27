@@ -5,15 +5,9 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
-import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.ReelerUIBean;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,12 +18,9 @@ import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 
 /**
@@ -38,30 +29,15 @@ import javax.inject.Inject;
  */
 @ManagedBean
 @RequestScoped
-public class WeblogEntryAuthorBean implements Serializable {
+public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Serializable {
     
     
     @Inject
     private Logger log;
-
-    @EJB
-    private WeblogEntryManager weblogEntryManager;
-    
-    @EJB
-    private WeblogManager weblogManager;
-    
-    @EJB
-    private WeblogCategoryManager weblogCategoryManager;
-    
-    @Inject
-    private ReelerUIBean reelerUiBean;
     
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
     
-    @ManagedProperty(value = "#{param.action}")
-    private String action = "create";
-
     private WeblogEntry weblogEntry;
     
     private Calendar cal;
@@ -80,6 +56,7 @@ public class WeblogEntryAuthorBean implements Serializable {
     private String tagString = new String();
 
     public WeblogEntryAuthorBean() {
+        super(WeblogEntry.class);
     }
     
     @PostConstruct
@@ -87,9 +64,23 @@ public class WeblogEntryAuthorBean implements Serializable {
         //this.weblog = currentWeblog;//weblogManager.findByHandle(handle);
         this.handle = weblog.getHandle();
         this.cal = Calendar.getInstance(TimeZone.getTimeZone(weblog.getTimeZone()));
-        if(this.weblogEntry == null){
-            this.weblogEntry = new WeblogEntry(weblog,reelerUiBean.getUser());   
+                
+        if(this.id != null && !this.id.isEmpty()){
+            this.weblogEntry = weblogger.getWeblogEntryManager().findById(id);
+            this.action = "edit";
+            this.actionLabel = "Edit";
+        }else{
+            log.info("initing new WeblogEntryfor " + reelerUiBean.getCurrentWeblog().getName());
+            this.weblogEntry = new WeblogEntry();
+            this.weblogEntry = new WeblogEntry(weblog,reelerUiBean.getUser());
+            weblogEntry.setCommentDays(weblog.getDefaultCommentDays());
         }
+        
+        if(this.action == null || this.action.isEmpty()){
+            this.action = "create";
+            this.actionLabel = "Create";
+        }
+        
     }
 
     public Weblog getWeblog() {
@@ -197,14 +188,12 @@ public class WeblogEntryAuthorBean implements Serializable {
         this.action = action;
     }
     
-    
-    
     private void setupAndSave(String facesMsg){
         String anchor = weblogEntry.getTitle().replace(" ", WeblogEntry.TITLE_SEPARATOR);
         weblogEntry.setAnchor(anchor);
         weblogEntry.setPubTime(setCalFromStrPubDate(strDateTimeOfPubDate));
         weblogEntry.setUpdateTime(setCalFromDate(new Date()));
-        weblogEntryManager.save(weblogEntry);
+        save(weblogEntry);
         FacesMessageManager.addSuccessMessage("weblogEntryForm", facesMsg);
     }
     
@@ -219,6 +208,19 @@ public class WeblogEntryAuthorBean implements Serializable {
         //TODO: need some logic for PENDING and SCHEDULED
         weblogEntry.setStatus(WeblogEntry.PubStatus.PUBLISHED.toString());
         setupAndSave("Blog post published");
+    }
+    
+    public void updateWeblogEntry() {
+        log.info("updated?");
+        //TODO: need some logic for PENDING and SCHEDULED
+        weblogEntry.setUpdateTime(setCalFromDate(new Date()));
+        save(weblogEntry);
+        FacesMessageManager.addSuccessMessage("weblogEntryForm", "Entry updated");
+    }
+
+    
+    public void save(WeblogEntry weblogEntry) {
+        weblogger.getWeblogEntryManager().save(weblogEntry);
     }
 
 }

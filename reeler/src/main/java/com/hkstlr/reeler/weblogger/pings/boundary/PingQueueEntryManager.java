@@ -10,7 +10,11 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
 import java.sql.Timestamp;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -72,7 +76,7 @@ public class PingQueueEntryManager extends AbstractManager<PingQueueEntry> {
     }
 
     
-    public void addQueueEntry(AutoPing autoPing) throws WebloggerException {
+    public void addQueueEntry(AutoPing autoPing, TimeZone timeZone, Locale locale) throws WebloggerException {
         log.warning("Creating new ping queue entry for auto ping configuration: " 
             + autoPing);
         
@@ -84,10 +88,10 @@ public class PingQueueEntryManager extends AbstractManager<PingQueueEntry> {
             return;
         }
 
-        Timestamp now = new Timestamp(System.currentTimeMillis());
+        Calendar now = Calendar.getInstance(timeZone, locale);
+        now.setTime(new Date());
         PingQueueEntry pingQueueEntry =
-                new PingQueueEntry(
-                    null, now, autoPing.getPingTarget(), 
+                new PingQueueEntry(now, autoPing.getPingTarget(), 
                     autoPing.getWebsite(), 0);
         this.saveQueueEntry(pingQueueEntry);
     }

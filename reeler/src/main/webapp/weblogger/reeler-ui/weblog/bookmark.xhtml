@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:jsf="http://xmlns.jcp.org/jsf"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    
+    <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
+        <ui:define name="title">
+            <h:outputText value="#{weblogBookmarkAuthorBean.actionLabel} Bookmark"></h:outputText>            
+        </ui:define>
+
+        <ui:define name="navigation">
+            <ui:include src="navigation.xhtml">
+                <ui:param name="page" value="blogrolls"/>
+            </ui:include>
+        </ui:define>
+        <ui:define name="content">
+            <f:view>
+                <h2>#{weblogBookmarkAuthorBean.actionLabel} #{labels.res.getString('bookmarksForm.rootTitle')} for #{reelerUiBean.currentWeblog.name}</h2>
+                <div id="weblogBookmarkDiv">
+                    <h:form id="weblogBookmarkForm" class="form" prependId="false">   
+
+                        <h:panelGroup id="messagePanel" layout="block">
+                            <h:messages 
+                                errorStyle="color: red" 
+                                infoStyle="color: green" 
+                                layout="table"/>
+                        </h:panelGroup>
+
+                        <div class="form-group">
+                            <div>
+                                <label jsf:for="name" 
+                                       class="control-label #{name.isValid ? '':'has-error'}">Name</label>
+                                <input jsfc="h:inputText"
+                                       id="name"
+                                       value="#{weblogBookmarkAuthorBean.weblogBookmark.name}"
+                                       class="form-control"
+                                       type="text"
+                                       /> 
+                                <h:message for="weblogBookmarkForm:name" style="color: red"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div>
+                                <label jsf:for="description" class="control-label">Description</label>
+                                <input jfsc="h:inputText"
+                                       jsf:id="description"  
+                                       jsf:value="#{weblogBookmarkAuthorBean.weblogBookmark.description}"                                       
+                                       type="text"
+                                       class="form-control"/>
+                                <h:message for="weblogBookmarkForm:description" style="color: red"/>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div>
+                                <label jsf:for="url" class="control-label">URL</label>
+                                <input jfsc="h:inputText"
+                                       jsf:id="url"  
+                                       jsf:value="#{weblogBookmarkAuthorBean.weblogBookmark.url}"                                       
+                                       type="text"
+                                       class="form-control"/>
+                                <h:message for="weblogBookmarkForm:url" style="color: red"/>
+                            </div>
+                        </div>
+
+                        
+
+                        <div class="form-group">
+                            <div>
+                                <label jsf:for="feedUrl" 
+                                       class="control-label">Feed URL</label>
+                                <input jsfc="h:inputText"
+                                       id="feedUrl"
+                                       value="#{weblogBookmarkAuthorBean.weblogBookmark.feedUrl}"
+                                       class="form-control"
+                                       type="text"
+                                       /> 
+                                <h:message for="weblogBookmarkForm:feedUrl" style="color: red"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div>
+                               
+                                <h:commandButton id="submitCategory" 
+                                                 value="Save"
+                                                 action="#{weblogBookmarkAuthorBean.save}"
+                                                 styleClass="btn btn-primary">
+
+                                </h:commandButton>
+                            </div>
+                        </div>
+                        <input type="hidden" name="id" value="#{weblogBookmarkAuthorBean.id}"/>
+                        <input type="hidden" name="action" value="#{weblogBookmarkAuthorBean.action}"/>
+                    </h:form>
+                </div>
+            </f:view>
+
+        </ui:define>
+
+    </ui:composition>
+
+</html>

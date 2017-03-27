@@ -56,7 +56,8 @@ public class WeblogAuthorBean implements Serializable {
     @PostConstruct
     private void init() {
         log.info("current Weblog: " + weblog.getName());
-       
+        
+        
         //set the default categories
         //this.weblog.setWeblogCategories(wcm.findAll());
     }

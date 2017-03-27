@@ -8,12 +8,12 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.UUID;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -25,7 +25,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-
 
 /**
  *
@@ -60,10 +59,13 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogEntryComment.getMostCommentedWeblogEntryByWebsite&amp;EndDate&amp;StartDate", query = "SELECT COUNT(c), c.weblogEntry.website.handle, c.weblogEntry.anchor, c.weblogEntry.title FROM WeblogEntryComment c WHERE c.weblogEntry.website = ?1 AND c.weblogEntry.pubTime < ?2 AND c.weblogEntry.pubTime > ?3 GROUP BY c.weblogEntry.website.handle, c.weblogEntry.anchor, c.weblogEntry.title")})
 public class WeblogEntryComment extends AbstractEntity implements Serializable {
 
-	
     private static final long serialVersionUID = 1L;
     
-    
+    // approval status states
+    public enum ApprovalStatus {
+        APPROVED, DISAPPROVED, SPAM, PENDING
+    }
+
     @Size(max = 255)
     @Column(name = "name", length = 255)
     private String name;
@@ -71,57 +73,54 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     @Size(max = 255)
     @Column(name = "email", length = 255)
     private String email;
-    
+
     @Size(max = 255)
     @Column(name = "url", length = 255)
     private String url;
-    
+
     @Size(max = 2147483647)
     @Column(name = "content", length = 2147483647)
     private String content;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "posttime", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date postTime;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "notify", nullable = false)
     private boolean notify;
-    
+
     @Size(max = 128)
     @Column(name = "remotehost", length = 128)
     private String remoteHost;
-    
+
     @Size(max = 255)
     @Column(name = "referrer", length = 255)
     private String referrer;
-    
+
     @Size(max = 255)
     @Column(name = "useragent", length = 255)
     private String userAgent;
-    
-   
-    @Basic(optional = false)    
+
+    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
     @Column(name = "status", nullable = false, length = 20)
-    //this really should be of ApprovalStatus, but it only works with existing data 
-    //with type String
-    private String status;
-    
+    @Enumerated(EnumType.STRING)
+    private ApprovalStatus status = ApprovalStatus.PENDING;
+
     @Size(max = 255)
     @Column(name = "plugins", length = 255)
     private String plugins;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 128)
     @Column(name = "contenttype", nullable = false, length = 128)
     private String contentType;
-    
+
     @JoinColumn(name = "entryid", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private WeblogEntry weblogEntry;
@@ -130,126 +129,116 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     }
 
     public WeblogEntryComment(String id, boolean notify, ApprovalStatus status, String contenttype) {
-      
+
         this.notify = notify;
-        this.status = status.toString();
+        this.status = status;
         this.contentType = contenttype;
     }
+
     
-    // approval status states
-    public enum ApprovalStatus {APPROVED, DISAPPROVED, SPAM, PENDING}
-    
-    public String getId() {
-		return id;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getUrl() {
+        return url;
+    }
 
-	public String getUrl() {
-		return url;
-	}
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
-	public void setUrl(String url) {
-		this.url = url;
-	}
+    public String getContent() {
+        return content;
+    }
 
-	public String getContent() {
-		return content;
-	}
+    public void setContent(String content) {
+        this.content = content;
+    }
 
-	public void setContent(String content) {
-		this.content = content;
-	}
+    public Date getPostTime() {
+        return postTime;
+    }
 
-	public Date getPostTime() {
-		return postTime;
-	}
+    public void setPostTime(Date postTime) {
+        this.postTime = postTime;
+    }
 
-	public void setPostTime(Date postTime) {
-		this.postTime = postTime;
-	}
+    public boolean isNotify() {
+        return notify;
+    }
 
-	public boolean isNotify() {
-		return notify;
-	}
+    public void setNotify(boolean notify) {
+        this.notify = notify;
+    }
 
-	public void setNotify(boolean notify) {
-		this.notify = notify;
-	}
+    public String getRemoteHost() {
+        return remoteHost;
+    }
 
-	public String getRemoteHost() {
-		return remoteHost;
-	}
+    public void setRemoteHost(String remoteHost) {
+        this.remoteHost = remoteHost;
+    }
 
-	public void setRemoteHost(String remoteHost) {
-		this.remoteHost = remoteHost;
-	}
+    public String getReferrer() {
+        return referrer;
+    }
 
-	public String getReferrer() {
-		return referrer;
-	}
+    public void setReferrer(String referrer) {
+        this.referrer = referrer;
+    }
 
-	public void setReferrer(String referrer) {
-		this.referrer = referrer;
-	}
+    public String getUserAgent() {
+        return userAgent;
+    }
 
-	public String getUserAgent() {
-		return userAgent;
-	}
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
 
-	public void setUserAgent(String userAgent) {
-		this.userAgent = userAgent;
-	}
-	
-	public String getStatus() {
-		return status;
-	}
+    public ApprovalStatus getStatus() {
+        return status;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setStatus(ApprovalStatus status) {
+        this.status = status;
+    }
 
-	public String getPlugins() {
-		return plugins;
-	}
+    public String getPlugins() {
+        return plugins;
+    }
 
-	public void setPlugins(String plugins) {
-		this.plugins = plugins;
-	}
+    public void setPlugins(String plugins) {
+        this.plugins = plugins;
+    }
 
-	public String getContentType() {
-		return contentType;
-	}
+    public String getContentType() {
+        return contentType;
+    }
 
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
 
-	
+    public WeblogEntry getWeblogEntry() {
+        return weblogEntry;
+    }
 
-	public WeblogEntry getWeblogEntry() {
-		return weblogEntry;
-	}
-
-	public void setWeblogEntry(WeblogEntry weblogEntry) {
-		this.weblogEntry = weblogEntry;
-	}
-	
-
+    public void setWeblogEntry(WeblogEntry weblogEntry) {
+        this.weblogEntry = weblogEntry;
+    }
 
     /**
      * Indicates that weblog owner considers this comment to be spam.
@@ -257,24 +246,21 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     public Boolean getSpam() {
         return ApprovalStatus.SPAM.equals(getStatus());
     }
-    
-    
+
     /**
      * True if comment has is pending moderator approval.
      */
     public Boolean getPending() {
         return ApprovalStatus.PENDING.equals(getStatus());
     }
-    
-    
+
     /**
      * Indicates that comment has been approved for display on weblog.
      */
     public Boolean getApproved() {
         return ApprovalStatus.APPROVED.equals(getStatus());
     }
-    
-    
+
     /**
      * Timestamp to be used to formulate comment permlink.
      */
@@ -285,7 +271,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
         return null;
     }
 
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -305,9 +291,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
         return true;
     }
 
-    
     //------------------------------------------------------- Good citizenship
-
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("{");
@@ -318,14 +302,14 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
         buf.append("}");
         return buf.toString();
     }
-    
+
     @PrePersist
-    private void setApproval(){
-    	//TODO: figure out why the timestamp doesnt set the date in the db; postgresql at least
+    private void setApproval() {
+        //TODO: figure out why the timestamp doesnt set the date in the db; postgresql at least
         this.postTime = new Date();
         this.notify = false;
-        this.status = ApprovalStatus.APPROVED.toString();
+        this.status = ApprovalStatus.APPROVED;
         this.contentType = "text/plain";
     }
-    
+
 }

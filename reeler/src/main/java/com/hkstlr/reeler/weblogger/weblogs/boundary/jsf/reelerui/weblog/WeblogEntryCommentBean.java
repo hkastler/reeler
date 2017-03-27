@@ -11,6 +11,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -46,7 +47,9 @@ public class WeblogEntryCommentBean {
     @PostConstruct
     private void init(){
         log.info("getting comments for Weblog:" + weblog.getName());
-        this.weblogEntryComments = weblogger.getWeblogEntryCommentManager().getCommentsForWeblog(weblog);
+        this.weblogEntryComments = weblogger.getWeblogEntryCommentManager()
+                .getCommentsForWeblog(weblog, WeblogEntryComment.ApprovalStatus.APPROVED);
+        
         
     }
 
@@ -66,14 +69,18 @@ public class WeblogEntryCommentBean {
         this.weblogEntryComments = weblogEntryComments;
     }
 
-    
-
     public Weblog getWeblog() {
         return weblog;
     }
 
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
+    }
+    
+    public void updateComment(WeblogEntryComment updatedComment){
+        log.log(Level.INFO,"updating comment");
+        log.log(Level.INFO,"comment content:" + updatedComment.getContent());
+        weblogger.getWeblogEntryCommentManager().save(updatedComment);
     }
     
     

@@ -76,16 +76,18 @@
         </div>
         
         <!-- Side Widget -->
+        <form jsf:id="sideNavLinks">
         <div class="card my-4">
             <h5 class="card-header">Navigation</h5>
             <div class="card-block">
                 <a href="#{request.contextPath}/">Front Page</a><br/>
-                <a value="#{request.contextPath}/#{weblogBean.handle}" jsfc="h:outputLink" jsf:id="weblogHome" rendered="#{weblogBean.handle.length() gt 0}">Weblog #{weblogBean.handle}</a>
-                <br/><a href="#{request.contextPath}/weblogger/login/">Login</a>
+                <a value="#{request.contextPath}/#{weblogBean.handle}" jsfc="h:outputLink" jsf:id="weblogHome" rendered="#{weblogBean.handle.length() gt 0}">Weblog #{weblogBean.handle}</a><br/>
+                <a value="#{request.contextPath}/weblogger/login/" jsfc="h:outputLink" rendered="#{sessionScope.user eq null}">Login</a>
+                <a action="#{loginBean.logout()}" jsf:id="link-logout" jsfc="h:commandLink" rendered="#{sessionScope.user ne null}">Logout</a>
                 <br/>
             </div>
         </div>
-
+        </form>
     </f:view>
 </html>
 

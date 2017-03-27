@@ -167,7 +167,10 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.WeblogCategory[ id=" + id + " ]";
+        return "WeblogCategory[ id=" + id + " ]"
+                .concat("[name=" + name + "]")
+                .concat("[description=" + description + "]")
+                .concat("[image=" + image + "]");
     }
 
 }

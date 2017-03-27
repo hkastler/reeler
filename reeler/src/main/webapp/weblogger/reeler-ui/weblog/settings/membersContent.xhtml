@@ -12,7 +12,7 @@
         </div>
 
         <div class="panel-body">
-            <p>#{labels.res.getString("commentManagement.tip")}</p>
+            <p>#{labels.res.getString("memberPermissions.description")}</p>
             <div class="row">
                 <div class="col-lg-6">
 
@@ -27,23 +27,17 @@
                         <h:panelGroup id="messagePanel" layout="block" styleClass="control-label">
                             <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                         </h:panelGroup>
+                        <div class="row">
+                            <div class="col-lg-2">Username</div>
+                            <div class="col-lg-2">Admin</div>
+                            <div class="col-lg-2">Author</div>
+                            <div class="col-lg-2">Limited</div>
+                            <div class="col-lg-2">Remove</div>
+                        </div>
+                        
+                        
                         <h:panelGroup rendered="#{weblogBookmarkBean.bookmarks.size() > 0}">
-                            <div class="row">
-                                <div class="col-lg-3">Name</div>
-                                <div class="col-lg-4">URL</div>
-                                <div class="col-lg-3">Newsfeed URL</div>
-                                <div class="col-lg-1">Edit</div>
-                                <div class="col-lg-1">Visit</div>
-                            </div>
-                            <ui:repeat value="#{weblogBookmarkBean.bookmarks}" var="bookmark">
-                                <div class="row">
-                                    <div class="col-lg-3">#{bookmark.name}</div>
-                                    <div class="col-lg-4">#{bookmark.url}</div>
-                                    <div class="col-lg-3">#{bookmark.feedurl}</div>
-                                    <div class="col-lg-1">Edit</div>
-                                    <div class="col-lg-1"><a href="#{bookmark.url}" target="_blank">visit</a></div>
-                                </div>
-                            </ui:repeat>
+                            
                         </h:panelGroup>
 
                     </h:form>     

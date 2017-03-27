@@ -14,6 +14,8 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
@@ -85,7 +87,9 @@ public class AutoPingManager extends AbstractManager<AutoPing> {
         
         List<AutoPing> applicableAutopings = getApplicableAutoPings(changedWeblogEntry);
         for (AutoPing autoPing : applicableAutopings) {
-            pqem.addQueueEntry(autoPing);
+            pqem.addQueueEntry(autoPing
+                    ,TimeZone.getTimeZone(changedWeblogEntry.getWebsite().getTimeZone())
+                    ,new Locale(changedWeblogEntry.getWebsite().getLocale()));
         }
     }
 

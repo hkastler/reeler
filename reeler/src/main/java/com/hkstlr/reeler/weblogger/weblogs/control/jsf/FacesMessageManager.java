@@ -40,7 +40,7 @@ public class FacesMessageManager {
     }
 
     public static void addSuccessMessage(String clientId,String msg) {
-        System.out.println("adding success message:" + msg);
+        //System.out.println("adding success message:" + msg);
         FacesMessage facesMsg = new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg);
         FacesContext.getCurrentInstance().addMessage(clientId, facesMsg);
     }

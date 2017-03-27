@@ -24,8 +24,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-//import org.apache.commons.lang3.BooleanUtils;
-
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.pings.boundary.AutoPingManager;
@@ -44,8 +42,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTag;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTagAggregate;
-//import com.hkstlr.reeler.weblogger.pings.boundary.manager.AutoPingManager;
-//import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingTargetManager;
+
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
@@ -571,7 +568,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
         for (WeblogPermission perm : perms) {
             Weblog weblog = getWeblogByHandle(perm.getObjectId());
             List<WeblogEntry> entries = weblog.getWeblogEntries();
+            List<WeblogBookmarkFolder> folders = weblog.getBookmarkFolders();
+            for(WeblogBookmarkFolder folder : folders){
+                List<WeblogBookmark> bookmarks = folder.getBookmarks();
+                log.log(Level.INFO, "number of bookmarks:" + bookmarks.size());
+            }
             log.log(Level.INFO,"number of entries:"  + weblog.getWeblogEntries().size());
+            log.log(Level.INFO, "number of folders:" + weblog.getBookmarkFolders().size());
             log.log(Level.INFO,"blog returned:" + weblog.getName());
             if ((!enabledOnly || weblog.isVisible()) && weblog.isActive()) {
                 weblogs.add(weblog);

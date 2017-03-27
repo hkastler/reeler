@@ -12,23 +12,16 @@
             <h:outputText value="Comments Admin"></h:outputText>            
         </ui:define>
 
-        <ui:define name="head">
-           
-        </ui:define>
-
         <ui:define name="navigation">
             <ui:include src="navigation.xhtml">
                 <ui:param name="page" value="comments"/>
             </ui:include>
         </ui:define>
+        
         <ui:define name="content">
             <f:view>                
                 <ui:include src="commentsContent.xhtml"/>                
             </f:view>
-        </ui:define>
-
-        <ui:define name="postBody">
-            
         </ui:define>
         
     </ui:composition>

@@ -21,7 +21,6 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 import javax.ejb.Stateless;
 

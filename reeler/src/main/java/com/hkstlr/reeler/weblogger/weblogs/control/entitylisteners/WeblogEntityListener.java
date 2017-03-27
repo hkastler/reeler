@@ -33,39 +33,39 @@ public class WeblogEntityListener {
 
     @PrePersist
     public void weblogPrePersist(Weblog ob) {
-        System.out.println("Listening Weblog Pre Persist : " + ob.getName());
+        //System.out.println("Listening Weblog Pre Persist : " + ob.getName());
     }
 
     @PostPersist
     public void weblogPostPersist(Weblog ob) {
-        System.out.println("Listening Weblog Post Persist : " + ob.getName());
+        //System.out.println("Listening Weblog Post Persist : " + ob.getName());
     }
 
     @PostLoad
     public void weblogPostLoad(Weblog ob) {
         //System.out.println("Listening Weblog Post Load : " + ob.getName());
         //List<WeblogCategory> weblogCategories = wcm.getWeblogCategoriesForWeblog(ob);
-        System.out.println("weblogCategories:" + ob.getWeblogCategories().size());
+        //System.out.println("weblogCategories:" + ob.getWeblogCategories().size());
         //ob.setWeblogCategories(weblogCategories);
     }
 
     @PreUpdate
     public void weblogPreUpdate(Weblog ob) {
-        System.out.println("Listening Weblog Pre Update : " + ob.getName());
+        //System.out.println("Listening Weblog Pre Update : " + ob.getName());
     }
 
     @PostUpdate
     public void weblogPostUpdate(Weblog ob) {
-        System.out.println("Listening Weblog Post Update : " + ob.getName());
+        //System.out.println("Listening Weblog Post Update : " + ob.getName());
     }
 
     @PreRemove
     public void weblogPreRemove(Weblog ob) {
-        System.out.println("Listening Weblog Pre Remove : " + ob.getName());
+        //System.out.println("Listening Weblog Pre Remove : " + ob.getName());
     }
 
     @PostRemove
     public void userPostRemove(Weblog ob) {
-        System.out.println("Listening Weblog Post Remove : " + ob.getName());
+        //System.out.println("Listening Weblog Post Remove : " + ob.getName());
     }
 }

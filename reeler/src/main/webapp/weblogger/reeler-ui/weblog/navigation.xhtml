@@ -21,10 +21,9 @@
             <div class="col-lg-12">
                 <ul class="nav nav-tabs">
                     <ui:repeat value="#{reelerUiBean.pages.keySet().toArray()}" var="key">
-                        <li class="#{page == key ? 'active': ''}" >
-                                                        
+                        <li class="#{page == key ? 'active': ''}" >                                                        
                             <a href="#{request.contextPath}#{reelerUiBean.path}/weblog/#{key}.xhtml"
-                               jsf:id="nav">
+                               id="nav">
                                 #{reelerUiBean.pages[key]}
                             </a>
                         </li>
