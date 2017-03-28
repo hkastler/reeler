@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.ReelerUIBean;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedProperty;
 
@@ -30,14 +31,17 @@ public abstract class AuthorBean<T> {
     @ManagedProperty(value = "#{param.action}")
     protected String action;
     
-    protected String actionLabel = "Edit";
+    protected String actionLabel;
 
     public AuthorBean() {
+        
     }
     
     public AuthorBean(Class<T> entityClass){
         this.entityClass = entityClass;
     }
+    
+   
 
     public String getId() {
         return id;
@@ -79,7 +83,13 @@ public abstract class AuthorBean<T> {
         this.reelerUiBean = reelerUiBean;
     }
     
-   
+    public void setActionLabel(){
+        if(action.equals("create")){
+            actionLabel = "Create";
+        }else if(action.equals("edit")){
+            actionLabel = "Edit";
+        }
+    }
        
     
     

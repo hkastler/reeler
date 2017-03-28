@@ -27,12 +27,17 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
     private Logger log = Logger.getLogger(WeblogCategoryAuthorBean.class.getName());
 
     public WeblogCategoryAuthorBean() {
+        super();
     }
     
     @PostConstruct
     private void init(){
         //log.info("getting categories for Weblog:" + weblog.getName());
         //this.weblogCategories = weblogger.getWeblogCategoryManager().getWeblogCategoriesForWeblog(weblog);
+        log.info("action:" + this.action);
+        setActionLabel();
+        
+        
         if(this.id != null && !this.id.isEmpty()){
             this.weblogCategory = weblogger.getWeblogCategoryManager().findById(id);
         }else{

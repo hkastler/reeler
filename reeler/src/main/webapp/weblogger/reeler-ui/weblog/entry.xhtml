@@ -20,6 +20,7 @@
         <ui:define name="navigation">
             <ui:include src="navigation.xhtml">
                 <ui:param name="page" value="entry"/>
+                <ui:param name="customLabel" value="#{weblogEntryAuthorBean.actionLabel} Entry"/>
             </ui:include>
         </ui:define>
         <ui:define name="content">
@@ -231,6 +232,10 @@
                 </div>
             </f:view>
 
+        </ui:define>
+        
+        <ui:define name="sideNav">
+            <ui:include src="entrySideNav.xhtml"/>
         </ui:define>
 
         <ui:define name="postBody">

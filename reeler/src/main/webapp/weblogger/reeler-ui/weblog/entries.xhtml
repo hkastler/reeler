@@ -11,13 +11,8 @@
             <f:viewAction action="#{reelerUiBean.indexViewAction}"/>
         </f:metadata>
         <ui:define name="title">
-            <h:outputText value="Entries Admin"></h:outputText>            
+            <h:outputText value="Entries Admin"/>           
         </ui:define>
-
-        <ui:define name="head">
-           
-        </ui:define>
-
         <ui:define name="navigation">
             <ui:include src="navigation.xhtml">
                 <ui:param name="page" value="entries"/>
@@ -25,9 +20,12 @@
         </ui:define>
         <ui:define name="content">
             <f:view>
-                <ui:include src="entriesContent.xhtml"/>
-                
+                <ui:include src="entriesContent.xhtml"/>                
             </f:view>
+        </ui:define>
+        
+        <ui:define name="sideNav">
+            <ui:include src="entriesSideNav.xhtml"/>
         </ui:define>
 
         <ui:define name="postBody">

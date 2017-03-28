@@ -24,7 +24,8 @@
                         <li class="#{page == key ? 'active': ''}" >                                                        
                             <a href="#{request.contextPath}#{reelerUiBean.path}/weblog/#{key}.xhtml"
                                id="nav">
-                                #{reelerUiBean.pages[key]}
+                                #{((page == key) and (customLabel ne null)) ? customLabel : reelerUiBean.pages[key]}
+                                
                             </a>
                         </li>
                     </ui:repeat>

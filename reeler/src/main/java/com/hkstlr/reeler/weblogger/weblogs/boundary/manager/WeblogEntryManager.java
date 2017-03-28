@@ -98,6 +98,36 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         }
         return entries;
     }
+    
+    public List<Calendar> getWeblogEntryDatesForCalendar(String dateString, Weblog weblog){
+        
+        //dateString expected format = YYYYMM
+        log.fine("dateString:" + dateString);
+        Integer year = Integer.parseInt(dateString.substring(0, 4));
+        log.info("year: " + year);
+        Integer month = Integer.parseInt(dateString.substring(4, 6));
+        
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(year, month-1, 1);
+        Calendar endDate = Calendar.getInstance();
+        endDate.set(year, month-1, startDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+        
+        
+        Query query = em.createQuery("SELECT DISTINCT we.pubTime FROM WeblogEntry we"
+                + " WHERE we.website = :blog"
+                + " AND we.publishEntry = true"
+                + " AND we.pubTime BETWEEN "
+                + ":startDate"
+                + " AND "
+                + ":endDate");
+        query.setParameter("blog",weblog);
+        query.setParameter("startDate", startDate);
+        query.setParameter("endDate", endDate);
+        List<Calendar> results = query.getResultList();
+        
+        return results;
+        
+    }
 
     public List<WeblogEntry> findByPinnedToMain() {
         Query query = em.createNamedQuery("WeblogEntry.findByPinnedToMain");

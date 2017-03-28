@@ -46,7 +46,8 @@
         <div class="card my-4">
             <h5 class="card-header">Calendar</h5>
             <div class="card-block">
-                
+                <h:outputText value="#{calendarPrinter.calendarTable(request.contextPath,weblogBean.weblog)}" 
+                              escape="false"/>
             </div>
         </div>
         <!-- Side Widget -->

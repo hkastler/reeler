@@ -37,6 +37,7 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
     private void init(){
         //log.info("getting categories for Weblog:" + weblog.getName());
         //this.weblogCategories = weblogger.getWeblogCategoryManager().getWeblogCategoriesForWeblog(weblog);
+        setActionLabel();
         if(this.id != null && !this.id.isEmpty()){
             this.weblogBookmark = weblogger.getWeblogBookmarkManager().findById(id);
         }else{
@@ -46,10 +47,6 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
             //this.weblogBookmark.setFolderid(folder);
         }
         
-        if(this.action == null || this.action.isEmpty()){
-            this.action = "create";
-            this.actionLabel = "Create";
-        }
     }
 
     public WeblogBookmark getWeblogBookmark() {

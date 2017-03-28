@@ -8,10 +8,14 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
     <!-- Page Content -->
-    <ui:define name="title">#{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}</ui:define>
+    <ui:define name="title">#{weblogEntryBean.weblog.name} - #{weblogEntryBean.weblogEntry.title}</ui:define>
+    <ui:define name="meta">
+        <meta name="author" content="#{weblogEntryBean.weblogEntry.creatorUserName}"/>
+        <meta name="description" content="#{weblogEntryBean.weblogEntry.searchDescription}"/>
+    </ui:define>
     <ui:define name="navbar-brand">
         <a class="navbar-brand" href="#{request.contextPath}/#{weblogBean.handle}/">
-            #{weblogBean.weblog.name} - #{weblogBean.weblog.tagline}
+            #{weblogEntryBean.weblog.name} - #{weblogEntryBean.weblog.tagline}
         </a>
     </ui:define>
     <ui:define name="content">

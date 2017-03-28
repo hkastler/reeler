@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
+import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
@@ -81,6 +82,14 @@ public class WeblogEntryCommentBean {
         log.log(Level.INFO,"updating comment");
         log.log(Level.INFO,"comment content:" + updatedComment.getContent());
         weblogger.getWeblogEntryCommentManager().save(updatedComment);
+        FacesMessageManager.addSuccessMessage("commentForm", "Comment updated");
+    }
+    
+    public void setSpam(WeblogEntryComment updatedComment){
+        log.log(Level.INFO,"updating comment spam");
+        updatedComment.setSpam();
+        weblogger.getWeblogEntryCommentManager().save(updatedComment);
+        FacesMessageManager.addSuccessMessage("commentForm", "Comment updated");
     }
     
     

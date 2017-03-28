@@ -13,79 +13,83 @@
 
         <div class="panel-body">
             <p>#{labels.res.getString("commentManagement.tip")}</p>
+
             
-            
-                                    
-                    <h:panelGroup id="messagePanel" layout="block" styleClass="control-label">
-                        <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
-                    </h:panelGroup>
 
-                    <h:panelGroup rendered="#{weblogEntryCommentBean.weblogEntryComments.size() > 0}"
-                                  id="comments">
-
-                        <h:dataTable value="#{weblogEntryCommentBean.weblogEntryComments}" 
-                                     var="comment" 
-                                     rules="all" 
-                                     styleClass="table table-responsive table-striped table-border">
-
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{labels.res.getObject('commentManagement.columnApproved')}"/>
-                                </f:facet>
-                                <h:form>
-                                    <h:selectBooleanCheckbox id="isApproved"
-                                                             value=""/>
-                                </h:form>
-                            </h:column>
-
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{labels.res.getString('commentManagement.columnSpam')}"/>
-                                </f:facet>
-                                <h:form>
-                                    <h:selectBooleanCheckbox id="isSpam">
-                                        <f:ajax execute="this"/>
-                                    </h:selectBooleanCheckbox>
-                                </h:form>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="Delete"/>
-                                </f:facet>
-                                <h:form>
-                                    <h:selectBooleanCheckbox id="delete"
-                                                             value=""/>
-                                </h:form>
-                            </h:column>
-                            <h:column>
-                                <f:facet name="header">
-                                    <h:outputText value="#{labels.res.getString('commentManagement.columnComment')}"/>
-                                </f:facet>
-                                <p>Regarding: #{comment.weblogEntry.title}<br/>
-                                    Posted by: #{comment.name}<br/>
-                                    Posted URL: <h:outputText value="#{comment.url}"/>
-                                                              <br/>
-                                    Posted at: #{comment.postTime}</p>
-                                <h:form styleClass="form">
-                                    <h:inputTextarea 
-                                        value="#{comment.content}"
-                                        class="form-control"/>
-                                    <h:commandButton value="Save changes"
-                                                     class="btn btn-secondary"
-                                                     action="#{weblogEntryCommentBean.updateComment(comment)}">
-                                        <f:ajax execute="@form" render="this"/>
-                                    </h:commandButton>
-                                </h:form>
-                            </h:column> 
-
-                        </h:dataTable>
-                        
-
-                    </h:panelGroup>
-
-
+            <h:panelGroup rendered="#{weblogEntryCommentBean.weblogEntryComments.size() > 0}"
+                          id="comments">
                 
-            
+                <h:dataTable value="#{weblogEntryCommentBean.weblogEntryComments}" 
+                             var="comment" 
+                             rules="all" 
+                             styleClass="table table-responsive table-striped table-border">
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.res.getObject('commentManagement.columnApproved')}"/>
+                        </f:facet>
+                        <h:form>
+                            <h:selectBooleanCheckbox id="isApproved"
+                                                     value="#{comment.status.toString() == 'APPROVED'}"/>
+                        </h:form>
+                    </h:column>
+
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.res.getString('commentManagement.columnSpam')}"/>
+                        </f:facet>
+                        <h:form>
+                            <h:selectBooleanCheckbox id="isSpam"
+                                                     value="#{comment.status.toString() == 'SPAM'}">
+                                <f:ajax event="change"
+                                        listener="#{weblogEntryCommentBean.setSpam(comment)}"/>
+                            </h:selectBooleanCheckbox>
+                        </h:form>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="Delete"/>
+                        </f:facet>
+                        <h:form>
+                            <h:selectBooleanCheckbox id="delete"
+                                                     value=""/>
+                        </h:form>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{labels.res.getString('commentManagement.columnComment')}"/>
+                        </f:facet>
+                        <p>Regarding: #{comment.weblogEntry.title}<br/>
+                            Posted by: #{comment.name}<br/>
+                            Posted URL: <h:outputText value="#{comment.url}"/>
+                            <br/>
+                            Posted at: #{comment.postTime}</p>
+                        <h:form styleClass="form" id="commentForm">
+                            
+                            <h:messages errorStyle="color: red" 
+                                        infoStyle="color: green" 
+                                        layout="table"
+                                        for="commentForm"/>
+                           
+                            <h:inputTextarea 
+                                value="#{comment.content}"
+                                class="form-control"/>
+                            <h:commandButton value="Save changes"
+                                             class="btn btn-secondary"
+                                             action="#{weblogEntryCommentBean.updateComment(comment)}">
+                                <f:ajax execute="@form" render="this"/>
+                            </h:commandButton>
+                        </h:form>
+                    </h:column> 
+
+                </h:dataTable>
+
+
+            </h:panelGroup>
+
+
+
+
 
         </div>
         <div class="panel-footer"></div>

@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <f:view>
+        <div class="row">   
+            <div class="col-lg-12">
+                <div class="panel panel-info">
+                    <div class="panel-heading panel-title">
+                        Filter Entries
+                    </div>
+                    <div class="panel panel-body">
+                        <p>Filter weblog entries by category, date, and/or status.</p>
+
+                        <form id="commentsQuery"
+                              name="commentsQuery" 
+                              jsfc="h:form"
+                              class="form">
+
+                            <input type="hidden" name="salt" value="vXFCXmEJeSXq2YI8Izpw" id="commentsQuery_salt"/>
+                            <input type="hidden" name="weblog" value="hkastler" id="commentsQuery_weblog"/>
+
+                            <div class="sideformrow">
+                                <label for="searchString" class="sideformrow">Search string:</label>   
+                                <input type="text" 
+                                       name="bean.searchString" 
+                                       class="form-control"
+                                       value="" 
+                                       id="commentsQuery_bean_searchString"/>
+                            </div>
+
+                            <div class="sideformrow">
+                                <label for="startDateString" class="sideformrow">Start date:</label>
+                                <script>
+                                    $(function () {
+                                        $("#commentsQuery_bean_startDateString").datepicker({
+                                            showOn: "button",
+                                            buttonImage: "../../images/calendar.png",
+                                            buttonImageOnly: true,
+                                            changeMonth: true,
+                                            changeYear: true
+                                        });
+                                    });
+                                </script>
+                                <input type="text" 
+                                       name="bean.startDateString" 
+                                       size="12" 
+                                       value="" 
+                                       readonly="readonly" 
+                                       id="commentsQuery_bean_startDateString" 
+                                       class="hasDatepicker"/>
+
+                            </div>
+
+                            <div class="sideformrow">
+                                <label for="endDateString" class="sideformrow">End date:</label>
+                                <script>
+                                    $(function () {
+                                        $("#commentsQuery_bean_endDateString").datepicker({
+                                            showOn: "button",
+                                            buttonImage: "../../images/calendar.png",
+                                            buttonImageOnly: true,
+                                            changeMonth: true,
+                                            changeYear: true
+                                        });
+                                    });
+                                </script>
+                                <input type="text" 
+                                       name="bean.endDateString" 
+                                       class="form-control"
+                                       value="" 
+                                       readonly="readonly" 
+                                       id="commentsQuery_bean_endDateString"/>
+
+                            </div>
+                            <div class="sideformrow">
+                                <label for="approvedString" class="sideformrow">Pending status</label> 
+                                <div>
+                                    <input type="radio" 
+                                           name="bean.approvedString" 
+                                           id="commentsQuery_bean_approvedStringALL" 
+                                           checked="checked" 
+                                           value="ALL"/>
+                                    <label for="commentsQuery_bean_approvedStringALL">All</label>
+                                    <input type="radio" 
+                                           name="bean.approvedString" 
+                                           id="commentsQuery_bean_approvedStringONLY_PENDING" 
+                                           value="ONLY_PENDING"/>
+                                    <label for="commentsQuery_bean_approvedStringONLY_PENDING">Pending only</label>
+                                    <input type="radio" 
+                                           name="bean.approvedString" 
+                                           id="commentsQuery_bean_approvedStringONLY_APPROVED" 
+                                           value="ONLY_APPROVED"/>
+                                    <label for="commentsQuery_bean_approvedStringONLY_APPROVED">Approved only</label>
+                                    <input type="radio" 
+                                           name="bean.approvedString" 
+                                           id="commentsQuery_bean_approvedStringONLY_DISAPPROVED" 
+                                           value="ONLY_DISAPPROVED"/>
+                                    <label for="commentsQuery_bean_approvedStringONLY_DISAPPROVED">Disapproved only</label>
+                                    <input type="radio" 
+                                           name="bean.approvedString" 
+                                           id="commentsQuery_bean_approvedStringONLY_SPAM" 
+                                           value="ONLY_SPAM"/>
+                                    <label for="commentsQuery_bean_approvedStringONLY_SPAM">Spam only</label>
+                                </div>
+                            </div> 
+                            <input type="submit" 
+                                   id="commentsQuery_0"
+                                   class="btn btn-info"
+                                   value="Filter"/>
+                        </form>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </f:view>
+
+</ui:composition>

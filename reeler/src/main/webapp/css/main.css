@@ -8,6 +8,9 @@
     float: right;
 }
 
+table {
+    table-layout: fixed;
+}
 
 
 

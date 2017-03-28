@@ -246,6 +246,9 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     public Boolean getSpam() {
         return ApprovalStatus.SPAM.equals(getStatus());
     }
+    public void setSpam(){
+        this.status = ApprovalStatus.SPAM;
+    }
 
     /**
      * True if comment has is pending moderator approval.
@@ -253,12 +256,16 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     public Boolean getPending() {
         return ApprovalStatus.PENDING.equals(getStatus());
     }
+    
 
     /**
      * Indicates that comment has been approved for display on weblog.
      */
     public Boolean getApproved() {
         return ApprovalStatus.APPROVED.equals(getStatus());
+    }
+    public void setApproved(){
+        this.status = ApprovalStatus.APPROVED;
     }
 
     /**

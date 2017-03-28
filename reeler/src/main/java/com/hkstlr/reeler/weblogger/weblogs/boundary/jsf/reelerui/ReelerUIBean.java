@@ -62,7 +62,7 @@ public class ReelerUIBean implements Serializable {
     @PostConstruct
     private void init() {
         log.log(Level.INFO, "expected that a session bean would init only once");
-        pages.put("entry", "New Entry");
+        pages.put("entry", "Create Entry");
         pages.put("entries", "Entries");
         pages.put("comments", "Comments");
         pages.put("categories", "Categories");
