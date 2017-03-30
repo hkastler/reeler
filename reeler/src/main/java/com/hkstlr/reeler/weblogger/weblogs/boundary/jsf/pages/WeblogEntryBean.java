@@ -17,6 +17,7 @@ import javax.inject.Inject;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -46,7 +47,7 @@ public class WeblogEntryBean {
 
     private Weblog weblog;
 
-    private List<WeblogEntryComment> comments;
+    private Collection<WeblogEntryComment> comments;
 
     private WeblogEntryComment weblogEntryComment = new WeblogEntryComment();
 
@@ -101,11 +102,11 @@ public class WeblogEntryBean {
         this.weblog = weblog;
     }
 
-    public List<WeblogEntryComment> getComments() {
+    public Collection<WeblogEntryComment> getComments() {
         return comments;
     }
 
-    public void setComments(List<WeblogEntryComment> comments) {
+    public void setComments(Collection<WeblogEntryComment> comments) {
         this.comments = comments;
     }
 
@@ -134,7 +135,7 @@ public class WeblogEntryBean {
     public List<WeblogEntryComment> getComments(WeblogEntry entry) {
         List<WeblogEntryComment> _comments = null;
 
-        _comments = weblogger.getWeblogEntryManager().getComments(entry);
+        _comments = weblogger.getWeblogEntryCommentManager().getComments(entry);
 
         return _comments;
     }

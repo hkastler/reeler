@@ -33,7 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
+import com.hkstlr.reeler.weblogger.weblogs.control.LocaleFixer;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Map;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
@@ -117,7 +119,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "editorpage", length = 255)
     private String editorPage;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "bloggercatid")
     private WeblogCategory bloggerCategory;
 
@@ -223,25 +225,25 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "analyticscode", length = 2147483647)
     private String analyticsCode;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
     private List<WeblogCategory> weblogCategories = new ArrayList<WeblogCategory>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
+    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<WeblogBookmarkFolder> bookmarkFolders  = new ArrayList<WeblogBookmarkFolder>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
+    @OneToMany(mappedBy = "weblog")
     private List<WeblogCustomTemplate> weblogCustomTemplates;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "website", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "website", fetch = FetchType.EAGER)
     private List<WeblogEntry> weblogEntries;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
+    @OneToMany(mappedBy = "weblog")
     private List<Newsfeed> newsfeeds;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblog")
+    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<MediaFileDirectory> mediaFileDirectories;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "website")
+    @OneToMany(mappedBy = "website")
     private List<AutoPing> autopings;
     
     @Transient
@@ -555,6 +557,16 @@ public class Weblog extends AbstractEntity implements Serializable {
 
     public static long getSerialversionuid() {
         return serialVersionUID;
+    }
+    
+     /**
+     * Parse locale value and instantiate a Locale object,
+     * otherwise return default Locale.
+     *
+     * @return Locale
+     */
+    public Locale getLocaleInstance() {
+        return LocaleFixer.toLocale(getLocale());
     }
 
     @Override

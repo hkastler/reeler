@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.control.WebloggerException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,8 +35,17 @@ import javax.xml.bind.annotation.XmlTransient;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryTagComparator;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryTagFixer;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.TreeSet;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.inject.Inject;
 import javax.persistence.Cacheable;
 /**
  *
@@ -81,6 +91,9 @@ import javax.persistence.Cacheable;
     , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime BETWEEN :pubTimeBefore AND :pubTimeAfter AND w.publishEntry = true")    
     , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :weblog ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
+    
+    @Transient
+    private Logger log = Logger.getLogger(WeblogEntry.class.getName());
 
     public enum PubStatus {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
@@ -189,18 +202,23 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     private Weblog website;
 
     @NotNull(message = "{WeblogEntry.category.NotNull}")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "categoryid", referencedColumnName = "id", nullable = false, updatable = true)
     private WeblogCategory category = new WeblogCategory();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblogEntry")
+    @OneToMany(mappedBy = "weblogEntry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<WeblogEntryTag> tags = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "weblogEntry")
+    @OneToMany(mappedBy = "weblogEntry")
     private List<WeblogEntryComment> comments = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "entry")
+    @OneToMany(mappedBy = "entry")
     private List<WeblogEntryAttribute> entryAttributes = new ArrayList<>();
+    
+     // set to true when switching between pending/draft/scheduled and published
+    // either the aggregate table needs the entry's tags added (for published)
+    // or subtracted (anything else)
+    private Boolean   refreshAggregates = Boolean.FALSE;
 
     @Transient
     private Set<WeblogEntryTag> removedTags = new HashSet<WeblogEntryTag>();;
@@ -213,10 +231,8 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     }
 
 
-    public WeblogEntry(String id, String anchor, String creator, String title, String text, Calendar updatetime, boolean publishentry, boolean allowcomments, int commentdays, boolean righttoleft, boolean pinnedtomain, String status) {
-        this.removedTags = new HashSet<WeblogEntryTag>();
-        this.addedTags = new HashSet<WeblogEntryTag>();
-
+    public WeblogEntry(String anchor, String creator, String title, String text, Calendar updatetime, boolean publishentry, boolean allowcomments, int commentdays, boolean righttoleft, boolean pinnedtomain, String status) {
+        
         this.anchor = anchor;
         this.creatorUserName = creator;
         this.title = title;
@@ -308,6 +324,12 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
 
     public void setUpdateTime(Calendar updateTime) {
         this.updateTime = updateTime;
+    }
+    
+    public void setUpdateTime(Date date){
+        Calendar calendar = Calendar.getInstance();
+	calendar.setTime(date);
+        this.updateTime = calendar;
     }
 
     public boolean isPublishEntry() {
@@ -422,7 +444,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.category = category;
     }
 
-    public List<WeblogEntryAttribute> getEntryAttributes() {
+    public Collection<WeblogEntryAttribute> getEntryAttributes() {
         return entryAttributes;
     }
 
@@ -438,16 +460,122 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.removedTags = removedTags;
     }
 
-    public List<WeblogEntryTag> getTags() {
+    public Collection<WeblogEntryTag> getTags() {
         return tags;
     }
+    
+    public void addTag(WeblogEntryTag weTag){
+        if(tags.contains(weTag))
+            return;
+        
+        tags.add(weTag);
+        weTag.setWeblogEntry(this);
+    }
+    
+    public void removeTag(WeblogEntryTag weTag){
+        if(!tags.contains(weTag)){
+            log.info("weTag:" + weTag.getName() + "not found, nothing to delete");
+            return;
+        }
+        log.info("removing tag:" + weTag.getName());
+        tags.remove(weTag);
+        weTag.setWeblog(null);
+        weTag.setWeblogEntry(null);
+    }
+    
+    public String getTagsAsString() {
+        StringBuilder sb = new StringBuilder();
+        // Sort by name
+        Set<WeblogEntryTag> tmp = new TreeSet<WeblogEntryTag>(new WeblogEntryTagComparator());
+        tmp.addAll(getTags());
+        for (WeblogEntryTag entryTag : tmp) {
+            sb.append(entryTag.getName()).append(" ");
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        return sb.toString();
+    }
+
+    public void setTagsAsString(String tagNames) throws WebloggerException {
+        if (tagNames.isEmpty()) {
+            //removedTags.addAll(tags)
+            tags.clear();
+            return;
+        }
+        log.info("tagNames:" + tagNames.toString());
+        List<String> incomingTagNames = WeblogEntryTagFixer.splitStringAsTags(tagNames);
+        Set<String> incomingTags = new HashSet<String>(incomingTagNames.size());
+        Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
+
+        for (String name : incomingTagNames) {
+            incomingTags.add(WeblogEntryTagFixer.normalizeTag(name, localeObject));
+            log.info("incomingTag added:" + name);
+        }
+        log.info("incomingTags:" + incomingTags.toString());
+        //loop through originalTags
+        List<WeblogEntryTag> existingTags = new ArrayList<>(tags);
+        // remove old ones no longer passed.
+        existingTags.forEach((existingTag) -> {
+            //WeblogEntryTag tag = (WeblogEntryTag) it.next();
+            log.info("existingTag:" + existingTag.getName());
+            if (!incomingTags.contains(existingTag.getName())) {
+                // tag no longer listed in UI, needs removal from DB
+                log.info("removing tag:" + existingTag.getName());
+                removedTags.add(existingTag);
+                this.tags.remove(existingTag);
+            } else {
+                // already in persisted set, therefore isn't new
+                incomingTags.remove(existingTag.getName());
+                existingTag.setWeblog(website);
+                existingTag.setWeblogEntry(null);
+            }
+        });
+
+        for (String newTagName : incomingTags) {
+            log.info("adding tag:" + newTagName);
+            addTag(newTagName);
+        }
+    }
+    
+     /**
+     * Roller lowercases all tags based on locale because there's not a 1:1 mapping
+     * between uppercase/lowercase characters across all languages.  
+     * @param name
+     * @throws WebloggerException
+     */
+    public void addTag(String name) throws WebloggerException {
+        Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
+        name = WeblogEntryTagFixer.normalizeTag(name, localeObject);
+        if (name.length() == 0) {
+            return;
+        }
+        
+        for (WeblogEntryTag tag : getTags()) {
+            if (tag.getName().equals(name)) {
+                return;
+            }
+        }
+
+        WeblogEntryTag tag = new WeblogEntryTag();
+        tag.setName(name);
+        tag.setCreator(getCreatorUserName());
+        tag.setWeblog(getWebsite());
+        tag.setWeblogEntry(this);
+        tag.setCreateDate(new Date());
+        tags.add(tag);
+        log.info("tag " + tag.getId().concat("|name:").concat(tag.getName()).concat("|weblogEntryId:").concat(tag.getWeblogEntry().getId()));
+        addedTags.add(tag);
+    }
+    
 
     public void setTags(List<WeblogEntryTag> tags) {
         this.tags = tags;
     }
 
     @XmlTransient
-    public List<WeblogEntryComment> getComments() {
+    public Collection<WeblogEntryComment> getComments() {
         return comments;
     }
 
@@ -518,5 +646,19 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         }
         return new ArrayList<String>();
     }
+    
+    public Boolean getRefreshAggregates() {
+        return refreshAggregates;
+    }
+
+    public void setRefreshAggregates(Boolean refreshAggregates) {
+        this.refreshAggregates = refreshAggregates;
+    }
+    
+    
+    public Set<WeblogEntryTag> getAddedTags() {
+        return addedTags;
+    }
+    
     
 }

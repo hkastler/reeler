@@ -106,7 +106,7 @@ public class LoginBean implements Serializable {
                 request.logout();
             }
             String outcome = "/weblogger/login/index";
-            log.log(Level.INFO, "login password:{0}", password);
+            //log.log(Level.INFO, "login password:{0}", password);
             try {
                 request.login(this.username, this.password);
                 log.info("user authenticated at request level");

@@ -16,11 +16,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
+import com.hkstlr.reeler.app.control.AppConstants;
+import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.weblogs.control.CommentSearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.control.TagStat;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryAttribute;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTag;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 import javax.ejb.Stateless;
 
@@ -34,6 +45,18 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
     @Inject
     private Logger log;
 
+    @Inject
+    private WeblogEntryCommentManager wecm;
+
+    @Inject
+    private WeblogEntryTagManager wetm;
+
+    @Inject
+    private WeblogEntryTagAggregateManager wetam;
+
+    @Inject
+    private WeblogManager weblogManager;
+
     @PersistenceContext
     private EntityManager em;
 
@@ -46,9 +69,44 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         super(WeblogEntry.class);
     }
 
-    public void removeWeblogEntry(WeblogEntry entry) {
-        // TODO Auto-generated method stub
-        remove(entry);
+    public void removeWeblogEntry(WeblogEntry entry) throws WebloggerException {
+        Weblog weblog = entry.getWebsite();
+
+        CommentSearchCriteria csc = new CommentSearchCriteria();
+        csc.setEntry(entry);
+
+        // remove comments
+        List<WeblogEntryComment> comments = wecm.getComments(csc);
+        for (WeblogEntryComment comment : comments) {
+            wecm.remove(comment);
+        }
+
+        // remove tag & tag aggregates
+        if (entry.getTags() != null) {
+            for (WeblogEntryTag tag : entry.getTags()) {
+                wetm.removeWeblogEntryTag(tag);
+            }
+        }
+
+        // remove attributes
+        if (entry.getEntryAttributes() != null) {
+            for (Iterator it = entry.getEntryAttributes().iterator(); it.hasNext();) {
+                WeblogEntryAttribute att = (WeblogEntryAttribute) it.next();
+                it.remove();
+                this.em.remove(att);
+            }
+        }
+
+        // remove entry
+        this.em.remove(entry);
+
+        // update weblog last modified date.  date updated by saveWebsite()
+        if (entry.isPublishEntry()) {
+            weblogManager.saveWeblog(weblog);
+        }
+
+        // remove entry from cache mapping
+        //this.entryAnchorToIdMap.remove(entry.getWebsite().getHandle()+":"+entry.getAnchor());
     }
 
     public List<TagStat> getTags(Weblog weblog, Object object, Object object2, int i, int j) {
@@ -98,21 +156,20 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         }
         return entries;
     }
-    
-    public List<Calendar> getWeblogEntryDatesForCalendar(String dateString, Weblog weblog){
-        
+
+    public List<Calendar> getWeblogEntryDatesForCalendar(String dateString, Weblog weblog) {
+
         //dateString expected format = YYYYMM
         log.fine("dateString:" + dateString);
         Integer year = Integer.parseInt(dateString.substring(0, 4));
         log.info("year: " + year);
         Integer month = Integer.parseInt(dateString.substring(4, 6));
-        
+
         Calendar startDate = Calendar.getInstance();
-        startDate.set(year, month-1, 1);
+        startDate.set(year, month - 1, 1);
         Calendar endDate = Calendar.getInstance();
-        endDate.set(year, month-1, startDate.getActualMaximum(Calendar.DAY_OF_MONTH));
-        
-        
+        endDate.set(year, month - 1, startDate.getActualMaximum(Calendar.DAY_OF_MONTH));
+
         Query query = em.createQuery("SELECT DISTINCT we.pubTime FROM WeblogEntry we"
                 + " WHERE we.website = :blog"
                 + " AND we.publishEntry = true"
@@ -120,13 +177,13 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
                 + ":startDate"
                 + " AND "
                 + ":endDate");
-        query.setParameter("blog",weblog);
+        query.setParameter("blog", weblog);
         query.setParameter("startDate", startDate);
         query.setParameter("endDate", endDate);
         List<Calendar> results = query.getResultList();
-        
+
         return results;
-        
+
     }
 
     public List<WeblogEntry> findByPinnedToMain() {
@@ -139,21 +196,20 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return entries;
     }
 
-    public List<WeblogEntryComment> getComments(WeblogEntry entry) {
-        Query query = em.createNamedQuery("WeblogEntryComment.findByWeblogEntry", WeblogEntryComment.class);
-        query.setParameter("weblogEntry", entry);
-        List<WeblogEntryComment> comments = query.getResultList();
-        if (comments == null) {
-            comments = new ArrayList<>();
-        }
-        return comments;
-    }
-
     public WeblogEntry getWeblogEntry(String id) {
         WeblogEntry entry = em.find(WeblogEntry.class, id);
         if (entry == null) {
             entry = new WeblogEntry();
         }
+        return entry;
+    }
+
+    public WeblogEntry findForEdit(String id) {
+        WeblogEntry entry = findById(id);
+        if (entry == null) {
+            entry = new WeblogEntry();
+        }
+        entry.getTags().size();
         return entry;
     }
 
@@ -189,10 +245,10 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         Integer date = Integer.parseInt(dateString.substring(6, 8));
         log.info("date: " + date);
         Calendar pubTimeBefore = Calendar.getInstance(new Locale(weblog.getLocale()));
-        pubTimeBefore.set(year, month-1, date-1);
+        pubTimeBefore.set(year, month - 1, date - 1);
         log.info("pubTimeBefore" + pubTimeBefore.getTime().toString());
         Calendar pubTimeAfter = Calendar.getInstance(new Locale(weblog.getLocale()));
-        pubTimeAfter.set(year, month-1, date+1);
+        pubTimeAfter.set(year, month - 1, date + 1);
         log.info("pubTimeAfter" + pubTimeAfter.getTime().toString());
         List<WeblogEntry> entries = new ArrayList<>();
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getWeblogEntriesByDateAndWeblog");
@@ -210,6 +266,41 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
                 .setMaxResults(1);
         WeblogEntry we = (WeblogEntry) q.getSingleResult();
         return we;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    // TODO: perhaps the createAnchor() and queuePings() items should go outside this method?
+    public void saveWeblogEntry(WeblogEntry entry) throws WebloggerException {
+
+        // Entry is invalid without local. if missing use weblog default
+        if (entry.getLocale() == null) {
+            entry.setLocale(entry.getWebsite().getLocale());
+        }
+
+        if (entry.getAnchor() == null || entry.getAnchor().trim().equals("")) {
+            //entry.setAnchor(this.createAnchor(entry));
+        }       
+
+        // if the entry was published to future, set status as SCHEDULED
+        // we only consider an entry future published if it is scheduled
+        // more than 1 minute into the future
+        if (WeblogEntry.PubStatus.PUBLISHED.equals(entry.getStatus())
+                && entry.getPubTime().after(new Date(System.currentTimeMillis() + AppConstants.MIN_IN_MS))) {
+            entry.setStatus(WeblogEntry.PubStatus.SCHEDULED.toString());
+        }
+        
+        // Store value object (creates new or updates existing)
+        entry.setUpdateTime(new Date());
+        save(entry);
+        log.info("tags:" + entry.getTags().size());
+        
+         if (entry.isPublishEntry()) {
+            weblogManager.saveWeblog(entry.getWebsite());
+        }
+        em.flush();
+        
     }
 
 }

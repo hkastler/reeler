@@ -21,6 +21,7 @@ import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingQueueEntryManager;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingTargetManager;
 import com.hkstlr.reeler.weblogger.plugins.boundary.PluginManager;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryTagManager;
 //import com.hkstlr.reeler.weblogger.themes.boundary.ThemeManager;
 import javax.ejb.Stateless;
 
@@ -44,6 +45,9 @@ public class Weblogger {
     WeblogEntryCommentManager weblogEntryCommentManager;
     
     @Inject
+    private WeblogEntryTagManager weblogEntryTagManager;
+    
+    @Inject
     WeblogPermissionManager weblogPermissionManager;
     
     @Inject
@@ -51,6 +55,8 @@ public class Weblogger {
     
     @Inject
     private WeblogBookmarkManager weblogBookmarkManager;
+    
+    
 
     //@Inject
     //private AutoPingManager autoPingManager;
@@ -153,6 +159,10 @@ public class Weblogger {
     
     public WeblogCategoryManager getWeblogCategoryManager() {
         return weblogCategoryManager;
+    }
+    
+    public WeblogEntryTagManager getWeblogEntryTagManager() {
+        return weblogEntryTagManager;
     }
     
     public WeblogBookmarkManager getWeblogBookmarkManager() {

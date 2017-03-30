@@ -5,12 +5,13 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -33,81 +34,72 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "WeblogEntryTag.findAll", query = "SELECT r FROM WeblogEntryTag r")
     , @NamedQuery(name = "WeblogEntryTag.findById", query = "SELECT r FROM WeblogEntryTag r WHERE r.id = :id")
     , @NamedQuery(name = "WeblogEntryTag.findByWebsite", query = "SELECT r FROM WeblogEntryTag r WHERE r.weblog = :website")
+    , @NamedQuery(name = "WeblogEntryTag.findByNameAndWeblogEntry", query = "SELECT r FROM WeblogEntryTag r WHERE r.name = :name AND r.weblogEntry = :weblogEntry")
     , @NamedQuery(name = "WeblogEntryTag.findByCreator", query = "SELECT r FROM WeblogEntryTag r WHERE r.creator = :creator")
     , @NamedQuery(name = "WeblogEntryTag.findByName", query = "SELECT r FROM WeblogEntryTag r WHERE r.name = :name")
-    , @NamedQuery(name = "WeblogEntryTag.findByTime", query = "SELECT r FROM WeblogEntryTag r WHERE r.time = :time")
+    , @NamedQuery(name = "WeblogEntryTag.findByCreateDate", query = "SELECT r FROM WeblogEntryTag r WHERE r.createDate = :createDate")
     , @NamedQuery(name = "WeblogEntryTag.getByWeblog", query = "SELECT w FROM WeblogEntryTag w WHERE w.weblog = ?1")})
-public class WeblogEntryTag implements Serializable {
+public class WeblogEntryTag extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
-    @Column(name = "id", nullable = false, length = 48)
-    private String id;
-    
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 48)
+    @NotNull(message = "weblog can not be null")
     @ManyToOne
-    @JoinColumn(name = "websiteid", referencedColumnName = "id")
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", insertable = true, updatable = true, nullable = false)
     private Weblog weblog;
-    
+
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "creator can not be null")
     @Size(min = 1, max = 255)
     @Column(name = "creator", nullable = false, length = 255)
     private String creator;
-    
+
     @Basic(optional = false)
-    @NotNull
+    @NotNull(message = "name can not be null")
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date time;
+    private Date createDate = new Date();
+
     
-    @JoinColumn(name = "entryid", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
+    @JoinColumn(
+        name = "entryid",
+        referencedColumnName = "id",
+        insertable = true,
+        updatable = false,
+        nullable = false
+    )
     private WeblogEntry weblogEntry;
 
     public WeblogEntryTag() {
     }
 
-    public WeblogEntryTag(String id) {
-        this.id = id;
+    public WeblogEntryTag(String name) {
+        this.name = name;
+        this.createDate = new Date();
     }
 
-    public WeblogEntryTag(String id, Weblog website, String creator, String name, Date time) {
-        this.id = id;
+    public WeblogEntryTag(Weblog website, String creator, String name, Date time) {
         this.weblog = website;
         this.creator = creator;
         this.name = name;
-        this.time = time;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+        this.createDate = time;
     }
 
     public Weblog getWeblog() {
-		return weblog;
-	}
+        return weblog;
+    }
 
-	public void setWeblog(Weblog weblog) {
-		this.weblog = weblog;
-	}
+    public void setWeblog(Weblog weblog) {
+        this.weblog = weblog;
+    }
 
-	public String getCreator() {
+    public String getCreator() {
         return creator;
     }
 
@@ -123,23 +115,23 @@ public class WeblogEntryTag implements Serializable {
         this.name = name;
     }
 
-    public Date getTime() {
-        return time;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setTime(Date time) {
-        this.time = time;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public WeblogEntry getWeblogEntry() {
-		return weblogEntry;
-	}
+        return weblogEntry;
+    }
 
-	public void setWeblogEntry(WeblogEntry weblogEntry) {
-		this.weblogEntry = weblogEntry;
-	}
+    public void setWeblogEntry(WeblogEntry weblogEntry) {
+        this.weblogEntry = weblogEntry;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -148,12 +140,12 @@ public class WeblogEntryTag implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof WeblogEntryTag)) {
             return false;
         }
         WeblogEntryTag other = (WeblogEntryTag) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;
@@ -161,7 +153,7 @@ public class WeblogEntryTag implements Serializable {
 
     @Override
     public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.WeblogEntryTag[ id=" + id + " ]";
+        return "com.hkstlr.reeler.weblogger.entities.WeblogEntryTag[ id=" + id + " ]".concat(name);
     }
-    
+
 }

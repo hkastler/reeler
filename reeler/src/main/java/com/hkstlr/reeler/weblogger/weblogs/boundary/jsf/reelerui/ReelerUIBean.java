@@ -10,9 +10,12 @@ import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -103,6 +106,15 @@ public class ReelerUIBean implements Serializable {
         for (Weblog blog : ublogs) {
             log.info("weblog:" + blog.getHandle() + " has " + blog.getWeblogEntries().size() + " entries");
             //blog.getBookmarkFolders().forEach(f -> f.getBookmarks());
+            // Sorting
+            Collections.sort(blog.getWeblogEntries(), new Comparator<WeblogEntry>() {
+                    @Override
+                    public int compare(WeblogEntry we2, WeblogEntry we1)
+                    {
+
+                        return  we1.getPubTime().compareTo(we2.getPubTime());
+                    }
+                });
             finalUblogs.add(blog);
         }
         this.userWeblogs = null;
