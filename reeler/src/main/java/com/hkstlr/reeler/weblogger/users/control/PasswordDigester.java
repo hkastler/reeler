@@ -9,9 +9,6 @@ import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.inject.Inject;
 
 public class PasswordDigester {
        

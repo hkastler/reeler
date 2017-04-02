@@ -51,29 +51,27 @@ public class WebloggerConfig {
 
     private static Logger log = Logger.getLogger(WebloggerConfig.class.getName());
 
-    
     public WebloggerConfig() {
-        //log.setLevel(Level.FINE);
-        //log.fine(log.getLevel());
+        
         log.log(Level.FINE, "init WebloggerConfig");
-        try {
-            // we'll need this to get at our properties files in the classpath
-            Class configClass = Class.forName(WebloggerConfig.class.getName());
-            // first, lets load our default properties
-            InputStream is = configClass.getResourceAsStream(default_config);
-            log.fine("defaultConfigPath:" + default_config);
-            
-            //config is static, so we'll need temp vars
-            //TODO: less procedural
-            Properties tempConfig = new Properties();
-            
-            Properties configLoad = new Properties();
-            configLoad.load(is);
-            log.fine("configLoad:" + configLoad.toString());
-            tempConfig.putAll(configLoad);
-            
-            // first, see if we can find our junit testing config
-           
+        if (config.isEmpty()) {
+            try {
+                // we'll need this to get at our properties files in the classpath
+                Class configClass = Class.forName(WebloggerConfig.class.getName());
+                // first, lets load our default properties
+                InputStream is = configClass.getResourceAsStream(default_config);
+                log.fine("defaultConfigPath:" + default_config);
+
+                //config is static, so we'll need temp vars
+                //TODO: less procedural
+                Properties tempConfig = new Properties();
+
+                Properties configLoad = new Properties();
+                configLoad.load(is);
+                //log.fine("configLoad:" + configLoad.toString());
+                tempConfig.putAll(configLoad);
+
+                // first, see if we can find our junit testing config
                 log.fine("customConfigPath:" + configClass.getResource(custom_config));
                 // now, see if we can find our custom config
                 is = configClass.getResourceAsStream(custom_config);
@@ -83,67 +81,66 @@ public class WebloggerConfig {
                     customConfigLoad.load(is);
                     tempConfig.putAll(customConfigLoad);
                     log.fine("Roller Weblogger: Successfully loaded custom properties file from classpath");
-                    log.fine("customPropFilePath : " + configClass.getResource(custom_config));
-                    log.fine("customConfigLoad:" + customConfigLoad.toString());
+                    //log.fine("customPropFilePath : " + configClass.getResource(custom_config));
+                    //log.fine("customConfigLoad:" + customConfigLoad.toString());
                 } else {
                     log.fine("Roller Weblogger: No custom properties file found in classpath");
                 }
 
-           
+                // finally, check for an external config file
+                String env_file = System.getProperty(custom_jvm_param);
+                if (env_file != null && env_file.length() > 0) {
+                    custom_config_file = new File(env_file);
 
-            // finally, check for an external config file
-            String env_file = System.getProperty(custom_jvm_param);
-            if (env_file != null && env_file.length() > 0) {
-                custom_config_file = new File(env_file);
+                    // make sure the file exists, then try and load it
+                    if (custom_config_file != null && custom_config_file.exists()) {
+                        is = new FileInputStream(custom_config_file);
+                        config.load(is);
+                        //log.fine("Roller Weblogger: Successfully loaded custom properties from "
+                        //        + custom_config_file.getAbsolutePath());
+                    } else {
+                        //log.fine("Roller Weblogger: Failed to load custom properties from "
+                        //        + custom_config_file.getAbsolutePath());
+                    }
 
-                // make sure the file exists, then try and load it
-                if (custom_config_file != null && custom_config_file.exists()) {
-                    is = new FileInputStream(custom_config_file);
-                    config.load(is);
-                    log.fine("Roller Weblogger: Successfully loaded custom properties from "
-                            + custom_config_file.getAbsolutePath());
-                } else {
-                    log.fine("Roller Weblogger: Failed to load custom properties from "
-                            + custom_config_file.getAbsolutePath());
                 }
-
-            }
-            //transfer to static storage            
-            this.config.putAll(tempConfig);
-            log.fine("config:" + config.toString());
-            // Now expand system properties for properties in the config.expandedProperties list,
-            // replacing them by their expanded values.
-            String expandedPropertiesDef = (String) config.get("config.expandedProperties");
-            if (expandedPropertiesDef != null) {
-                String[] expandedProperties = expandedPropertiesDef.split(",");
-                for (int i = 0; i < expandedProperties.length; i++) {
-                    String propName = expandedProperties[i].trim();
-                    String initialValue = (String) config.get(propName);
-                    if (initialValue != null) {
-                        String expandedValue = PropertyExpander.expandSystemProperties(initialValue);
-                        this.config.put(propName, expandedValue);
+                //transfer to static storage            
+                this.config.putAll(tempConfig);
+                //log.fine("config:" + config.toString());
+                // Now expand system properties for properties in the config.expandedProperties list,
+                // replacing them by their expanded values.
+                String expandedPropertiesDef = (String) config.get("config.expandedProperties");
+                if (expandedPropertiesDef != null) {
+                    String[] expandedProperties = expandedPropertiesDef.split(",");
+                    for (int i = 0; i < expandedProperties.length; i++) {
+                        String propName = expandedProperties[i].trim();
+                        String initialValue = (String) config.get(propName);
+                        if (initialValue != null) {
+                            String expandedValue = PropertyExpander.expandSystemProperties(initialValue);
+                            this.config.put(propName, expandedValue);
+                        }
                     }
                 }
-            }
 
-            // initialize logging subsystem via WebloggerConfig
-            //PropertyConfigurator.configure(WebloggerConfig.getPropertiesStartingWith("log4j."));
-            // finally we can start logging...
-            // some debugging for those that want it
-            if (log.isLoggable(Level.FINER)) {
-                log.finer("WebloggerConfig looks like this ...");
+                // initialize logging subsystem via WebloggerConfig
+                //PropertyConfigurator.configure(WebloggerConfig.getPropertiesStartingWith("log4j."));
+                // finally we can start logging...
+                // some debugging for those that want it
+                if (log.isLoggable(Level.FINER)) {
+                    log.finer("WebloggerConfig looks like this ...");
 
-                String key = null;
-                Enumeration keys = config.keys();
-                while (keys.hasMoreElements()) {
-                    key = (String) keys.nextElement();
-                    log.finer(key + "=" + config.getProperty(key));
+                    String key = null;
+                    Enumeration keys = config.keys();
+                    while (keys.hasMoreElements()) {
+                        key = (String) keys.nextElement();
+                        log.finer(key + "=" + config.getProperty(key));
+                    }
                 }
-            }
 
-        } catch (Exception e) {
-            log.severe("WebloggerConfig failed:" + e.getMessage());
-            e.printStackTrace();
+            } catch (Exception e) {
+                log.severe("WebloggerConfig failed:" + e.getMessage());
+                e.printStackTrace();
+            }
         }
     }
 
@@ -154,13 +151,13 @@ public class WebloggerConfig {
      * @return String Value of property requested, null if not found
      */
     public static String getProperty(String key) {
-        log.info("Fetching property ["+key+"="+config.getProperty(key)+"]");
+        log.info("Fetching property [" + key + "=" + config.getProperty(key) + "]");
         String value = config.getProperty(key);
-         log.info("value: " + value);
+        log.info("value: " + value);
         //for system properties
-        if(value.startsWith("$")){
+        if (value.startsWith("$")) {
             String newValue = value;
-            newValue = value.substring(2,value.indexOf("}"));
+            newValue = value.substring(2, value.indexOf("}"));
             String theEndPart = value.split("}")[1];
             log.fine("theEndPart:" + theEndPart);
             //newSearchIndexDir = newSearchIndexDir.concat(theEndPart);
@@ -171,7 +168,7 @@ public class WebloggerConfig {
             newValue = newValue.replace('/', File.separatorChar);
             value = newValue;
         }
-        
+
         return value == null ? null : value.trim();
     }
 

@@ -17,7 +17,7 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <h2 style="padding-top: 20px">Category: #{weblogBean.categoryName}</h2>
+            <h2>Category: #{weblogBean.categoryName}</h2>
             <hr/>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() eq 0}">
                 No entries found for category #{weblogBean.categoryName}

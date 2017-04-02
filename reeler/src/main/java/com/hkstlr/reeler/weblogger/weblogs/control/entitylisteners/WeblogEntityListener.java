@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -26,7 +27,7 @@ import org.ocpsoft.logging.Logger;
 public class WeblogEntityListener {
     
     @EJB
-    WeblogCategoryManager wcm;
+    WeblogManager wm;
     
     
     Logger log = Logger.getLogger(WeblogEntityListener.class.getName());
@@ -65,7 +66,7 @@ public class WeblogEntityListener {
     }
 
     @PostRemove
-    public void userPostRemove(Weblog ob) {
+    public void weblogPostRemove(Weblog ob) {
         //System.out.println("Listening Weblog Post Remove : " + ob.getName());
     }
 }

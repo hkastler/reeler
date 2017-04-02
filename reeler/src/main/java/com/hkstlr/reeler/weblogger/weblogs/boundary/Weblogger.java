@@ -22,12 +22,16 @@ import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
 //import com.hkstlr.reeler.weblogger.pings.boundary.manager.PingTargetManager;
 import com.hkstlr.reeler.weblogger.plugins.boundary.PluginManager;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryTagManager;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
 //import com.hkstlr.reeler.weblogger.themes.boundary.ThemeManager;
 import javax.ejb.Stateless;
 
 @Named
 @Stateless
 public class Weblogger {
+    
+    @Inject
+    private RuntimeConfigManager runtimeConfigManager;
 
     @Inject
     private UserManager userManager;
@@ -105,6 +109,12 @@ public class Weblogger {
     void init() {
         this.version = "1.0";
     }
+
+    public RuntimeConfigManager getRuntimeConfigManager() {
+        return runtimeConfigManager;
+    }
+    
+    
 
     /**
      *

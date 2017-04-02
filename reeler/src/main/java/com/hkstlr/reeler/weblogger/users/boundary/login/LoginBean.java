@@ -44,6 +44,9 @@ public class LoginBean implements Serializable {
 
     @Inject
     private UserManager userManager;
+    
+    @Inject
+    private URLStrategy urlStrategy;
 
     @Inject
     private transient Logger log;
@@ -80,13 +83,13 @@ public class LoginBean implements Serializable {
      * </p>
      *
      */
-    public void validateUser() throws ServletException {
+    public void validateUser() throws ServletException, WebloggerException {
         FacesContext context = FacesContext.getCurrentInstance();
         User user = getUser();
         boolean isPasswordOK = false;
 
         String hashPwd = password;
-        log.log(Level.INFO, "password is:" + hashPwd);
+        //log.log(Level.INFO, "password is:" + hashPwd);
         try {
             hashPwd = PasswordDigester.getDigestedPassword(password);
         } catch (Exception ex) {
@@ -109,15 +112,15 @@ public class LoginBean implements Serializable {
             //log.log(Level.INFO, "login password:{0}", password);
             try {
                 request.login(this.username, this.password);
-                log.info("user authenticated at request level");
-                outcome = URLStrategy.getLoginSuccessOutcome(); // Do your thing?
+                //log.info("user authenticated at request level");
+                outcome = urlStrategy.getLoginSuccessOutcome(user); // Do your thing?
             } catch (ServletException e) {
                 log.log(Level.SEVERE,"user not realm authenticated:",e);
                 context.addMessage(null, new FacesMessage("Login failed." + e.getMessage()));
                 //return "common/error";
             }
 
-            log.log(Level.INFO, "roles:{0}", Arrays.toString(user.getJdbcrealmGroups().toArray()));
+            //log.log(Level.INFO, "roles:{0}", Arrays.toString(user.getJdbcrealmGroups().toArray()));
             log.log(Level.INFO, "user?{0}", request.isUserInRole("user"));
             log.log(Level.INFO, "admin?{0}", request.isUserInRole("admin"));
 

@@ -114,6 +114,12 @@
                 
         <!-- end -->
         <dependency>
+            <groupId>org.glassfish.ozark</groupId>
+            <artifactId>parent</artifactId>
+            <version>1.0.0-m02</version>
+            <type>pom</type>
+        </dependency>
+        <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
             <version>7.0</version>
@@ -168,6 +174,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- java ee mvc -->
+        <dependency>
+            <groupId>com.oracle.ozark</groupId>
+            <artifactId>ozark</artifactId>
+            <version>1.0.0-m01</version>
+            <scope>compile</scope>
+        </dependency>
+
+        
     </dependencies>
     <build>
         <finalName>reeler</finalName>

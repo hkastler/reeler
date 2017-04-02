@@ -16,6 +16,7 @@ import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,6 +76,7 @@ public class UserManager extends AbstractManager<User> {
      * @param user User to be removed.
      * @throws WebloggerException If there is a problem.
      */
+    
     public void removeUser(User user) throws WebloggerException {
         remove(user);
     }
@@ -178,6 +180,7 @@ public class UserManager extends AbstractManager<User> {
      * @return List A list of UserDatUsers which match the criteria.
      * @throws WebloggerException If there is a problem.
      */
+    
     public List<User> getUsers(
             Boolean enabled,
             Date startDate,

@@ -19,6 +19,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -244,5 +245,35 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
                 WeblogPermission.class);
         q.setParameter(1, weblog.getHandle());
         return q.getResultList();
+    }
+    
+    
+    public boolean checkPermission(WeblogPermission perm, User user) throws WebloggerException {
+
+        // if permission a weblog permission
+        if (perm instanceof WeblogPermission) {
+            // if user has specified permission in weblog return true
+            Query qWeblog = em.createNamedQuery("Weblog.findById", Weblog.class);
+            qWeblog.setParameter("id", perm.getObjectId());
+            Weblog weblog = (Weblog)qWeblog.getResultList();
+            WeblogPermission existingPerm = getWeblogPermission(weblog, user);
+            if (existingPerm != null && existingPerm.implies(perm)) {
+                return true;
+            }
+        }
+
+        // if Blog Server admin would still have weblog permission above
+        ObjectPermission globalPerm ;
+        Query qGlobal = em.createNamedQuery("ObjectPermission.findByUserName", ObjectPermission.class);
+        qGlobal.setParameter("userName", user.getUserName());
+        globalPerm = (ObjectPermission)qGlobal.getSingleResult();
+        if (globalPerm.implies(perm)) {
+            return true;
+        }
+
+        if (log.isLoggable(Level.FINE)) {
+            log.fine("PERM CHECK FAILED: user " + user.getUserName() + " does not have " + perm.toString());
+        }
+        return false;
     }
 }

@@ -1,20 +1,40 @@
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
+import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import java.util.List;
+import javax.inject.Inject;
+
 public class URLStrategy {
+    
+    @Inject
+    WeblogManager wm;
 
-	public static String getOAuthRequestTokenURL() {
-		// TODO Auto-generated method stub
-		return "hey";
-	}
+    public URLStrategy() {
+    }
 
-	public static String getOAuthAuthorizationURL() {
-		// TODO Auto-generated method stub
-		return "authorized";
-	}
+    public static String getOAuthRequestTokenURL() {
+        // TODO Auto-generated method stub
+        return "hey";
+    }
 
-	public static String getLoginSuccessOutcome() {
-            // TODO Auto-generated method stub
-            return "/weblogger/reeler-ui/index?faces-redirect=true";
-	}
+    public static String getOAuthAuthorizationURL() {
+        // TODO Auto-generated method stub
+        return "authorized";
+    }
+
+    public static String getLoginSuccessOutcome() {
+        // TODO Auto-generated method stub
+        return "/weblogger/reeler-ui/index?faces-redirect=true";
+    }
+
+    public String getLoginSuccessOutcome(User user) throws WebloggerException {
+
+        List<Weblog> weblogs = wm.getUserWeblogs(user, true);
+                    
+        return "/weblogger/reeler-ui/weblog/entry.xhtml?weblog=".concat(weblogs.get(0).getId()).concat("faces-redirect=true") ;
+    }
 
 }

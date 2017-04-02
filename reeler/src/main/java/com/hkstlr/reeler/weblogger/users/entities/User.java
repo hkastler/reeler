@@ -6,7 +6,6 @@
 package com.hkstlr.reeler.weblogger.users.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,7 +13,6 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
@@ -102,6 +100,8 @@ public class User extends AbstractEntity {
     @Size(min = 1, max = 255)
     @Column(name = "emailaddress", nullable = false, length = 255)
     private String emailAddress;
+    
+    
     @Size(max = 48)
     @Column(name = "activationcode", length = 48)
     private String activationCode;
@@ -142,10 +142,6 @@ public class User extends AbstractEntity {
         this.emailAddress = emailaddress;
         this.dateCreated = datecreated;
         this.isEnabled = isenabled;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getUserName() {
@@ -262,7 +258,7 @@ public class User extends AbstractEntity {
             return false;
         }
         User other = (User) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;
