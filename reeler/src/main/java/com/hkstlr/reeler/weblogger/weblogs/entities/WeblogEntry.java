@@ -33,19 +33,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
-import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryTagComparator;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryTagFixer;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.persistence.Cacheable;
 /**
  *
@@ -88,7 +85,7 @@ import javax.persistence.Cacheable;
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
     , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :weblogCategoryName")
     , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :weblogCategoryName ")
-    , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime BETWEEN :pubTimeBefore AND :pubTimeAfter AND w.publishEntry = true")    
+    , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime = :pubTime AND w.publishEntry = true")    
     , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :weblog ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
     
@@ -99,8 +96,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
     }
 
-    public static final String TITLE_SEPARATOR
-            = WebloggerConfig.getBooleanProperty("weblogentry.title.useUnderscoreSeparator") ? "_" : "-";
+    
 
     private static final long serialVersionUID = 1L;
 
@@ -660,5 +656,5 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         return addedTags;
     }
     
-    
+        
 }

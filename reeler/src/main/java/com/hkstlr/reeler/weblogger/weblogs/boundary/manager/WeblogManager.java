@@ -571,11 +571,11 @@ public class WeblogManager extends AbstractManager<Weblog> {
             List<WeblogBookmarkFolder> folders = weblog.getBookmarkFolders();
             for(WeblogBookmarkFolder folder : folders){
                 List<WeblogBookmark> bookmarks = folder.getBookmarks();
-                log.log(Level.INFO, "number of bookmarks:" + bookmarks.size());
+                log.log(Level.FINE, "number of bookmarks:" + bookmarks.size());
             }
-            log.log(Level.INFO,"number of entries:"  + weblog.getWeblogEntries().size());
-            log.log(Level.INFO, "number of folders:" + weblog.getBookmarkFolders().size());
-            log.log(Level.INFO,"blog returned:" + weblog.getName());
+            log.log(Level.FINE,"number of entries:"  + weblog.getWeblogEntries().size());
+            log.log(Level.FINE, "number of folders:" + weblog.getBookmarkFolders().size());
+            log.log(Level.FINE,"blog returned:" + weblog.getName());
             if ((!enabledOnly || weblog.isVisible()) && weblog.isActive()) {
                 weblogs.add(weblog);
             }
@@ -819,5 +819,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
        
         return false;
     }
+        
+        
+    
     
 }

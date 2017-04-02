@@ -35,8 +35,10 @@ import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
 import com.hkstlr.reeler.weblogger.weblogs.control.LocaleFixer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
@@ -568,6 +570,20 @@ public class Weblog extends AbstractEntity implements Serializable {
     public Locale getLocaleInstance() {
         return LocaleFixer.toLocale(getLocale());
     }
+    
+    /**
+     * Return TimeZone instance for value of timeZone,
+     * otherwise return system default instance.
+     * @return TimeZone
+     */
+    public TimeZone getTimeZoneInstance() {
+        if (getTimeZone() == null) {
+            this.setTimeZone( TimeZone.getDefault().getID() );
+        }
+        return TimeZone.getTimeZone(getTimeZone());
+    }
+    
+    
 
     @Override
     public int hashCode() {

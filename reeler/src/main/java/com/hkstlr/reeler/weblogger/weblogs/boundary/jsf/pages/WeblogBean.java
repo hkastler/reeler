@@ -170,9 +170,17 @@ public class WeblogBean {
        log.fine("number of viewEntries:" + this.viewEntries.size());
     }
     
-    public void dateViewAction(){       
+    public void dateViewAction(){
+       
+       String dateToGet = this.dateString;
+       //log.info("dateToGet.length:" + dateToGet.length());
+       //log.info("dateToGet:" + dateToGet);
+       //if(dateToGet.length()==6){
+       //    dateToGet += "01";
+       //}
+       log.info("dateToGet:" + dateToGet);
        this.viewEntries = weblogger.getWeblogEntryManager()
-                .getWeblogEntriesByDateAndWeblog(this.dateString,weblog);
+                .getWeblogEntriesByDateAndWeblog(dateToGet,weblog);
        log.fine("number of viewEntries:" + this.viewEntries.size());
     }
     

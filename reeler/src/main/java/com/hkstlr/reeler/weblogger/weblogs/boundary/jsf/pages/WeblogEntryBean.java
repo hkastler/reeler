@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.pages;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
+import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import java.util.List;
 
 
@@ -17,7 +18,10 @@ import javax.inject.Inject;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -52,6 +56,14 @@ public class WeblogEntryBean {
     private WeblogEntryComment weblogEntryComment = new WeblogEntryComment();
 
     private boolean commentIsPosted = false;
+    
+    private boolean showComments = false;
+    
+    private boolean showCommentForm = false;
+    
+    private Calendar todayCal;
+    
+    private Calendar allowCommentsCal;
 
     public WeblogEntryBean() {
     }
@@ -60,10 +72,24 @@ public class WeblogEntryBean {
     private void init() {
         try {
             this.weblogEntry = getEntryByHandleAndAnchor(handle, anchor);
-            log.log(Level.INFO,"weblogEntry:" + weblogEntry.getAnchor());
+            
             this.weblogEntryComment.setWeblogEntry(weblogEntry);
             this.weblog = weblogEntry.getWebsite();
             this.comments = getComments(weblogEntry);
+            this.showComments = weblogEntry.isAllowComments();
+            
+            Date now = new Date();
+            todayCal = Calendar.getInstance(weblog.getLocaleInstance());
+            todayCal.setTime(now);
+            
+            allowCommentsCal = this.weblogEntry.getPubTime();
+            allowCommentsCal.add(Calendar.DAY_OF_YEAR,-weblogEntry.getCommentDays());
+            
+            long daysBetween = ChronoUnit.DAYS.between(allowCommentsCal.toInstant(), todayCal.toInstant());
+            log.info("daysBetween:" + daysBetween);
+            
+            this.showCommentForm = this.showComments && (weblogEntry.getCommentDays() == 0 
+                                                            || daysBetween < weblogEntry.getCommentDays());
         } catch (Exception e) {
             log.log(Level.SEVERE,"WeblogEntryBean init error:", e);            
         }
@@ -127,34 +153,40 @@ public class WeblogEntryBean {
     }
 
     public WeblogEntry getEntryByHandleAndAnchor(String handle, String anchor) {
-        log.info("handle:" + handle);
-        log.info("anchor:" + anchor);
         return weblogger.getWeblogEntryManager().getWeblogEntryByHandleAndAnchor(handle, anchor);
     }
 
     public List<WeblogEntryComment> getComments(WeblogEntry entry) {
-        List<WeblogEntryComment> _comments = null;
+        List<WeblogEntryComment> _comments;
 
-        _comments = weblogger.getWeblogEntryCommentManager().getComments(entry);
+        _comments = weblogger.getWeblogEntryCommentManager()
+                .getCommentsByWeblogEntryAndStatus(entry, WeblogEntryComment.ApprovalStatus.APPROVED);
 
         return _comments;
     }
 
     public void postComment() {
-        log.info("postingComment");
-        log.info("numberOfComments:" + getComments(this.weblogEntry).size());
+        log.fine("postingComment");
+        log.fine("numberOfComments:" + getComments(this.weblogEntry).size());
         
         //ApprovalStatus.PENDING is the default
         boolean moderated = weblog.isModerateComments();
+        log.info("moderateComments:" + moderated);
         if(!moderated){
              this.weblogEntryComment.setStatus(WeblogEntryComment.ApprovalStatus.APPROVED);
         }
-        this.comments = this.weblogEntryComment.getWeblogEntry().getComments();
+        //this.comments = this.weblogEntryComment.getWeblogEntry().getComments();
         weblogger.getWeblogEntryCommentManager().saveAndLoadComments(this.weblogEntryComment);
+        
         this.commentIsPosted = true;
-        log.log(Level.FINE, "comment posted, commentIsPosted: " + this.isCommentIsPosted());
+        //log.log(Level.FINE, "comment posted, commentIsPosted: " + this.isCommentIsPosted());
         this.comments = getComments(this.weblogEntry);
         //log.log(Level.FINE, "numberOfComments:" + this.weblogEntry.getComments().size());
+        if(!moderated){
+            FacesMessageManager.addSuccessMessage("commentMessage", "Comment Posted");
+        }else{
+            FacesMessageManager.addSuccessMessage("commentMessage", "Comments are moderated");
+        }
     }
 
 }
