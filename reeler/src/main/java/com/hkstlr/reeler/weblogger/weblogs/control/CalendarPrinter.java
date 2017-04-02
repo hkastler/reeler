@@ -9,6 +9,7 @@ import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.text.DateFormatSymbols;
 import static java.text.MessageFormat.format;
+import java.text.ParseException;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -25,28 +26,20 @@ import javax.inject.Inject;
  *
  * @author henry.kastler
  */
-@RequestScoped
-@Named
 public class CalendarPrinter {
 
-    @Inject
-    private Logger log;
-
    
+    private Logger log = Logger.getLogger(CalendarPrinter.class.getName());
+    
     //Date now = new Date();
-    Calendar calendar;
-
-    List<String> calendarDates = new ArrayList();
-
-    @Inject
-    WeblogEntryManager wem;
+    private Calendar calendar;
 
     Date now = new Date();
 
-    int year;
-    int month; // Jan = 0, dec = 11
-    int dayOfMonth;
-    int dayOfWeek;
+    private int year;
+    private int month; // Jan = 0, dec = 11
+    private int dayOfMonth;
+    private int dayOfWeek;
     //int weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR);
     //int weekOfMonth = calendar.get(Calendar.WEEK_OF_MONTH);
 
@@ -68,25 +61,48 @@ public class CalendarPrinter {
     }
 
     @PostConstruct
-    private void init() {
+    public void init() {
         //List<Object> dates = wem.getWeblogEntryDatesForCalendar("201703", weblog);
 
         String strYear = DateFormatter.yearFormat.format(now);
         String strMonth = DateFormatter.monthFormat.format(now);
 
         calendar = new GregorianCalendar(Integer.parseInt(strYear), Integer.parseInt(strMonth) - 1, 1);
-        //calendar.setTime(now);
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH); // Jan = 0, dec = 11
-        dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-
+        //calendar.setTime(now);
+        //year = ;
+        //month = ; // Jan = 0, dec = 11
+        //dayOfMonth = 
+       // 
+        
     }
 
-    public void calendarSetup() {
-
+    public Calendar getCalendar() {
+        return calendar;
     }
 
+    public void setCalendar(Calendar calendar) {
+        this.calendar = calendar;
+    }
+
+    public int getYear() {
+        return calendar.get(Calendar.YEAR);
+    }
+
+    public int getMonth() {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getDayOfMonth() {
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+
+    public int getDayOfWeek() {
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    
+    
     public String[] getDayNames() {
         return dayNames;
     }
@@ -101,23 +117,25 @@ public class CalendarPrinter {
         return formatted;
     }
 
-    public String calendarTable(String path, Weblog weblog) {
+    public String calendarTable(List<Calendar> dates, Date incomingDate, String path, String handle) throws ParseException {
+              
+        String incomingMonth = DateFormatter.monthFormat.format(incomingDate);        
+        Integer intMonth = Integer.parseInt(incomingMonth);        
+        Integer previousMonth = intMonth-1;
+        Integer nextMonth = intMonth+1;
         
-        String formattedDate = DateFormatter.dateFormat.format(new Date());
-
-        return calendarTable(formattedDate, path, weblog);
-    }
-
-    public String calendarTable(String dateString, String path, Weblog weblog) {
-
-        List<Calendar> dates = wem.getWeblogEntryDatesForCalendar(dateString, weblog);
-        log.fine("dates:" + dates.toString());
+        String incomingYear = DateFormatter.yearFormat.format(incomingDate);
+                
+        calendar.setTime(incomingDate);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        dayOfWeek = getDayOfWeek();
+        //log.fine("dates:" + dates.toString());
         List<Integer> days = new ArrayList<>();
 
         for (Calendar calDate : dates) {
             Date theDate = calDate.getTime();
             String day = DateFormatter.dayFormat.format(theDate);
-            log.fine("dayFormat:" + day);
+            //log.fine("dayFormat:" + day);
             days.add(Integer.parseInt(day));
         }
 
@@ -125,19 +143,27 @@ public class CalendarPrinter {
         calTable.append("<thead class=\"thead-default\">");
         calTable.append("<tr>");
         calTable.append("<td colspan=\"1\" align=\"left\">");
-        //calTable.append("<a href=\"date\">");
-        // calTable.append("<i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i>");
-        // calTable.append("</a>");
+        String pastMonthDateStr = String.format("%02d", previousMonth);
+        String dateLink = incomingYear+pastMonthDateStr;
+        if(handle.length() > 0){
+            calTable.append(dateHrefTemplate(new Object[]{path, handle, dateLink}))
+                    .append("<i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i></a>");
+        }
         calTable.append("</td>");
         calTable.append("<td colspan=\"5\" align=\"center\">");
-        calTable.append(Month.of(month + 1));
+        calTable.append(Month.of(getMonth() + 1));
         calTable.append(" ");
-        calTable.append(year);
+        calTable.append(getYear());
         calTable.append("</td>");
         calTable.append("<td colspan=\"1\" align=\"right\">");
-        //calTable.append("<a href=\"date\">");
-        //calTable.append("<i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>");
-        //calTable.append("</a>");
+        
+        String nextMonthDateStr = String.format("%02d", nextMonth);
+        dateLink = incomingYear+nextMonthDateStr;
+        
+            calTable.append(dateHrefTemplate(new Object[]{path, handle, dateLink}));
+            calTable.append("<i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>");
+            calTable.append("</a>");
+            
         calTable.append("</td>");
         calTable.append("</tr>");
 
@@ -154,6 +180,7 @@ public class CalendarPrinter {
 
         calTable.append("<tbody>");
         calTable.append("<tr>");
+        
         if (calendar.getFirstDayOfWeek() == Calendar.MONDAY) {
             if (dayOfWeek == 1) {
                 dayOfWeek += 6;
@@ -170,21 +197,21 @@ public class CalendarPrinter {
                 calTable.append("</tr><tr>");
             }
             Calendar tempCal = (Calendar) calendar.clone();
-            tempCal.set(Calendar.MONTH, month);
+            tempCal.set(Calendar.MONTH, getMonth());
             tempCal.set(Calendar.DATE, i);
-            tempCal.set(Calendar.YEAR, year);
+            tempCal.set(Calendar.YEAR, getYear());
             dayOfWeek = tempCal.get(Calendar.DAY_OF_WEEK);
             dayOfMonth = tempCal.get(Calendar.DAY_OF_MONTH);
             calTable.append("<td>");
             if (days.contains(dayOfMonth)) {
                 //add a padding zero to the month string
-                String monthString = String.format("%02d", (month + 1));
-                String dayString = String.format("%02d", dayOfMonth);
-                String thisDateString = Integer.toString(year)
+                String monthString = String.format("%02d", (getMonth() + 1));                
+                String dayString = String.format("%02d", dayOfMonth);                
+                String thisDateString = Integer.toString(getYear())
                         .concat(monthString)
                         .concat(dayString);
                 calTable.append("<b>");
-                calTable.append(dateHrefTemplate(new Object[]{path, weblog.getHandle(), thisDateString}));
+                calTable.append(dateHrefTemplate(new Object[]{path, handle, thisDateString}));
             }
             calTable.append(Integer.toString(dayOfMonth));
             if (days.contains(dayOfMonth)) {
