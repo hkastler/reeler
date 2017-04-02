@@ -6,14 +6,14 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryAnchorBuilder;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTag;
 import java.io.Serializable;
-import java.text.DateFormat;
+
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -35,6 +35,9 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     @Inject
     private Logger log;
+    
+    @Inject
+    private WeblogEntryAnchorBuilder anchorBuilder;
 
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
@@ -45,6 +48,9 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     //@ManagedProperty(value = "#{param.weblog}")
     private String handle;
+    
+    @ManagedProperty(value = "#{param.weblog}")
+    private String weblogId;
 
     private boolean isFieldValidationDisabled = true;
 
@@ -55,6 +61,9 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     private String enclosureURL = new String();
 
     private String tagBag = new String();
+    
+    Boolean allowCommentsChecked = false;
+            
 
     public WeblogEntryAuthorBean() {
         super(WeblogEntry.class);
@@ -63,8 +72,15 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     @PostConstruct
     private void init() {
         //this.weblog = currentWeblog;//weblogManager.findByHandle(handle);
+        if(weblogId != null){
+            weblog = weblogger.getWeblogManager().findById(weblogId);
+            reelerUiBean.setCurrentWeblog(weblog);
+            
+        }
+        
         this.handle = weblog.getHandle();
         this.cal = Calendar.getInstance(TimeZone.getTimeZone(weblog.getTimeZone()));
+        this.allowCommentsChecked = weblog.isAllowComments();
 
         if (this.id != null && !this.id.isEmpty()) {
             this.weblogEntry = weblogger.getWeblogEntryManager().findForEdit(id);
@@ -72,23 +88,35 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             tagBag = tagBag.concat(tag.getName()).concat(" ");
             });*/
             tagBag = this.weblogEntry.getTagsAsString();
+            allowCommentsChecked = this.weblogEntry.isAllowComments();
             log.fine("tags:" + this.weblogEntry.getTags().size());
+            this.strDateTimeOfPubDate = DateFormatter.sdf.format(new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
 
             this.action = "edit";
             this.actionLabel = "Edit";
         } else {
-            log.info("initing new WeblogEntryfor " + reelerUiBean.getCurrentWeblog().getName());
+            log.info("initing new WeblogEntryfor " + weblog.getName());
+            if(reelerUiBean.getUser()==null){
+                reelerUiBean.setUserFromSession();
+            }
             this.weblogEntry = new WeblogEntry(weblog, reelerUiBean.getUser());
             weblogEntry.setCommentDays(weblog.getDefaultCommentDays());
-        }
-
-        if (this.action == null || this.action.isEmpty()) {
+            allowCommentsChecked = weblog.isAllowComments();
             this.action = "create";
             this.actionLabel = "Create";
         }
 
+
     }
 
+    public String getWeblogId() {
+        return weblogId;
+    }
+
+    public void setWeblogId(String weblogId) {
+        this.weblogId = weblogId;
+    }
+    
     public Weblog getWeblog() {
         return weblog;
     }
@@ -168,10 +196,11 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         //Timestamp ts = null;
         if (strPubDate.equals("")) {
             cal.setTime(new Date());
+            return cal;
         }
-        DateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        
         try {
-            Date lpubDate = df.parse(strPubDate);
+            Date lpubDate = DateFormatter.sdf.parse(strPubDate);
             cal.setTime(lpubDate);
         } catch (ParseException ex) {
             Logger.getLogger(WeblogEntryAuthorBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -193,14 +222,17 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         this.action = action;
     }
 
-    private void setupAndSave(String facesMsg) throws WebloggerException {
-        String anchor = weblogEntry.getTitle().replace(" ", WeblogEntry.TITLE_SEPARATOR);
-        weblogEntry.setAnchor(anchor);
-        weblogEntry.setPubTime(setCalFromStrPubDate(strDateTimeOfPubDate));
-        weblogEntry.setUpdateTime(setCalFromDate(new Date()));        
-        setupTags();
-        FacesMessageManager.addSuccessMessage("weblogEntryForm", facesMsg);
+    public Boolean getAllowCommentsChecked() {
+        return allowCommentsChecked;
     }
+
+    public void setAllowCommentsChecked(Boolean allowCommentsChecked) {
+        this.allowCommentsChecked = allowCommentsChecked;
+    }
+    
+    
+
+    
 
     public void saveAsDraft() throws WebloggerException {
         log.info("draft?");
@@ -208,9 +240,10 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         setupAndSave("Blog post saved as draft");
     }
 
-    public void postToWeblog() throws WebloggerException {
+    public void publishWeblog() throws WebloggerException {
         log.info("posted?");
-        //TODO: need some logic for PENDING and SCHEDULED
+        //TODO: need some logic for PENDING and SCHEDULED        
+        weblogEntry.setPubTime(setCalFromStrPubDate(strDateTimeOfPubDate));
         weblogEntry.setStatus(WeblogEntry.PubStatus.PUBLISHED.toString());
         setupAndSave("Blog post published");
     }
@@ -219,51 +252,29 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         log.info("updated?");
         //TODO: need some logic for PENDING and SCHEDULED
         weblogEntry.setUpdateTime(setCalFromDate(new Date()));
-        setupTags();
+        setupTagsAndSave();
         FacesMessageManager.addSuccessMessage("weblogEntryForm", "Entry updated");
         return reelerUiBean.getPath() + "/weblog/entry.xhtml";
     }
 
+    private void setupAndSave(String facesMsg) throws WebloggerException {
+        if(weblogEntry.getAnchor() == null || weblogEntry.getAnchor().isEmpty()){
+            String anchor = anchorBuilder.createAnchorBase(weblogEntry);
+            weblogEntry.setAnchor(anchor);
+        }        
+        weblogEntry.setUpdateTime(setCalFromDate(new Date()));        
+        setupTagsAndSave();
+        FacesMessageManager.addSuccessMessage("weblogEntryForm", facesMsg);
+    }
+    
+    public void setupTagsAndSave() throws WebloggerException{
+        weblogEntry.setTagsAsString(tagBag);
+        save(weblogEntry);        
+     }
+    
     public void save(WeblogEntry weblogEntry) throws WebloggerException {
         weblogger.getWeblogEntryManager().saveWeblogEntry(weblogEntry);
     }
     
-    public void setupTags() throws WebloggerException{
-        /*if(action.equals("edit")){
-        for(WeblogEntryTag tag: weblogEntry.getTags()){
-        log.info("removing tag: " + tag.getName());
-        weblogEntry.removeTag(tag);
-        }
-        }*/
-        weblogEntry.setTagsAsString(tagBag);
-        log.info("tags:" + weblogEntry.getTags().size());
-        save(weblogEntry);
-        log.info("tags after save:" + weblogEntry.getTags().size()); 
-        //the tagbag has only temp holding names
-        //b/c the right query cannot be performed in the converter
-        /*for (String tagName : tagBag.split(" ")) {
-        log.info("tagBag name:" + tagName);
-        WeblogEntryTag jpatag = weblogger.getWeblogEntryTagManager()
-        .findByNameAndWeblogEntry(tagName.trim(), weblogEntry);
-        if (jpatag == null) {
-        WeblogEntryTag tag = new WeblogEntryTag(tagName);
-        tag.setCreator(weblogEntry.getCreatorUserName());
-        tag.setCreateDate(new Date());
-        tag.setWeblog(weblog);
-        tag.setWeblogEntry(weblogEntry);
-        weblogger.getWeblogEntryTagManager().save(tag);
-        jpatag = tag;
-        }
-        
-        weblogEntry.addTag(jpatag);
-        
-        }
-        save(weblogEntry);
-        log.info("tags after save:" + weblogEntry.getTags().size());
-        
-        */
-        
-        
-    }
 
 }

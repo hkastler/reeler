@@ -8,31 +8,30 @@
 
     <f:view>
         <!-- Sidebar Widgets Column -->
+        <div class="panel panel-group">
+            <!-- Search Widget -->
+            <div class="panel panel-info">
+                <h5 class="panel-heading panel-title">
+                    Actions
+                </h5>
 
-        <!-- Search Widget -->
-        <div class="card my-4">
-            <h5 class="card-header"><a href="#{request.contextPath}#{reelerUiBean.path}/profile/index.xhtml">Edit User Profile</a></h5>
-            <div class="card-block">
-                Change user info, locale, timezone
+                <div class="panel-body">
+                    <a href="#{request.contextPath}#{reelerUiBean.path}/profile/index.xhtml">Edit User Profile</a>
+                    Change user info, locale, timezone
+                    <hr/>
+                    <a href="#{request.contextPath}#{reelerUiBean.path}/weblog/create.xhtml">Create new blog</a>
+                    
+                        Feel like you've got more to say? Maybe another weblog is what you need. 
+                    
+                    <hr/>
+                    <a href="#{request.contextPath}#{reelerUiBean.path}/admin/">Server Administration</a>
+                    
+                        Make site-wide administration changes.
+                    
+                </div>
             </div>
-        </div>
 
-        <!-- Categories Widget -->
-        <div class="card my-4">
-            <h5 class="card-header"><a href="#{request.contextPath}#{reelerUiBean.path}/weblog/create.xhtml">Create new blog</a></h5>
-            <div class="card-block">
-                Feel like you've got more to say? Maybe another weblog is what you need. 
-            </div>
         </div>
-        
-         <!-- Side Widget -->
-        <div class="card my-4">
-            <h5 class="card-header"><a href="#{request.contextPath}#{reelerUiBean.path}/admin/">Server Administration</a></h5>
-            <div class="card-block">
-                Make site-wide administration changes.
-            </div>
-        </div>
-
     </f:view>
 </html>
 

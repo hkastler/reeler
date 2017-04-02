@@ -59,25 +59,29 @@
                         <f:facet name="header">
                             <h:outputText value="#{labels.res.getString('commentManagement.columnComment')}"/>
                         </f:facet>
-                        <p>Regarding: #{comment.weblogEntry.title}<br/>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p>Regarding: #{comment.weblogEntry.title}<br/>
                             Posted by: #{comment.name}<br/>
                             Posted URL: <h:outputText value="#{comment.url}"/>
                             <br/>
                             Posted at: #{comment.postTime}</p>
-                        <h:form styleClass="form" id="commentForm">
+                            </div>
+                            <div class="col-md-6">
+                                
+                            </div>
+                        </div>
+                        <h:form styleClass="form">
                             
-                            <h:messages errorStyle="color: red" 
-                                        infoStyle="color: green" 
-                                        layout="table"
-                                        for="commentForm"/>
+                            <div jsfc="h:messages" class="alert alert-success"/>
                            
                             <h:inputTextarea 
                                 value="#{comment.content}"
-                                class="form-control"/>
+                                class="form-control "/>
                             <h:commandButton value="Save changes"
                                              class="btn btn-secondary"
                                              action="#{weblogEntryCommentBean.updateComment(comment)}">
-                                <f:ajax execute="@form" render="this"/>
+                                <f:ajax execute="@form" render="@form"/>
                             </h:commandButton>
                         </h:form>
                     </h:column> 

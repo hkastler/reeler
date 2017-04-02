@@ -1,56 +1,56 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:jsf="http://xmlns.jcp.org/jsf"
-      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+<ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:define name="title">
+        <h:outputText value="#{weblogEntryAuthorBean.actionLabel} Entry"></h:outputText>            
+    </ui:define>
 
-    <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
-        <ui:define name="title">
-            <h:outputText value="#{weblogEntryAuthorBean.actionLabel} Entry"></h:outputText>            
-        </ui:define>
-
-        <ui:define name="head">
-            <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/datetimepicker/jquery.datetimepicker.css"/>
-            <script type="text/javascript" src="#{request.contextPath}/js/vendor/ckeditor_4.4.7_full/ckeditor/ckeditor.js"></script>  
-        </ui:define>
+    <ui:define name="head">
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/datetimepicker/jquery.datetimepicker.css"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/vendor/ckeditor_4.4.7_full/ckeditor/ckeditor.js"></script>  
+    </ui:define>
 
 
-        <ui:define name="navigation">
-            <ui:include src="navigation.xhtml">
-                <ui:param name="page" value="entry"/>
-                <ui:param name="customLabel" value="#{weblogEntryAuthorBean.actionLabel} Entry"/>
-            </ui:include>
-        </ui:define>
-        <ui:define name="content">
-            <f:view>
-                <h2>#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
-                    for #{weblogEntryAuthorBean.weblog.name}</h2>
-                <div id="weblogEntryDiv">
-                    <h:form id="weblogEntryForm" class="form" prependId="false">   
+    <ui:define name="navigation">
+        <ui:include src="navigation.xhtml">
+            <ui:param name="page" value="entry"/>
+            <ui:param name="customLabel" value="#{weblogEntryAuthorBean.actionLabel} Entry"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="content">
+        <f:view>
+            <h2>#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
+                for #{weblogEntryAuthorBean.weblog.name}</h2>
+            <div id="weblogEntryDiv">
 
-                        <h:panelGroup id="messagePanel" layout="block">
-                            <h:messages 
-                                errorStyle="color: red" 
-                                infoStyle="color: green" 
-                                layout="table"/>
-                        </h:panelGroup>
+                <h:form id="weblogEntryForm" class="form" prependId="false">   
 
+                    <h:panelGroup id="messagePanel" layout="block">
+                        <h:messages 
+                            errorClass="control-label has-error" 
+                            infoStyle="color: green" 
+                            layout="table"/>
+                    </h:panelGroup>
 
-                        <div class="form-group">
+                    <fieldset id="weblogEntry-fieldset">
+                        <div class="form-group #{title.valid ? '':'has-error'}">
                             <div>
                                 <label jsf:for="title" 
-                                       class="control-label #{title.isValid ? '':'has-error'}">#{messages.WeblogEntry_title}</label>
-                                <input jsf:id="title"
+                                       class="control-label #{title.valid ? '':'has-error'}">#{messages.WeblogEntry_title}</label>
+
+                                <input id="title"
                                        value="#{weblogEntryAuthorBean.weblogEntry.title}"
-                                       class="form-control"
+                                       binding="#{title}"
+                                       class="form-control #{title.valid ? '':'has-error'}"
                                        type="text"
-                                       /> 
-                                <h:message for="weblogEntryForm:title" style="color: red"/>
+                                       jsfc="h:inputText"
+                                       /><h:message for="weblogEntryForm:title" class="control-label has-error"/> 
                             </div>
-                        </div>
+                        </div>                     
 
                         <div class="form-group">
                             <div>
@@ -64,9 +64,16 @@
                             </div>
                         </div>
 
+                        <div jsf:id="permalink" class="form-group" rendered="#{weblogEntryAuthorBean.weblogEntry.status == 'PUBLISHED'}">
+                            <div>Permalink: <a href="#{request.contextPath}/#{weblogEntryAuthorBean.weblog.handle}/entry/#{weblogEntryAuthorBean.weblogEntry.anchor}"
+                                               target="_blank">#{request.contextPath}/#{weblogEntryAuthorBean.weblog.handle}/entry/#{weblogEntryAuthorBean.weblogEntry.anchor}</a>
+                                <i class="fa fa-external-link" aria-hidden="true"></i>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <div>
-                                <label for="weblogEntryCategory" class="control-label#{weblogEntryCategory.isValid ? '':'has-error'}">#{messages.WeblogEntry_category}</label>
+                                <label for="weblogEntryCategory" class="control-label #{weblogEntryCategory.valid ? '':'has-error'}">#{messages.WeblogEntry_category}</label>
                                 <div id="">
                                     <select
                                         id="weblogEntryCategory"
@@ -106,34 +113,29 @@
 
 
 
-                        <div class="form-group">
+                        <div class="form-group #{text.valid ? '':'has-error'}">
                             <div>
-                                <label jsf:for="text" class="control-label">Content</label>
-                                <h:message for="weblogEntryForm:text" style="color: red"/>
+                                <label jsf:for="text" class="control-label #{text.valid ? '':'has-error'}">Content</label>                                
+
                                 <textarea                        
-                                    jsf:id="text"
-                                    value="#{weblogEntryAuthorBean.weblogEntry.text}" 
-                                    class="ckeditor">
-                                </textarea>
+                                    jsfc="h:inputTextarea"
+                                    id="text"
+                                    value="#{weblogEntryAuthorBean.weblogEntry.text}"
+                                    binding="#{text}"
+                                    class="ckeditor #{text.valid ? '':'form-control has-error'}">
+                                </textarea><h:message for="weblogEntryForm:text" errorClass="control-label has-error"/>
                             </div>
                         </div>
                         <div class="form-group">
                             <label jsf:for="strDateTimeOfPubDate" class="control-label">Pub Time</label>
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <input jsfc="h:inputText"
-                                           id="strDateTimeOfPubDate"
-                                           type="text" 
-                                           value="#{weblogEntryAuthorBean.strDateTimeOfPubDate}"
-                                           class="form-control"
-                                           autocomplete="off"
-                                           ></input>                                
-                                </div>
-                                <div class="col-lg-6">
-                                    #{reelerUiBean.user.timeZone}                                
-                                </div>
-                            </div>
-
+                            &#160;#{weblogEntryAuthorBean.weblog.timeZone}
+                            <input jsfc="h:inputText"
+                                   id="strDateTimeOfPubDate"
+                                   type="text" 
+                                   value="#{weblogEntryAuthorBean.strDateTimeOfPubDate}"
+                                   class="form-control"
+                                   autocomplete="off"/>
+                            
                         </div>
 
 
@@ -141,9 +143,9 @@
                             <div>
                                 <div class="checkbox-inline">
                                     <h:selectBooleanCheckbox id="allowComments"
-                                                             value="#{weblogEntryAuthorBean.weblogEntry.allowComments}"/>
-                                    <label jsf:for="allowComments">Allow Comments for</label>
-                                    &nbsp;
+                                                             value="#{weblogEntryAuthorBean.allowCommentsChecked}"/>
+                                    <label jsf:for="allowComments">Allow Comments for</label>                                    
+                                    &#160;
                                     <h:selectOneMenu 
                                         id="commentDays"
                                         value="#{weblogEntryAuthorBean.weblogEntry.commentDays}">
@@ -169,7 +171,7 @@
                                     <h:selectBooleanCheckbox 
                                         id="pinnedToMain" 
                                         value="#{weblogEntryAuthorBean.weblogEntry.pinnedToMain}"/>
-                                    <label jsf:for="rightToLeft">Pinned to main</label>
+                                    <label jsf:for="pinnedToMain">Pinned to main</label>
 
                                 </div>
                             </div>
@@ -178,7 +180,7 @@
                         <div class="form-group">
                             <div>
                                 <label jsf:for="searchDescription" 
-                                       class="control-label #{searchDescription.isValid ? '':'has-error'}">Search Description</label>
+                                       class="control-label">Search Description</label>
                                 <input jsf:id="searchDescription"
                                        binding="#{searchDescription}"
                                        value="#{weblogEntryAuthorBean.weblogEntry.searchDescription}"
@@ -193,7 +195,7 @@
                         <div class="form-group">
                             <div>
                                 <label jsf:for="enclosureURL" 
-                                       class="control-label #{enclosureURL.isValid ? '':'has-error'}">Enclosure URL</label>
+                                       class="control-label #{enclosureURL.valid ? '':'has-error'}">Enclosure URL</label>
                                 <input jsf:id="enclosureURL"
                                        value="#{weblogEntryAuthorBean.enclosureURL}"
                                        class="form-control"
@@ -204,63 +206,73 @@
                         </div>
                         <input type="hidden" name="id" value="#{weblogEntryAuthorBean.id}"/>
                         <input type="hidden" name="action" value="#{weblogEntryAuthorBean.action}"/>
-                        <div class="form-group">
-                            <div>
-                                <h:commandButton id="submitDraft" 
-                                                 value="Save as Draft"
-                                                 action="#{weblogEntryAuthorBean.saveAsDraft}"
-                                                 styleClass="btn btn-info"
-                                                 rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+                    </fieldset>
+                    <div class="form-group">
+                        <div>
+                            <h:commandButton id="submitPost" 
+                                             value="Post to Weblog"
+                                             action="#{weblogEntryAuthorBean.publishWeblog}"
+                                             styleClass="btn btn-primary"
+                                             rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+                            </h:commandButton>
+                            <h:commandButton id="submitDraft" 
+                                             value="Save as Draft"
+                                             action="#{weblogEntryAuthorBean.saveAsDraft}"
+                                             styleClass="btn btn-secondary"
+                                             rendered="#{weblogEntryAuthorBean.action eq 'create'}">
 
-                                </h:commandButton>
-                                <h:commandButton id="submitPost" 
-                                                 value="Post to Weblog"
-                                                 action="#{weblogEntryAuthorBean.postToWeblog}"
-                                                 styleClass="btn btn-primary"
-                                                 rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+                            </h:commandButton>
 
-                                </h:commandButton>
-                                 <h:commandButton id="editWeblogEntry" 
-                                                 value="Update Weblog Entry"
-                                                 action="#{weblogEntryAuthorBean.updateWeblogEntry}"
-                                                 styleClass="btn btn-primary"
-                                                 rendered="#{weblogEntryAuthorBean.action eq 'edit'}">
 
-                                </h:commandButton>
-                            </div>
+
+                            <h:commandButton id="editWeblogEntry" 
+                                             value="Update Weblog Entry"
+                                             action="#{weblogEntryAuthorBean.updateWeblogEntry}"
+                                             styleClass="btn btn-primary"
+                                             rendered="#{weblogEntryAuthorBean.action eq 'edit'}">
+                            </h:commandButton>
+                            <input 
+                                jsf:id="cancelButton"
+                                type="button" 
+                                class="btn btn-secondary"
+                                value="Cancel" 
+                                onclick="window.location = '#{request.contextPath}#{reelerUiBean.path}'" 
+                                rendered="#{weblogEntryAuthorBean.action eq 'edit'}"/>
                         </div>
-                    </h:form>
-                </div>
-            </f:view>
+                    </div>
+                </h:form>
 
-        </ui:define>
-        
-        <ui:define name="sideNav">
-            <ui:include src="entrySideNav.xhtml"/>
-        </ui:define>
+            </div>
+        </f:view>
 
-        <ui:define name="postBody">
-            <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
-            <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
-            <script>
-                Date.parseDate = function (input, format) {
-                    return moment(input, format).toDate();
-                };
-                Date.prototype.dateFormat = function (format) {
-                    return moment(this).format(format);
-                };
-                //$(document).ready(function () {
-                //$('#dateTimeOfEvent').datetimepicker();
-                //}
-                $('#strDateTimeOfPubDate').datetimepicker({
-                    format: 'YYYY/MM/DD HH:mm:ss',
-                    formatTime: 'HH:mm:ss',
-                    formatDate: 'YYYY/MM/DD'
-                });
-            </script>           
-        </ui:define>
-    </ui:composition>
+    </ui:define>
 
-</html>
+    <ui:define name="sideNav">
+        <ui:include src="entrySideNav.xhtml"/>
+    </ui:define>
+
+    <ui:define name="postBody">
+        <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
+        <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
+        <script>
+                                    Date.parseDate = function (input, format) {
+                                        return moment(input, format).toDate();
+                                    };
+                                    Date.prototype.dateFormat = function (format) {
+                                        return moment(this).format(format);
+                                    };
+                                    //$(document).ready(function () {
+                                    //$('#dateTimeOfEvent').datetimepicker();
+                                    //}
+                                    $('#strDateTimeOfPubDate').datetimepicker({
+                                        format: 'YYYY MMM DD HH:mm',
+                                        formatTime: 'HH:mm',
+                                        formatDate: 'YYYY MM DD'
+                                    });
+        </script>           
+    </ui:define>
+</ui:composition>
+
+
 
 

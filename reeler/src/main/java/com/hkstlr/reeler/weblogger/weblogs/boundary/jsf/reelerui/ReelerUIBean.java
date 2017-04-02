@@ -48,12 +48,12 @@ public class ReelerUIBean implements Serializable {
     private List<Weblog> userWeblogs;
 
     private Map<String, String> userWeblogPermissions;
-
+    
     private Map<String, String> pages = new LinkedHashMap<>();
 
     private final String path = "/weblogger/reeler-ui";
 
-    private Weblog currentWeblog;
+    private Weblog currentWeblog = new Weblog();
 
     public ReelerUIBean() {
         setUserFromSession();
@@ -63,7 +63,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     @PostConstruct
-    private void init() {
+    public void init() {
         log.log(Level.INFO, "expected that a session bean would init only once");
         pages.put("entry", "Create Entry");
         pages.put("entries", "Entries");
@@ -91,7 +91,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserWeblogs(User user) {
-
+        log.info("setting user weblogs");
         List<Weblog> ublogs = null;
         List<Weblog> finalUblogs = new ArrayList<>();
         try {
@@ -111,11 +111,16 @@ public class ReelerUIBean implements Serializable {
                     @Override
                     public int compare(WeblogEntry we2, WeblogEntry we1)
                     {
-
-                        return  we1.getPubTime().compareTo(we2.getPubTime());
+                        return  we1.getUpdateTime().compareTo(we2.getUpdateTime());
                     }
                 });
             finalUblogs.add(blog);
+            //refresh the current weblog
+            if(currentWeblog != null){
+                if(blog.equals(currentWeblog)){
+                    currentWeblog = blog;
+                }
+            }
         }
         this.userWeblogs = null;
         this.userWeblogs = finalUblogs;
@@ -126,6 +131,8 @@ public class ReelerUIBean implements Serializable {
         setUserWeblogs(this.user);
 
     }
+    
+    
 
     public void setWeblogPermissions(List<Weblog> blogs) {
 
@@ -165,7 +172,7 @@ public class ReelerUIBean implements Serializable {
         this.user = user;
     }
 
-    private void setUserFromSession() {
+    public void setUserFromSession() {
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
     }
 
@@ -208,6 +215,17 @@ public class ReelerUIBean implements Serializable {
     }
     
     public void indexViewAction(){
+        try {
+            setUserWeblogs();
+        } catch (Exception e) {
+        }
+        try {
+            setWeblogPermissions();
+        } catch (WebloggerException ex) {
+            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    public void entriesViewAction(){
         setUserWeblogs();
         try {
             setWeblogPermissions();
@@ -215,12 +233,11 @@ public class ReelerUIBean implements Serializable {
             Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
     public void blogrollsViewAction(){
         setUserWeblogs();
         try {
             setWeblogPermissions();
-        } catch (Exception ex) {
+        } catch (WebloggerException ex) {
             Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

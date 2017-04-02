@@ -11,6 +11,34 @@
 table {
     table-layout: fixed;
 }
+h2{
+    padding-top: 20px;
+}
+
+/* Color of invalid field */
+.has-error .control-label,
+.has-error .help-block,
+.has-error .form-control-feedback {
+    color: #a94442;
+}
+
+/* Color of valid field */
+.has-success .control-label,
+.has-success .help-block,
+.has-success .form-control-feedback {
+    color: #3c763d;
+}
+
+#comments > table{
+    border: 1px;
+    width: 100%;
+    
+}
+
+#comments > table > tbody > tr .success{
+    background-color: #9cd096;
+    color: white;
+}
 
 
 

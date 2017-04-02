@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -49,6 +50,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogEntryComment.findByPlugins", query = "SELECT r FROM WeblogEntryComment r WHERE r.plugins = :plugins")
     , @NamedQuery(name = "WeblogEntryComment.findByContentType", query = "SELECT r FROM WeblogEntryComment r WHERE r.contentType = :contentType")
     , @NamedQuery(name = "WeblogEntryComment.findByWeblogEntry", query = "SELECT r FROM WeblogEntryComment r WHERE r.weblogEntry = :weblogEntry")
+    , @NamedQuery(name = "WeblogEntryComment.findByWeblogEntryAndStatus", query = "SELECT r FROM WeblogEntryComment r WHERE r.weblogEntry = :weblogEntry AND r.status = :status")
     , @NamedQuery(name = "WeblogEntryComment.getCountAllDistinctByStatus", query = "SELECT COUNT(c) FROM WeblogEntryComment c where c.status = ?1")
     , @NamedQuery(name = "WeblogEntryComment.getCountDistinctByWebsite&amp;Status", query = "SELECT COUNT(c) FROM WeblogEntryComment c WHERE c.weblogEntry.website = ?1 AND c.status = ?2")
     , @NamedQuery(name = "WeblogEntryComment.getMostCommentedWebsiteByEndDate", query = "SELECT COUNT(c), c.weblogEntry.website.id, c.weblogEntry.website.handle, c.weblogEntry.website.name FROM WeblogEntryComment c WHERE c.weblogEntry.pubTime < ?1 GROUP BY c.weblogEntry.website.id, c.weblogEntry.website.handle, c.weblogEntry.website.name")
@@ -311,11 +313,10 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     }
 
     @PrePersist
-    private void setApproval() {
+    private void setCommentPostTime() {
         //TODO: figure out why the timestamp doesnt set the date in the db; postgresql at least
+        //Calendar cal = Calendar.getInstance(this.weblogEntry.getLocale());
         this.postTime = new Date();
-        this.notify = false;
-        this.status = ApprovalStatus.APPROVED;
         this.contentType = "text/plain";
     }
 

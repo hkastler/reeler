@@ -76,6 +76,17 @@ public class WeblogEntryCommentManager extends AbstractManager {
         return comments;
     }
     
+    public List<WeblogEntryComment> getCommentsByWeblogEntryAndStatus(WeblogEntry entry, WeblogEntryComment.ApprovalStatus status) {
+        Query query = em.createNamedQuery("WeblogEntryComment.findByWeblogEntryAndStatus", WeblogEntryComment.class);
+        query.setParameter("weblogEntry", entry);
+        query.setParameter("status", status);
+        List<WeblogEntryComment> comments = query.getResultList();
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        return comments;
+    }
+    
     /**
      * @inheritDoc
      */
@@ -157,8 +168,9 @@ public class WeblogEntryCommentManager extends AbstractManager {
     }
 
     public void saveAndLoadComments(WeblogEntryComment comment) {
-
+        System.out.println("comment:" + comment.getStatus().toString());
         persist(comment);
+        System.out.println("comment:" + comment.getStatus().toString());
         //WeblogEntry entry = comment.getWeblogEntry();
         //web.setComments(entry.getComments());
     }

@@ -79,8 +79,6 @@ public class WeblogEntryCommentBean {
     }
     
     public void updateComment(WeblogEntryComment updatedComment){
-        log.log(Level.INFO,"updating comment");
-        log.log(Level.INFO,"comment content:" + updatedComment.getContent());
         weblogger.getWeblogEntryCommentManager().save(updatedComment);
         FacesMessageManager.addSuccessMessage("commentForm", "Comment updated");
     }

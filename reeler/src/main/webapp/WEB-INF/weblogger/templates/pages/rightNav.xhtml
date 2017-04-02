@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
@@ -46,7 +46,7 @@
         <div class="card my-4">
             <h5 class="card-header">Calendar</h5>
             <div class="card-block">
-                <h:outputText value="#{calendarPrinter.calendarTable(request.contextPath,weblogBean.weblog)}" 
+                <h:outputText value="#{calendarPrinterBean.calendarTable(request.contextPath,weblogBean.weblog)}" 
                               escape="false"/>
             </div>
         </div>
@@ -90,5 +90,5 @@
         </div>
         </form>
     </f:view>
-</html>
+</ui:composition>
 
