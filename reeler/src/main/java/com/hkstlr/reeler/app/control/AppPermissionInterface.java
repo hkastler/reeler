@@ -31,7 +31,6 @@ public interface AppPermissionInterface {
     boolean hasAction(String action);
 
     boolean hasActions(List<String> actionsToCheck);
-
     /**
      * True if permission specifies no actions
      */

@@ -17,14 +17,11 @@ import javax.inject.Inject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
-import static javax.persistence.DiscriminatorType.STRING;
 import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import static javax.persistence.InheritanceType.SINGLE_TABLE;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
@@ -85,14 +82,6 @@ public class AbstractPermissionEntity extends java.security.Permission implement
     @Column(name = "actions", length = 255)
     protected String actions;
     
-    /** Allowed to login and edit profile */
-    public static final String LOGIN  = "login";
-    
-    /** Allowed to login and do weblogging */
-    public static final String WEBLOG = "weblog";
-
-    /** Allowed to login and do everything, including site-wide admin */
-    public static final String ADMIN  = "admin";
 
     public AbstractPermissionEntity(String name) {
         super(name);

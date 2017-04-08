@@ -1,6 +1,6 @@
 package com.hkstlr.reeler.app.control;
 
-import com.hkstlr.reeler.weblogger.weblogs.entities.ObjectPermission;
+import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
@@ -56,7 +56,7 @@ public abstract class AppPermission extends java.security.Permission implements 
     /**
      * Merge actions into this permission.
      */
-    public void addActions(ObjectPermission perm) {
+    public void addActions(AppPermission perm) {
         List<String> newActions = perm.getActionsAsList();
         List<String> updatedActions = getActionsAsList();
         for (String newAction : newActions) {
