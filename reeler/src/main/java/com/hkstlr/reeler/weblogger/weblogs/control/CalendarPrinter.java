@@ -5,8 +5,6 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
-import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.text.DateFormatSymbols;
 import static java.text.MessageFormat.format;
 import java.text.ParseException;
@@ -18,9 +16,6 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Inject;
 
 /**
  *
@@ -139,16 +134,16 @@ public class CalendarPrinter {
             days.add(Integer.parseInt(day));
         }
 
-        StringBuilder calTable = new StringBuilder("<table class=\"table fixed-table-body table-striped\">");
+        StringBuilder calTable = new StringBuilder("<table id=\"calendar\" class=\"table table-striped table-condensed table-hover\">");
         calTable.append("<thead class=\"thead-default\">");
         calTable.append("<tr>");
         calTable.append("<td colspan=\"1\" align=\"left\">");
         String pastMonthDateStr = String.format("%02d", previousMonth);
         String dateLink = incomingYear+pastMonthDateStr;
-        if(handle.length() > 0){
+        
             calTable.append(dateHrefTemplate(new Object[]{path, handle, dateLink}))
-                    .append("<i class=\"fa fa-arrow-left\" aria-hidden=\"true\"></i></a>");
-        }
+                    .append("<i class=\"fa fa-arrow-left\"></i></a>");
+        
         calTable.append("</td>");
         calTable.append("<td colspan=\"5\" align=\"center\">");
         calTable.append(Month.of(getMonth() + 1));
@@ -161,7 +156,7 @@ public class CalendarPrinter {
         dateLink = incomingYear+nextMonthDateStr;
         
             calTable.append(dateHrefTemplate(new Object[]{path, handle, dateLink}));
-            calTable.append("<i class=\"fa fa-arrow-right\" aria-hidden=\"true\"></i>");
+            calTable.append("<i class=\"fa fa-arrow-right\"></i>");
             calTable.append("</a>");
             
         calTable.append("</td>");
@@ -181,18 +176,22 @@ public class CalendarPrinter {
         calTable.append("<tbody>");
         calTable.append("<tr>");
         
+        
         if (calendar.getFirstDayOfWeek() == Calendar.MONDAY) {
             if (dayOfWeek == 1) {
-                dayOfWeek += 6;
+                dayOfWeek += 6;                
             } else {
-                dayOfWeek--;
+                dayOfWeek--;                
             }
         }
+        
         for (int i = 1; i < dayOfWeek; i++) {
-            calTable.append("<td>");
+            calTable.append("<td></td>");            
         }
+        
         dayOfWeek = 0;
         for (int i = 1; i <= calendar.getActualMaximum(Calendar.DAY_OF_MONTH); i++) {
+            //start++;
             if (dayOfWeek > 7) {
                 calTable.append("</tr><tr>");
             }
@@ -219,9 +218,18 @@ public class CalendarPrinter {
                 calTable.append("</b>");
             }
             calTable.append("</td>");
-
-            dayOfWeek++;
+           
+            if(i == calendar.getActualMaximum(Calendar.DAY_OF_MONTH)){
+                int tdPad = 6-dayOfWeek;
+                for(int t=0; t<=tdPad; t++){
+                    calTable.append("<td></td>");
+                }
+            }
+            
+            dayOfWeek++;            
         }
+        
+       
         calTable.append("</tr>");
         calTable.append("</table>");
 
