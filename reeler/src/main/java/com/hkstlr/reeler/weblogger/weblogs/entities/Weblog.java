@@ -35,10 +35,12 @@ import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
 import com.hkstlr.reeler.weblogger.weblogs.control.LocaleFixer;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
+import java.util.logging.Logger;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
@@ -92,6 +94,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Weblog.getCountByHandleLike", query = "SELECT COUNT(w) FROM Weblog w WHERE UPPER(w.handle) like ?1")})
 public class Weblog extends AbstractEntity implements Serializable {
 
+    private static final Logger log = Logger.getLogger(Weblog.class.getName());
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
@@ -149,10 +153,12 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "editortheme", length = 255)
     private String editorTheme;
 
+    @Basic
     @Size(max = 20)
     @Column(name = "locale", length = 20)
     private String locale;
 
+    @Basic
     @Size(max = 50)
     @Column(name = "timezone", length = 50)
     private String timeZone;
@@ -568,6 +574,11 @@ public class Weblog extends AbstractEntity implements Serializable {
      * @return Locale
      */
     public Locale getLocaleInstance() {
+        if(getLocale() == null || getLocale().length() == 0){
+            this.setLocale(Locale.getDefault().toString());
+        }
+        log.info("Locale.getDefault:" + Locale.getDefault().toString());
+        log.info("Locale:" + getLocale());
         return LocaleFixer.toLocale(getLocale());
     }
     
@@ -581,6 +592,15 @@ public class Weblog extends AbstractEntity implements Serializable {
             this.setTimeZone( TimeZone.getDefault().getID() );
         }
         return TimeZone.getTimeZone(getTimeZone());
+    }
+    
+    /**
+     * Return Calendar instance for value of timeZone, locale
+     * @return Calendar
+     */
+    public Calendar getCalendarInstance() {
+        Calendar calendar = Calendar.getInstance(getTimeZoneInstance(), getLocaleInstance());
+        return calendar;
     }
     
     

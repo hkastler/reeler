@@ -11,14 +11,11 @@ import java.util.List;
 //import com.hkstlr.reeler.weblogger.boundary.manager.UserManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.users.entities.User;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -159,7 +156,7 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
 
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append("GlobalPermission: ");
+        sb.append("WeblogPermission: ");
         for (String action : getActionsAsList()) {
             sb.append(" ").append(action).append(" ");
         }

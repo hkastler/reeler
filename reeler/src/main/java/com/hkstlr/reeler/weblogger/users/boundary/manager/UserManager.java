@@ -15,8 +15,6 @@ import javax.persistence.Query;
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.entities.User;
-import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 
 import java.util.ArrayList;
 import java.util.Date;

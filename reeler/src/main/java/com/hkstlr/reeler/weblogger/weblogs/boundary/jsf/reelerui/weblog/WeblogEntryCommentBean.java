@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentVisitor;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
@@ -28,46 +29,43 @@ import javax.inject.Inject;
 @ManagedBean
 @RequestScoped
 public class WeblogEntryCommentBean {
-    
+
     @EJB
     Weblogger weblogger;
-    
+
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
-    
-    private List<Object[]> commentObject;
-    
-    private List<WeblogEntryComment> weblogEntryComments = new ArrayList<>();
-    
+
+    private List<WeblogEntryCommentVisitor> weblogEntryCommentVisitors = new ArrayList<>();
+
     @Inject
     private Logger log;
 
     public WeblogEntryCommentBean() {
     }
-    
+
     @PostConstruct
-    private void init(){
+    public void init() {
         log.info("getting comments for Weblog:" + weblog.getName());
-        this.weblogEntryComments = weblogger.getWeblogEntryCommentManager()
-                .getCommentsForWeblog(weblog, WeblogEntryComment.ApprovalStatus.APPROVED);
-        
-        
+        List<WeblogEntryComment.ApprovalStatus> statuses = new ArrayList<>();
+        statuses.add(WeblogEntryComment.ApprovalStatus.SPAM);
+        statuses.add(WeblogEntryComment.ApprovalStatus.APPROVED);
+        statuses.add(WeblogEntryComment.ApprovalStatus.PENDING);
+        List<WeblogEntryComment> weblogEntryComments = weblogger.getWeblogEntryCommentManager()
+                .getCommentsForWeblog(weblog, statuses);
+        for (WeblogEntryComment wec : weblogEntryComments) {
+            WeblogEntryCommentVisitor wecv = new WeblogEntryCommentVisitor(wec.getSpam(), wec.getApproved(), wec);
+            weblogEntryCommentVisitors.add(wecv);
+        }
+
     }
 
-    public List<Object[]> getCommentObject() {
-        return commentObject;
+    public List<WeblogEntryCommentVisitor> getWeblogEntryCommentVisitors() {
+        return weblogEntryCommentVisitors;
     }
 
-    public void setCommentObject(List<Object[]> commentObject) {
-        this.commentObject = commentObject;
-    }
-
-    public List<WeblogEntryComment> getWeblogEntryComments() {
-        return weblogEntryComments;
-    }
-
-    public void setWeblogEntryComments(List<WeblogEntryComment> weblogEntryComments) {
-        this.weblogEntryComments = weblogEntryComments;
+    public void setWeblogEntryCommentVisitors(List<WeblogEntryCommentVisitor> weblogEntryCommentVisitors) {
+        this.weblogEntryCommentVisitors = weblogEntryCommentVisitors;
     }
 
     public Weblog getWeblog() {
@@ -77,19 +75,23 @@ public class WeblogEntryCommentBean {
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
     }
-    
-    public void updateComment(WeblogEntryComment updatedComment){
+
+    public void updateComment(WeblogEntryComment updatedComment) {
         weblogger.getWeblogEntryCommentManager().save(updatedComment);
         FacesMessageManager.addSuccessMessage("commentForm", "Comment updated");
     }
-    
-    public void setSpam(WeblogEntryComment updatedComment){
-        log.log(Level.INFO,"updating comment spam");
-        updatedComment.setSpam();
-        weblogger.getWeblogEntryCommentManager().save(updatedComment);
-        FacesMessageManager.addSuccessMessage("commentForm", "Comment updated");
+
+    public void setSpamAndApproval(WeblogEntryCommentVisitor visitedComment) {
+
+        visitedComment.setSpamAndApproval();
+        if(visitedComment.getWeblogEntryComment().getSpam()){
+           FacesMessageManager.addErrorMessage("Spam");           
+        }
+        if(visitedComment.getWeblogEntryComment().getApproved()){
+           FacesMessageManager.addSuccessMessage("isApprovedForm", "Approved");
+        }
+        weblogger.getWeblogEntryCommentManager().save(visitedComment.getWeblogEntryComment());
+        
     }
-    
-    
-    
+
 }

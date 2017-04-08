@@ -7,10 +7,13 @@ package com.hkstlr.reeler.weblogger.users.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -75,6 +78,10 @@ public class UserRole extends AbstractEntity implements Serializable {
     public void setUserName(String userName) {
         this.userName = userName;
     }
+    
+    @ManyToMany(mappedBy="roles")
+    @MapKey(name="userName")
+    private Map<String, User> owners = new HashMap<String, User>();
 
     @Override
     public int hashCode() {

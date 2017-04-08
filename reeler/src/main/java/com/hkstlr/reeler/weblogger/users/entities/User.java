@@ -8,7 +8,9 @@ package com.hkstlr.reeler.weblogger.users.entities;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -128,12 +130,21 @@ public class User extends AbstractEntity {
     @JoinTable(name = "user_jdbcrealm_groups",
             joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
             inverseJoinColumns = @JoinColumn(name = "groupname", referencedColumnName = "groupname"))
-    private List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<JdbcrealmGroup>();
-
+    private List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<>();
+    
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="UserUserRole",
+      joinColumns=@JoinColumn(name="username", referencedColumnName = "username"),
+      inverseJoinColumns=@JoinColumn(name="rolename", referencedColumnName = "rolename")
+    )
+    private Set<UserRole> roles;
+    
     public User() {
+        
     }
 
     public User(String id, String userName, String password, String screenname, String fullname, String emailaddress, Date datecreated, boolean isenabled) {
+        this.roles = new HashSet<>();
 
         this.userName = userName;
         this.password = password;
@@ -242,6 +253,14 @@ public class User extends AbstractEntity {
 
     public void setJdbcrealmGroups(List<JdbcrealmGroup> jdbcrealmGroups) {
         this.jdbcrealmGroups = jdbcrealmGroups;
+    }
+
+    public Set<UserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<UserRole> roles) {
+        this.roles = roles;
     }
 
     @Override

@@ -1,13 +1,28 @@
+
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+
+   adapted from  org.apache.roller.weblogger.business.jpa.JPAUserManagerImpl.java;
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.weblogs.entities.ObjectPermission;
+import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
@@ -37,7 +52,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
 
     public WeblogPermissionManager() {
     }
-    
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
@@ -46,13 +61,10 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public WeblogPermissionManager(Class<WeblogPermission> entityClass) {
         super(entityClass);
     }
-    
 
-
-    
     public WeblogPermission getWeblogPermission(Weblog weblog, User user) throws WebloggerException {
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogId"
-                , WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogId",
+                 WeblogPermission.class);
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         try {
@@ -84,12 +96,13 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
-        } catch (NoResultException ignored) {}
+        } catch (NoResultException ignored) {
+        }
 
         // permission already exists, so add any actions specified in perm argument
         if (existingPerm != null) {
             existingPerm.addActions(actions);
-            
+
             save(existingPerm);
         } else {
             // it's a new permission, so store it
@@ -97,7 +110,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             save(perm);
         }
     }
-    
+
     public void grantWeblogPermission(Weblog weblog, User user, List<String> actions, boolean pending) throws WebloggerException {
 
         // first, see if user already has a permission for the specified object
@@ -108,12 +121,13 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
-        } catch (NoResultException ignored) {}
+        } catch (NoResultException ignored) {
+        }
 
         // permission already exists, so add any actions specified in perm argument
         if (existingPerm != null) {
             existingPerm.addActions(actions);
-            
+
             save(existingPerm);
         } else {
             // it's a new permission, so store it
@@ -122,7 +136,6 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         }
     }
 
-    
     public void grantWeblogPermissionPending(Weblog weblog, User user, List<String> actions) throws WebloggerException {
 
         // first, see if user already has a permission for the specified object
@@ -133,7 +146,8 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
-        } catch (NoResultException ignored) {}
+        } catch (NoResultException ignored) {
+        }
 
         // permission already exists, so complain 
         if (existingPerm != null) {
@@ -146,7 +160,6 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         }
     }
 
-    
     public void confirmWeblogPermission(Weblog weblog, User user) throws WebloggerException {
 
         // get specified permission
@@ -166,7 +179,6 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         save(existingPerm);
     }
 
-    
     public void declineWeblogPermission(Weblog weblog, User user) throws WebloggerException {
 
         // get specified permission
@@ -184,7 +196,6 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         this.em.remove(existingPerm);
     }
 
-    
     public void revokeWeblogPermission(Weblog weblog, User user, List<String> actions) throws WebloggerException {
 
         // get specified permission
@@ -211,7 +222,6 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         }
     }
 
-    
     public List<WeblogPermission> getWeblogPermissions(User user) throws WebloggerException {
         TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName",
                 WeblogPermission.class);
@@ -246,8 +256,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         q.setParameter(1, weblog.getHandle());
         return q.getResultList();
     }
-    
-    
+
     public boolean checkPermission(WeblogPermission perm, User user) throws WebloggerException {
 
         // if permission a weblog permission
@@ -255,7 +264,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             // if user has specified permission in weblog return true
             Query qWeblog = em.createNamedQuery("Weblog.findById", Weblog.class);
             qWeblog.setParameter("id", perm.getObjectId());
-            Weblog weblog = (Weblog)qWeblog.getResultList();
+            Weblog weblog = (Weblog) qWeblog.getResultList();
             WeblogPermission existingPerm = getWeblogPermission(weblog, user);
             if (existingPerm != null && existingPerm.implies(perm)) {
                 return true;
@@ -263,10 +272,10 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         }
 
         // if Blog Server admin would still have weblog permission above
-        ObjectPermission globalPerm ;
-        Query qGlobal = em.createNamedQuery("ObjectPermission.findByUserName", ObjectPermission.class);
+        GlobalPermission globalPerm;
+        Query qGlobal = em.createNamedQuery("ObjectPermission.findByUserName", GlobalPermission.class);
         qGlobal.setParameter("userName", user.getUserName());
-        globalPerm = (ObjectPermission)qGlobal.getSingleResult();
+        globalPerm = (GlobalPermission) qGlobal.getSingleResult();
         if (globalPerm.implies(perm)) {
             return true;
         }

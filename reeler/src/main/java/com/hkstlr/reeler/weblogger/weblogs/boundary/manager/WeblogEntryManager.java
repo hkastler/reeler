@@ -1,8 +1,25 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+ * 
+ * adapted from org.apache.roller.weblogger.business.jpa.JPAWeblogEntryManagerImpl.java
+**
  */
+
+
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import java.util.ArrayList;
@@ -65,7 +82,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
     public WeblogEntryManager() {
         super(WeblogEntry.class);
     }
-
+    
     public WeblogEntry getWeblogEntryByHandleAndAnchor(String handle, String anchor) {
 
         Weblog weblog = null;
@@ -80,22 +97,22 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
         }
 
-        log.info("weblog: " + weblog.getHandle());
+        //log.info("weblog: " + weblog.getHandle());
 
         Query query = em.createNamedQuery("WeblogEntry.findByWebsiteAndAnchor");
         query.setParameter("website", weblog);
         query.setParameter("anchor", anchor);
-
+        
         try {
             weblogEntry = (WeblogEntry) query.getSingleResult();
             weblogEntry.getTags().size();
+            weblogEntry.setWebsite(weblog);
         } catch (Exception e) {
             weblogEntry = new WeblogEntry();
+            weblogEntry.setTitle("not found");
             weblogEntry.setText("not found");
             log.log(Level.WARNING, "weblog: {0} not found, reason: {1}", new Object[]{anchor, e.getMessage()});
         }
-
-        log.log(Level.INFO, "weblogEntry found:" + weblogEntry.getAnchor());
 
         return weblogEntry;
     }
@@ -150,7 +167,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
     public List<WeblogEntry> getWeblogEntriesByCategoryNameAndWeblog(String weblogCategoryName, Weblog weblog) {
 
-        List<WeblogEntry> categoryEntries = new ArrayList<>();
+        List<WeblogEntry> categoryEntries;
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog");
         
         String trimmed = weblogCategoryName.trim();

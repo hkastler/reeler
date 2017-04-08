@@ -10,10 +10,7 @@ import com.hkstlr.reeler.weblogger.TestSetup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import java.util.Collection;
 import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -25,9 +22,9 @@ public class WeblogEntryTest {
     
     public static Logger log = Logger.getLogger(WeblogEntryTest.class.getName());
     
-    User testUser = null;
-    Weblog testWeblog = null;
-    WeblogEntry cut = null;
+    static User testUser = null;
+    static Weblog testWeblog = null;
+    static WeblogEntry cut = null;
     
     public WeblogEntryTest() {
     }

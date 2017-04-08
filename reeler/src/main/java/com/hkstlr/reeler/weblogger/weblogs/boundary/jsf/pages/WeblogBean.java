@@ -17,12 +17,16 @@ import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogHitCount;
+import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  *
@@ -43,6 +47,8 @@ public class WeblogBean {
     
     @ManagedProperty(value = "#{param.dateString}")
     private String dateString = new String();
+    
+    private Date date;
     
     private List<WeblogEntry> viewEntries;
     
@@ -118,9 +124,23 @@ public class WeblogBean {
     public void setBookmarks(List<WeblogBookmark> bookmarks) {
         this.bookmarks = bookmarks;
     }
-    
-    
 
+    public WeblogHitCount getWeblogHitCount() {
+        return weblogHitCount;
+    }
+
+    public void setWeblogHitCount(WeblogHitCount weblogHitCount) {
+        this.weblogHitCount = weblogHitCount;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+    
     private Weblog getWeblogByHandle(String handle) {
 
         if (handle == null) {
@@ -128,7 +148,7 @@ public class WeblogBean {
             Weblog weblog = weblogEntry.getWebsite();
             return weblog;
         }
-        log.log(Level.FINE, "handle:{0}", handle);
+        
         Weblog weblog = null;
         try {
             weblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
@@ -136,8 +156,6 @@ public class WeblogBean {
             //weblog.setWeblogEntries(weblogEntries);
             List<WeblogBookmark> weblogBookmarks = weblogger.getWeblogBookmarkManager().getBookmarksForWeblog(weblog);
             setBookmarks(weblogBookmarks);
-            log.log(Level.FINE, "weblog retrieved:" + weblog.getName());
-
         } catch (WebloggerException ex) {
             log.log(Level.SEVERE, null, ex);
         }
@@ -148,10 +166,9 @@ public class WeblogBean {
     public WeblogEntry getLatestWeblogEntryForWeblog() {
 
         if (this.weblog.getWeblogEntries() != null && !this.weblog.getWeblogEntries().isEmpty()) {
-            log.fine("latestWeblogEntry returning from getWeblogEntries");
             return this.weblog.getWeblogEntries().get(this.weblog.getWeblogEntries().size()-1);
         }
-        log.fine("finding top 1 weblogEntry");
+        
         WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().getLatestEntryForWeblog(weblog);
         if (weblogEntry == null) {
             weblogEntry = new WeblogEntry();
@@ -161,32 +178,47 @@ public class WeblogBean {
     }
     
     public void categoryViewAction(){
-       log.fine("category:" + this.categoryName);
+       
        if(this.categoryName == null){
            this.categoryName = "Technology";
        }
         this.viewEntries = weblogger.getWeblogEntryManager()
                 .getWeblogEntriesByCategoryNameAndWeblog(categoryName,weblog);
-       log.fine("number of viewEntries:" + this.viewEntries.size());
+       
     }
+    
+    public DateFormat localeDateFormat(){
+        return DateFormatter.localeDefaultDateFormat(weblog.getLocaleInstance());
+    }
+    
     
     public void dateViewAction(){
        
        String dateToGet = this.dateString;
-       //log.info("dateToGet.length:" + dateToGet.length());
-       //log.info("dateToGet:" + dateToGet);
-       //if(dateToGet.length()==6){
-       //    dateToGet += "01";
-       //}
-       log.info("dateToGet:" + dateToGet);
-       this.viewEntries = weblogger.getWeblogEntryManager()
+       
+       Integer year = Integer.parseInt(dateString.substring(0, 4));
+       Integer month = Integer.parseInt(dateString.substring(4, 6));
+       Integer startDate = 1;
+
+        if (dateString.length() == 8) {
+            startDate = Integer.parseInt(dateString.substring(6, 8));
+        }
+        
+        Calendar calendar = weblog.getCalendarInstance();
+        calendar.set(year, month-1, startDate,0,0,0);
+        this.date = new Date(calendar.getTimeInMillis());
+        //log.info("date:" + date);
+        //log.info("formatted:" + localeDateFormat().format(date));
+        this.viewEntries = weblogger.getWeblogEntryManager()
                 .getWeblogEntriesByDateAndWeblog(dateToGet,weblog);
-       log.fine("number of viewEntries:" + this.viewEntries.size());
+               
     }
     
     public void weblogViewAction(){
         this.viewEntries = weblogger.getWeblogEntryManager()
                 .getWeblogEntriesForWeblog(weblog);
-        log.fine("number of viewEntries:" + this.viewEntries.size());
+        
     }
+    
+    
 }

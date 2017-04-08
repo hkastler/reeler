@@ -1,8 +1,24 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ *  contributor license agreements.  The ASF licenses this file to You
+ * under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.  For additional information regarding
+ * copyright in this work, please see the NOTICE file in the top level
+ * directory of this distribution.
+ * 
+ * adapted from org.apache.roller.weblogger.business.jpa.JPAWeblogManagerImpl.java
+**
  */
+
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
@@ -30,7 +46,7 @@ import com.hkstlr.reeler.weblogger.pings.boundary.AutoPingManager;
 import com.hkstlr.reeler.weblogger.pings.boundary.PingTargetManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
-import com.hkstlr.reeler.weblogger.weblogs.entities.ObjectPermission;
+import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
 import com.hkstlr.reeler.weblogger.weblogs.control.StatCount;
 import com.hkstlr.reeler.weblogger.weblogs.control.StatCountCountComparator;
 import com.hkstlr.reeler.weblogger.weblogs.control.TagStat;
@@ -808,8 +824,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
         }
 
         // if Blog Server admin would still have weblog permission above
-        //ObjectPermission globalPerm = new ObjectPermission(user);
-        ObjectPermission globalPerm = new ObjectPermission();
+        //ObjectPermission globalPerm = new GlobalPermission(user);
+        GlobalPermission globalPerm = new GlobalPermission();
         if (globalPerm.implies(perm)) {
             return true;
         }

@@ -93,7 +93,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "notify", nullable = false)
-    private boolean notify;
+    private boolean notify = false;
 
     @Size(max = 128)
     @Column(name = "remotehost", length = 128)
@@ -130,8 +130,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     public WeblogEntryComment() {
     }
 
-    public WeblogEntryComment(String id, boolean notify, ApprovalStatus status, String contenttype) {
-
+    public WeblogEntryComment(boolean notify, ApprovalStatus status, String contenttype) {
         this.notify = notify;
         this.status = status;
         this.contentType = contenttype;
@@ -266,6 +265,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     public Boolean getApproved() {
         return ApprovalStatus.APPROVED.equals(getStatus());
     }
+    
     public void setApproved(){
         this.status = ApprovalStatus.APPROVED;
     }

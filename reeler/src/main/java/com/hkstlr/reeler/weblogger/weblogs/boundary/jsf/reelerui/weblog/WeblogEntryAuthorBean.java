@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
+import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryAnchorBuilder;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
@@ -14,6 +15,8 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.io.Serializable;
 
 import java.text.ParseException;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -41,9 +44,9 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
-
+    
     private WeblogEntry weblogEntry;
-
+    
     private Calendar cal;
 
     //@ManagedProperty(value = "#{param.weblog}")
@@ -57,6 +60,8 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     private Date pubDate = new Date();
 
     private String strDateTimeOfPubDate = new String();
+    
+    private String localDateTimeFormat;
 
     private String enclosureURL = new String();
 
@@ -89,13 +94,15 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             });*/
             tagBag = this.weblogEntry.getTagsAsString();
             allowCommentsChecked = this.weblogEntry.isAllowComments();
-            log.fine("tags:" + this.weblogEntry.getTags().size());
-            this.strDateTimeOfPubDate = DateFormatter.sdf.format(new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
-
+            
+            if(weblogEntry.getPubTime() != null){        
+                this.strDateTimeOfPubDate = DateFormatter.sdf.format(new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
+            }
+            
             this.action = "edit";
             this.actionLabel = "Edit";
         } else {
-            log.info("initing new WeblogEntryfor " + weblog.getName());
+            //log.info("initing new WeblogEntryfor " + weblog.getName());
             if(reelerUiBean.getUser()==null){
                 reelerUiBean.setUserFromSession();
             }
@@ -229,10 +236,22 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     public void setAllowCommentsChecked(Boolean allowCommentsChecked) {
         this.allowCommentsChecked = allowCommentsChecked;
     }
-    
-    
 
-    
+    public String getLocalDateTimeFormat() {
+        String df = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).toFormat().toString();
+        log.info("pattern:" + df);
+        return df;
+    }
+
+    public String[] getStatuses() {
+        String[] statuses = new String[WeblogEntry.PubStatus.values().length];
+        int counter = 0;
+        for(Enum e : WeblogEntry.PubStatus.values()){
+            statuses[counter] = StringChanger.toTitleCase(e.toString());
+            counter++;
+        }
+        return statuses;
+    }
 
     public void saveAsDraft() throws WebloggerException {
         log.info("draft?");
@@ -264,7 +283,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         }        
         weblogEntry.setUpdateTime(setCalFromDate(new Date()));        
         setupTagsAndSave();
-        FacesMessageManager.addSuccessMessage("weblogEntryForm", facesMsg);
+        FacesMessageManager.addSuccessMessage("authorBeanUpdate", facesMsg);
     }
     
     public void setupTagsAndSave() throws WebloggerException{

@@ -29,6 +29,7 @@ import javax.inject.Named;
 
 import com.hkstlr.reeler.app.control.AuthMethod;
 import com.hkstlr.reeler.app.control.PropertyExpander;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.util.logging.Level;
 import javax.ejb.Startup;
 
@@ -58,6 +59,7 @@ public class WebloggerConfig {
             try {
                 // we'll need this to get at our properties files in the classpath
                 Class configClass = Class.forName(WebloggerConfig.class.getName());
+                              
                 // first, lets load our default properties
                 InputStream is = configClass.getResourceAsStream(default_config);
                 log.fine("defaultConfigPath:" + default_config);
@@ -71,7 +73,7 @@ public class WebloggerConfig {
                 //log.fine("configLoad:" + configLoad.toString());
                 tempConfig.putAll(configLoad);
 
-                // first, see if we can find our junit testing config
+                
                 log.fine("customConfigPath:" + configClass.getResource(custom_config));
                 // now, see if we can find our custom config
                 is = configClass.getResourceAsStream(custom_config);
@@ -80,11 +82,11 @@ public class WebloggerConfig {
                     Properties customConfigLoad = new Properties();
                     customConfigLoad.load(is);
                     tempConfig.putAll(customConfigLoad);
-                    log.fine("Roller Weblogger: Successfully loaded custom properties file from classpath");
+                    log.info("Successfully loaded custom properties file from classpath");
                     //log.fine("customPropFilePath : " + configClass.getResource(custom_config));
                     //log.fine("customConfigLoad:" + customConfigLoad.toString());
                 } else {
-                    log.fine("Roller Weblogger: No custom properties file found in classpath");
+                    log.severe("No custom properties file found in classpath");
                 }
 
                 // finally, check for an external config file
@@ -153,17 +155,13 @@ public class WebloggerConfig {
     public static String getProperty(String key) {
         log.info("Fetching property [" + key + "=" + config.getProperty(key) + "]");
         String value = config.getProperty(key);
-        log.info("value: " + value);
+        //log.info("value: " + value);
         //for system properties
         if (value.startsWith("$")) {
             String newValue = value;
             newValue = value.substring(2, value.indexOf("}"));
             String theEndPart = value.split("}")[1];
-            log.fine("theEndPart:" + theEndPart);
-            //newSearchIndexDir = newSearchIndexDir.concat(theEndPart);
-            log.fine("SystemPropertyKey:" + newValue);
             newValue = System.getProperty(newValue);
-            log.fine("SystemPropertyValue:" + newValue);
             newValue = newValue.concat(theEndPart);
             newValue = newValue.replace('/', File.separatorChar);
             value = newValue;

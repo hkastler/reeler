@@ -108,6 +108,10 @@ public class OAuthManager{
     
     /**
      * Get the access token and token secret for the given oauth_token. 
+     * @param requestMessage
+     * @return 
+     * @throws java.io.IOException
+     * @throws net.oauth.OAuthProblemException
      */
     public OAuthAccessor getAccessor(OAuthMessage requestMessage)
             throws IOException, OAuthProblemException {
@@ -151,10 +155,10 @@ public class OAuthManager{
 
     /**
      * Generate a fresh request token and secret for a consumer.
+     * @param accessor
      * @throws OAuthException
      */
-    public void generateRequestToken(
-            OAuthAccessor accessor)
+    public void generateRequestToken(OAuthAccessor accessor)
             throws OAuthException {
 
         // generate oauth_token and oauth_secret
@@ -189,6 +193,7 @@ public class OAuthManager{
     
     /**
      * Generate a fresh request token and secret for a consumer.
+     * @param accessor
      * @throws OAuthException
      */
     public void generateAccessToken(OAuthAccessor accessor)

@@ -8,7 +8,6 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.ReelerUIBean;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.io.Serializable;
@@ -22,7 +21,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
