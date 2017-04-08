@@ -27,9 +27,11 @@ public class DateFormatter {
     public static DateFormat format8chars = new SimpleDateFormat("YYYYMMDD");
     public static DateFormat yearMonthFormat = new SimpleDateFormat("yyyyMMM");
     
+    
     static public DateFormat localeDefaultDateFormat(Locale currentLocale) {
-        DateFormat dateFormatter = DateFormat.getDateInstance(DateFormat.DEFAULT, currentLocale);
-        return dateFormatter;
-  }
+        DateFormat localeDateFormat = DateFormat.getDateInstance(DateFormat.SHORT ,currentLocale);
+        
+        return localeDateFormat;
+    }
 
 }

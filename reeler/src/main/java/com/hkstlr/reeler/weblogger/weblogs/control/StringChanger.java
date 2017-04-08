@@ -1,3 +1,7 @@
+/*
+adapted from package org.apache.roller.weblogger.util.Utilities;
+*/
+
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
 import java.util.ArrayList;
