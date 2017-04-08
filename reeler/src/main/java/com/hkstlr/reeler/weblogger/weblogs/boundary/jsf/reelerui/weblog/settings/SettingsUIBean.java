@@ -3,13 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
+package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog.settings;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.ReelerUIBean;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -25,24 +23,16 @@ import javax.inject.Inject;
  */
 @ManagedBean
 @RequestScoped
-public class ConfigBean {
+public class SettingsUIBean {
     
     @Inject
     private ReelerUIBean reelerUiBean;
-    
-    @Inject
-    private RuntimeConfigManager runtimeConfigManager;
-    
+        
     private Map<String,String> pages = new LinkedHashMap<>();
     
     private String path;
-    
       
-    private ResourceBundle res;
-
-   
-    
-    public ConfigBean() {
+    public SettingsUIBean() {
     }
     
     @PostConstruct
@@ -53,7 +43,7 @@ public class ConfigBean {
         pages.put("pings", "Pings");
         pages.put("maintenance", "Maintenance");
         this.path = reelerUiBean.getPath() + "/weblog/settings";
-        setRes("/ApplicationResources");
+       
     }
     
     public Map<String, String> getPages() {
@@ -71,26 +61,5 @@ public class ConfigBean {
     public void setPath(String path) {
         this.path = path;
     }
-
-    public RuntimeConfigManager getRuntimeConfigManager() {
-        return runtimeConfigManager;
-    }
-
-    public void setRuntimeConfigManager(RuntimeConfigManager runtimeConfigManager) {
-        this.runtimeConfigManager = runtimeConfigManager;
-    }
-    
-     public ResourceBundle getRes() {
-        return res;
-    }
-
-    public void setRes(String bundleLocation) {
-        this.res = ResourceBundle.getBundle(bundleLocation);
-    }
-    
-    
-    
-    
-    
-    
+       
 }

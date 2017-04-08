@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -107,13 +106,9 @@ public class ReelerUIBean implements Serializable {
             log.info("weblog:" + blog.getHandle() + " has " + blog.getWeblogEntries().size() + " entries");
             //blog.getBookmarkFolders().forEach(f -> f.getBookmarks());
             // Sorting
-            Collections.sort(blog.getWeblogEntries(), new Comparator<WeblogEntry>() {
-                    @Override
-                    public int compare(WeblogEntry we2, WeblogEntry we1)
-                    {
-                        return  we1.getUpdateTime().compareTo(we2.getUpdateTime());
-                    }
-                });
+            Collections.sort(blog.getWeblogEntries(), 
+                    (WeblogEntry we2, WeblogEntry we1) -> we1.getUpdateTime().compareTo(we2.getUpdateTime())
+            );
             finalUblogs.add(blog);
             //refresh the current weblog
             if(currentWeblog != null){
@@ -201,13 +196,27 @@ public class ReelerUIBean implements Serializable {
         this.currentWeblog = weblog;
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
+            StringBuilder actionPath = new StringBuilder(context.getRequestContextPath());
+            actionPath.append(this.path);
+            actionPath.append("/weblog/");
+            if(page.equals("config")){
+                actionPath.append("settings/");
+            }
+            actionPath.append(page).append(".xhtml");
+            context.redirect(actionPath.toString());
+        } catch (IOException ex) {
+            log.severe(ex.getMessage());
+        }
+    }
+    
+    public void newWeblog() throws WebloggerException {
+        //log.info("setting weblog and redirecting...");
+        this.currentWeblog = new Weblog();
+        ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
+        try {
             StringBuilder path = new StringBuilder(context.getRequestContextPath());
             path.append(this.path);
-            path.append("/weblog/");
-            if(page.equals("config")){
-                path.append("settings/");
-            }
-            path.append(page).append(".xhtml");
+            path.append("/weblog/create.xhtml");
             context.redirect(path.toString());
         } catch (IOException ex) {
             log.severe(ex.getMessage());

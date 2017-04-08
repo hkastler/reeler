@@ -13,7 +13,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-        
+
         <ui:insert name="meta"></ui:insert>
         <title><ui:insert name="title">For Reeler</ui:insert></title>
 
@@ -21,11 +21,9 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"/>
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
-
-
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
-        
+
         <!-- Custom CSS -->        
         <link rel="stylesheet" href="#{request.contextPath}/css/main.css"/>
 
@@ -57,27 +55,31 @@
             <ui:include src="header.xhtml" />  
         </ui:insert>
 
-       
-        <!-- Page Content -->
-        <main>
-            <div class="container-fluid">
-                 <ui:insert name="navigation">                
-                    
-                </ui:insert>
-                <div class="row">
-                    <div class="col-md-9">
-                        <ui:insert name="content">                   
 
-                        </ui:insert>
-                    </div>
-                    <div class="col-md-3">
-                        <ui:insert name="sideNav">
-                            <ui:include src="rightNav.xhtml"/>
-                        </ui:insert>
+        <!-- Page Content -->
+        <f:view>
+            <main>
+                <div class="container-fluid">
+                    <ui:insert name="navigation">                
+
+                    </ui:insert>
+                    <div class="row">
+                        <div class="col-md-9">
+
+                            <ui:insert name="content">                   
+
+                            </ui:insert>
+
+                        </div>
+                        <div class="col-md-3">
+                            <ui:insert name="sideNav">
+                                <ui:include src="rightNav.xhtml"/>
+                            </ui:insert>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </main>
+            </main>
+        </f:view>
         <!-- /.container -->
 
         <ui:insert name="footer">
@@ -90,7 +92,7 @@
         <!-- Tether -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
 
 

@@ -5,20 +5,26 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <f:view>
-       
-        <div class="row">   
-            <div class="col-lg-12">
-            
-                <ul class="nav nav-tabs">
-                    <li class="active"><a href="#{request.contextPath}#{reelerUiBean.path}/">Home</a></li>
-                    <li><a href="#">Menu 1</a></li>
-                    <li><a href="#">Menu 2</a></li>
-                    <li><a href="#">Menu 3</a></li>
-                </ul>
-            
+    <div class="row">   
+        <div class="col-lg-12">
+            <ul class="nav nav-tabs">
+                <li class="active" ><a href="#{request.contextPath}#{pageBean.path}/#{pageBean.pages['index']}.xhtml">#{messages[ pageBean.pages['index'][1] ]}</a></li>
+            </ul>
+            <div class="row">   
+                <div class="col-lg-12">
+                    <ul class="nav nav-tabs">
+                        <ui:repeat value="#{pageBean.pages.keySet().toArray()}" var="key">
+                            <li class="#{pageBean.page == key ? 'active': ''}" >                                                        
+                                <a href="#{request.contextPath}#{pageBean.path}/#{key}.xhtml"
+                                   id="nav">
+                                    #{((pageBean.page == key) and (customLabel ne null)) ? customLabel : messages[pageBean.pages[key][0]]}
+                                </a>
+                            </li>
+                        </ui:repeat>
+                    </ul>
+                </div>
             </div>
         </div>
-    </f:view>
+    </div>
 </ui:composition>
 

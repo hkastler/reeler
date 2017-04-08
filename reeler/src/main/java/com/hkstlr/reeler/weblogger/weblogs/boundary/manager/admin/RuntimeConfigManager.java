@@ -97,8 +97,8 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
 
             // if any default props missing from the properties DB table,
             // initialize them and save them to that table.
-            //initializeMissingProps(this.props);
-            //this.saveProperties(this.props);
+            initializeMissingProps(this.props);
+            this.saveProperties(this.props);
 
         } catch (Exception e) {
             log.log(Level.SEVERE,"Failed to initialize runtime configuration properties."+
@@ -139,7 +139,7 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
          * we can save the elements again after they have been updated
          */
         for (RuntimeConfigProperty prop : list) {
-            //log.info(prop.getName() + ":" + prop.getValue());
+            log.info(prop.getName() + ":" + prop.getValue());
            try{
                 props.put(prop.getName(), prop.getValue());
            }catch(Exception e){
@@ -160,13 +160,30 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
 
     /**
      * Save all properties.
+     * @param properties
      */
+    /*
+    revised from the original method
+    java 8 lamba
+    properties are key value pairs
+    */
     public void saveProperties(Map properties){
-
         // just go through the list and saveProperties each property
-        for (Object prop : properties.values()) {
-            this.em.persist(prop);
-        }
+        
+        properties.forEach((k,v)-> {
+            
+            String value = null;
+            
+            if(v instanceof String){
+                value = (String) v;                
+            }else if(v instanceof Boolean){
+                Boolean bool = (Boolean)v;                
+                value = Boolean.toString(bool);
+            }            
+            this.em.merge(new RuntimeConfigProperty((String)k, value));            
+        });
+        
+        
     }
     
 
@@ -177,7 +194,11 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
      *
      * If the Map of props is empty/null then we will initialize all properties.
      **/
-    private Map initializeMissingProps(Map<String, RuntimeConfigProperty> props) {
+    /*
+    revised from the original
+    props initialized as key value pairs
+    */
+    private Map initializeMissingProps(Map<String, String> props) {
 
         if(props == null) {
             props = new HashMap<>();
@@ -202,14 +223,14 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
 
                     // do we already have this prop?  if not then add it
                     if(!props.containsKey(propDef.getName())) {
-                        RuntimeConfigProperty newprop =
-                                new RuntimeConfigProperty(
-                                        propDef.getName(), propDef.getDefaultValue());
+                       // RuntimeConfigProperty newprop =
+                          //      new RuntimeConfigProperty(
+                          //              propDef.getName(), propDef.getDefaultValue());
 
-                        props.put(propDef.getName(), newprop);
+                        props.put(propDef.getName(), propDef.getDefaultValue());
 
                         log.info("Property " + propDef.getName() +
-                            " not yet in roller_properties database table, will store with " +
+                            " not yet in roller_properties database table, will initialize with " +
                             "default value of [" + propDef.getDefaultValue() + "`]");
                     }
                 }

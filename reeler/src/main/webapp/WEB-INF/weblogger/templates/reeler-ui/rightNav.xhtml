@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
@@ -19,19 +19,21 @@
                     <a href="#{request.contextPath}#{reelerUiBean.path}/profile/index.xhtml">Edit User Profile</a>
                     Change user info, locale, timezone
                     <hr/>
-                    <a href="#{request.contextPath}#{reelerUiBean.path}/weblog/create.xhtml">Create new blog</a>
-                    
-                        Feel like you've got more to say? Maybe another weblog is what you need. 
-                    
+                    <h:form><a action="#{reelerUiBean.newWeblog()}" jsfc="h:commandLink">
+                        <f:param name="action" value="create"/>Create new blog</a></h:form>
+                    Create a new weblog         
                     <hr/>
-                    <a href="#{request.contextPath}#{reelerUiBean.path}/admin/">Server Administration</a>
-                    
-                        Make site-wide administration changes.
-                    
+                    <div jsf:id="serverAdminLink" rendered="#{reelerUiBean.user.roles
+                                                              .stream()
+                                                              .anyMatch(r->r.roleName.equals('admin')
+                                                              )}">
+                        <a href="#{request.contextPath}#{reelerUiBean.path}/admin/">Server Administration</a>
+                        Make site-wide administration changes
+                    </div>
                 </div>
             </div>
 
         </div>
     </f:view>
-</html>
+</ui:composition>
 

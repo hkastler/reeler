@@ -1,31 +1,75 @@
-
-<ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition template="#{adminUIBean.template}"
                 xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:h="http://xmlns.jcp.org/jsf/html"
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <ui:define name="title">
-        <h:outputText value=""></h:outputText>            
-    </ui:define>
+    <ui:param name="pageBean" value="#{adminUIBean}"/>
+    <f:metadata>        
+        <f:viewAction action="#{adminUIBean.viewAction('index')}"/>              
+    </f:metadata> 
 
-    <ui:define name="head">
+    <ui:define name="pageContent">
+        <form id="globalConfig" name="globalConfig" jsfc="h:form">
+            <ui:repeat value="#{runtimeConfigBean.runtimeConfigManager.runtimeConfigDefs.configDefs}"
+                       var="configDef">
+                <ui:repeat value="#{configDef.displayGroups}" var="displayGroup">                    
+                    <h3>#{runtimeConfigBean.res.getString(displayGroup.key)}</h3>
+                    <br/>
+                    <ui:repeat value="#{displayGroup.propertyDefs}" var="propertyDef">
+                        <div class="form-group" jsf:id="text" rendered="#{propertyDef.type eq 'string' 
+                                                                          or propertyDef.type eq 'text'}">
+                            <label for="#{propertyDef.name}" class="control-label">
+                                #{runtimeConfigBean.res.getString(propertyDef.key)}
+                            </label>
+                            <input 
+                                jsfc="h:inputText"
+                                type="text" 
+                                name="#{propertyDef.name}" 
+                                value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
+                                class="form-control" 
+                                rendered="#{propertyDef.type eq 'string'}"/>
 
-    </ui:define>
-
-    <ui:define name="navigation">
-
-    </ui:define>
-    <ui:define name="content">
-        <f:view>
-            <ui:include src="server-admin-form.xhtml"/>
-
-        </f:view>
-    </ui:define>
-
-    <ui:define name="postBody">
-
+                            <textarea 
+                                class="form-control"
+                                jsfc="h:inputTextarea"
+                                name="#{propertyDef.name}"
+                                value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
+                                rendered="#{propertyDef.type eq 'text'}">
+                            </textarea>
+                        </div> 
+                        <div class="checkbox" jsf:id="checkbox" rendered="#{propertyDef.type eq 'boolean'}">
+                            <label jsf:for="checkbox">
+                                <input jsfc="h:selectBooleanCheckbox"
+                                       type="checkbox"
+                                       value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
+                                       name="#{propertyDef.name}"
+                                       rendered="#{propertyDef.type eq 'boolean'}"/>
+                                <h:outputText value="#{runtimeConfigBean.res.getString(propertyDef.key)}"/>
+                            </label>
+                        </div>
+                    </ui:repeat>
+                    <hr/>
+                </ui:repeat>
+                <hr/>
+            </ui:repeat>
+            <input type="hidden" jsf:id="page" value="#{adminUIBean.page}"/>
+            <h:commandButton id="updateRuntimeConfig" 
+                             value="#{messages.label_update} #{messages[adminUIBean.pages[adminUIBean.page][0]]}"
+                             action="#{runtimeConfigBean.updateConfigs()}"
+                             styleClass="btn btn-primary">
+            </h:commandButton>
+            <input 
+                jsf:id="cancelButton"
+                type="button" 
+                class="btn btn-secondary"
+                value="Cancel" 
+                onclick="window.location = '#{request.contextPath}#{reelerUiBean.path}'"/>
+        </form>
     </ui:define>
 
 </ui:composition>
