@@ -23,26 +23,26 @@
             <article>
                 <!-- Title -->
                 <h1 class="mt-4"><h:outputText value="#{weblogEntryBean.weblogEntry.title}" escape="false" /></h1>
-
                 <!-- Author -->
                 <p class="lead">
                     by <a href="#"><h:outputText value="#{weblogEntryBean.weblogEntry.creatorUserName}" /></a>
                 </p>
-
                 <hr/>
                 <!-- Date/Time -->       
-                <p>Posted on  <h:outputText value="#{weblogEntryBean.weblogEntry.pubTime.time}" >
-                        <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
-                                           timeZone="#{weblogEntryBean.weblog.timeZone}"/>
-                    </h:outputText></p>
+                <p>Posted on 
+                    <h:outputText value="#{weblogEntryBean.weblogEntry.pubTime.time}" >
+                        <f:convertDateTime dateStyle="default"
+                                           type="both"
+                                           locale="#{weblogEntryBean.weblogEntry.localeInstance}"
+                                           timeZone="#{weblogEntryBean.weblog.timeZoneInstance}"/>
+                    </h:outputText>
+                </p>
                 <p jsf:id="pTags" rendered="#{weblogEntryBean.weblogEntry.tags.size() gt 0}">
                     Tags: #{weblogEntryBean.weblogEntry.tagsAsString}
                 </p>
                 <hr/>
-
                 <!-- Post Content -->
                 <h:outputText value="#{weblogEntryBean.weblogEntry.text}" escape="false"/>
-
                 <hr/>
             </article>
             <!-- Comments Form -->
@@ -61,7 +61,7 @@
                               prependId="false" 
                               id="commentForm">            
                             <div id="messages" jsfc="h:messages" errorClass="control-label has-error"
-                                 infoStyle="color: green"/>
+                                 infoClass="alert alert-success"/>
                             <fieldset>
                                 <div class="form-group #{name.valid ? '' : 'has-error'}">
 

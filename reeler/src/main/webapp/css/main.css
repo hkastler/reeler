@@ -8,11 +8,8 @@
     float: right;
 }
 
-table {
-    table-layout: fixed;
-}
 h2{
-    padding-top: 20px;
+    margin-top: 0px;
 }
 
 /* Color of invalid field */
@@ -29,16 +26,16 @@ h2{
     color: #3c763d;
 }
 
-#comments > table{
-    border: 1px;
-    width: 100%;
-    
+#calendar {
+    table-layout: fixed;
 }
 
-#comments > table > tbody > tr .success{
-    background-color: #9cd096;
-    color: white;
+div.alternating-row-container > div:nth-of-type(odd) {
+    background: #e0e0e0;
 }
+
+.commentCheckBox { width: 8%; }
+.commentForm { width: 76%; }
 
 
 

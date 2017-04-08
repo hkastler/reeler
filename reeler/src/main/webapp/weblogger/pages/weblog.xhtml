@@ -16,10 +16,12 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <hr/>
+            <h2 class="text-center">Main</h2>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() eq 0}">
                 No entries found for Weblog #{weblogBean.weblog.name}
             </div>
+
+
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() gt 0}">
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
                     <!-- Title -->
@@ -30,11 +32,13 @@
                     </h3>
                     <!-- Author -->
                     by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
-                    <!-- Date/Time -->
-                    <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
-                            <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
-                                               timeZone="#{weblogBean.weblog.timeZone}"/>
-                        </h:outputText></p>
+                    <!-- Date/Time -->                    
+                    <p>
+                        Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
+                                    <f:convertDateTime
+                                        dateStyle="default"/>
+                                    </h:outputText>
+                    </p>
                     <!-- Post Content -->
                     <h:outputText value="#{weblogEntry.text}" escape="false" />
                     <hr/>

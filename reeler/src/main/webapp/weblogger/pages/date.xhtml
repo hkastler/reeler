@@ -17,10 +17,37 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <h2 style="padding-top: 20px">Date #{weblogBean.dateString}</h2>
+            <h2>                                                
+                <h:outputText value="#{weblogBean.date}" rendered="#{weblogBean.dateString.length() eq 6}">
+                    <f:convertDateTime pattern="MMMM yyyy"
+                                       locale="#{weblogBean.weblog.localeInstance}"
+                                       timeZone="#{weblogBean.weblog.timeZoneInstance}"
+                                       />
+                </h:outputText>
+                
+                <h:outputText value="#{weblogBean.date}" rendered="#{weblogBean.dateString.length() eq 8}">
+                    <f:convertDateTime dateStyle="default"
+                                       locale="#{weblogBean.weblog.localeInstance}"
+                                       timeZone="#{weblogBean.weblog.timeZoneInstance}"
+                        />
+                </h:outputText>
+                
+            </h2>
             <hr/>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() eq 0}">
-                No entries found for Date #{weblogBean.dateString}
+                No entries found for <h:outputText value="#{weblogBean.date}" rendered="#{weblogBean.dateString.length() eq 6}">
+                                        <f:convertDateTime pattern="MMMM yyyy"
+                                                           locale="#{weblogBean.weblog.localeInstance}"
+                                                           timeZone="#{weblogBean.weblog.timeZoneInstance}"
+                                                           />
+                                    </h:outputText>
+
+                                    <h:outputText value="#{weblogBean.date}" rendered="#{weblogBean.dateString.length() eq 8}">
+                                        <f:convertDateTime dateStyle="default"
+                                                           locale="#{weblogBean.weblog.localeInstance}"
+                                                           timeZone="#{weblogBean.weblog.timeZoneInstance}"
+                                            />
+                                    </h:outputText>
             </div>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() gt 0}">
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
@@ -34,8 +61,10 @@
                     by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
                     <!-- Date/Time -->
                     <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
-                            <f:convertDateTime pattern="yyyy/MM/dd hh:mm a"
-                                               timeZone="#{weblogBean.weblog.timeZone}"/>
+                            <f:convertDateTime dateStyle="default"
+                                               type="both"
+                                               locale="#{weblogBean.weblog.localeInstance}"
+                                               timeZone="#{weblogBean.weblog.timeZoneInstance}"/>
                         </h:outputText></p>
                     <!-- Post Content -->
                     <h:outputText value="#{weblogEntry.text}" escape="false" />

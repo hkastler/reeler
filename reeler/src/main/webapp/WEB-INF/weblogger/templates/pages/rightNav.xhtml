@@ -8,7 +8,39 @@
 
     <f:view>
         <!-- Sidebar Widgets Column -->
-
+         <!-- Side Widget -->
+        <form jsf:id="sideNavLinks">
+        <div class="card my-4">
+            <h5 class="card-header">Navigation</h5>
+            <div class="card-block">
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <a href="#{request.contextPath}/">Front Page</a>
+                    </li>
+                    <li class="list-group-item" jsf:id="weblogSideNavLink" rendered="#{weblogBean.handle.length() gt 0}">
+                        <a value="#{request.contextPath}/#{weblogBean.handle}" 
+                           jsfc="h:outputLink" 
+                           jsf:id="weblogHome" >Weblog #{weblogBean.weblog.name}</a>
+                    </li>
+                    <li class="list-group-item" jsf:id="loginSideNavLink" rendered="#{sessionScope.user eq null}">
+                        <a value="#{request.contextPath}/weblogger/login/" 
+                           jsfc="h:outputLink" >Login</a>
+                    </li>
+                    <li class="list-group-item" jsf:id="adminSideNavLink" rendered="#{sessionScope.user ne null}">
+                        <a value="#{request.contextPath}/weblogger/reeler-ui/" 
+                           jsfc="h:outputLink" 
+                           jsf:id="link-admin">Admin</a>
+                    </li>
+                    <li class="list-group-item" jsf:id="logoutSideNavLink" rendered="#{sessionScope.user ne null}">
+                        <a action="#{loginBean.logout()}" 
+                            jsfc="h:commandLink"
+                            jsf:id="link-logout">Logout</a>
+                    </li>     
+                </ul>
+            </div>
+        </div>
+        </form>
+        
         <!-- Search Widget -->
         <div class="card my-4" jsf:id="searchWidget" rendered="#{false}">
             <h5 class="card-header">Search</h5>
@@ -30,10 +62,10 @@
             <div class="card-block">
                 <div class="row">
                     <div class="col-lg-12">
-                        <ul class="list-unstyled mb-0">
+                        <ul class="list-group">
                             <ui:repeat value="#{weblogBean.weblog.weblogCategories}"
                                        var="category">
-                                <li><a href="#{request.contextPath}/#{weblogBean.handle}/category/#{category.name}">#{category.name}</a></li>
+                                <li class="list-group-item"><a href="#{request.contextPath}/#{weblogBean.handle}/category/#{category.name}">#{category.name}</a></li>
                             </ui:repeat>                                    
                         </ul>
                     </div>
@@ -43,7 +75,7 @@
         </div>
         
          <!-- Side Widget -->
-        <div class="card my-4">
+         <div class="card my-4" jsf:id="calendar" rendered="#{weblogBean.weblog ne null}">
             <h5 class="card-header">Calendar</h5>
             <div class="card-block">
                 <h:outputText value="#{calendarPrinterBean.calendarTable(request.contextPath,weblogBean.weblog)}" 
@@ -56,10 +88,10 @@
               <div class="card-block">
                 <div class="row">
                     <div class="col-lg-12">
-                        <ul class="list-unstyled mb-0">
+                        <ul class="list-group">
                             <ui:repeat value="#{weblogBean.bookmarks}"
                                        var="bookmark">                                
-                                <li><a href="#{bookmark.url}" target="_blank">#{bookmark.name}</a></li>                                
+                                <li class="list-group-item"><a href="#{bookmark.url}" target="_blank">#{bookmark.name}</a></li>                                
                             </ui:repeat>                                    
                         </ul>
                     </div>
@@ -69,26 +101,14 @@
         </div>
         
          <!-- Side Widget -->
-        <div class="card my-4">
+        <div class="card my-4" jsf:id="feeds" rendered="false">
             <h5 class="card-header">Feeds</h5>
             <div class="card-block">
                 
             </div>
         </div>
         
-        <!-- Side Widget -->
-        <form jsf:id="sideNavLinks">
-        <div class="card my-4">
-            <h5 class="card-header">Navigation</h5>
-            <div class="card-block">
-                <a href="#{request.contextPath}/">Front Page</a><br/>
-                <a value="#{request.contextPath}/#{weblogBean.handle}" jsfc="h:outputLink" jsf:id="weblogHome" rendered="#{weblogBean.handle.length() gt 0}">Weblog #{weblogBean.handle}</a><br/>
-                <a value="#{request.contextPath}/weblogger/login/" jsfc="h:outputLink" rendered="#{sessionScope.user eq null}">Login</a>
-                <a action="#{loginBean.logout()}" jsf:id="link-logout" jsfc="h:commandLink" rendered="#{sessionScope.user ne null}">Logout</a>
-                <br/>
-            </div>
-        </div>
-        </form>
+       
     </f:view>
 </ui:composition>
 

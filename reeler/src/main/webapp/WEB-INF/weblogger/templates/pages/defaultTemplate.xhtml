@@ -13,37 +13,37 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
 
-        
-        
+
+
         <ui:insert name="meta"></ui:insert>
         <title><ui:insert name="title">Get Reeler</ui:insert></title>
 
         <!-- Bootstrap Core CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous"/>
-        
-            <!-- Custom CSS -->
-            <link href="#{request.contextPath}/css/blog-post.css" rel="stylesheet"/>
-            <link rel="stylesheet" href="#{request.contextPath}/css/main.css"/>
+
+        <!-- Custom CSS -->
+        <link href="#{request.contextPath}/css/blog-post.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="#{request.contextPath}/css/main.css"/>
 
 
-            <link rel="icon" type="image/gif" href="/favicon.ico" />
+        <link rel="icon" type="image/gif" href="/favicon.ico" />
 
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
 
-            <!-- Temporary fix for navbar responsiveness -->
-            <style>
-                .navbar-toggler {
-                    z-index: 1;
+        <!-- Temporary fix for navbar responsiveness -->
+        <style>
+            .navbar-toggler {
+                z-index: 1;
+            }
+
+            @media (max-width: 576px) {
+                nav > .container {
+                    width: 100%;
                 }
+            }
+        </style>
 
-                @media (max-width: 576px) {
-                    nav > .container {
-                        width: 100%;
-                    }
-                }
-            </style>
-
-            <ui:insert name="head"></ui:insert>
+        <ui:insert name="head"></ui:insert>
     </h:head>
 
     <h:body>
@@ -55,21 +55,24 @@
 
         <!-- Page Content -->
         <main>
-        <div class="container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="panel panel-primary">
+                            <div class="panel panel-body">
+                                <ui:insert name="content">                   
 
-            <div class="row">
-                <div class="col-lg-8">
-                    <ui:insert name="content">                   
-
-                    </ui:insert>
-                </div>
-                <div class="col-md-4">
-                    <ui:insert name="rightNav">
-                        <ui:include src="rightNav.xhtml"/>
-                    </ui:insert>
+                                </ui:insert>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <ui:insert name="rightNav">
+                            <ui:include src="rightNav.xhtml"/>
+                        </ui:insert>
+                    </div>
                 </div>
             </div>
-        </div>
         </main>
         <!-- /.container -->
 
