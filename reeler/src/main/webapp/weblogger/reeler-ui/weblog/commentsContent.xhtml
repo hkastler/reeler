@@ -8,88 +8,108 @@
 
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
-            Manage comments in weblog #{reelerUiBean.currentWeblog.name}
+            Manage comments in weblog #{weblogEntryCommentBean.weblog.name}
         </div>
 
         <div class="panel-body">
             <p>#{labels.res.getString("commentManagement.tip")}</p>
+            <div  rendered="#{weblogEntryCommentBean.weblogEntryCommentVisitors.size() > 0}"
+                  jsf:id="comments"
+                  class="table-responsive">
 
-            
-
-            <h:panelGroup rendered="#{weblogEntryCommentBean.weblogEntryComments.size() > 0}"
-                          id="comments">
-                
-                <h:dataTable value="#{weblogEntryCommentBean.weblogEntryComments}" 
-                             var="comment" 
+                <h:dataTable value="#{weblogEntryCommentBean.weblogEntryCommentVisitors}" 
+                             var="commentVisitor" 
                              rules="all" 
-                             styleClass="table table-responsive table-striped table-border">
-
+                             styleClass="table table-bordered table-striped table-hover table-responsive"
+                             columnClasses="commentCheckBox,
+                                            commentCheckBox,
+                                            commentCheckBox,commentForm">
+                    
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="#{labels.res.getObject('commentManagement.columnApproved')}"/>
+
                         </f:facet>
-                        <h:form>
-                            <h:selectBooleanCheckbox id="isApproved"
-                                                     value="#{comment.status.toString() == 'APPROVED'}"/>
-                        </h:form>
+                        <div class="text-center alert alert-success" >
+                            <h:form id="isApprovedForm">
+                                <h:selectBooleanCheckbox id="isApproved"
+                                                         value="#{commentVisitor.approved}">
+                                    
+                                <f:ajax event="change"
+                                        listener="#{weblogEntryCommentBean.setSpamAndApproval(commentVisitor)}"
+                                        render="@form isSpamForm"/>
+                                </h:selectBooleanCheckbox>
+                                <div jsfc="h:messages" class="alert alert-success list-unstyled"/>
+                            </h:form>
+                         </div>
                     </h:column>
 
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="#{labels.res.getString('commentManagement.columnSpam')}"/>
                         </f:facet>
-                        <h:form>
-                            <h:selectBooleanCheckbox id="isSpam"
-                                                     value="#{comment.status.toString() == 'SPAM'}">
-                                <f:ajax event="change"
-                                        listener="#{weblogEntryCommentBean.setSpam(comment)}"/>
-                            </h:selectBooleanCheckbox>
-                        </h:form>
+                        <div class="text-center alert alert-warning">
+                            <h:form id="isSpamForm">
+                                <h:selectBooleanCheckbox id="isSpam"
+                                                         value="#{commentVisitor.spam}"
+                                                         class="text-center">
+                                    <f:ajax event="change"
+                                            listener="#{weblogEntryCommentBean.setSpamAndApproval(commentVisitor)}"
+                                            render="@form isApprovedForm"/>
+                                </h:selectBooleanCheckbox>
+                                <div jsfc="h:messages" class="alert alert-warning list-unstyled"/>
+                            </h:form>
+                        </div>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="Delete"/>
+                            <h:outputText value="#{messages._delete}"/>
+
                         </f:facet>
-                        <h:form>
-                            <h:selectBooleanCheckbox id="delete"
-                                                     value=""/>
-                        </h:form>
+                        <div class="text-center alert alert-danger">
+                            <h:form>
+                                <h:selectBooleanCheckbox id="delete"
+                                                         value=""/>
+                            </h:form>
+                        </div>
                     </h:column>
                     <h:column>
                         <f:facet name="header">
                             <h:outputText value="#{labels.res.getString('commentManagement.columnComment')}"/>
                         </f:facet>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <p>Regarding: #{comment.weblogEntry.title}<br/>
-                            Posted by: #{comment.name}<br/>
-                            Posted URL: <h:outputText value="#{comment.url}"/>
-                            <br/>
-                            Posted at: #{comment.postTime}</p>
-                            </div>
-                            <div class="col-md-6">
-                                
-                            </div>
-                        </div>
-                        <h:form styleClass="form">
+                        <div >
                             
-                            <div jsfc="h:messages" class="alert alert-success"/>
-                           
+                                <p>Regarding: #{commentVisitor.weblogEntryComment.weblogEntry.title}<br/>
+                                    Posted by: #{commentVisitor.weblogEntryComment.name}<br/>
+                                    Posted URL: <h:outputText value="#{commentVisitor.weblogEntryComment.url}"/>
+                                    <br/>
+                                    Posted at: <h:outputText value="#{commentVisitor.weblogEntryComment.postTime}" >
+                                                   <f:convertDateTime type="both" dateStyle="full"/>
+                                               </h:outputText>
+                                </p>
+                            
+                        </div>
+                        
+                        <h:form id="contentUpdateForm">
+                            <div jsfc="h:messages" class="alert alert-success list-unstyled"
+                                                   errorClass="alert alert-danger list-unstyled"/>
+
                             <h:inputTextarea 
-                                value="#{comment.content}"
-                                class="form-control "/>
+                                value="#{commentVisitor.weblogEntryComment.content}"
+                                class="form-control "
+                                rows="7"/>
                             <h:commandButton value="Save changes"
-                                             class="btn btn-secondary"
-                                             action="#{weblogEntryCommentBean.updateComment(comment)}">
+                                             class="btn btn-default"
+                                             action="#{weblogEntryCommentBean.updateComment(commentVisitor.weblogEntryComment)}">
                                 <f:ajax execute="@form" render="@form"/>
                             </h:commandButton>
                         </h:form>
                     </h:column> 
-
+                   
                 </h:dataTable>
 
 
-            </h:panelGroup>
+            </div>
 
 
 

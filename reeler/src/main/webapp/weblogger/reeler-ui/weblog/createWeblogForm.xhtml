@@ -46,7 +46,6 @@
 
             <div class="form-group">
                 <label jsf:for="handle" >Handle</label>
-
                 <input type="text" 
                        jsf:id="handle" 
                        class="form-control" 
@@ -56,17 +55,20 @@
                     URL:&#160;
                     http://localhost:10080/roller/<span id="handlePreview" style="color:red">handle</span>
                 </span>
-                <div>The handle is a short one-word name for your weblog. It will be used in your URL, so please limit it to simple ASCII alphanumeric characters (a-z, A-Z and 0-9), and do not use HTML.</div>
+                <div>The handle is a short one-word name for your weblog. 
+                    It will be used in your URL, so please limit it to simple ASCII 
+                    alphanumeric characters (a-z, A-Z and 0-9), and do not use HTML.</div>
             </div>
 
             <div class="form-group">
-                <label jsf:for="emailAddress" >Email Address</label></div>
-            <input type="text" 
-                   jsf:id="emailAddress" 
-                   class="form-control" 
-                   value="#{weblogAuthorBean.weblog.emailAddress}" />
-
-            <div>Your email address or the email address of the person responsible for the weblog that you are creating. </div>
+                <label jsf:for="emailAddress" >Email Address</label>
+                <input type="text" 
+                       jsf:id="emailAddress" 
+                       class="form-control" 
+                       value="#{weblogAuthorBean.weblog.emailAddress}" />
+            </div>
+            <div>Your email address or the email address of the person responsible
+                for the weblog that you are creating. </div>
         </div>
 
         <div class="form-group">
@@ -88,16 +90,14 @@
 
             </select>
             <h:message for="locale" style="color: red"/>
-
-
-
-            <div>The default locale to be used for the display of this weblog when the browser does not specify a locale.</div>
+            <div>The default locale to be used for the display of this weblog 
+                when the browser does not specify a locale.</div>
         </div>
 
         <div class="form-group">
             <label jsf:for="timeZone" >Timezone</label>
 
-             <select
+            <select
                 id="timeZone"
                 name="timeZone"
                 jsfc="h:selectOneMenu"
@@ -144,7 +144,7 @@
         <input type="button" 
                class="btn btn-secondary"
                value="Cancel" 
-               onclick="window.location = '#{reelerUiBean.path}'" />
+               onclick="window.location = '#{request.contextPath}#{reelerUiBean.path}'" />
 
     </form>
 </ui:composition>

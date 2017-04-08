@@ -23,58 +23,57 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <h2>#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
-                for #{weblogEntryAuthorBean.weblog.name}</h2>
-            <div id="weblogEntryDiv">
+            <div class="panel panel-primary">
+                <div id="weblogEntryDiv" class="panel panel-body">
+                    <div class="panel-heading panel-title">
+                        <h2 >#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
+                            for #{weblogEntryAuthorBean.weblog.name}</h2>
+                    </div>
+                    <h:form id="weblogEntryForm" prependId="false" binding="#{weblogEntryForm}">   
+                        <h:messages
+                            infoClass="alert alert-success list-unstyled"                               
+                            errorClass="alert alert-danger list-unstyled"/>
 
-                <h:form id="weblogEntryForm" class="form" prependId="false">   
 
-                    <h:panelGroup id="messagePanel" layout="block">
-                        <h:messages 
-                            errorClass="control-label has-error" 
-                            infoStyle="color: green" 
-                            layout="table"/>
-                    </h:panelGroup>
+                        <fieldset id="weblogEntry-fieldset">
+                            <div class="form-group #{title.valid ? '':'has-error'}">
+                                <div>
+                                    <label jsf:for="title" 
+                                           class="control-label #{title.valid ? '':'has-error'}">#{messages.WeblogEntry_title}</label>
 
-                    <fieldset id="weblogEntry-fieldset">
-                        <div class="form-group #{title.valid ? '':'has-error'}">
-                            <div>
-                                <label jsf:for="title" 
-                                       class="control-label #{title.valid ? '':'has-error'}">#{messages.WeblogEntry_title}</label>
+                                    <input id="title"
+                                           value="#{weblogEntryAuthorBean.weblogEntry.title}"
+                                           binding="#{title}"
+                                           class="form-control #{title.valid ? '':'has-error'}"
+                                           type="text"
+                                           jsfc="h:inputText"
+                                           /><h:message for="weblogEntryForm:title" class="control-label has-error"/> 
+                                </div>
+                            </div>                     
 
-                                <input id="title"
-                                       value="#{weblogEntryAuthorBean.weblogEntry.title}"
-                                       binding="#{title}"
-                                       class="form-control #{title.valid ? '':'has-error'}"
-                                       type="text"
-                                       jsfc="h:inputText"
-                                       /><h:message for="weblogEntryForm:title" class="control-label has-error"/> 
+                            <div class="form-group">
+                                <div>
+                                    <label jsf:for="status" class="control-label">#{messages.WeblogEntry_status}</label>
+                                    <input jsf:id="status"  
+                                           value="#{weblogEntryAuthorBean.weblogEntry.status}"                                       
+                                           type="text"
+                                           class="form-control"
+                                           disabled="true"/>
+                                    <h:message for="weblogEntryForm:status" style="color: red"/>
+                                </div>
                             </div>
-                        </div>                     
 
-                        <div class="form-group">
-                            <div>
-                                <label jsf:for="status" class="control-label">#{messages.WeblogEntry_status}</label>
-                                <input jsf:id="status"  
-                                       value="#{weblogEntryAuthorBean.weblogEntry.status}"                                       
-                                       type="text"
-                                       class="form-control"
-                                       disabled="true"/>
-                                <h:message for="weblogEntryForm:status" style="color: red"/>
+                            <div jsf:id="permalink" class="form-group" rendered="#{weblogEntryAuthorBean.weblogEntry.status == 'PUBLISHED'}">
+                                <div>Permalink: <a href="#{request.contextPath}/#{weblogEntryAuthorBean.weblog.handle}/entry/#{weblogEntryAuthorBean.weblogEntry.anchor}"
+                                                   target="_blank">#{request.contextPath}/#{weblogEntryAuthorBean.weblog.handle}/entry/#{weblogEntryAuthorBean.weblogEntry.anchor}</a>
+                                    <i class="fa fa-external-link" aria-hidden="true"></i>
+                                </div>
                             </div>
-                        </div>
 
-                        <div jsf:id="permalink" class="form-group" rendered="#{weblogEntryAuthorBean.weblogEntry.status == 'PUBLISHED'}">
-                            <div>Permalink: <a href="#{request.contextPath}/#{weblogEntryAuthorBean.weblog.handle}/entry/#{weblogEntryAuthorBean.weblogEntry.anchor}"
-                                               target="_blank">#{request.contextPath}/#{weblogEntryAuthorBean.weblog.handle}/entry/#{weblogEntryAuthorBean.weblogEntry.anchor}</a>
-                                <i class="fa fa-external-link" aria-hidden="true"></i>
-                            </div>
-                        </div>
+                            <div class="form-group">
+                                <div>
+                                    <label for="weblogEntryCategory" class="control-label #{weblogEntryCategory.valid ? '':'has-error'}">#{messages.WeblogEntry_category}</label>
 
-                        <div class="form-group">
-                            <div>
-                                <label for="weblogEntryCategory" class="control-label #{weblogEntryCategory.valid ? '':'has-error'}">#{messages.WeblogEntry_category}</label>
-                                <div id="">
                                     <select
                                         id="weblogEntryCategory"
                                         name="weblogEntryCategory"
@@ -92,93 +91,89 @@
                                                 itemLabel="#{category.name}" />
 
                                     </select>
-                                    <h:message for="weblogEntryForm:weblogEntryCategory" style="color: red"/>
-                                </div>  
-                            </div>                            
-                        </div>
+                                    <h:message for="weblogEntryForm:weblogEntryCategory" errorClass="alert alert-danger"/>
+
+                                </div>                            
+                            </div>
 
 
-                        <div class="form-group">
-                            <div>
-                                <label jsf:for="tagBag" 
-                                       class="control-label">#{messages.WeblogEntry_tags}</label>
+                            <div class="form-group">
+                                <div>
+                                    <label jsf:for="tagBag" 
+                                           class="control-label">#{messages.WeblogEntry_tags}</label>
+                                    <input jsfc="h:inputText"
+                                           id="tagBag"
+                                           value="#{weblogEntryAuthorBean.tagBag}"
+                                           class="form-control"
+                                           type="text"
+                                           />
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group #{text.valid ? '':'has-error'}">
+                                <div>
+                                    <label jsf:for="text" class="control-label #{text.valid ? '':'has-error'}">Content</label>                                
+
+                                    <textarea                        
+                                        jsfc="h:inputTextarea"
+                                        id="text"
+                                        value="#{weblogEntryAuthorBean.weblogEntry.text}"
+                                        binding="#{text}"
+                                        class="ckeditor #{text.valid ? '':'form-control has-error'}">
+                                    </textarea><h:message for="weblogEntryForm:text" errorClass="control-label has-error"/>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label jsf:for="strDateTimeOfPubDate" class="control-label">Pub Time</label>
+                                &#160;#{weblogEntryAuthorBean.weblog.timeZone}
                                 <input jsfc="h:inputText"
-                                       id="tagBag"
-                                       value="#{weblogEntryAuthorBean.tagBag}"
+                                       id="strDateTimeOfPubDate"
+                                       type="text" 
+                                       value="#{weblogEntryAuthorBean.strDateTimeOfPubDate}"
                                        class="form-control"
-                                       type="text"
-                                       />
+                                       autocomplete="off"/>
+
                             </div>
-                        </div>
 
 
-
-                        <div class="form-group #{text.valid ? '':'has-error'}">
-                            <div>
-                                <label jsf:for="text" class="control-label #{text.valid ? '':'has-error'}">Content</label>                                
-
-                                <textarea                        
-                                    jsfc="h:inputTextarea"
-                                    id="text"
-                                    value="#{weblogEntryAuthorBean.weblogEntry.text}"
-                                    binding="#{text}"
-                                    class="ckeditor #{text.valid ? '':'form-control has-error'}">
-                                </textarea><h:message for="weblogEntryForm:text" errorClass="control-label has-error"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label jsf:for="strDateTimeOfPubDate" class="control-label">Pub Time</label>
-                            &#160;#{weblogEntryAuthorBean.weblog.timeZone}
-                            <input jsfc="h:inputText"
-                                   id="strDateTimeOfPubDate"
-                                   type="text" 
-                                   value="#{weblogEntryAuthorBean.strDateTimeOfPubDate}"
-                                   class="form-control"
-                                   autocomplete="off"/>
-                            
-                        </div>
-
-
-                        <div class="form-group">
-                            <div>
-                                <div class="checkbox-inline">
-                                    <h:selectBooleanCheckbox id="allowComments"
-                                                             value="#{weblogEntryAuthorBean.allowCommentsChecked}"/>
-                                    <label jsf:for="allowComments">Allow Comments for</label>                                    
+                            <div class="form-group" jsf:id="allowCommentsFormGroup"
+                                 rendered="true">                            
+                                <div class="checkbox">
+                                    <label jsf:for="allowComments">
+                                        <h:selectBooleanCheckbox id="allowComments"
+                                                                 value="#{weblogEntryAuthorBean.allowCommentsChecked}"/>
+                                        Allow Comments for
+                                    </label>                                    
                                     &#160;
                                     <h:selectOneMenu 
                                         id="commentDays"
-                                        value="#{weblogEntryAuthorBean.weblogEntry.commentDays}">
+                                        value="#{weblogEntryAuthorBean.weblogEntry.commentDays}"
+                                        class="form-control input-md">
                                         <f:selectItems value="#{selectItemBean.commentDaysItems}"/>                                    
                                     </h:selectOneMenu>
-                                </div>
+                                </div>                            
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div>
-                                <div class="checkbox-inline">
-                                    <h:selectBooleanCheckbox id="rightToLeft" value="#{weblogEntryAuthorBean.weblogEntry.rightToLeft}"/>
-                                    <label jsf:for="rightToLeft">Text reads right to left</label>
 
-                                </div>
+                            <div class="checkbox">
+                                <label jsf:for="rightToLeft">
+                                    <h:selectBooleanCheckbox id="rightToLeft" 
+                                                             value="#{weblogEntryAuthorBean.weblogEntry.rightToLeft}"/>
+                                    Text reads right to left
+                                </label>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <div>
-                                <div class="checkbox-inline">
+                            <div class="checkbox">
+                                <label jsf:for="pinnedToMain">
                                     <h:selectBooleanCheckbox 
                                         id="pinnedToMain" 
                                         value="#{weblogEntryAuthorBean.weblogEntry.pinnedToMain}"/>
-                                    <label jsf:for="pinnedToMain">Pinned to main</label>
-
-                                </div>
+                                    Pinned to main
+                                </label>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div>
+                            <div class="form-group">
                                 <label jsf:for="searchDescription" 
                                        class="control-label">Search Description</label>
                                 <input jsf:id="searchDescription"
@@ -189,11 +184,10 @@
                                        /> 
                                 <h:message for="weblogEntryForm:searchDescription" style="color: red"/>
                             </div>
-                        </div>
 
 
-                        <div class="form-group">
-                            <div>
+                            <div class="form-group">
+
                                 <label jsf:for="enclosureURL" 
                                        class="control-label #{enclosureURL.valid ? '':'has-error'}">Enclosure URL</label>
                                 <input jsf:id="enclosureURL"
@@ -202,46 +196,47 @@
                                        type="text"
                                        /> 
                                 <h:message for="weblogEntryForm:enclosureURL" style="color: red"/>
+
+                            </div>
+                            <input type="hidden" name="id" value="#{weblogEntryAuthorBean.id}"/>
+                            <input type="hidden" name="action" value="#{weblogEntryAuthorBean.action}"/>
+                        </fieldset>
+                        <div class="form-group">
+                            <div>
+                                <h:commandButton id="submitPost" 
+                                                 value="Post to Weblog"
+                                                 action="#{weblogEntryAuthorBean.publishWeblog}"
+                                                 styleClass="btn btn-primary"
+                                                 rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+                                </h:commandButton>
+                                <h:commandButton id="submitDraft" 
+                                                 value="Save as Draft"
+                                                 action="#{weblogEntryAuthorBean.saveAsDraft}"
+                                                 styleClass="btn btn-secondary"
+                                                 rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+
+                                </h:commandButton>
+
+
+
+                                <h:commandButton id="editWeblogEntry" 
+                                                 value="Update Weblog Entry"
+                                                 action="#{weblogEntryAuthorBean.updateWeblogEntry}"
+                                                 styleClass="btn btn-primary"
+                                                 rendered="#{weblogEntryAuthorBean.action eq 'edit'}">
+                                </h:commandButton>
+                                <input 
+                                    jsf:id="cancelButton"
+                                    type="button" 
+                                    class="btn btn-secondary"
+                                    value="Cancel" 
+                                    onclick="window.location = '#{request.contextPath}#{reelerUiBean.path}'" 
+                                    rendered="#{weblogEntryAuthorBean.action eq 'edit'}"/>
                             </div>
                         </div>
-                        <input type="hidden" name="id" value="#{weblogEntryAuthorBean.id}"/>
-                        <input type="hidden" name="action" value="#{weblogEntryAuthorBean.action}"/>
-                    </fieldset>
-                    <div class="form-group">
-                        <div>
-                            <h:commandButton id="submitPost" 
-                                             value="Post to Weblog"
-                                             action="#{weblogEntryAuthorBean.publishWeblog}"
-                                             styleClass="btn btn-primary"
-                                             rendered="#{weblogEntryAuthorBean.action eq 'create'}">
-                            </h:commandButton>
-                            <h:commandButton id="submitDraft" 
-                                             value="Save as Draft"
-                                             action="#{weblogEntryAuthorBean.saveAsDraft}"
-                                             styleClass="btn btn-secondary"
-                                             rendered="#{weblogEntryAuthorBean.action eq 'create'}">
-
-                            </h:commandButton>
-
-
-
-                            <h:commandButton id="editWeblogEntry" 
-                                             value="Update Weblog Entry"
-                                             action="#{weblogEntryAuthorBean.updateWeblogEntry}"
-                                             styleClass="btn btn-primary"
-                                             rendered="#{weblogEntryAuthorBean.action eq 'edit'}">
-                            </h:commandButton>
-                            <input 
-                                jsf:id="cancelButton"
-                                type="button" 
-                                class="btn btn-secondary"
-                                value="Cancel" 
-                                onclick="window.location = '#{request.contextPath}#{reelerUiBean.path}'" 
-                                rendered="#{weblogEntryAuthorBean.action eq 'edit'}"/>
-                        </div>
-                    </div>
-                </h:form>
-
+                    </h:form>
+                </div>
+                <div class="panel panel-footer"></div>
             </div>
         </f:view>
 
@@ -252,24 +247,7 @@
     </ui:define>
 
     <ui:define name="postBody">
-        <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
-        <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
-        <script>
-                                    Date.parseDate = function (input, format) {
-                                        return moment(input, format).toDate();
-                                    };
-                                    Date.prototype.dateFormat = function (format) {
-                                        return moment(this).format(format);
-                                    };
-                                    //$(document).ready(function () {
-                                    //$('#dateTimeOfEvent').datetimepicker();
-                                    //}
-                                    $('#strDateTimeOfPubDate').datetimepicker({
-                                        format: 'YYYY MMM DD HH:mm',
-                                        formatTime: 'HH:mm',
-                                        formatDate: 'YYYY MM DD'
-                                    });
-        </script>           
+        
     </ui:define>
 </ui:composition>
 

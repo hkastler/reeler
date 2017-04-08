@@ -8,14 +8,10 @@
 
     <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
         <f:metadata>        
-            <f:viewAction action="#{reelerUiBean.indexViewAction}"/>
+            <f:viewAction action="#{reelerUiBean.blogrollsViewAction}"/>
         </f:metadata>
         <ui:define name="title">
-            <h:outputText value="Blogroll Admin"/>
-        </ui:define>
-
-        <ui:define name="head">
-           
+            <h:outputText value="#{reelerUiBean.pages['blogrolls']} Admin"/>
         </ui:define>
 
         <ui:define name="navigation">

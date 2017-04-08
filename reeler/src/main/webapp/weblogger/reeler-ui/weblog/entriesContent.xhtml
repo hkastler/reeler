@@ -4,11 +4,11 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-
+    <ui:param name="weblog" value="#{reelerUiBean.currentWeblog}"/>
 
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
-            Find and edit entries in weblog #{reelerUiBean.currentWeblog.name}
+            Find and edit entries in weblog #{weblog.name}
         </div>
 
         <div class="panel-body">
@@ -30,20 +30,20 @@
 
 
 
-                        <h:panelGroup rendered="#{reelerUiBean.currentWeblog.weblogEntries.size() > 0}">
+                        <h:panelGroup rendered="#{weblog.weblogEntries.size() > 0}">
 
-                            <h:dataTable value="#{reelerUiBean.currentWeblog.weblogEntries}" 
+                            <h:dataTable value="#{weblog.weblogEntries}" 
                                          var="entry" 
                                          rules="all" 
-                                         styleClass="table table-bordered table-striped">
+                                         styleClass="table table-bordered table-striped table-hover table-responsive">
 
-                                <h:column>
+                                <h:column >
                                     <f:facet name="header">
                                         <h:outputText value="#{labels.res.getObject('weblogEntryQuery.pubTime')}"/>
                                     </f:facet>
                                     <h:outputText value="#{entry.pubTime.time}">
                                         <f:convertDateTime type="both" pattern="yyyy/MM/dd hh:mm a"
-                                                           timeZone="#{reelerUiBean.currentWeblog.timeZone}"/>
+                                                           timeZone="#{weblog.timeZone}"/>
                                     </h:outputText>
                                 </h:column>
                                 <h:column>
@@ -52,7 +52,7 @@
                                     </f:facet>
                                     <h:outputText value="#{entry.updateTime.time}">
                                         <f:convertDateTime type="both" pattern="yyyy/MM/dd hh:mm a"
-                                                           timeZone="#{reelerUiBean.currentWeblog.timeZone}"/>
+                                                           timeZone="#{weblog.timeZone}"/>
                                     </h:outputText>
                                 </h:column>
                                 <h:column>
@@ -68,29 +68,43 @@
                                     <h:outputText value="#{entry.category.name}"/>
                                 </h:column>
                                 <h:column>
-                                    <a href="#{request.contextPath}/#{reelerUiBean.currentWeblog.handle}/entry/#{entry.anchor}"
+                                    <f:facet name="header">
+                                        <h:outputText value="#{messages._view}"/>
+                                    </f:facet>
+                                    
+                                    <a href="#{request.contextPath}/#{weblog.handle}/entry/#{entry.anchor}"
                                        target="_blank">
-                                        View
+                                        <i class="fa fa-eye"></i>
                                     </a>
 
                                 </h:column>
                                 <h:column >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{messages._edit}"/>
+                                    </f:facet>
                                     <a outcome="#{reelerUiBean.path}/weblog/entry.xhtml"
                                        jsfc="h:link">
                                         <f:param name="action" value="edit"/>
                                         <f:param name="id" value="#{entry.id}"/>
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit
+                                        <i class="fa fa-pencil-square-o" ></i>
                                     </a>
                                 </h:column>
-
-
+                                <h:column >
+                                    <f:facet name="header">
+                                        <h:outputText value="#{messages._delete}"/>
+                                    </f:facet>
+                                    <a outcome="#{reelerUiBean.path}/weblog/entry.xhtml"
+                                       jsfc="h:link">
+                                        <f:param name="action" value="delete"/>
+                                        <f:param name="id" value="#{entry.id}"/>
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </h:column>
                             </h:dataTable>
                         </h:panelGroup>
-
                     </h:form>     
                 </div>
             </div>
-
         </div>
         <div class="panel-footer"></div>
     </div>
