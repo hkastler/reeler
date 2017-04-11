@@ -3,7 +3,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogBookmarkManager;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+
 import javax.inject.Named;
 
 //import com.hkstlr.reeler.weblogger.boundary.manager.FileContentManager;
@@ -23,6 +23,7 @@ import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
 import com.hkstlr.reeler.weblogger.plugins.boundary.PluginManager;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryTagManager;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
+import javax.ejb.EJB;
 //import com.hkstlr.reeler.weblogger.themes.boundary.ThemeManager;
 import javax.ejb.Stateless;
 
@@ -30,62 +31,62 @@ import javax.ejb.Stateless;
 @Stateless
 public class Weblogger {
     
-    @Inject
+    @EJB
     private RuntimeConfigManager runtimeConfigManager;
 
-    @Inject
+    @EJB
     private UserManager userManager;
 
-    /*  @Inject
+    /*  @EJB
     private WeblogBookmarkManager bookmarkManager*/;
 
-    @Inject
+    @EJB
     private WeblogManager weblogManager;
 
-    @Inject
+    @EJB
     private WeblogEntryManager weblogEntryManager;
 
-    @Inject
+    @EJB
     WeblogEntryCommentManager weblogEntryCommentManager;
     
-    @Inject
+    @EJB
     private WeblogEntryTagManager weblogEntryTagManager;
     
-    @Inject
+    @EJB
     WeblogPermissionManager weblogPermissionManager;
     
-    @Inject
+    @EJB
     private WeblogCategoryManager weblogCategoryManager;
     
-    @Inject
+    @EJB
     private WeblogBookmarkManager weblogBookmarkManager;
     
     
 
-    //@Inject
+    //@EJB
     //private AutoPingManager autoPingManager;
 
-    //@Inject
+    //@EJB
     //private OAuthManager oAuthManager;
 
-    //@Inject
+    //@EJB
     //private PingQueueEntryManager pingQueueEntryManager;
 
-    //@Inject
+    //@EJB
     //private PingTargetManager pingTargetManager;
 
-    //@Inject
+    //@EJB
     //private PropertiesManager propertiesManager;
 
-    //@Inject
+    //@EJB
     //private MediaFileManager mediaFileManager;
 
     //@EJB
     //private FileContentManager fileContentManager;
-    //@Inject
+    //@EJB
     //private ThemeManager themeManager;
 
-    @Inject
+    @EJB
     private PluginManager pluginManager;
 
     private URLStrategy urlStrategy;

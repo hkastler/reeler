@@ -31,6 +31,8 @@ import com.hkstlr.reeler.app.control.AuthMethod;
 import com.hkstlr.reeler.app.control.PropertyExpander;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.util.logging.Level;
+import javax.ejb.ConcurrencyManagement;
+import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Startup;
 
 /**
@@ -40,6 +42,7 @@ import javax.ejb.Startup;
 @Named
 @Singleton
 @Startup
+@ConcurrencyManagement
 public class WebloggerConfig {
 
     private static final String default_config = "/com/hkstlr/reeler/app/control/config/reeler.properties";

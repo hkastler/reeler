@@ -23,10 +23,9 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogHitCount;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
+import javax.ejb.EJB;
 
 /**
  *
@@ -36,7 +35,7 @@ import java.util.Locale;
 @RequestScoped
 public class WeblogBean {
 
-    @Inject
+    @EJB
     Weblogger weblogger;
 
     @ManagedProperty(value = "#{param.handle}")
