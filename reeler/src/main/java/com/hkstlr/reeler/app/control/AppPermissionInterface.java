@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.app.control;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
+import java.security.Permission;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public interface AppPermissionInterface {
     /**
      * Merge actions into this permission.
      */
-    void addActions(WeblogPermission perm);
+    void addActions(AppPermission perm);
 
     /**
      * Merge actions into this permission.

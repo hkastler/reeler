@@ -1,13 +1,15 @@
 package com.hkstlr.reeler.app.control;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
+import java.security.Permission;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 
 import java.util.Date;
 
-public abstract class AppPermission extends java.security.Permission implements AppPermissionInterface {
+public class AppPermission extends java.security.Permission implements AppPermissionInterface {
 
     private static Logger log = Logger.getLogger(AppPermission.class.getName());
 
@@ -101,4 +103,31 @@ public abstract class AppPermission extends java.security.Permission implements 
     public boolean isEmpty() {
         return (getActions() == null || getActions().trim().length() == 0);
     }
+
+    @Override
+    public boolean implies(Permission permission) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int hashCode() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getActions() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void setActions(String actions) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }
