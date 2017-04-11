@@ -5,19 +5,22 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.json.JsonObjectBuilder;
-import javax.json.JsonString;
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
 
 /**
  *
@@ -45,8 +48,8 @@ public class JsonBuilder {
      * @return
      */
     public JsonObject toJsonObject(Object o, String[] skipFields) {
-        
-        Field[] fields =  getAllFieldsForObject(o);
+
+        Field[] fields = getAllFieldsForObject(o);
         //get all that don't equal the following filters
         //never want these fields
         fields = Arrays.stream(fields).filter(f -> (!f.getName().equalsIgnoreCase("log")))
@@ -57,7 +60,7 @@ public class JsonBuilder {
         //infinite recursion
         fields = filterInverses(fields);
         //filter out any user defined fields
-        fields = filterFieldsByName(fields, skipFields);        
+        fields = filterFieldsByName(fields, skipFields);
 
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
@@ -65,10 +68,10 @@ public class JsonBuilder {
             field.setAccessible(true);
             try {
                 String fieldName = field.getName();
-                Object fieldValue = field.get(o);                
+                Object fieldValue = field.get(o);
 
                 if (fieldValue != null) {
-                    //log.info("fieldName:" + fieldName);
+                    log.info("fieldName:" + fieldName);
                     if (fieldValue instanceof String) {
                         builder.add(fieldName, (String) fieldValue);
                     } else if (fieldValue instanceof Integer) {
@@ -77,14 +80,23 @@ public class JsonBuilder {
                         builder.add(fieldName, (Boolean) fieldValue);
                     } else if (fieldValue instanceof Long) {
                         builder.add(fieldName, (Long) fieldValue);
-                    } else if (fieldValue instanceof GregorianCalendar){
+                    } else if (fieldValue instanceof GregorianCalendar) {
                         Date calDate = new Date(((GregorianCalendar) fieldValue).getTimeInMillis());
                         String formattedCalDate = DateFormatter.jsFormat.format(calDate);
                         builder.add(fieldName, formattedCalDate);
-                    } else {
+                    } else if (fieldValue instanceof List){
+                        log.info("list here");
+                        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
+                        for(Object item :(List) fieldValue){
+                            //log.info("item:" + item.toString());
+                            arrayBuilder.add(item.toString());
+                            //arrayBuilder.add(Json.createObjectBuilder().add(fieldName, item.toString()));
+                        }
+                        builder.add(fieldName, arrayBuilder);
+		    } else {
                         try {
                             String jsonStr = fieldValue.toString();
-                            String cleanJson = jsonStr.replace("\\\"","\"");
+                            String cleanJson = jsonStr.replace("\\\"", "\"");
                             builder.add(fieldName, cleanJson);
                         } catch (Exception e) {
                             String className = fieldValue.getClass().getName();
@@ -92,14 +104,14 @@ public class JsonBuilder {
                             try {
                                 //Object fallbackObject = Class.forName(className).newInstance();
                                 //fallbackObject.getClass().getTypeName();
-                                
+
                                 JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
 
                                 builder.add(className, arrayBuilder);
                                 builder.addNull(fieldName);
                             } catch (Exception ex) {
-                               Logger.getLogger(JsonBuilder.class.getName()).log(Level.SEVERE, null, ex);
-                                
+                                Logger.getLogger(JsonBuilder.class.getName()).log(Level.SEVERE, null, ex);
+
                             }
                         }
                     }
@@ -112,7 +124,6 @@ public class JsonBuilder {
         }
 
         //builder.add(o.getClass().getName(), builder);
-
         return builder.build();
     }
 

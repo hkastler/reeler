@@ -9,6 +9,7 @@ import com.hkstlr.reeler.app.control.JsonBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -107,6 +108,12 @@ public class JdbcrealmGroup implements Serializable {
     public String toString() {
         //skip the manytomany with the owner or jsonbuilder will stackoverflow
         return new JsonBuilder().toJsonString(this,new String[]{"users"});
+    }
+    
+     
+    public JsonObject toJsonObject() {
+        //skip the manytomany with the owner or jsonbuilder will stackoverflow
+        return new JsonBuilder().toJsonObject(this,new String[]{"users"});
     }
     
 }
