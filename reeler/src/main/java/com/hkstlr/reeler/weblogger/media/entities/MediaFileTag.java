@@ -59,10 +59,6 @@ public class MediaFileTag extends AbstractEntity implements Serializable {
         this.name = name;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }
