@@ -1,0 +1,180 @@
+
+<ui:composition template="/WEB-INF/weblogger/templates/pages/mustacheTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:fmt="http://java.sun.com/jsp/jstl/fmt">
+    <!-- Page Content --> 
+    <ui:remove>
+        <ui:define name="title">#{weblogEntryBean.weblog.name} - #{weblogEntryBean.weblogEntry.title}</ui:define>
+        <ui:define name="meta">
+            <meta name="author" content="#{weblogEntryBean.weblogEntry.creatorUserName}"/>
+            <meta name="description" content="#{weblogEntryBean.weblogEntry.searchDescription}"/>
+        </ui:define>
+    </ui:remove>
+    <ui:define name="navbar-brand">
+        <a class="navbar-brand" href="#{request.contextPath}/#{weblogBean.handle}/">
+            <span id="navbarBrandText"></span>
+        </a>
+    </ui:define>
+    <ui:define name="content">
+        <f:view>
+            <article>
+                <!-- Title -->
+                <script id="title_template" type="text/html">
+                    <h1 class="mt-4">{{title}}</h1>
+                </script>
+
+                <!-- Author -->
+                <p class="lead">
+                    by <a href="#">
+                        <script id="creatorUserName_template" type="text/html">{{creatorUserName}}</script>
+                    </a>
+                </p>
+                <hr/>
+                <!-- Date/Time -->       
+                <p>Posted on <script id="pubTime_template" type="text/html">{{pubTime}}</script>
+
+                </p>
+                <p jsf:id="pTags" rendered="#{weblogEntryBean.weblogEntry.tags.size() gt 0}">
+                    Tags: #{weblogEntryBean.weblogEntry.tagsAsString}
+                </p>
+                <hr/>
+                <!-- Post Content -->
+                <span id="postContent"></span>
+                <hr/>
+            </article>
+            <!-- Comments Form -->
+            <div jsfc="h:panelGroup"  id="commentWrapper" rendered="#{weblogEntryBean.weblogEntry.allowComments}">
+                <div class="card my-4" id="commentBlock" jsfc="h:panelGroup" prependId="false" >
+                    <h5 class="card-header" >Comments</h5>
+
+                    <div class="card-block" id="postDiv" prependId="false" jsfc="h:panelGroup" rendered="#{weblogEntryBean.commentIsPosted}">
+                        <div class="alert alert-success">
+                            <div jsfc="h:message" for="commentMessage" id="commentMessage" />
+                        </div>
+                    </div>
+                    <div class="card-block" id="formDiv" jsfc="h:panelGroup" rendered="#{!weblogEntryBean.commentIsPosted}">
+                        <form jsfc="h:form" 
+                              class="form" 
+                              prependId="false" 
+                              id="commentForm">            
+                            <div id="messages" jsfc="h:messages" errorClass="control-label has-error"
+                                 infoClass="alert alert-success"/>
+                            <fieldset>
+                                <div class="form-group #{name.valid ? '' : 'has-error'}">
+
+                                    <label jsf:for="name" class="control-label #{name.valid ? '' : 'has-error'}">Your Name</label>
+
+                                    <div>
+                                        <input 
+                                            class="form-control #{name.valid ? '' : 'has-error'}"
+                                            type="text" 
+                                            jsf:binding="#{name}"
+                                            jsf:id="name" 
+                                            jsf:value="#{weblogEntryBean.weblogEntryComment.name}"
+                                            jsf:requiredMessage="Name is required."
+                                            placeholder=""
+                                            required="true"
+                                            oninvalid="this.setCustomValidity('Please enter a name')"
+                                            oninput="setCustomValidity('')"
+                                            /><h:message for="commentForm:name" class="control-label #{name.valid ? '' : 'has-error'}"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group #{emailAddress.valid ? '' : 'has-error'}">
+                                    <label jsf:for="emailAddress" class="control-label #{emailAddress.valid ? '' : 'has-error'}">Email Address</label>
+                                    <div>
+                                        <input class="form-control"
+                                               type="email" 
+                                               jsf:binding="#{emailAddress}"
+                                               jsf:id="emailAddress" 
+                                               jsf:value="#{weblogEntryBean.weblogEntryComment.email}"
+                                               jsf:required="true"
+                                               jsf:requiredMessage="Please enter your email address."
+                                               oninvalid="this.setCustomValidity('Please enter your email')"
+                                               oninput="setCustomValidity('')"/>
+                                        <h:message for="commentForm:emailAddress" class="control-label #{emailAddress.valid ? '' : 'has-error'}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label jsf:for="url" class="control-label">URL</label>
+                                    <div>
+                                        <input class="form-control"
+                                               type="text" 
+                                               jsf:id="url" 
+                                               jsf:value="#{weblogEntryBean.weblogEntryComment.url}"
+                                               />
+                                    </div>
+                                </div>
+                                <div class="form-group #{content.valid ? '' : 'has-error'}">
+                                    <label jsf:for="content" class="control-label #{content.valid ? '' : 'has-error'}">Comment</label>
+                                    <textarea jsf:id="content" 
+                                              jsf:binding="#{content}"
+                                              jsf:value="#{weblogEntryBean.weblogEntryComment.content}" 
+                                              jsf:required="true" 
+                                              jsf:requiredMessage="Comment is required."
+                                              class="form-control #{content.valid ? '' : 'has-error'}"></textarea>
+                                    <h:message for="commentForm:content" class="control-label #{content.valid ? '' : 'has-error'}"/>
+                                </div>
+                                <input type="hidden" name="weblogEntry" value="#{weblogEntryBean.weblogEntry}"/>
+                            </fieldset>
+
+                            <button type="submit" 
+                                    class="btn btn-primary" 
+                                    jsf:actionListener="#{weblogEntryBean.postComment}"
+                                    jsfc="h:commandButton"
+                                    >Submit
+                                <f:ajax execute="commentForm" render="commentBlock comments"/>
+                                <f:param name="handle" value="#{weblogEntryBean.handle}"/>
+                                <f:param name="anchor" value="#{weblogEntryBean.anchor}"/>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="sampleArea">
+
+                    </div>
+
+                    <div jsfc="h:panelGroup" id="comments" prependId="false" >
+                        <ui:repeat value="#{weblogEntryBean.comments}" var="comment" varStatus="status" >
+                            <!-- Single Comment -->
+                            <div class="media mb-4" >
+                                <img class="d-flex mr-3 rounded-circle" src="http://placehold.it/50x50" alt=""/>
+                                <div class="media-body">
+                                    <h5 class="mt-0"><h:outputText value="#{comment.name}"/></h5> 
+                                    <h:outputText value="#{comment.content}"/>
+                                </div>
+                            </div>
+                        </ui:repeat>
+                    </div>
+                </div>             
+            </div>
+        </f:view>        
+    </ui:define>
+
+    <ui:define name="postBody">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var weblog = #{weblogEntryBean.weblog.toJsonObject()};
+                //document.getElementById('yourElementId').title = 
+                var weblogEntry = #{weblogEntryBean.weblogEntry.toJsonObject()};
+                var template = "{{name}} - {{tagline}}";
+                var html = Mustache.to_html(template, weblog);
+                $('#navbarBrandText').html(html);
+                var template = document.getElementById("title_template").innerHTML;
+                var output = Mustache.render(template, weblogEntry);
+
+                $('#pubTime').html();
+                $('#postContent').html(Mustache.render("{{content}}", weblogEntry));
+                document.getElementById('postContent').innerHTML = Mustache.render("{{content}}", weblogEntry);
+            });
+        </script>
+    </ui:define>
+
+    <!-- /.container -->
+</ui:composition>
