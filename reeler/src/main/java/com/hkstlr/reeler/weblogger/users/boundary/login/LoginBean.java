@@ -12,7 +12,6 @@ import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
@@ -99,8 +98,8 @@ public class LoginBean implements Serializable {
         if (user != null && user.getPassword().equals(hashPwd)) {
             context.getExternalContext().getSessionMap().put(USER_SESSION_KEY, user);
 
-            log.info("user now authenticated");
-            log.info(user.toString());
+            //log.info("user now authenticated");
+            //log.info(user.toString());
 
             //FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -152,7 +151,7 @@ public class LoginBean implements Serializable {
         User userToGet = null;
         try {
             userToGet = userManager.getUserByUserName(username);
-            Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toString());
+            Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toJsonString());
             return userToGet;
         } catch (NoResultException nre) {
             //return null;

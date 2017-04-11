@@ -90,10 +90,10 @@ public abstract class AbstractManager<T> {
 
     public T findById(String id) {
         String className = entityClass.getSimpleName();
-        log.log(Level.INFO, "className:" + className);
-        log.log(Level.INFO, "id:" + id);
+        //log.log(Level.INFO, "className:" + className);
+        //log.log(Level.INFO, "id:" + id);
         String queryName = className.concat(".findById");
-        log.log(Level.INFO, "queryName:" + queryName);
+        // log.log(Level.INFO, "queryName:" + queryName);
         Query query = getEntityManager().createNamedQuery(queryName);
         query.setParameter("id", id);
         T record = null;
@@ -110,10 +110,10 @@ public abstract class AbstractManager<T> {
 
     public T findByField(String fieldName, Object fieldValue) {
         String className = entityClass.getSimpleName();
-        log.log(Level.INFO, "className:" + className);
+        //log.log(Level.INFO, "className:" + className);
         String queryNameSuffix = StringChanger.toTitleCase(fieldName);
         String queryName = className.concat(".findBy").concat(queryNameSuffix);
-        log.log(Level.INFO, queryName + ":" + fieldValue.toString());
+        //log.log(Level.INFO, queryName + ":" + fieldValue.toString());
         Query query = getEntityManager().createNamedQuery(queryName);
         query.setParameter(fieldName, fieldValue);
         T record = null;
@@ -151,9 +151,6 @@ public abstract class AbstractManager<T> {
 
     public <T> TypedQuery<T> getNamedQuery(String queryName) {
         TypedQuery<T> q = (TypedQuery<T>) getEntityManager().createNamedQuery(queryName, this.entityClass);
-        // For performance, never flush/commit prior to running queries.
-        // Roller code assumes this behavior
-
         return q;
     }
 
