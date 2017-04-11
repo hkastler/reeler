@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.users.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +105,8 @@ public class JdbcrealmGroup implements Serializable {
 
     @Override
     public String toString() {
-        return "reeler.weblogger.users.entity.JdbcrealmGroup[ jdbcrealmGroupId=" + jdbcrealmGroupId + " ]";
+        //skip the manytomany with the owner or jsonbuilder will stackoverflow
+        return new JsonBuilder().toJsonString(this,new String[]{"users"});
     }
     
 }
