@@ -99,11 +99,6 @@ public class Subscription extends AbstractEntity {
         this.feedURL = feedURL;
     }
 
-    public String getId() {
-        return id;
-    }
-
-
     public String getTitle() {
         return title;
     }

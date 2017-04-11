@@ -79,10 +79,6 @@ public class Planet extends AbstractEntity {
         this.title = title;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getHandle() {
         return handle;
     }

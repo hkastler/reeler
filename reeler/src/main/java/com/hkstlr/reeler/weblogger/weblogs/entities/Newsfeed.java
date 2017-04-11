@@ -68,10 +68,6 @@ public class Newsfeed extends AbstractEntity implements Serializable {
         this.link = link;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getName() {
         return name;
     }

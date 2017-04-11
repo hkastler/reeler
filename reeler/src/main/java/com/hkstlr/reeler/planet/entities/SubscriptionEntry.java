@@ -108,10 +108,6 @@ public class SubscriptionEntry extends AbstractEntity {
     public SubscriptionEntry() {
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getHandle() {
         return handle;
     }
