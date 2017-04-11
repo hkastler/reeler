@@ -52,7 +52,10 @@ public class ReelerUIBean implements Serializable {
     
     private Map<String, String> pages = new LinkedHashMap<>();
 
-    private final String path = "/weblogger/reeler-ui";
+     private final String pageHome = "/weblogger/reeler-ui";
+    
+    private final String path = pageHome + "/weblog";   
+   
 
     private Weblog currentWeblog = new Weblog();
 
@@ -201,14 +204,20 @@ public class ReelerUIBean implements Serializable {
         this.pages = pages;
     }
 
+    public String getPageHome() {
+        return pageHome;
+    }
+
+    
+    
+
     public void action(Weblog weblog, String page) throws WebloggerException {
         log.info("setting weblog and redirecting...");
         this.currentWeblog = weblog;
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             StringBuilder actionPath = new StringBuilder(context.getRequestContextPath());
-            actionPath.append(this.path);
-            actionPath.append("/weblog/");
+            actionPath.append(this.path).append("/");
             if(page.equals("config")){
                 actionPath.append("settings/");
             }
@@ -226,7 +235,7 @@ public class ReelerUIBean implements Serializable {
         try {
             StringBuilder path = new StringBuilder(context.getRequestContextPath());
             path.append(this.path);
-            path.append("/weblog/create.xhtml");
+            path.append("/create.xhtml");
             context.redirect(path.toString());
         } catch (IOException ex) {
             log.severe(ex.getMessage());

@@ -105,7 +105,11 @@ public class UserRole extends AbstractEntity implements Serializable {
     
     @Override
     public String toString(){
-        return this.toJsonObject().toString();
+         return Json.createObjectBuilder()
+        .add("id", id)
+        .add("roleName", roleName)
+        .build()
+        .toString();
     }
     
     @Override

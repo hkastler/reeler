@@ -16,12 +16,12 @@
             <h:form prependId="false">
             <div class="container">
                 
-                <a class="navbar-brand" href="#{request.contextPath}#{reelerUiBean.path}">Reeler UI</a>
+                <a class="navbar-brand" href="#{request.contextPath}#{reelerUiBean.pageHome}">Reeler UI</a>
                 
                 <div class="collapse navbar-collapse" id="navbarReeler">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="#{request.contextPath}#{reelerUiBean.path}">Main Menu <span class="sr-only">(current)</span></a>
+                            <a class="nav-link" href="#{request.contextPath}#{reelerUiBean.pageHome}">Main Menu <span class="sr-only">(current)</span></a>
                         </li>
                         <li class="nav-item" jsf:id="li-logout" rendered="#{sessionScope.user ne null}">
                             <a class="nav-link" jsf:id="link-logout" jsfc="h:commandLink" action="#{loginBean.logout()}">Logout</a>

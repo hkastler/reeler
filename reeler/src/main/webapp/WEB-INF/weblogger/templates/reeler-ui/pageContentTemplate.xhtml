@@ -5,18 +5,20 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-    
-    <ui:define name="content">        
-        <div class="panel panel-primary">
-            <div class="panel-heading panel-title">
-                #{messages[pageBean.pages[pageBean.page][0]]}
+
+    <ui:define name="content"> 
+        
+            <div class="panel panel-primary">
+                <div class="panel-heading panel-title">
+                    #{messages[pageBean.pages[pageBean.page][0]]}
+                </div>
+                <div class="panel panel-body">
+                    <h:messages infoClass="alert alert-success"
+                                errorClass="alert alert-warning"/>
+                    <ui:insert name="pageContent"/>          
+                </div>
             </div>
-            <div class="panel panel-body">
-                <h:messages infoClass="alert alert-success"
-                            errorClass="alert alert-warning"/>
-                <ui:insert name="pageContent"/>          
-            </div>
-        </div>          
+        
     </ui:define>
-    
+
 </ui:composition>

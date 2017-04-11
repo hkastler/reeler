@@ -24,6 +24,8 @@
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
 
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/datetimepicker/jquery.datetimepicker.css"/>
+        
         <!-- Custom CSS -->        
         <link rel="stylesheet" href="#{request.contextPath}/css/main.css"/>
 
@@ -44,7 +46,8 @@
                 }
             }
         </style>
-
+       
+        <script type="text/javascript" src="#{request.contextPath}/js/vendor/ckeditor_4.4.7_full/ckeditor/ckeditor.js"></script>  
         <ui:insert name="head"></ui:insert>
     </h:head>
 
@@ -65,16 +68,18 @@
                     </ui:insert>
                     <div class="row">
                         <div class="col-md-9">
+                            <div id="content">
+                                <ui:insert name="content">                   
 
-                            <ui:insert name="content">                   
-
-                            </ui:insert>
-
+                                </ui:insert>
+                            </div>
                         </div>
                         <div class="col-md-3">
-                            <ui:insert name="sideNav">
-                                <ui:include src="rightNav.xhtml"/>
-                            </ui:insert>
+                            <div id="sideNav">
+                                <ui:insert name="sideNav">
+                                    <ui:include src="rightNav.xhtml"/>
+                                </ui:insert>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -87,8 +92,10 @@
         </ui:insert>
 
 
-        <!-- jQuery Version 3.1.1 -->
-        <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n" crossorigin="anonymous"></script>
+        <!-- jQuery Version 3.2.1 -->
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
+                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
         <!-- Tether -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <!-- Latest compiled and minified JavaScript -->
@@ -96,8 +103,17 @@
 
 
 
-        <script src="#{request.contextPath}/js/main.js"></script>
-        <ui:insert name="postBody"><!-- hello --> </ui:insert>
+        <script src="#{request.contextPath}/js/reelerUi.js"></script>
+        <ui:insert name="postBody"><script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
+                <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
+                <script>
+                    Date.parseDate = function (input, format) {
+                        return moment(input, format).toDate();
+                    };
+                    Date.prototype.dateFormat = function (format) {
+                        return moment(this).format(format);
+                    };
+                </script></ui:insert>
 
     </h:body>
 

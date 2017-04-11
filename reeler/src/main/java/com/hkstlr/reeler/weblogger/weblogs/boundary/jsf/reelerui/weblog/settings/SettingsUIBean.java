@@ -42,7 +42,7 @@ public class SettingsUIBean {
         pages.put("members", "Members");
         pages.put("pings", "Pings");
         pages.put("maintenance", "Maintenance");
-        this.path = reelerUiBean.getPath() + "/weblog/settings";
+        this.path = reelerUiBean.getPath() + "/settings";
        
     }
     

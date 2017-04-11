@@ -42,82 +42,94 @@
 
 
 
-                                <div class="form-group">
-                                    <label for="searchString" class="sideformrow">Search string</label>   
+                            <div class="form-group">
+                                <label for="searchString" class="sideformrow">Search string</label>   
+                                <input type="text" 
+                                       name="searchString" 
+                                       class="form-control"
+                                       value="#{param.searchString}" 
+                                       id="searchString"/>
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="startDateString" class="sideformrow">Start date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
                                     <input type="text" 
-                                           name="searchString" 
+                                           name="startDateString" 
+                                           value="#{param.startDateString}"
                                            class="form-control"
-                                           value="#{param.searchString}" 
-                                           id="searchString"/>
-                                </div>
+                                           id="startDateString"
+                                           autocomplete="off"/>
 
-
-                                <div class="form-group">
-                                    <label for="startDateString" class="sideformrow">Start date</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                        <input type="text" 
-                                               name="startDateString" 
-                                               value="#{param.startDateString}"
-                                               class="form-control"
-                                               id="startDateString"
-                                               autocomplete="off"/>
-
-                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="endDateString" class="control-label">End date</label>
-                                    <div class="input-group">
-                                        <span class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </span>
-                                        <input type="text" 
-                                               name="endDateString" 
-                                               class="form-control"
-                                               value="#{param.endDateString}"
-                                               id="endDateString"
-                                               autocomplete="off"/>
-                                    </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="endDateString" class="control-label">End date</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <input type="text" 
+                                           name="endDateString" 
+                                           class="form-control"
+                                           value="#{param.endDateString}"
+                                           id="endDateString"
+                                           autocomplete="off"/>
                                 </div>
-                                <div>
-                                    <label class="control-label">Pending status</label> 
+                            </div>
+                            <div>
+                                <label class="control-label">Pending status</label> 
+                                <div class="checkbox">
+                                    <label for="#{radioButtonName}ALL">
+                                        <input type="radio" 
+                                               name="#{radioButtonName}" 
+                                               id="#{radioButtonName}ALL"
+                                               value="ALL"
+                                               checked="#{(param.get(radioButtonName) == 'ALL')? 'checked':''}"/>
+                                        All</label>
+                                </div>
+                                <ui:repeat value="#{radioButtonValues}" var="value">
                                     <div class="checkbox">
-                                        <label for="#{radioButtonName}ALL">
+                                        <label for="#{radioButtonName}#{value.toUpperCase()}">
                                             <input type="radio" 
                                                    name="#{radioButtonName}" 
-                                                   id="#{radioButtonName}ALL"
-                                                   value="ALL"
-                                                   checked="#{(param.get(radioButtonName) == 'ALL')? 'checked':''}"/>
-                                            All</label>
+                                                   id="#{radioButtonName}#{value.toUpperCase()}"
+                                                   value="#{value.toUpperCase()}"
+                                                   checked="#{(param.get(radioButtonName) == value.toUpperCase())? 'checked':''}"/>
+
+                                            #{value}</label>
                                     </div>
-                                    <ui:repeat value="#{radioButtonValues}" var="value">
-                                        <div class="checkbox">
-                                            <label for="#{radioButtonName}#{value.toUpperCase()}">
-                                                <input type="radio" 
-                                                       name="#{radioButtonName}" 
-                                                       id="#{radioButtonName}#{value.toUpperCase()}"
-                                                       value="#{value.toUpperCase()}"
-                                                       checked="#{(param.get(radioButtonName) == value.toUpperCase())? 'checked':''}"/>
+                                </ui:repeat>
+                            </div>
 
-                                                #{value}</label>
-                                        </div>
-                                    </ui:repeat>
-                                </div>
+                            <input type="submit" 
+                                   id="searchFormSubmit"
+                                   class="btn btn-info"
+                                   value="Filter"/>
 
-                                <input type="submit" 
-                                       id="searchFormSubmit"
-                                       class="btn btn-info"
-                                       value="Filter"/>
-                            
                         </form>
 
                     </div>
 
                 </div>
             </div>
-        </div>  
+        </div>
+        <script>
+            $('#startDateString').datetimepicker({
+                format: 'YYYY-MM-DDTHH:mm',
+                formatTime: 'HH:mm',
+                formatDate: 'YYYY MM DD'
+            });
+            $('#endDateString').datetimepicker({
+                format: 'YYYY-MM-DDTHH:mm',
+                formatTime: 'HH:mm',
+                formatDate: 'YYYY MM DD'
+            });
+        </script>
     </f:view>
 
 </ui:composition>
