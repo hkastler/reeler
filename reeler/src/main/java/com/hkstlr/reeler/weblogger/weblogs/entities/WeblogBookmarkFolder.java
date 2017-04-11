@@ -5,10 +5,12 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -110,9 +112,13 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.BookmarkFolder[ id=" + id + " ]";
+   @Override
+    public String toJsonString(){
+        return this.toJsonObject().toString();
     }
-
+    
+    @Override
+    public JsonObject toJsonObject(){
+        return new JsonBuilder().toJsonObject(this, new String[]{"weblog"});
+    }
 }
