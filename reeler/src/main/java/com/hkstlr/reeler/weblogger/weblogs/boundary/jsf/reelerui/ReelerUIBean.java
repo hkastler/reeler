@@ -10,6 +10,7 @@ import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.io.IOException;
 import java.io.Serializable;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -79,6 +81,10 @@ public class ReelerUIBean implements Serializable {
      */
     public User getUser() {
         return user;
+    }
+    
+    public List<UserRole> getUserRolesAsList(Set<UserRole> roles){
+        return new ArrayList<UserRole>(roles);
     }
 
     public Map<String, String> getUserWeblogPermissions() {
@@ -168,7 +174,11 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserFromSession() {
+        log.info("setting user from session");
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
+        user.getPermissions().forEach((t) -> {
+            log.info(t.toString());
+        });
     }
 
     public String getPath() {
