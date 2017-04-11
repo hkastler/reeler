@@ -5,15 +5,28 @@
  */
 package com.hkstlr.reeler.weblogger.users.entities;
 
+import com.hkstlr.reeler.app.control.AppPermission;
+import com.hkstlr.reeler.app.control.AppPermissionInterface;
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
+import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import com.hkstlr.reeler.weblogger.users.control.UserEntityListener;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.json.Json;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -23,6 +36,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,6 +47,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author henry.kastler
  */
 @Entity
+@EntityListeners(UserEntityListener.class)
 @Table(name = "roller_user", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"username"})})
 @XmlRootElement
@@ -102,8 +117,7 @@ public class User extends AbstractEntity {
     @Size(min = 1, max = 255)
     @Column(name = "emailaddress", nullable = false, length = 255)
     private String emailAddress;
-    
-    
+
     @Size(max = 48)
     @Column(name = "activationcode", length = 48)
     private String activationCode;
@@ -131,16 +145,19 @@ public class User extends AbstractEntity {
             joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
             inverseJoinColumns = @JoinColumn(name = "groupname", referencedColumnName = "groupname"))
     private List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<>();
-    
+
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="UserUserRole",
-      joinColumns=@JoinColumn(name="username", referencedColumnName = "username"),
-      inverseJoinColumns=@JoinColumn(name="rolename", referencedColumnName = "rolename")
+    @JoinTable(name = "UserUserRole",
+            joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
+            inverseJoinColumns = @JoinColumn(name = "rolename", referencedColumnName = "rolename")
     )
     private Set<UserRole> roles;
-    
+
+    @Transient
+    private List<AbstractPermissionEntity> permissions = new ArrayList<>();
+
     public User() {
-        
+
     }
 
     public User(String id, String userName, String password, String screenname, String fullname, String emailaddress, Date datecreated, boolean isenabled) {
@@ -263,6 +280,14 @@ public class User extends AbstractEntity {
         this.roles = roles;
     }
 
+    public List<AbstractPermissionEntity> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<AbstractPermissionEntity> permissions) {
+        this.permissions = permissions;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -282,10 +307,7 @@ public class User extends AbstractEntity {
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.User[ id=" + id + " ]";
-    }
+        
+    
 
 }

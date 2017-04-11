@@ -8,6 +8,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -47,6 +48,7 @@ import java.util.Locale;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.json.JsonObject;
 import javax.persistence.Cacheable;
 import javax.persistence.UniqueConstraint;
 /**
@@ -263,10 +265,6 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @PostConstruct
     private void init(){
         
-    }
-
-    public String getId() {
-        return id;
     }
 
     public Weblog getWebsite() {
@@ -583,6 +581,15 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.comments = comments;
     }
     
+    @Override
+    public String toJsonString(){
+        return this.toJsonObject().toString();
+    }
+    
+    @Override
+    public JsonObject toJsonObject(){
+        return new JsonBuilder().toJsonObject(this, new String[]{"weblog"});
+    }
     
 
     @Override
@@ -599,15 +606,10 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
             return false;
         }
         WeblogEntry other = (WeblogEntry) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.WeblogEntry[ id=" + id + " ]";
     }
 
     /**

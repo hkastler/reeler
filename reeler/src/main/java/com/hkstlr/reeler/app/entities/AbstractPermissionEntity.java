@@ -5,15 +5,17 @@
  */
 package com.hkstlr.reeler.app.entities;
 
-import com.hkstlr.reeler.app.control.AppPermissionInterface;
+import com.hkstlr.reeler.app.control.AppPermission;
+import com.hkstlr.reeler.app.control.JsonBuilder;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.security.Permission;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 import javax.inject.Inject;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -37,7 +39,7 @@ import javax.validation.constraints.Size;
 @DiscriminatorColumn(name = "objecttype")
 @DiscriminatorValue(value = "objecttype")
 @MappedSuperclass
-public class AbstractPermissionEntity extends java.security.Permission implements AppPermissionInterface {
+public class AbstractPermissionEntity extends java.security.Permission {
 
     protected static final long serialVersionUID = 1L;
     
@@ -99,11 +101,6 @@ public class AbstractPermissionEntity extends java.security.Permission implement
     }
 
     
-    public void addActions(WeblogPermission perm) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
     public void addActions(List<String> newActions) {
         List<String> updatedActions = getActionsAsList();
         for (String newAction : newActions) {
@@ -112,6 +109,10 @@ public class AbstractPermissionEntity extends java.security.Permission implement
             }
         }
         setActionsAsList(updatedActions);
+    }
+    
+    public void addActions(Permission perm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public List<String> getActionsAsList() {
@@ -219,14 +220,26 @@ public class AbstractPermissionEntity extends java.security.Permission implement
     }
 
     @Override
-    public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.ObjectPermission[ id=" + id + " ]";
-    }
-
-    @Override
     public boolean implies(Permission permission) {
         // TODO Auto-generated method stub
         return false;
+    }
+
+    
+    public void addActions(AppPermission perm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public String toString() {
+        return this.getClass().getName() + StringPool.COLON + this.id;
+    }
+    
+    public String toJsonString(){
+        return new JsonBuilder().toJsonString(this);
+    }
+    
+    public JsonObject toJsonObject(){
+        return new JsonBuilder().toJsonObject(this, new String[]{});
     }
 
     

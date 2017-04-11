@@ -86,7 +86,7 @@ public class WeblogEntryBean {
             allowCommentsCal.add(Calendar.DAY_OF_YEAR,-weblogEntry.getCommentDays());
             
             long daysBetween = ChronoUnit.DAYS.between(allowCommentsCal.toInstant(), todayCal.toInstant());
-            log.info("daysBetween:" + daysBetween);
+            //log.info("daysBetween:" + daysBetween);
             
             this.showCommentForm = this.showComments && (weblogEntry.getCommentDays() == 0 
                                                             || daysBetween < weblogEntry.getCommentDays());

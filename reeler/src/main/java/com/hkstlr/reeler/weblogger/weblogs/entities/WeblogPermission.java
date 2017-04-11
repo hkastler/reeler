@@ -1,5 +1,6 @@
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
 import java.io.Serializable;
 import java.security.Permission;
@@ -106,6 +107,9 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
         return null;
     }
 
+    public void addActions(WeblogPermission perm) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 
     public WeblogPermission(Weblog weblog, List<String> actions) {
@@ -153,15 +157,12 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
         }
         return false;
     }
+    
+    
 
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("WeblogPermission: ");
-        for (String action : getActionsAsList()) {
-            sb.append(" ").append(action).append(" ");
-        }
-        return sb.toString();
-    }
+    /*public String toString() {
+    return new JsonBuilder().toJsonString(this);
+    }*/
 
     /*    public boolean equals(Object other) {
     if (other == this) {

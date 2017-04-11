@@ -5,9 +5,11 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Comparator;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -82,10 +84,6 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.image = image;
         //weblog.getWeblogCategories().add(this);
         calculatePosition();
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {
@@ -164,13 +162,24 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         }
         return true;
     }
-
+    
     @Override
-    public String toString() {
-        return "WeblogCategory[ id=" + id + " ]"
-                .concat("[name=" + name + "]")
-                .concat("[description=" + description + "]")
-                .concat("[image=" + image + "]");
+    public String toJsonString(){
+        return this.toJsonObject().toString();
     }
+    
+    @Override
+    public JsonObject toJsonObject(){
+        return new JsonBuilder().toJsonObject(this, new String[]{"weblog"});
+    }
+    
+    /*@Override
+    public String toString() {
+    return new JsonBuilder().toJsonString(this,new String[]{"weblog"});
+    /* return "WeblogCategory[ id=" + id + " ]"
+    .concat("[name=" + name + "]")
+    .concat("[description=" + description + "]")
+    .concat("[image=" + image + "]");
+    }*/
 
 }

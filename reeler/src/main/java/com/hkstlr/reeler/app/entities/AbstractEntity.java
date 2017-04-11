@@ -15,14 +15,14 @@
  */
 package com.hkstlr.reeler.app.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
+import com.hkstlr.reeler.app.control.StringPool;
 import java.io.Serializable;
 import java.util.UUID;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -35,7 +35,7 @@ import javax.validation.constraints.Size;
 public abstract class AbstractEntity implements Serializable {
 
     protected static final long serialVersionUID = 1L;
-
+    
     /**
      *
      */
@@ -72,5 +72,18 @@ public abstract class AbstractEntity implements Serializable {
         }
         AbstractEntity other = (AbstractEntity) obj;
         return getId().equals(other.getId());
+    }
+    
+    
+    public String toString() {
+        return this.getClass().getName() + StringPool.COLON + this.id;
+    }
+    
+    public String toJsonString(){
+        return new JsonBuilder().toJsonString(this);
+    }
+    
+    public JsonObject toJsonObject(){
+        return new JsonBuilder().toJsonObject(this, new String[]{});
     }
 }

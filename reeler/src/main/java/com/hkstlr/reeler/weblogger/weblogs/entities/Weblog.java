@@ -5,6 +5,8 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFileDirectory;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners.WeblogEntityListener;
@@ -36,16 +38,15 @@ import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
 import com.hkstlr.reeler.weblogger.weblogs.control.LocaleFixer;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
+import javax.json.JsonObject;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -242,7 +243,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @OneToMany(mappedBy = "weblog")
     private List<WeblogCustomTemplate> weblogCustomTemplates;
 
-    @OneToMany(mappedBy = "website", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "website", fetch = FetchType.LAZY)
     private List<WeblogEntry> weblogEntries;
 
     @OneToMany(mappedBy = "weblog")
@@ -277,10 +278,6 @@ public class Weblog extends AbstractEntity implements Serializable {
         this.entryDisplayCount = displaycnt;
         this.enableMultiLang = enablemultilang;
         this.showAllLangs = showalllangs;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public String getName() {
@@ -577,8 +574,6 @@ public class Weblog extends AbstractEntity implements Serializable {
         if(getLocale() == null || getLocale().length() == 0){
             this.setLocale(Locale.getDefault().toString());
         }
-        log.info("Locale.getDefault:" + Locale.getDefault().toString());
-        log.info("Locale:" + getLocale());
         return LocaleFixer.toLocale(getLocale());
     }
     
@@ -625,9 +620,7 @@ public class Weblog extends AbstractEntity implements Serializable {
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.Weblog[ id=" + id + " ]";
-    }
+        
+    
 
 }

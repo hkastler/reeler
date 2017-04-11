@@ -5,10 +5,14 @@
  */
 package com.hkstlr.reeler.weblogger.users.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import javax.json.Json;
+import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -59,10 +63,6 @@ public class UserRole extends AbstractEntity implements Serializable {
         this.userName = username;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public String getRoleName() {
         return roleName;
     }
@@ -97,15 +97,26 @@ public class UserRole extends AbstractEntity implements Serializable {
             return false;
         }
         UserRole other = (UserRole) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((!this.id.equals(other.id))) {
             return false;
         }
         return true;
     }
-
+    
     @Override
-    public String toString() {
-        return "com.hkstlr.reeler.weblogger.entities.UserRole[ id=" + id + " ]";
+    public String toString(){
+        return this.toJsonObject().toString();
     }
+    
+    @Override
+    public String toJsonString(){
+        return this.toJsonObject().toString();
+    }
+    
+    @Override
+    public JsonObject toJsonObject(){
+        return new JsonBuilder().toJsonObject(this, new String[]{"owners"});
+    }
+    
 
 }
