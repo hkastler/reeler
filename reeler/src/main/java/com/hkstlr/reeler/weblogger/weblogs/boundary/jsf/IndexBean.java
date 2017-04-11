@@ -17,12 +17,12 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
@@ -35,7 +35,7 @@ import javax.inject.Inject;
 @RequestScoped
 public class IndexBean {
     
-    @Inject
+    @EJB
     Weblogger weblogger;
     
     //@Inject
@@ -50,7 +50,7 @@ public class IndexBean {
     }
     
     @PostConstruct
-    private void init(){
+    public void init(){
         try {
             setWeblogs();
         } catch (WebloggerException ex) {
@@ -73,10 +73,10 @@ public class IndexBean {
         //blog.setHandle("test-handle");
         //blog.setName("Test Name");
         //blogs.add(blog);
-        blogs.forEach((blog) -> {
-            blog.getWeblogEntries();
-            blog.getWeblogEntries().size();
-        });
+        /*blogs.forEach((blog) -> {
+        blog.getWeblogEntries();
+        blog.getWeblogEntries().size();
+        });*/
        
        this.weblogs = blogs;
     }

@@ -30,6 +30,7 @@ public class ApplicationConfigurationProvider extends HttpConfigurationProvider
         .addRule(Join.path("/{handle}").to("/weblogger/pages/weblog.xhtml"))
         .addRule(Join.path("/{handle}/").to("/weblogger/pages/weblog.xhtml"))
         .addRule(Join.path("/{handle}/entry/{anchor}").to("/weblogger/pages/entry.xhtml"))
+        .addRule(Join.path("/{handle}/entry-m/{anchor}").to("/weblogger/pages/entryMustache.xhtml"))       
         .addRule(Join.path("/{handle}/category/{categoryName}").to("/weblogger/pages/category.xhtml"))
         .addRule(Join.path("/{handle}/search").to("/weblogger/pages/search.xhtml"))
         .addRule(Join.path("/{handle}/date/{dateString}").to("/weblogger/pages/date.xhtml"))
