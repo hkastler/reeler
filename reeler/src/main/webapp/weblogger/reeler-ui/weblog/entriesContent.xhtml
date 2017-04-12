@@ -44,7 +44,8 @@
                                         <h:outputText value="#{labels.res.getObject('weblogEntryQuery.pubTime')}"/>
                                     </f:facet>
                                     <h:outputText value="#{entry.pubTime.time}">
-                                        <f:convertDateTime type="both" pattern="yyyy/MM/dd hh:mm a"
+                                        <f:convertDateTime type="both" 
+                                                           pattern="yyyy/MM/dd hh:mm a"
                                                            timeZone="#{weblog.timeZone}"/>
                                     </h:outputText>
                                 </h:column>

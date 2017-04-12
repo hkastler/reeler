@@ -104,7 +104,8 @@
 
 
         <script src="#{request.contextPath}/js/reelerUi.js"></script>
-        <ui:insert name="postBody"><script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
+        <ui:insert name="postBody">
+                <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
                 <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
                 <script>
                     Date.parseDate = function (input, format) {
@@ -113,7 +114,8 @@
                     Date.prototype.dateFormat = function (format) {
                         return moment(this).format(format);
                     };
-                </script></ui:insert>
+                </script>
+        </ui:insert>
 
     </h:body>
 

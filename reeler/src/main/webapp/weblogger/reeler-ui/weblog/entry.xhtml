@@ -30,7 +30,26 @@
         <ui:include src="entrySideNav.xhtml"/>
     </ui:define>
 
-    
+    <ui:define name="postBody">
+        <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
+        <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
+        <script>
+            Date.parseDate = function (input, format) {
+                return moment(input, format).toDate();
+            };
+            Date.prototype.dateFormat = function (format) {
+                return moment(this).format(format);
+            };
+        </script>
+        <script>
+            $('#strDateTimeOfPubDate').datetimepicker({
+                format: 'YYYY MMM DD HH:mm a',
+                formatTime: 'HH:mm',
+                formatDate: 'YYYY MM DD'
+            });
+        </script>
+    </ui:define>
+
 </ui:composition>
 
 
