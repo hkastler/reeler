@@ -19,18 +19,21 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import com.hkstlr.reeler.weblogger.plugins.comment.control.WeblogEntryCommentPlugin;
 import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
+import java.util.concurrent.ConcurrentHashMap;
 import javax.annotation.PostConstruct;
+import javax.ejb.ConcurrencyManagement;
 import javax.ejb.DependsOn;
 import javax.ejb.Singleton;
 
 @Singleton
 @DependsOn("WebloggerConfig")
+@ConcurrencyManagement
 public class PluginManager {
 
     private Logger log = Logger.getLogger(PluginManager.class.getName());
 
     // Plugin classes keyed by plugin name
-    static Map<String, Class> mPagePlugins = new LinkedHashMap<String, Class>();
+    static Map<String, Class> mPagePlugins = new ConcurrentHashMap<String, Class>();
 
     // Comment plugins
     private List<WeblogEntryCommentPlugin> commentPlugins = new ArrayList<WeblogEntryCommentPlugin>();

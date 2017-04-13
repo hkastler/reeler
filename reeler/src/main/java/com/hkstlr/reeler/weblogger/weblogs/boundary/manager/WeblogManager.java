@@ -68,6 +68,9 @@ import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 
@@ -836,7 +839,6 @@ public class WeblogManager extends AbstractManager<Weblog> {
         return false;
     }
         
-        
-    
+   
     
 }

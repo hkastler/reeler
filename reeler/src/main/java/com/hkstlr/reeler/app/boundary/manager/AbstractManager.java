@@ -30,6 +30,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import java.util.Collection;
 import javax.ejb.Stateless;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.Root;
 
 /**
  *
@@ -133,9 +135,13 @@ public abstract class AbstractManager<T> {
     }
 
     public List<T> findRange(int[] range) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
-        cq.select(cq.from(entityClass));
-        javax.persistence.Query q = getEntityManager().createQuery(cq);
+        Root<T> t = cq.from(entityClass);
+        cq.select(t);
+        cq.orderBy(cb.asc(t.get("pubTime")));
+        //cq.orderBy(entityClass.)
+        Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
         return q.getResultList();
