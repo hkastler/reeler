@@ -133,6 +133,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Column(name = "text", nullable = false, length = 2147483647)
     private String text;
 
+    @Basic
     @Column(name = "pubtime")
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar pubTime;

@@ -25,7 +25,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment.ApprovalS
 import java.util.Date;
 
 
-public class CommentSearchCriteria {
+public class WeblogEntryCommentSearchCriteria {
 
     // Weblog or null to get comments on all blogs
     private Weblog weblog;

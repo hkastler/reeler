@@ -4,15 +4,35 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-
-
+    
+    <f:metadata>        
+        <f:viewAction action="#{weblogEntryCommentBean.commentsViewAction}"/>
+    </f:metadata>
+    <f:loadBundle basename="ApplicationResources" var="msg"/>
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
             Manage comments in weblog #{weblogEntryCommentBean.weblog.name}
         </div>
 
         <div class="panel-body">
-            <p>#{labels.res.getString("commentManagement.tip")}</p>
+            <p>
+                <h:outputText value="#{msg['commentManagement.tip']}" escape="false"/>
+            </p>
+            
+            <div class="row">
+                <div class="text-center" style="margin: 0 auto" id="top-paginatorContainer">
+                    <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">
+                        <ui:param name="page" value="#{weblogEntryCommentBean.pageNum}"/>
+                        <ui:param name="paginator" value="#{weblogEntryCommentBean.paginator}"/>
+                        <ui:param name="outcome" value="#{request.contextPath}#{reelerUiBean.path}/comments.xhtml"/>
+                        <ui:param name="hrefStyle" value="queryString"/>
+                        <ui:param name="position" value="top"/>
+                    </ui:include>
+                </div>
+            </div>
+            
+            <hr/>
+
             <div  rendered="#{weblogEntryCommentBean.weblogEntryCommentVisitors.size() > 0}"
                   jsf:id="comments"
                   class="table-responsive">
@@ -22,31 +42,32 @@
                              rules="all" 
                              styleClass="table table-bordered table-striped table-hover table-responsive"
                              columnClasses="commentCheckBox,
-                                            commentCheckBox,
-                                            commentCheckBox,commentForm">
-                    
+                             commentCheckBox,
+                             commentCheckBox,commentForm">
+
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="#{labels.res.getObject('commentManagement.columnApproved')}"/>
+                            <h:outputText value="#{msg['commentManagement.columnApproved']}"
+                                          escape="false"/>
 
                         </f:facet>
                         <div class="text-center alert alert-success" >
                             <h:form id="isApprovedForm">
                                 <h:selectBooleanCheckbox id="isApproved"
                                                          value="#{commentVisitor.approved}">
-                                    
-                                <f:ajax event="change"
-                                        listener="#{weblogEntryCommentBean.setSpamAndApproval(commentVisitor)}"
-                                        render="@form isSpamForm"/>
+
+                                    <f:ajax event="change"
+                                            listener="#{weblogEntryCommentBean.setSpamAndApproval(commentVisitor)}"
+                                            render="@form isSpamForm"/>
                                 </h:selectBooleanCheckbox>
                                 <div jsfc="h:messages" class="alert alert-success list-unstyled"/>
                             </h:form>
-                         </div>
+                        </div>
                     </h:column>
 
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="#{labels.res.getString('commentManagement.columnSpam')}"/>
+                            <h:outputText value="#{msg['commentManagement.columnSpam']}"/>
                         </f:facet>
                         <div class="text-center alert alert-warning">
                             <h:form id="isSpamForm">
@@ -75,24 +96,24 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="#{labels.res.getString('commentManagement.columnComment')}"/>
+                            <h:outputText value="#{msg['commentManagement.columnComment']}"/>
                         </f:facet>
                         <div >
-                            
-                                <p>Regarding: #{commentVisitor.weblogEntryComment.weblogEntry.title}<br/>
-                                    Posted by: #{commentVisitor.weblogEntryComment.name}<br/>
-                                    Posted URL: <h:outputText value="#{commentVisitor.weblogEntryComment.url}"/>
-                                    <br/>
-                                    Posted at: <h:outputText value="#{commentVisitor.weblogEntryComment.postTime}" >
-                                                   <f:convertDateTime type="both" dateStyle="full"/>
-                                               </h:outputText>
-                                </p>
-                            
+
+                            <p><h:outputText value="#{msg['commentManagement.entryTitled']}"/>: #{commentVisitor.weblogEntryComment.weblogEntry.title}<br/>
+                                <h:outputText value="#{msg['commentManagement.commentBy']}"/>: #{commentVisitor.weblogEntryComment.name}<br/>
+                                <h:outputText value="#{msg['commentManagement.commentByURL']}"/>: <h:outputText value="#{commentVisitor.weblogEntryComment.url}"/>
+                                <br/>
+                                <h:outputText value="#{msg['commentManagement.postTime']}"/>: <h:outputText value="#{commentVisitor.weblogEntryComment.postTime}" >
+                                    <f:convertDateTime type="both" dateStyle="full"/>
+                                </h:outputText>
+                            </p>
+
                         </div>
-                        
+
                         <h:form id="contentUpdateForm">
                             <div jsfc="h:messages" class="alert alert-success list-unstyled"
-                                                   errorClass="alert alert-danger list-unstyled"/>
+                                 errorClass="alert alert-danger list-unstyled"/>
 
                             <h:inputTextarea 
                                 value="#{commentVisitor.weblogEntryComment.content}"
@@ -105,16 +126,9 @@
                             </h:commandButton>
                         </h:form>
                     </h:column> 
-                   
+
                 </h:dataTable>
-
-
             </div>
-
-
-
-
-
         </div>
         <div class="panel-footer"></div>
     </div>

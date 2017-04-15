@@ -586,15 +586,15 @@ public class WeblogManager extends AbstractManager<Weblog> {
         List<WeblogPermission> perms = weblogPermissionManager.getWeblogPermissions(user);
         for (WeblogPermission perm : perms) {
             Weblog weblog = getWeblogByHandle(perm.getObjectId());
-            List<WeblogEntry> entries = weblog.getWeblogEntries();
+            /*List<WeblogEntry> entries = weblog.getWeblogEntries();
             List<WeblogBookmarkFolder> folders = weblog.getBookmarkFolders();
             for(WeblogBookmarkFolder folder : folders){
-                List<WeblogBookmark> bookmarks = folder.getBookmarks();
-                log.log(Level.FINE, "number of bookmarks:" + bookmarks.size());
+            List<WeblogBookmark> bookmarks = folder.getBookmarks();
+            log.log(Level.FINE, "number of bookmarks:" + bookmarks.size());
             }
             log.log(Level.FINE,"number of entries:"  + weblog.getWeblogEntries().size());
             log.log(Level.FINE, "number of folders:" + weblog.getBookmarkFolders().size());
-            log.log(Level.FINE,"blog returned:" + weblog.getName());
+            log.log(Level.FINE,"blog returned:" + weblog.getName());*/
             if ((!enabledOnly || weblog.isVisible()) && weblog.isActive()) {
                 weblogs.add(weblog);
             }

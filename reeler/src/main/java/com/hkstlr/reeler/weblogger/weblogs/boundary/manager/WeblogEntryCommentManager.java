@@ -23,7 +23,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.weblogs.control.CommentSearchCriteria;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentSearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import javax.persistence.EntityManager;
@@ -55,33 +55,27 @@ public class WeblogEntryCommentManager extends AbstractManager {
     }
 
     public WeblogEntryCommentManager() {
-        //super(WeblogEntryComment.class);
+        super(WeblogEntryComment.class);
     }
    
-    public List<WeblogEntryComment> getCommentsForWeblog(Weblog weblog, List<ApprovalStatus> statuses){
-        /*String sqlString = "SELECT rc.*, re.*" +
-        "	FROM public.roller_comment rc" +
-        "    INNER JOIN weblogentry re" +
-        "    ON re.id = rc.entryid" +
-        "    INNER JOIN weblog rb" +
-        "    ON rb.id = re.websiteid" +
-        "    where rb.id =?1";
-        Query query = getEntityManager().createNativeQuery(sqlString);
-        */
+    public List<WeblogEntryComment> getCommentsForWeblog(Weblog weblog, 
+            List<ApprovalStatus> statuses,
+            int[] range){
         
-        //System.out.println("weblog:" + weblog.getName());
         String qlString = "SELECT wec FROM WeblogEntryComment wec"
                 + " LEFT JOIN FETCH wec.weblogEntry we"
                 + " WHERE we.website = ?1 "
                 + " AND wec.status IN (?2)"
                 + " ORDER BY wec.postTime DESC";
-        //qlString.concat("");
-        //qlString.concat("JOIN Weblog rb");
-        //qlString.concat("WHERE rb = :weblog ");                
-        Query query = getEntityManager().createQuery(qlString);
-        query.setParameter(1, weblog);
-        query.setParameter(2, statuses);
-        List<WeblogEntryComment> results = query.getResultList();
+        Query q = getEntityManager().createQuery(qlString);
+        q.setParameter(1, weblog);
+        q.setParameter(2, statuses);
+        if(range != null){
+            q.setMaxResults(range[1] - range[0] + 1);
+            q.setFirstResult(range[0]);
+        }
+        
+        List<WeblogEntryComment> results = q.getResultList();
         return results;
     }
     
@@ -109,7 +103,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
     /**
      * @inheritDoc
      */
-    public List<WeblogEntryComment> getComments(CommentSearchCriteria csc) throws WebloggerException {
+    public List<WeblogEntryComment> getComments(WeblogEntryCommentSearchCriteria csc, int[]range) throws WebloggerException {
         
         List<Object> params = new ArrayList<Object>();
         int size = 0;
@@ -166,6 +160,10 @@ public class WeblogEntryCommentManager extends AbstractManager {
         for (int i=0; i<params.size(); i++) {
             query.setParameter(i+1, params.get(i));
         }
+        if(range != null){
+            
+        }
+        
         return query.getResultList();
         
     }
@@ -194,5 +192,15 @@ public class WeblogEntryCommentManager extends AbstractManager {
         //web.setComments(entry.getComments());
     }
        
+    /**
+     * @inheritDoc
+     */
+    public long getCommentCount(Weblog website) throws WebloggerException {
+        TypedQuery<Long> q = getEntityManager().createNamedQuery(
+                "WeblogEntryComment.getCountDistinctByWebsite&Status", Long.class);
+        q.setParameter(1, website);
+        //q.setParameter(2, ApprovalStatus.APPROVED);
+        return q.getResultList().get(0);
+    }
 
 }

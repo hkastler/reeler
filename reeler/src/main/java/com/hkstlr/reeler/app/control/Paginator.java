@@ -13,7 +13,7 @@ public final class Paginator {
     @Inject
     Logger log;
 
-    private int pageSize = 15;
+    private int pageSize;
     //pages have a 1 based index
     //list elements have 0 based index
     private int page = 1;
@@ -21,13 +21,6 @@ public final class Paginator {
     private int numberOfItems = 0;
 
     public Paginator() {
-    }
-
-    public Paginator(int pageSize, int page, int numberOfItems, int numberOfPages) {
-        this.pageSize = pageSize;
-        this.page = page;
-        this.numberOfItems = numberOfItems;
-        this.numberOfPages = numberOfPages;
     }
 
     public Paginator(int pageSize, int page, int numberOfItems) {
@@ -63,6 +56,12 @@ public final class Paginator {
 
     public void setNumberOfPages() {
         this.numberOfPages = (int) Math.ceil((double) getNumberOfItems() / getPageSize());
+    }
+    
+    public void setPages(int pageSize, int numberOfItems){
+        this.pageSize = pageSize;
+        this.numberOfItems = numberOfItems;
+        setNumberOfPages();
     }
 
     public int getNumberOfItems() {
@@ -125,6 +124,10 @@ public final class Paginator {
         if (hasPreviousPage()) {
             page--;
         }
+    }
+    
+    public String toString(){
+        return new JsonBuilder().toJsonString(this);
     }
 
 }

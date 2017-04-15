@@ -114,11 +114,7 @@ public class WeblogAuthorBean implements Serializable {
     
     public void configViewAction(){
         log.info("configViewAction here");
-        log.info("currentWeblog:" + weblog.getName());
-        //reelerUiBean.getCurrentWeblog().getId()
-        //Weblog copyWeblog = weblogger.getWeblogManager().findById(reelerUiBean.getCurrentWeblog().getId());
-        //this.weblog = copyWeblog;
-        //this.weblog = weblog;
+        log.info("currentWeblog:" + weblog.getName());       
     }
     
      //@FacesConverter(forClass = Weblog.class)

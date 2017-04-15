@@ -101,10 +101,10 @@ public abstract class AbstractManager<T> {
         T record = null;
         try {
             record = (T) query.getSingleResult();
-            log.log(Level.INFO, "object:" + className + " found for " + id);
+            //log.log(Level.INFO, "object:" + className + " found for " + id);
 
         } catch (Exception e) {
-            log.log(Level.INFO, className + ".findById:" + id + e.toString());
+            log.log(Level.WARNING, className + ".findById:" + id + e.toString());
 
         }
         return record;

@@ -84,10 +84,10 @@ public class WeblogBean {
         try {
             this.weblog = getWeblogByHandle(handle);
             int numberOfEntries = getEntryCount(weblog);
-            log.info("numberOfEntries:" + numberOfEntries + " for weblog " + weblog.getName());
+            //log.info("numberOfEntries:" + numberOfEntries + " for weblog " + weblog.getName());
             if (pageSize == null) {
                 pageSize = weblog.getEntryDisplayCount();
-                log.info("pageSize:" + pageSize);
+                //log.info("pageSize:" + pageSize);
             }
             paginator = new Paginator(pageSize,pageNum,numberOfEntries);
             //log.log(Level.WARNING,"hello from WeblogBean");

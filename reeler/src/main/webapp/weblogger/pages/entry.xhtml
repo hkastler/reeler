@@ -32,9 +32,7 @@
                 <p>Posted on 
                     <h:outputText value="#{weblogEntryBean.weblogEntry.pubTime.time}" >
                         <f:convertDateTime dateStyle="default"
-                                           type="both"
-                                           locale="#{weblogEntryBean.weblogEntry.localeInstance}"
-                                           timeZone="#{weblogEntryBean.weblog.timeZoneInstance}"/>
+                                           type="both"/>
                     </h:outputText>
                 </p>
                 <p jsf:id="pTags" rendered="#{weblogEntryBean.weblogEntry.tags.size() gt 0}">

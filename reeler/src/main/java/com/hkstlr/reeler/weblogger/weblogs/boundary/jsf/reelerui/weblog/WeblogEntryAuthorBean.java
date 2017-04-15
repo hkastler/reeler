@@ -67,9 +67,6 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     private String tagBag = new String();
     
-    Boolean allowCommentsChecked = false;
-            
-
     public WeblogEntryAuthorBean() {
         super(WeblogEntry.class);
     }
@@ -85,7 +82,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         
         this.handle = weblog.getHandle();
         this.cal = Calendar.getInstance(TimeZone.getTimeZone(weblog.getTimeZone()));
-        this.allowCommentsChecked = weblog.isAllowComments();
+        //this.allowCommentsChecked = weblog.isAllowComments();
 
         if (this.id != null && !this.id.isEmpty()) {
             this.weblogEntry = weblogger.getWeblogEntryManager().findForEdit(id);
@@ -93,7 +90,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             tagBag = tagBag.concat(tag.getName()).concat(" ");
             });*/
             tagBag = this.weblogEntry.getTagsAsString();
-            allowCommentsChecked = this.weblogEntry.isAllowComments();
+            //allowCommentsChecked = this.weblogEntry.isAllowComments();
             
             if(weblogEntry.getPubTime() != null){        
                 this.strDateTimeOfPubDate = DateFormatter.sdf.format(new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
@@ -108,7 +105,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             }
             this.weblogEntry = new WeblogEntry(weblog, reelerUiBean.getUser());
             weblogEntry.setCommentDays(weblog.getDefaultCommentDays());
-            allowCommentsChecked = weblog.isAllowComments();
+            //allowCommentsChecked = weblog.isAllowComments();
             this.action = "create";
             this.actionLabel = "Create";
         }
@@ -229,14 +226,6 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         this.action = action;
     }
 
-    public Boolean getAllowCommentsChecked() {
-        return allowCommentsChecked;
-    }
-
-    public void setAllowCommentsChecked(Boolean allowCommentsChecked) {
-        this.allowCommentsChecked = allowCommentsChecked;
-    }
-
     public String getLocalDateTimeFormat() {
         String df = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).toFormat().toString();
         log.info("pattern:" + df);
@@ -273,7 +262,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         weblogEntry.setUpdateTime(setCalFromDate(new Date()));
         setupTagsAndSave();
         FacesMessageManager.addSuccessMessage("weblogEntryForm", "Entry updated");
-        return reelerUiBean.getPath() + "/weblog/entry.xhtml";
+        return reelerUiBean.getPath() + "/entry.xhtml";
     }
 
     private void setupAndSave(String facesMsg) throws WebloggerException {

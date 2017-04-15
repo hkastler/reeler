@@ -6,7 +6,7 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <ui:param name="weblog" value="#{reelerUiBean.currentWeblog}"/>
     <f:metadata>            
-        <f:viewAction action="#{reelerUiBean.entriesViewAction}"/>
+        <f:viewAction action="#{weblogEntriesBean.entriesViewAction}"/>
     </f:metadata>
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
@@ -16,13 +16,17 @@
         <div class="panel-body">
             <p>#{labels.res.getString("weblogEntryQuery.tip")}</p>
             <div class="row">
-                <div class="col-lg-6">
-
-                </div>
-                <div class="col-lg-6">
-
+                <div class="text-center" style="margin: 0 auto" id="top-paginatorContainer">
+                    <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">
+                        <ui:param name="page" value="#{weblogEntriesBean.pageNum}"/>
+                        <ui:param name="paginator" value="#{weblogEntriesBean.paginator}"/>
+                        <ui:param name="outcome" value="#{request.contextPath}#{reelerUiBean.path}/entries.xhtml"/>
+                        <ui:param name="hrefStyle" value="queryString"/>
+                        <ui:param name="position" value="top"/>
+                    </ui:include>
                 </div>
             </div>
+            <hr/>
             <div class="row">
                 <div class="col-lg-12">                    
                     <h:form styleClass="form">
@@ -37,7 +41,8 @@
                             <h:dataTable value="#{weblog.weblogEntries}" 
                                          var="entry" 
                                          rules="all" 
-                                         styleClass="table table-bordered table-striped table-hover table-responsive">
+                                         styleClass="table table-bordered table-striped table-hover"
+                                         >
 
                                 <h:column >
                                     <f:facet name="header">

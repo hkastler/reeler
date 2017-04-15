@@ -44,16 +44,17 @@
                     by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
                     <!-- Date/Time -->                    
                     <p>
-                        Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
-                                    <f:convertDateTime
-                                        dateStyle="default"/>
-                                    </h:outputText>
+                        Posted on 
+                        <h:outputText value="#{weblogEntry.pubTime.time}" >                            
+                            <f:convertDateTime dateStyle="default"
+                                               type="both"/>
+                        </h:outputText>
                     </p>
                     <!-- Post Content -->
                     <h:outputText value="#{weblogEntry.text}" escape="false" />
                     <hr/>
                 </ui:repeat>
-                
+
                 <div class="row">
                     <div class="text-center" style="margin: 0 auto" id="bottom-paginatorContainer">
                         <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">

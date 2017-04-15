@@ -17,7 +17,8 @@
     <ui:define name="content">
         <div class="panel panel-primary">
             <div class="panel-heading panel-title">
-                <i class="fa fa-user" aria-hidden="true"></i> Welcome to Reeler Admin, #{reelerUiBean.user.fullName}                
+                <i class="fa fa-user" aria-hidden="true"></i> 
+                Welcome to Reeler Admin, #{reelerUiBean.user.fullName}                
             </div>
 
             <div class="panel-body">
@@ -40,7 +41,7 @@
                                     <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'entry')}"
                                                            jsfc="h:commandLink"><f:param name="action" value="create"/>New Entry</a></form><br/>
                                     <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'entries')}"
-                                                           jsfc="h:commandLink">Entries(#{blog.weblogEntries.size()})</a></form><br/>
+                                                           jsfc="h:commandLink">Entries()</a></form><br/>
                                     <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'comments')}"
                                                            jsfc="h:commandLink">Comments()</a></form><br/>
                                     <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'config')}"

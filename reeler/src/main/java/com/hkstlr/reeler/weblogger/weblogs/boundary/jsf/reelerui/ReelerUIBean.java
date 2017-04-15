@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui;
 
+import com.hkstlr.reeler.app.control.Paginator;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
@@ -25,6 +26,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
@@ -54,15 +56,14 @@ public class ReelerUIBean implements Serializable {
 
      private final String pageHome = "/weblogger/reeler-ui";
     
-    private final String path = pageHome + "/weblog";   
-   
-
+    private final String path = pageHome + "/weblog";
+    
     private Weblog currentWeblog = new Weblog();
 
     public ReelerUIBean() {
         setUserFromSession();
         //setUserWeblogs();
-        log.fine("reelerUiBean user:" + this.user.getUserName());
+        //log.fine("reelerUiBean user:" + this.user.getUserName());
 
     }
 
@@ -74,8 +75,8 @@ public class ReelerUIBean implements Serializable {
         pages.put("comments", "Comments");
         pages.put("categories", "Categories");
         pages.put("blogrolls", "Blogrolls");
-        pages.put("mediafiles", "Media Files");       
-    }
+        pages.put("mediafiles", "Media Files");
+     }
 
     /**
      * Get the value of user
@@ -99,7 +100,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserWeblogs(User user) {
-        log.info("setting user weblogs");
+        //log.info("setting user weblogs");
         List<Weblog> ublogs = null;
         List<Weblog> finalUblogs = new ArrayList<>();
         try {
@@ -112,12 +113,10 @@ public class ReelerUIBean implements Serializable {
             ublogs = new ArrayList<>();
         }
         for (Weblog blog : ublogs) {
-            log.info("weblog:" + blog.getHandle() + " has " + blog.getWeblogEntries().size() + " entries");
-            //blog.getBookmarkFolders().forEach(f -> f.getBookmarks());
             // Sorting
-            Collections.sort(blog.getWeblogEntries(), 
-                    (WeblogEntry we2, WeblogEntry we1) -> we1.getUpdateTime().compareTo(we2.getUpdateTime())
-            );
+            /*Collections.sort(blog.getWeblogEntries(),
+            (WeblogEntry we2, WeblogEntry we1) -> we1.getUpdateTime().compareTo(we2.getUpdateTime())
+            );*/
             finalUblogs.add(blog);
             //refresh the current weblog
             if(currentWeblog != null){
@@ -147,7 +146,7 @@ public class ReelerUIBean implements Serializable {
             List<WeblogPermission> perms;
             try {
                 perms = weblogger.getWeblogPermissionManager().getWeblogPermissions(blog);
-                log.info("perms for blog:" + blog.getHandle() + ":" + perms.size());
+                //log.info("perms for blog:" + blog.getHandle() + ":" + perms.size());
 
                 for (WeblogPermission perm : perms) {
                     permString.append(perm.getActions());
@@ -177,7 +176,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserFromSession() {
-        log.info("setting user from session");
+        //log.info("setting user from session");
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
         user.getPermissions().forEach((t) -> {
             log.info(t.toString());
@@ -207,9 +206,6 @@ public class ReelerUIBean implements Serializable {
     public String getPageHome() {
         return pageHome;
     }
-
-    
-    
 
     public void action(Weblog weblog, String page) throws WebloggerException {
         log.info("setting weblog and redirecting...");
@@ -253,14 +249,7 @@ public class ReelerUIBean implements Serializable {
             Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    public void entriesViewAction(){
-        setUserWeblogs();
-        try {
-            setWeblogPermissions();
-        } catch (Exception ex) {
-            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+    
     public void blogrollsViewAction(){
         setUserWeblogs();
         try {

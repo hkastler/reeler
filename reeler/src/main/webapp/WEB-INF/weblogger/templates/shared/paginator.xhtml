@@ -15,7 +15,22 @@
         
     <c:if test="#{outcome == null}">
         <c:set var="outcome" value="#{weblogBean.defaultOutcome}"/>
-    </c:if>  
+    </c:if>
+    
+    <c:if test="#{hrefStyle == null}">
+        <c:set var="hrefStyle" value="rewrite"/>
+    </c:if>
+    
+    <c:choose>
+        <c:when test="#{hrefStyle == 'queryString'}">
+            <c:set var="pageStr" value="?page="/>
+            <c:set var="pageSizeStr" value="&amp;pageSize="/>
+        </c:when>
+        <c:otherwise>
+            <c:set var="pageStr" value="/page/"/>
+            <c:set var="pageSizeStr" value="/pageSize/"/>
+        </c:otherwise>
+    </c:choose>
     
     <c:set var="categoryId" value=""/>
     <f:view>        
@@ -26,7 +41,7 @@
                <li jsf:class="previous #{paginator.hasPreviousPage() ? '': 'hidden' } page-item" >
                     <a 
                        id="navBack-Arrow_#{position}" 
-                       href="#{outcome}/page/#{paginator.page-1}/pageSize/#{paginator.pageSize}" 
+                       href="#{outcome}#{pageStr}#{paginator.page-1}#{pageStr}#{paginator.pageSize}" 
                        class="page-link"
                        data-disabled="#{paginator.hasPreviousPage() eq false}"
                        fragment="#{fragment}"
@@ -41,7 +56,7 @@
                 <li jsf:class="previous #{paginator.hasPreviousPage? '':'hidden'} page-item"  >
                         <a 
                            id="navBack-Text_#{position}" 
-                           href="#{outcome}/page/#{paginator.page-1}/pageSize/#{paginator.pageSize}" 
+                           href="#{outcome}#{pageStr}#{paginator.page-1}#{pageSizeStr}#{paginator.pageSize}" 
                            class="page-link"
                            data-disabled="#{paginator.hasPreviousPage() eq false}"
                            fragment="#{fragment}"
@@ -68,7 +83,7 @@
             
             <ui:fragment rendered="#{showLinkedLi}">
             <li class="#{paginator.page eq i ? 'active': ''} hidden-xs page-item" id="paginatorPage#{i}">
-               <a href="#{outcome}/page/#{i}/pageSize/#{paginator.pageSize}"
+               <a href="#{outcome}#{pageStr}#{i}#{pageSizeStr}#{paginator.pageSize}"
                   class="page-link"
                   fragment="#{fragment}"
                   data-page="#{i}"
@@ -92,7 +107,7 @@
             </ui:fragment>
         </c:forEach>
 
-            <c:set var="nextLink" value="#{outcome}/page/#{paginator.page+1}/pageSize/#{paginator.pageSize}"/>
+            <c:set var="nextLink" value="#{outcome}#{pageStr}#{paginator.page+1}#{pageSizeStr}#{paginator.pageSize}"/>
             
             <c:if test="#{paginator.hasNextPage() eq false}">
                 <c:set var="nextLink" value="javascript:void(0);"/>

@@ -53,8 +53,6 @@ public class SelectItemBean {
     
     @PostConstruct
     private void init(){
-        log.fine("SelItemBean init");        
-        
         monthItems = getMonthSelectItems();
         yearItems = getYearSelectItems();
         hourItems = getHourSelectItems();
@@ -145,7 +143,7 @@ public class SelectItemBean {
     private SelectItem[] getYearSelectItems() {
         int currentYear;
         currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        log.log(Level.INFO, "Year:{0}", currentYear);
+        //log.log(Level.INFO, "Year:{0}", currentYear);
         int yearsToAppear = 10;
         SelectItem[] items = new SelectItem[yearsToAppear];
         int counter = 0;
@@ -266,7 +264,7 @@ public class SelectItemBean {
                 ftLocale.add(new SelectItem(locale.toString(),locale.getDisplayCountry()) );
             }
        }              
-       log.log(Level.INFO, "ftLocale size:{0}", ftLocale.size());        
+       //log.log(Level.INFO, "ftLocale size:{0}", ftLocale.size());        
        
         Comparator<SelectItem> localeNameSort = new Comparator<SelectItem>() {
             @Override
@@ -288,7 +286,7 @@ public class SelectItemBean {
        for (String tz : timeZones) { 
            ftZones.add(new SelectItem(tz,tz) );
        }              
-       log.log(Level.INFO, "ftZones size:{0}", ftZones.size());        
+       //log.log(Level.INFO, "ftZones size:{0}", ftZones.size());        
        
         Comparator<SelectItem> timeZoneNameSort = new Comparator<SelectItem>() {
             @Override

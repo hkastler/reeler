@@ -19,7 +19,10 @@
         </ui:define>
         
         <ui:define name="content">
-            <f:view>                
+            <f:view>
+                <f:metadata>        
+                    <f:viewAction action="#{weblogEntryCommentBean.commentsViewAction}"/>
+                </f:metadata>
                 <ui:include src="commentsContent.xhtml"/>                
             </f:view>
         </ui:define>

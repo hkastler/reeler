@@ -5,15 +5,15 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
+import com.hkstlr.reeler.app.control.PageBean;
+import com.hkstlr.reeler.app.control.Paginator;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentVisitor;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -28,7 +28,7 @@ import javax.inject.Inject;
  */
 @ManagedBean
 @RequestScoped
-public class WeblogEntryCommentBean {
+public class WeblogEntryCommentBean extends PageBean {
 
     @EJB
     Weblogger weblogger;
@@ -46,18 +46,30 @@ public class WeblogEntryCommentBean {
 
     @PostConstruct
     public void init() {
-        log.info("getting comments for Weblog:" + weblog.getName());
+        //log.info("getting comments for Weblog:" + weblog.getName());
+        //TODO: needs a count query
+        //TODO: filter functionality
         List<WeblogEntryComment.ApprovalStatus> statuses = new ArrayList<>();
         statuses.add(WeblogEntryComment.ApprovalStatus.SPAM);
         statuses.add(WeblogEntryComment.ApprovalStatus.APPROVED);
         statuses.add(WeblogEntryComment.ApprovalStatus.PENDING);
         List<WeblogEntryComment> weblogEntryComments = weblogger.getWeblogEntryCommentManager()
-                .getCommentsForWeblog(weblog, statuses);
+                .getCommentsForWeblog(weblog,statuses,null);
+        if(pageSize == null){
+            pageSize = weblog.getEntryDisplayCount();
+        }        
+        paginator = new Paginator(weblog.getEntryDisplayCount(),
+                                  this.getPageNum(),
+                                  weblogEntryComments.size());
+        int[] range = new int[2];
+        range[0] = getPaginator().getPageFirstItem()-1;
+        range[1] = getPaginator().getPageLastItem()-1;
+        weblogEntryComments = weblogger.getWeblogEntryCommentManager()
+                .getCommentsForWeblog(weblog,statuses,range);
         for (WeblogEntryComment wec : weblogEntryComments) {
             WeblogEntryCommentVisitor wecv = new WeblogEntryCommentVisitor(wec.getSpam(), wec.getApproved(), wec);
             weblogEntryCommentVisitors.add(wecv);
         }
-
     }
 
     public List<WeblogEntryCommentVisitor> getWeblogEntryCommentVisitors() {
@@ -92,6 +104,10 @@ public class WeblogEntryCommentBean {
         }
         weblogger.getWeblogEntryCommentManager().save(visitedComment.getWeblogEntryComment());
         
+    }
+    
+    public void commentsViewAction(){
+       //needs to be in init for ajax to work
     }
 
 }
