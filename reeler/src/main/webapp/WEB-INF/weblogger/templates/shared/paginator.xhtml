@@ -36,12 +36,12 @@
     <f:view>        
     <input type="hidden" id="numberOfPages" value="#{paginator.numberOfPages}"/>
     <ul class="pagination text-center" id="paginator-#{position}">
-            
+        <c:set var="previousLink" value="#{outcome}#{pageStr}#{paginator.page-1}#{pageSizeStr}#{paginator.pageSize}"/>
             <ui:fragment rendered="#{paginator.numberOfPages gt 1}" >
-               <li jsf:class="previous #{paginator.hasPreviousPage() ? '': 'hidden' } page-item" >
+               <li class="previous #{paginator.hasPreviousPage() ? '': 'disabled' } page-item" >
                     <a 
                        id="navBack-Arrow_#{position}" 
-                       href="#{outcome}#{pageStr}#{paginator.page-1}#{pageStr}#{paginator.pageSize}" 
+                       href="#{paginator.hasPreviousPage() ? previousLink : ''}" 
                        class="page-link"
                        data-disabled="#{paginator.hasPreviousPage() eq false}"
                        fragment="#{fragment}"
@@ -53,10 +53,10 @@
                     </a>   
                 </li>
 
-                <li jsf:class="previous #{paginator.hasPreviousPage? '':'hidden'} page-item"  >
+                <li class="previous #{paginator.hasPreviousPage() ? '' : 'disabled'} page-item"  >
                         <a 
                            id="navBack-Text_#{position}" 
-                           href="#{outcome}#{pageStr}#{paginator.page-1}#{pageSizeStr}#{paginator.pageSize}" 
+                           href="#{paginator.hasPreviousPage() ? previousLink : ''}" 
                            class="page-link"
                            data-disabled="#{paginator.hasPreviousPage() eq false}"
                            fragment="#{fragment}"
@@ -110,10 +110,10 @@
             <c:set var="nextLink" value="#{outcome}#{pageStr}#{paginator.page+1}#{pageSizeStr}#{paginator.pageSize}"/>
             
             <c:if test="#{paginator.hasNextPage() eq false}">
-                <c:set var="nextLink" value="javascript:void(0);"/>
+                <c:set var="nextLink" value=""/>
             </c:if>
             <ui:fragment rendered="#{paginator.numberOfPages gt 1}">
-                <li class="next page-item">
+                <li class="next #{paginator.hasNextPage() ? '': 'disabled' } page-item">
                     <a  
                        id="navForward-Text_#{position}" 
                        href="#{nextLink}" 
@@ -128,7 +128,7 @@
                     </a>                                            
                 </li>
 
-                <li class="next page-item">
+                <li class="next #{paginator.hasNextPage() ? '': 'disabled' } page-item">
                     <a  
                        id="navForward-Arrow_#{position}" 
                        href="#{nextLink}" 
