@@ -89,18 +89,18 @@ public class LoginBean implements Serializable {
     public void validateUser() throws WebloggerException {
         FacesContext context = FacesContext.getCurrentInstance();
         User user = getUser();
-        boolean isPasswordOK = true;
+       
 
         String hashPwd = password;
         
         try {
             hashPwd = PasswordDigester.getDigestedPassword(password);
         } catch (Exception ex) {
-            isPasswordOK = false;
+            
             log.log(Level.SEVERE, null, ex);
         }
 
-        if (user != null && user.getPassword().equals(hashPwd)) {
+        if ((user != null && user.getPassword().equals(hashPwd))) {
             context.getExternalContext().getSessionMap().put(USER_SESSION_KEY, user);
 
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
@@ -134,18 +134,18 @@ public class LoginBean implements Serializable {
 
         } else {
             FacesMessage message;
-            if (!isPasswordOK) {
+            if (user != null) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Login Failed!",
                         "Username '"
-                        + username
-                        + "' does not exist.");
+                                + username
+                                + "' supplied wrong password.");
             } else {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Login Failed!",
                         "Username '"
-                        + username
-                        + "' supplied wrong password.");
+                                + username
+                                + "' does not exist.");
             }
             context.addMessage(null, message);
             
