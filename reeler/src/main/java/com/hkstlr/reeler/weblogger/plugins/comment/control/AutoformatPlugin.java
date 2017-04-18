@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import java.util.logging.Logger;
 
 
 /**
@@ -29,6 +30,10 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
  * paragraph formatting using <p> and <br/> tags.
  */
 public class AutoformatPlugin extends WeblogEntryCommentPlugin {
+
+    private static final Logger LOG = Logger.getLogger(AutoformatPlugin.class.getName());
+    
+    
     
     public AutoformatPlugin() {
         // no-op
@@ -55,7 +60,7 @@ public class AutoformatPlugin extends WeblogEntryCommentPlugin {
     
     public String render(final WeblogEntryComment comment, String text) {
         
-        //LOG.debug("starting value:\n" + text);
+        LOG.fine("starting value:\n" + text);
         
         /* 
          * setup a buffered reader and iterate through each line
@@ -94,10 +99,10 @@ public class AutoformatPlugin extends WeblogEntryCommentPlugin {
             }
             
         } catch(Exception e) {
-            //LOG.warn("trouble rendering text.", e);
+            LOG.warning("trouble rendering text." + e.getLocalizedMessage());
         }
         
-        //LOG.debug("ending value:\n" + buf.toString());
+        LOG.finer("ending value:\n" + buf.toString());
         
         return buf.toString();
     }
