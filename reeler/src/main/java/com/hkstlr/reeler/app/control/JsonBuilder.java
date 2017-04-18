@@ -88,7 +88,7 @@ public class JsonBuilder {
                         log.info("list here");
                         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                         for(Object item :(List) fieldValue){
-                            //log.info("item:" + item.toString());
+                           
                             arrayBuilder.add(item.toString());
                             //arrayBuilder.add(Json.createObjectBuilder().add(fieldName, item.toString()));
                         }
@@ -148,15 +148,15 @@ public class JsonBuilder {
                     .toArray(Field[]::new);
         }
         for (Field field : fields) {
-            //log.info("field:" + field.getName());
+            
             Annotation[] annotations = field.getAnnotations();
             for (Annotation ann : annotations) {
                 ann.annotationType().getName();
 
                 if (ann.annotationType().getName().equals("javax.persistence.ManyToOne")) {
-                    //log.info("annotation:" + ann.annotationType().getName());
+                    
                     for (Method method : ann.annotationType().getDeclaredMethods()) {
-                        //log.info("method:" + method.getName());
+                        
                         if (method.equals("mappedBy")) {
                             fields = Arrays.stream(fields)
                                     .filter(f -> !f.equals(field)).toArray(Field[]::new);
@@ -223,14 +223,14 @@ public class JsonBuilder {
     public Field[] filterInverses(Field[] fieldsToFilter) {
 
         for (Field field : fieldsToFilter) {
-            //log.info("field:" + field.getName());
+            
             Annotation[] annotations = field.getAnnotations();
             for (Annotation ann : annotations) {
                 ann.annotationType().getName();
                 if (ann.annotationType().getName().equals("javax.persistence.ManyToOne")) {
-                    //log.info("annotation:" + ann.annotationType().getName());
+                    
                     for (Method method : ann.annotationType().getDeclaredMethods()) {
-                        //log.info("method:" + method.getName());
+                        
                         if (method.equals("mappedBy")) {
                             fieldsToFilter = Arrays.stream(fieldsToFilter)
                                     .filter(f -> !f.equals(field)).toArray(Field[]::new);

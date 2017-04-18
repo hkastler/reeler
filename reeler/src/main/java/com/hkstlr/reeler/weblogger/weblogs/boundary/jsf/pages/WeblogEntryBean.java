@@ -86,7 +86,7 @@ public class WeblogEntryBean {
             allowCommentsCal.add(Calendar.DAY_OF_YEAR,-weblogEntry.getCommentDays());
             
             long daysBetween = ChronoUnit.DAYS.between(allowCommentsCal.toInstant(), todayCal.toInstant());
-            //log.info("daysBetween:" + daysBetween);
+            
             
             this.showCommentForm = this.showComments && (weblogEntry.getCommentDays() == 0 
                                                             || daysBetween < weblogEntry.getCommentDays());
@@ -175,13 +175,13 @@ public class WeblogEntryBean {
         if(!moderated){
              this.weblogEntryComment.setStatus(WeblogEntryComment.ApprovalStatus.APPROVED);
         }
-        //this.comments = this.weblogEntryComment.getWeblogEntry().getComments();
+        
         weblogger.getWeblogEntryCommentManager().saveAndLoadComments(this.weblogEntryComment);
         
         this.commentIsPosted = true;
-        //log.log(Level.FINE, "comment posted, commentIsPosted: " + this.isCommentIsPosted());
+        
         this.comments = getComments(this.weblogEntry);
-        //log.log(Level.FINE, "numberOfComments:" + this.weblogEntry.getComments().size());
+        
         if(!moderated){
             FacesMessageManager.addSuccessMessage("commentMessage", "Comment Posted");
         }else{

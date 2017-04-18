@@ -107,9 +107,9 @@ public class WeblogAuthorBean implements Serializable {
         log.info("updating weblog");
         log.info("weblog:" + weblog.getTagline());
         weblogger.getWeblogManager().saveWeblog(weblog);
-        //log.info("weblog:" + this.weblog.getAbout());
+        
         FacesMessageManager.addSuccessMessage("editWeblog", "Weblog Updated");
-        //return "/weblogger/reeler-ui/weblog/settings/config.xhtml?faces-redirect=true";
+        
     }
     
     public void configViewAction(){

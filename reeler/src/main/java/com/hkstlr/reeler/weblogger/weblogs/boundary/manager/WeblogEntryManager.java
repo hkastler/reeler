@@ -104,7 +104,6 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
         }
 
-        //log.info("weblog: " + weblog.getHandle());
 
         Query query = em.createNamedQuery("WeblogEntry.findByWebsiteAndAnchor");
         query.setParameter("website", weblog);

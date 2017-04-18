@@ -15,6 +15,7 @@ import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
+import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 
@@ -41,19 +42,23 @@ public class LoginBean implements Serializable {
 
     public static final String USER_SESSION_KEY = "user";
 
-    @Inject
-    private UserManager userManager;
+    @EJB
+    private UserManager userManager;    
     
-    @Inject
     private URLStrategy urlStrategy;
+    
+    private static final Logger log = Logger.getLogger(LoginBean.class.getName());
 
-    @Inject
-    private transient Logger log;
 
     /**
      * Creates a new instance of LoginBean
+     * @param userManager
+     * @param urlStrategy
      */
-    public LoginBean() {
+    
+    @Inject 
+    public LoginBean(URLStrategy urlStrategy) {
+        this.urlStrategy = urlStrategy;
     }
 
     public String getUsername() {
@@ -88,7 +93,7 @@ public class LoginBean implements Serializable {
         boolean isPasswordOK = false;
 
         String hashPwd = password;
-        //log.log(Level.INFO, "password is:" + hashPwd);
+        
         try {
             hashPwd = PasswordDigester.getDigestedPassword(password);
         } catch (Exception ex) {
@@ -98,20 +103,16 @@ public class LoginBean implements Serializable {
         if (user != null && user.getPassword().equals(hashPwd)) {
             context.getExternalContext().getSessionMap().put(USER_SESSION_KEY, user);
 
-            //log.info("user now authenticated");
-            //log.info(user.toString());
-
-            //FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
             Principal userPrincipal = request.getUserPrincipal();
             if (request.getUserPrincipal() != null) {
                 request.logout();
             }
             String outcome = "/weblogger/login/index";
-            //log.log(Level.INFO, "login password:{0}", password);
+            
             try {
                 request.login(this.username, this.password);
-                //log.info("user authenticated at request level");
+                
                 outcome = urlStrategy.getLoginSuccessOutcome(user); // Do your thing?
             } catch (ServletException e) {
                 log.log(Level.SEVERE,"user not realm authenticated:",e);
@@ -119,7 +120,7 @@ public class LoginBean implements Serializable {
                 //return "common/error";
             }
 
-            //log.log(Level.INFO, "roles:{0}", Arrays.toString(user.getJdbcrealmGroups().toArray()));
+            
             log.log(Level.INFO, "user?{0}", request.isUserInRole("user"));
             log.log(Level.INFO, "admin?{0}", request.isUserInRole("admin"));
 
@@ -143,7 +144,7 @@ public class LoginBean implements Serializable {
                         + "' supplied wrong password.");
             }
             context.addMessage(null, message);
-            //return null;
+            
         }
     }
 
@@ -154,7 +155,7 @@ public class LoginBean implements Serializable {
             Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toJsonString());
             return userToGet;
         } catch (NoResultException nre) {
-            //return null;
+            
         } catch (WebloggerException ex) {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NullPointerException npe){
@@ -175,8 +176,7 @@ public class LoginBean implements Serializable {
         if (session != null) {
             session.invalidate();
         }
-
-        //HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+        
         return "/index?faces-redirect=true";
 
     }

@@ -136,7 +136,7 @@ public class PluginManager {
      * instantiated by PageHelper.
      */
     private void loadPagePluginClasses() {
-        //log.fine("Initializing page plugins");
+        
 
         String pluginStr = WebloggerConfig.getProperty("plugins.page");
         log.info("pluginStr:" + pluginStr);

@@ -92,16 +92,14 @@ public abstract class AbstractManager<T> {
 
     public T findById(String id) {
         String className = entityClass.getSimpleName();
-        //log.log(Level.INFO, "className:" + className);
-        //log.log(Level.INFO, "id:" + id);
+        
         String queryName = className.concat(".findById");
-        // log.log(Level.INFO, "queryName:" + queryName);
+        
         Query query = getEntityManager().createNamedQuery(queryName);
         query.setParameter("id", id);
         T record = null;
         try {
             record = (T) query.getSingleResult();
-            //log.log(Level.INFO, "object:" + className + " found for " + id);
 
         } catch (Exception e) {
             log.log(Level.WARNING, className + ".findById:" + id + e.toString());
@@ -112,10 +110,10 @@ public abstract class AbstractManager<T> {
 
     public T findByField(String fieldName, Object fieldValue) {
         String className = entityClass.getSimpleName();
-        //log.log(Level.INFO, "className:" + className);
+        
         String queryNameSuffix = StringChanger.toTitleCase(fieldName);
         String queryName = className.concat(".findBy").concat(queryNameSuffix);
-        //log.log(Level.INFO, queryName + ":" + fieldValue.toString());
+        
         Query query = getEntityManager().createNamedQuery(queryName);
         query.setParameter(fieldName, fieldValue);
         T record = null;
@@ -140,7 +138,7 @@ public abstract class AbstractManager<T> {
         Root<T> t = cq.from(entityClass);
         cq.select(t);
         cq.orderBy(cb.asc(t.get("pubTime")));
-        //cq.orderBy(entityClass.)
+        
         Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);

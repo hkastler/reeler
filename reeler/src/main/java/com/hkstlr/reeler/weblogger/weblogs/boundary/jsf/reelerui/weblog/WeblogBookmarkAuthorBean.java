@@ -35,8 +35,7 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
     
     @PostConstruct
     private void init(){
-        //log.info("getting categories for Weblog:" + weblog.getName());
-        //this.weblogCategories = weblogger.getWeblogCategoryManager().getWeblogCategoriesForWeblog(weblog);
+        
         setActionLabel();
         if(this.id != null && !this.id.isEmpty()){
             this.weblogBookmark = weblogger.getWeblogBookmarkManager().findById(id);

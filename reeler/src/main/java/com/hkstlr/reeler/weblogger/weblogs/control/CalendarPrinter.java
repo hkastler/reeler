@@ -124,13 +124,13 @@ public class CalendarPrinter {
         calendar.setTime(incomingDate);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         dayOfWeek = getDayOfWeek();
-        //log.fine("dates:" + dates.toString());
+        
         List<Integer> days = new ArrayList<>();
 
         for (Calendar calDate : dates) {
             Date theDate = calDate.getTime();
             String day = DateFormatter.dayFormat.format(theDate);
-            //log.fine("dayFormat:" + day);
+            
             days.add(Integer.parseInt(day));
         }
 
