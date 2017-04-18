@@ -99,7 +99,7 @@ import javax.persistence.UniqueConstraint;
 public class WeblogEntry extends AbstractEntity implements Serializable {
     
     @Transient
-    private Logger log = Logger.getLogger(WeblogEntry.class.getName());
+    private transient Logger log = Logger.getLogger(WeblogEntry.class.getName());
 
     public enum PubStatus {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
@@ -229,27 +229,32 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     private Boolean   refreshAggregates = Boolean.FALSE;
 
     public WeblogEntry() {
-       
+       //entity constructor
     }
 
 
-    public WeblogEntry(String anchor, String creator, String title, String text, Calendar updatetime, boolean publishentry, boolean allowcomments, int commentdays, boolean righttoleft, boolean pinnedtomain, String status) {
+    public WeblogEntry(String anchor, String creator, String title, String text, boolean publishentry, String status) {
         
         this.anchor = anchor;
         this.creatorUserName = creator;
         this.title = title;
         this.text = text;
-        this.updateTime = updatetime;
         this.publishEntry = publishentry;
-        this.allowComments = allowcomments;
-        this.commentDays = commentdays;
-        this.rightToLeft = righttoleft;
-        this.pinnedToMain = pinnedtomain;
         this.status = status;
     }
 
     public WeblogEntry(WeblogEntry entry) {
-        // TODO Auto-generated constructor stub
+        this.anchor = entry.getAnchor();
+        this.creatorUserName = entry.getCreatorUserName();
+        this.title = entry.getTitle();
+        this.text = entry.getText();
+        this.updateTime = entry.getUpdateTime();
+        this.publishEntry = entry.publishEntry;
+        this.allowComments = entry.allowComments;
+        this.commentDays = entry.commentDays;
+        this.rightToLeft = entry.rightToLeft;
+        this.pinnedToMain = entry.pinnedToMain;
+        this.status = status;
     }
     
     public WeblogEntry(Weblog weblog) {
@@ -263,11 +268,6 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.locale = weblog.getLocale();
     }
     
-    @PostConstruct
-    private void init(){
-        
-    }
-
     public Weblog getWebsite() {
         return website;
     }
@@ -398,7 +398,6 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         if(getLocale() == null){
             this.setLocale(Locale.getDefault().toString());
         }
-        System.out.println("Locale:" + getLocale());
         return LocaleFixer.toLocale(getLocale());
     }
 

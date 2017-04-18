@@ -5,8 +5,6 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
-import com.hkstlr.reeler.app.control.JsonBuilder;
-import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFileDirectory;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners.WeblogEntityListener;
@@ -42,7 +40,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Logger;
-import javax.json.JsonObject;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
@@ -95,7 +92,7 @@ import javax.validation.constraints.Pattern;
     , @NamedQuery(name = "Weblog.getCountByHandleLike", query = "SELECT COUNT(w) FROM Weblog w WHERE UPPER(w.handle) like ?1")})
 public class Weblog extends AbstractEntity implements Serializable {
 
-    private static final Logger log = Logger.getLogger(Weblog.class.getName());
+    private transient static final Logger log = Logger.getLogger(Weblog.class.getName());
     
     @Basic(optional = false)
     @NotNull
@@ -256,28 +253,17 @@ public class Weblog extends AbstractEntity implements Serializable {
     private List<AutoPing> autopings;
     
     @Transient
-    private Map<String, WeblogEntryPlugin> initializedPlugins = null;
+    private transient Map<String, WeblogEntryPlugin> initializedPlugins = null;
     
     public Weblog() {
+        //need an empty constructor for entity
     }
 
-    public Weblog(String name, String handle, boolean enablebloggerapi, boolean allowcomments, boolean emailcomments, String emailaddress, boolean visible, boolean isactive, Date datecreated, boolean defaultallowcomments, int defaultcommentdays, boolean commentmod, int displaycnt, boolean enablemultilang, boolean showalllangs) {
+    public Weblog(String name, String handle) {
         
         this.name = name;
         this.handle = handle;
-        this.enableBloggerApi = enablebloggerapi;
-        this.allowComments = allowcomments;
-        this.emailComments = emailcomments;
-        this.emailAddress = emailaddress;
-        this.visible = visible;
-        this.isActive = isactive;
-        this.dateCreated = datecreated;
-        this.defaultAllowComments = defaultallowcomments;
-        this.defaultCommentDays = defaultcommentdays;
-        this.moderateComments = commentmod;
-        this.entryDisplayCount = displaycnt;
-        this.enableMultiLang = enablemultilang;
-        this.showAllLangs = showalllangs;
+        
     }
 
     public String getName() {
@@ -594,8 +580,7 @@ public class Weblog extends AbstractEntity implements Serializable {
      * @return Calendar
      */
     public Calendar getCalendarInstance() {
-        Calendar calendar = Calendar.getInstance(getTimeZoneInstance(), getLocaleInstance());
-        return calendar;
+        return Calendar.getInstance(getTimeZoneInstance(), getLocaleInstance());
     }
     
     
@@ -609,12 +594,12 @@ public class Weblog extends AbstractEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        //Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Weblog)) {
             return false;
         }
         Weblog other = (Weblog) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;

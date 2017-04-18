@@ -15,13 +15,12 @@
  */
 package com.hkstlr.reeler.app.boundary.manager;
 
+import com.hkstlr.reeler.app.control.StringPool;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.FlushModeType;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -29,7 +28,6 @@ import javax.persistence.criteria.CriteriaQuery;
 
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import java.util.Collection;
-import javax.ejb.Stateless;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Root;
 
@@ -102,7 +100,7 @@ public abstract class AbstractManager<T> {
             record = (T) query.getSingleResult();
 
         } catch (Exception e) {
-            log.log(Level.WARNING, className + ".findById:" + id + e.toString());
+            log.log(Level.WARNING, className + ".findById:" + id , e);
 
         }
         return record;
@@ -120,7 +118,8 @@ public abstract class AbstractManager<T> {
         try {
             record = (T) query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.INFO, queryName + ":" + e.toString());
+            
+            log.log(Level.INFO, queryName+StringPool.COLON , e);
 
         }
         return record;
@@ -154,17 +153,14 @@ public abstract class AbstractManager<T> {
     }
 
     public <T> TypedQuery<T> getNamedQuery(String queryName) {
-        TypedQuery<T> q = (TypedQuery<T>) getEntityManager().createNamedQuery(queryName, this.entityClass);
-        return q;
+        return (TypedQuery<T>) getEntityManager().createNamedQuery(queryName, this.entityClass);
+         
     }
 
     //from roller
     public <T> TypedQuery<T> getNamedQuery(String queryName, Class<T> resultClass) {
-        TypedQuery<T> q = getEntityManager().createNamedQuery(queryName, resultClass);
-        // For performance, never flush/commit prior to running queries.
-        // Roller code assumes this behavior
-
-        return q;
+        return getEntityManager().createNamedQuery(queryName, resultClass);
+        
     }
 
     /**
