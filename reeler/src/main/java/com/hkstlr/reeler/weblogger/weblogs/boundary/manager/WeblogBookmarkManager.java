@@ -45,7 +45,7 @@ public class WeblogBookmarkManager extends AbstractManager<WeblogBookmark> {
         Query query = getEntityManager().createQuery(qlString);
         query.setParameter(1, weblog);
         List<WeblogBookmark> results = query.getResultList();
-        //log.info("found " + results.size() + " bookmarks");
+        
         return results;
     }
 

@@ -73,7 +73,7 @@ public class WebloggerConfig {
 
                 Properties configLoad = new Properties();
                 configLoad.load(is);
-                //log.fine("configLoad:" + configLoad.toString());
+                
                 tempConfig.putAll(configLoad);
 
                 
@@ -86,8 +86,8 @@ public class WebloggerConfig {
                     customConfigLoad.load(is);
                     tempConfig.putAll(customConfigLoad);
                     log.info("Successfully loaded custom properties file from classpath");
-                    //log.fine("customPropFilePath : " + configClass.getResource(custom_config));
-                    //log.fine("customConfigLoad:" + customConfigLoad.toString());
+                    log.fine("customPropFilePath : " + configClass.getResource(custom_config));
+                    log.finest("customConfigLoad:" + customConfigLoad.toString());
                 } else {
                     log.severe("No custom properties file found in classpath");
                 }
@@ -101,17 +101,16 @@ public class WebloggerConfig {
                     if (custom_config_file != null && custom_config_file.exists()) {
                         is = new FileInputStream(custom_config_file);
                         config.load(is);
-                        //log.fine("Roller Weblogger: Successfully loaded custom properties from "
-                        //        + custom_config_file.getAbsolutePath());
+                        
                     } else {
-                        //log.fine("Roller Weblogger: Failed to load custom properties from "
-                        //        + custom_config_file.getAbsolutePath());
+                        log.fine("Failed to load custom properties from "
+                                + custom_config_file.getAbsolutePath());
                     }
 
                 }
                 //transfer to static storage            
                 this.config.putAll(tempConfig);
-                //log.fine("config:" + config.toString());
+                log.finest("config:" + config.toString());
                 // Now expand system properties for properties in the config.expandedProperties list,
                 // replacing them by their expanded values.
                 String expandedPropertiesDef = (String) config.get("config.expandedProperties");
@@ -131,14 +130,14 @@ public class WebloggerConfig {
                 //PropertyConfigurator.configure(WebloggerConfig.getPropertiesStartingWith("log4j."));
                 // finally we can start logging...
                 // some debugging for those that want it
-                if (log.isLoggable(Level.FINER)) {
-                    log.finer("WebloggerConfig looks like this ...");
+                if (log.isLoggable(Level.FINEST)) {
+                    log.finest("WebloggerConfig looks like this ...");
 
                     String key = null;
                     Enumeration keys = config.keys();
                     while (keys.hasMoreElements()) {
                         key = (String) keys.nextElement();
-                        log.finer(key + "=" + config.getProperty(key));
+                        log.finest(key + "=" + config.getProperty(key));
                     }
                 }
 
@@ -158,7 +157,7 @@ public class WebloggerConfig {
     public static String getProperty(String key) {
         log.info("Fetching property [" + key + "=" + config.getProperty(key) + "]");
         String value = config.getProperty(key);
-        //log.info("value: " + value);
+        
         //for system properties
         if (value.startsWith("$")) {
             String newValue = value;
@@ -181,7 +180,7 @@ public class WebloggerConfig {
      * @return String Value of property requested or defaultValue
      */
     public static String getProperty(String key, String defaultValue) {
-        //log.info("Fetching property ["+key+"="+config.getProperty(key)+",defaultValue="+defaultValue+"]");
+        log.finer("Fetching property ["+key+"="+config.getProperty(key)+",defaultValue="+defaultValue+"]");
         String value = config.getProperty(key);
         if (value == null) {
             return defaultValue;

@@ -46,9 +46,7 @@ public class WeblogEntryCommentBean extends PageBean {
 
     @PostConstruct
     public void init() {
-        //log.info("getting comments for Weblog:" + weblog.getName());
-        //TODO: needs a count query
-        //TODO: filter functionality
+        
         List<WeblogEntryComment.ApprovalStatus> statuses = new ArrayList<>();
         statuses.add(WeblogEntryComment.ApprovalStatus.SPAM);
         statuses.add(WeblogEntryComment.ApprovalStatus.APPROVED);

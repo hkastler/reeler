@@ -84,17 +84,16 @@ public class WeblogBean {
         try {
             this.weblog = getWeblogByHandle(handle);
             int numberOfEntries = getEntryCount(weblog);
-            //log.info("numberOfEntries:" + numberOfEntries + " for weblog " + weblog.getName());
+            
             if (pageSize == null) {
                 pageSize = weblog.getEntryDisplayCount();
-                //log.info("pageSize:" + pageSize);
+                
             }
             paginator = new Paginator(pageSize,pageNum,numberOfEntries);
-            //log.log(Level.WARNING,"hello from WeblogBean");
+            
             
         } catch (Exception e) {
-            // TODO Auto-generated catch block
-            //e.printStackTrace();
+          
         }
 
     }
@@ -266,8 +265,6 @@ public class WeblogBean {
         Calendar calendar = weblog.getCalendarInstance();
         calendar.set(year, month - 1, startDate, 0, 0, 0);
         this.date = new Date(calendar.getTimeInMillis());
-        //log.info("date:" + date);
-        //log.info("formatted:" + localeDateFormat().format(date));
         this.viewEntries = weblogger.getWeblogEntryManager()
                 .getWeblogEntriesByDateAndWeblog(dateToGet, weblog);
 

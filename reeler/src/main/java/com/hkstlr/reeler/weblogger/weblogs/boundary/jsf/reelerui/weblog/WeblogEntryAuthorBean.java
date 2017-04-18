@@ -99,7 +99,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             this.action = "edit";
             this.actionLabel = "Edit";
         } else {
-            //log.info("initing new WeblogEntryfor " + weblog.getName());
+            
             if(reelerUiBean.getUser()==null){
                 reelerUiBean.setUserFromSession();
             }

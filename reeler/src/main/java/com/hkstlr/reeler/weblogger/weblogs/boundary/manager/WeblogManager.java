@@ -66,6 +66,7 @@ import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
+import java.util.HashMap;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -81,7 +82,7 @@ import javax.transaction.Transactional;
 @Stateless
 public class WeblogManager extends AbstractManager<Weblog> {
 	// cached mapping of weblogHandles -> weblogIds
-    private Map<String,String> weblogHandleToIdMap = new Hashtable<String,String>();
+    private Map<String,String> weblogHandleToIdMap = new HashMap<>();
     
     private static final Comparator<StatCount> STAT_COUNT_COUNT_REVERSE_COMPARATOR =
             Collections.reverseOrder(StatCountCountComparator.getInstance());

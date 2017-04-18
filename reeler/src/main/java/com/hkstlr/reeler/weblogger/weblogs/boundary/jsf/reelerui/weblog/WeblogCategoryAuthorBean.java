@@ -32,8 +32,7 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
     
     @PostConstruct
     private void init(){
-        //log.info("getting categories for Weblog:" + weblog.getName());
-        //this.weblogCategories = weblogger.getWeblogCategoryManager().getWeblogCategoriesForWeblog(weblog);
+        
         log.info("action:" + this.action);
         setActionLabel();
         

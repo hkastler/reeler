@@ -96,10 +96,10 @@ public class CalendarPrinterBean {
     }
     
     public String calendarTable(String path, Weblog weblog) throws ParseException {        
-        //Date formattedDate = DateFormatter.dateFormat.parse(dateString);
+        
         Date incomingDate = new Date();
         if(dateString.length() == 8){
-           //log.info("dateString.eight:" + dateString);
+          
            incomingDate = DateFormatter.dateFormat.parse(dateString);
           
         }else if(dateString.length() == 6){
@@ -110,8 +110,7 @@ public class CalendarPrinterBean {
         }
         
         weblogDates = loadWeblogDates(dateString, weblog);
-        //log.info("dateString:" + dateString);
-        //log.info("handle:" + handle);
+        
         return calendarPrinter.calendarTable(weblogDates, incomingDate, path, handle);
     }
     

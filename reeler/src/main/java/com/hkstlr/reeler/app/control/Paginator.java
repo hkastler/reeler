@@ -94,7 +94,7 @@ public final class Paginator {
 
         int lastItemIndex = (firstPageItem - 1) + pageSize;
         int count = numberOfItems;
-        //log.log(Level.INFO,"count:{0}",Integer.toString(count));
+        
         if (lastItemIndex > count) {
             lastItemIndex = count;
         }
@@ -102,7 +102,7 @@ public final class Paginator {
             lastItemIndex = 0;
         }
 
-        //System.out.println(itemIndex);
+        
         return lastItemIndex;
     }
 

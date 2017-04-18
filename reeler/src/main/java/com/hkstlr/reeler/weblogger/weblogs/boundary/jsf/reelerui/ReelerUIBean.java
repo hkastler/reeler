@@ -61,10 +61,7 @@ public class ReelerUIBean implements Serializable {
     private Weblog currentWeblog = new Weblog();
 
     public ReelerUIBean() {
-        setUserFromSession();
-        //setUserWeblogs();
-        //log.fine("reelerUiBean user:" + this.user.getUserName());
-
+        setUserFromSession();     
     }
 
     @PostConstruct
@@ -100,7 +97,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserWeblogs(User user) {
-        //log.info("setting user weblogs");
+        
         List<Weblog> ublogs = null;
         List<Weblog> finalUblogs = new ArrayList<>();
         try {
@@ -130,9 +127,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserWeblogs() {
-        //log.fine("getUserWeblog user:" + this.user.getUserName());
         setUserWeblogs(this.user);
-
     }
     
     
@@ -146,7 +141,7 @@ public class ReelerUIBean implements Serializable {
             List<WeblogPermission> perms;
             try {
                 perms = weblogger.getWeblogPermissionManager().getWeblogPermissions(blog);
-                //log.info("perms for blog:" + blog.getHandle() + ":" + perms.size());
+                
 
                 for (WeblogPermission perm : perms) {
                     permString.append(perm.getActions());
@@ -155,7 +150,7 @@ public class ReelerUIBean implements Serializable {
             } catch (WebloggerException ex) {
                 Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //log.info("permissions:" + perms.toString());
+            
             weblogPermissionMap.put(blog.getHandle(), permString.toString());
         }
 
@@ -176,7 +171,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserFromSession() {
-        //log.info("setting user from session");
+        
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
         user.getPermissions().forEach((t) -> {
             log.info(t.toString());
@@ -225,7 +220,7 @@ public class ReelerUIBean implements Serializable {
     }
     
     public void newWeblog() throws WebloggerException {
-        //log.info("setting weblog and redirecting...");
+        
         this.currentWeblog = new Weblog();
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {

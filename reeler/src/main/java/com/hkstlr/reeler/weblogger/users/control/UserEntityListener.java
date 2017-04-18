@@ -33,17 +33,14 @@ public class UserEntityListener {
     
     @PostLoad
     public void userPostLoad(User user) throws WebloggerException {
-        //log.info("userPostLoad");
+        
         List<AbstractPermissionEntity> permissions = new ArrayList<>();
-        //log.info("user:" + user.toString());
+        
         List<WeblogPermission> weblogPermissions = wpm.getWeblogPermissions(user);
         for(WeblogPermission wp : weblogPermissions){
             permissions.add(wp);
         }
         user.setPermissions(permissions);
-        //System.out.println("Listening Weblog Post Load : " + ob.getName());
-        //List<WeblogCategory> weblogCategories = wcm.getWeblogCategoriesForWeblog(ob);
-        //System.out.println("weblogCategories:" + ob.getWeblogCategories().size());
-        //ob.setWeblogCategories(weblogCategories);
+        
     }
 }

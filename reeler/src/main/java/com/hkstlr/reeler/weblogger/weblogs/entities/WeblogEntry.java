@@ -474,10 +474,10 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     
     public void removeTag(WeblogEntryTag weTag){
         if(!tags.contains(weTag)){
-            //log.info("weTag:" + weTag.getName() + "not found, nothing to delete");
+            
             return;
         }
-        //log.info("removing tag:" + weTag.getName());
+        
         tags.remove(weTag);
         weTag.setWeblog(null);
         weTag.setWeblogEntry(null);
@@ -504,25 +504,25 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
             tags.clear();
             return;
         }
-        //log.info("tagNames:" + tagNames.toString());
+        
         List<String> incomingTagNames = WeblogEntryTagFixer.splitStringAsTags(tagNames);
         Set<String> incomingTags = new HashSet<String>(incomingTagNames.size());
         Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
 
         for (String name : incomingTagNames) {
             incomingTags.add(WeblogEntryTagFixer.normalizeTag(name, localeObject));
-            //log.info("incomingTag added:" + name);
+            
         }
-        //log.info("incomingTags:" + incomingTags.toString());
+        
         //loop through originalTags
         List<WeblogEntryTag> existingTags = new ArrayList<>(tags);
         // remove old ones no longer passed.
         existingTags.forEach((existingTag) -> {
             //WeblogEntryTag tag = (WeblogEntryTag) it.next();
-            //log.info("existingTag:" + existingTag.getName());
+            
             if (!incomingTags.contains(existingTag.getName())) {
                 // tag no longer listed in UI, needs removal from DB
-                //log.info("removing tag:" + existingTag.getName());
+                
                 this.tags.remove(existingTag);
             } else {
                 // already in persisted set, therefore isn't new
@@ -532,8 +532,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
             }
         });
 
-        for (String newTagName : incomingTags) {
-            //log.info("adding tag:" + newTagName);
+        for (String newTagName : incomingTags) {            
             addTag(newTagName);
         }
     }
@@ -563,8 +562,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         tag.setWeblog(getWebsite());
         tag.setWeblogEntry(this);
         tag.setCreateDate(new Date());
-        tags.add(tag);
-        //log.info("tag " + tag.getId().concat("|name:").concat(tag.getName()).concat("|weblogEntryId:").concat(tag.getWeblogEntry().getId()));
+        tags.add(tag);      
         
     }
     
