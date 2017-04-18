@@ -11,7 +11,6 @@ import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import java.io.Serializable;
-import java.security.Principal;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
@@ -43,9 +42,9 @@ public class LoginBean implements Serializable {
     public static final String USER_SESSION_KEY = "user";
 
     @EJB
-    private UserManager userManager;    
+    private transient UserManager userManager;    
     
-    private URLStrategy urlStrategy;
+    private transient URLStrategy urlStrategy;
     
     private static final Logger log = Logger.getLogger(LoginBean.class.getName());
 
@@ -87,16 +86,17 @@ public class LoginBean implements Serializable {
      * </p>
      *
      */
-    public void validateUser() throws ServletException, WebloggerException {
+    public void validateUser() throws WebloggerException {
         FacesContext context = FacesContext.getCurrentInstance();
         User user = getUser();
-        boolean isPasswordOK = false;
+        boolean isPasswordOK = true;
 
         String hashPwd = password;
         
         try {
             hashPwd = PasswordDigester.getDigestedPassword(password);
         } catch (Exception ex) {
+            isPasswordOK = false;
             log.log(Level.SEVERE, null, ex);
         }
 
@@ -104,9 +104,13 @@ public class LoginBean implements Serializable {
             context.getExternalContext().getSessionMap().put(USER_SESSION_KEY, user);
 
             HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            Principal userPrincipal = request.getUserPrincipal();
+            
             if (request.getUserPrincipal() != null) {
-                request.logout();
+                try {
+                    request.logout();
+                } catch (ServletException ex) {
+                    Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
             String outcome = "/weblogger/login/index";
             
@@ -117,7 +121,7 @@ public class LoginBean implements Serializable {
             } catch (ServletException e) {
                 log.log(Level.SEVERE,"user not realm authenticated:",e);
                 context.addMessage(null, new FacesMessage("Login failed." + e.getMessage()));
-                //return "common/error";
+                
             }
 
             
@@ -129,7 +133,7 @@ public class LoginBean implements Serializable {
             facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
 
         } else {
-            FacesMessage message = null;
+            FacesMessage message;
             if (!isPasswordOK) {
                 message = new FacesMessage(FacesMessage.SEVERITY_ERROR,
                         "Login Failed!",
@@ -154,12 +158,8 @@ public class LoginBean implements Serializable {
             userToGet = userManager.getUserByUserName(username);
             Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toJsonString());
             return userToGet;
-        } catch (NoResultException nre) {
-            
-        } catch (WebloggerException ex) {
+        } catch (NoResultException | WebloggerException | NullPointerException ex) {
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NullPointerException npe){
-            Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, null, npe);
         }
         return userToGet;
     }
