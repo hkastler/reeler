@@ -43,8 +43,10 @@ public class LoginBean implements Serializable {
 
     @EJB
     private transient UserManager userManager;    
+
     
     private transient URLStrategy urlStrategy;
+
     
     private static final Logger log = Logger.getLogger(LoginBean.class.getName());
 
@@ -158,7 +160,9 @@ public class LoginBean implements Serializable {
             userToGet = userManager.getUserByUserName(username);
             Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toJsonString());
             return userToGet;
+
         } catch (NoResultException | WebloggerException | NullPointerException ex) {
+
             Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
         }
         return userToGet;
