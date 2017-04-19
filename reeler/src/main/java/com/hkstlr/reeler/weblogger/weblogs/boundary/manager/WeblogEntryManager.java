@@ -34,7 +34,6 @@ import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.AppConstants;
-import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentSearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.control.TagStat;
@@ -63,8 +62,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
-    @Inject
-    private Logger log;
+    private static final Logger log = Logger.getLogger(WeblogEntryManager.class.getName());
 
     @EJB
     private WeblogEntryCommentManager wecm;
@@ -81,13 +79,14 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
     @PersistenceContext
     private EntityManager em;
 
+    
+    public WeblogEntryManager() {
+        super(WeblogEntry.class);
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public WeblogEntryManager() {
-        super(WeblogEntry.class);
     }
     
     public WeblogEntry getWeblogEntryByHandleAndAnchor(String handle, String anchor) {
@@ -101,7 +100,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         try {
             weblog = (Weblog) website.getSingleResult();
         } catch (Exception e) {
-
+            log.log(Level.WARNING,"Weblog.findByHandle",e);
         }
 
 
@@ -117,7 +116,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             weblogEntry = new WeblogEntry();
             weblogEntry.setTitle("not found");
             weblogEntry.setText("not found");
-            log.log(Level.WARNING, "weblog: {0} not found, reason: {1}", new Object[]{anchor, e.getMessage()});
+            log.log(Level.WARNING, "weblog: {0} not found", new Object[]{anchor, e});
         }
 
         return weblogEntry;
@@ -162,7 +161,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
     public List<WeblogEntry> getWeblogEntriesByCategoryName(String weblogCategoryName) {
 
-        List<WeblogEntry> categoryEntries = new ArrayList<>();
+        List<WeblogEntry> categoryEntries;
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByWeblogCategoryName");
         
         String trimmed = weblogCategoryName.trim();
@@ -192,15 +191,14 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         if (dateString.length() == 8) {
             startDate = Integer.parseInt(dateString.substring(6, 8));
         }
-        Integer afterDate = startDate + 1;
-        
+                
         Calendar pubTimeBefore = Calendar.getInstance(weblog.getTimeZoneInstance());
         pubTimeBefore.set(year, month-1, startDate,0,0,0);
 
         Calendar pubTimeAfter = Calendar.getInstance(weblog.getTimeZoneInstance());
 
         List<WeblogEntry> entries;
-        Query q = null;
+        
         //if the dateString is 6
         //then we want the whole month
         if (dateString.length() == 6) {
@@ -212,7 +210,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         if (dateString.length() == 8) {
             pubTimeAfter.set(year, month-1,startDate,23,59,59);
         }
-        q = getEntityManager().createQuery("SELECT we FROM WeblogEntry we"
+        Query q = getEntityManager().createQuery("SELECT we FROM WeblogEntry we"
                     + " WHERE we.website = :blog"
                     + " AND we.publishEntry = true"
                     + " AND we.pubTime < :now"
@@ -226,8 +224,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
              q.setParameter("pubTimeBefore", pubTimeBefore, TemporalType.TIMESTAMP);             
              q.setParameter("pubTimeAfter", pubTimeAfter, TemporalType.TIMESTAMP);
 
-        entries = q.getResultList();
-        return entries;
+        return q.getResultList();
+        
     }
     
      public List<Calendar> getWeblogEntryDatesForCalendar(String dateString, Weblog weblog) {
@@ -257,10 +255,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         query.setParameter("endDate", endDate, TemporalType.TIMESTAMP);
         query.setParameter("now", new Timestamp(new Date().getTime()), TemporalType.TIMESTAMP);
         
-        List<Calendar> results = query.getResultList();
-
-        return results;
-
+        return query.getResultList();
     }
 
     public WeblogEntry getLatestEntryForWeblog(Weblog weblog) {
@@ -268,8 +263,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         Query q = em.createNamedQuery("WeblogEntry.getLatestEntryForWeblog")
                 .setParameter("weblog", weblog)
                 .setMaxResults(1);
-        WeblogEntry we = (WeblogEntry) q.getSingleResult();
-        return we;
+       return (WeblogEntry) q.getSingleResult();
+       
     }
 
     /**
@@ -283,14 +278,14 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             entry.setLocale(entry.getWebsite().getLocale());
         }
 
-        if (entry.getAnchor() == null || entry.getAnchor().trim().equals("")) {
-            //entry.setAnchor(this.createAnchor(entry));
+        if (entry.getAnchor() == null || "".equals(entry.getAnchor().trim())) {
+            //TODO: anchor logic
         }
 
         // if the entry was published to future, set status as SCHEDULED
         // we only consider an entry future published if it is scheduled
         // more than 1 minute into the future
-        if (WeblogEntry.PubStatus.PUBLISHED.equals(entry.getStatus())
+        if (entry.getStatus().equals(WeblogEntry.PubStatus.PUBLISHED.toString())
                 && entry.getPubTime().after(new Date(System.currentTimeMillis() + AppConstants.MIN_IN_MS))) {
             entry.setStatus(WeblogEntry.PubStatus.SCHEDULED.toString());
         }
@@ -344,7 +339,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         }
 
         // remove entry from cache mapping
-        //this.entryAnchorToIdMap.remove(entry.getWebsite().getHandle()+":"+entry.getAnchor());
+        //TODO: this.entryAnchorToIdMap.remove(entry.getWebsite().getHandle()+":"+entry.getAnchor());
     }
 
     public List<TagStat> getTags(Weblog weblog, Object object, Object object2, int i, int j) {

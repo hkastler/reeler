@@ -8,11 +8,14 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTag;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -21,25 +24,28 @@ import javax.persistence.Query;
 @Stateless
 public class WeblogEntryTagManager extends AbstractManager<WeblogEntryTag> {
 
-    @PersistenceContext(unitName = "rollerPU")
+    private static final Logger log = Logger.getLogger(WeblogEntryTagManager.class.getName());
+    
+    @PersistenceContext
     private EntityManager em;
 
+    public WeblogEntryTagManager() {
+        super(WeblogEntryTag.class);
+    }    
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
-    public WeblogEntryTagManager() {
-        super(WeblogEntryTag.class);
-    }
-
     public WeblogEntryTag findByName(String name) {
-        Query q = getNamedQuery("WeblogEntryTag.findByName");
+        TypedQuery<WeblogEntryTag> q = getNamedQuery("WeblogEntryTag.findByName");
         q.setParameter("name", name);
         WeblogEntryTag tag;
         try {
-            tag = (WeblogEntryTag) q.getSingleResult();
-        } catch (NoResultException nre) {
+            tag = q.getSingleResult();
+        } catch (NoResultException e) {
+            log.log(Level.WARNING,"WeblogEntryTag.findByName",e);
             tag = new WeblogEntryTag();
         }
         return tag;
@@ -50,14 +56,14 @@ public class WeblogEntryTagManager extends AbstractManager<WeblogEntryTag> {
     }
 
     public WeblogEntryTag findByNameAndWeblogEntry(String name, WeblogEntry weblogEntry) {
-        Query q = getNamedQuery("WeblogEntryTag.findByNameAndWeblogEntry");
+        TypedQuery<WeblogEntryTag> q = getNamedQuery("WeblogEntryTag.findByNameAndWeblogEntry");
         q.setParameter("name", name);
         q.setParameter("weblogEntry", weblogEntry);
         WeblogEntryTag tag;
         try {
-            tag = (WeblogEntryTag) q.getSingleResult();
-        } catch (NoResultException nre) {
-            
+            tag = q.getSingleResult();
+        } catch (NoResultException e) {
+            log.log(Level.WARNING,"WeblogEntryTag.findByNameAndWeblogEntry",e);
             tag = null;
         }
         return tag;

@@ -124,11 +124,11 @@ public class FileContentManager {
             log.info("The file has been written to ["
                     + saveFile.getAbsolutePath() + "]");
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new IOException("ERROR uploading file", e);
         } finally {
-            bos.flush();
-            bos.close();
+            if(bos != null)
+                bos.close();
         }
     }
 

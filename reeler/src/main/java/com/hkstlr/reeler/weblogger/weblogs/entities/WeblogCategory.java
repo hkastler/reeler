@@ -8,7 +8,7 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.Comparator;
+import java.util.Optional;
 import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -135,11 +135,11 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         if (size == 0) {
             this.position = 0;
         } else {
-             Integer maxPosition = weblog.getWeblogCategories().stream()
+             Optional<Integer> maxPosition = Optional.of(weblog.getWeblogCategories().stream()
                 .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
                 .get()
-                .getPosition();
-            this.position = maxPosition + 1;
+                .getPosition());
+            this.position = maxPosition.orElse(0) + 1;
         }
     }
 
@@ -172,14 +172,5 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     public JsonObject toJsonObject(){
         return new JsonBuilder().toJsonObject(this, new String[]{"weblog"});
     }
-    
-    /*@Override
-    public String toString() {
-    return new JsonBuilder().toJsonString(this,new String[]{"weblog"});
-    /* return "WeblogCategory[ id=" + id + " ]"
-    .concat("[name=" + name + "]")
-    .concat("[description=" + description + "]")
-    .concat("[image=" + image + "]");
-    }*/
 
 }

@@ -25,28 +25,24 @@ import javax.persistence.Query;
 @Stateless
 public class WeblogCategoryManager extends AbstractManager<WeblogCategory> {
 
-    @Inject
-    private Logger log;
-    
     @PersistenceContext
     private EntityManager em;
+    
+    
+    public WeblogCategoryManager() {
+        super(WeblogCategory.class);
+    }
 
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
-    public WeblogCategoryManager() {
-        super(WeblogCategory.class);
-    }
     
-    public List<WeblogCategory> getWeblogCategoriesForWeblog(Weblog weblog){
-        List<WeblogCategory> cats = new ArrayList<>();
+    public List<WeblogCategory> getWeblogCategoriesForWeblog(Weblog weblog){        
         Query q = em.createNamedQuery("WeblogCategory.getByWeblog");
         q.setParameter(1, weblog);
-        cats = q.getResultList();
-        log.info("cats:" + cats.size());
-        return cats;
+        return q.getResultList();
     }
     
 }

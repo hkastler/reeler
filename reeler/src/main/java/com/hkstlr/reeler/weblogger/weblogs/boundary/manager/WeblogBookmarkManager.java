@@ -25,28 +25,23 @@ import javax.persistence.Query;
 @Stateless
 public class WeblogBookmarkManager extends AbstractManager<WeblogBookmark> {
 
-    @Inject
-    private Logger log;
-    
     @PersistenceContext
     private EntityManager em;
-
+    
+    public WeblogBookmarkManager() {
+        super(WeblogBookmark.class);
+    }
+    
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public WeblogBookmarkManager() {
-        super(WeblogBookmark.class);
     }
 
     public List<WeblogBookmark> getBookmarksForWeblog(Weblog weblog) {
         String qlString = "SELECT b FROM WeblogBookmark b JOIN b.folder WHERE b.folder.weblog = ?1";
         Query query = getEntityManager().createQuery(qlString);
         query.setParameter(1, weblog);
-        List<WeblogBookmark> results = query.getResultList();
-        
-        return results;
+        return query.getResultList();
     }
 
 }

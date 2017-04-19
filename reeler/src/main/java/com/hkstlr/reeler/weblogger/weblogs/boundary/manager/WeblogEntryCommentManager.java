@@ -33,8 +33,6 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment.ApprovalStatus;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -49,14 +47,14 @@ public class WeblogEntryCommentManager extends AbstractManager {
 
     @PersistenceContext
     private EntityManager em;
-
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
+    
     public WeblogEntryCommentManager() {
         super(WeblogEntryComment.class);
     }
+
+    protected EntityManager getEntityManager() {
+        return em;
+    }    
    
     public List<WeblogEntryComment> getCommentsForWeblog(Weblog weblog, 
             List<ApprovalStatus> statuses,
@@ -75,8 +73,8 @@ public class WeblogEntryCommentManager extends AbstractManager {
             q.setFirstResult(range[0]);
         }
         
-        List<WeblogEntryComment> results = q.getResultList();
-        return results;
+        return q.getResultList();
+        
     }
     
     public List<WeblogEntryComment> getComments(WeblogEntry entry) {
@@ -103,7 +101,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
     /**
      * @inheritDoc
      */
-    public List<WeblogEntryComment> getComments(WeblogEntryCommentSearchCriteria csc, int[]range) throws WebloggerException {
+    public List<WeblogEntryComment> getComments(WeblogEntryCommentSearchCriteria csc, int[]range) {
         
         List<Object> params = new ArrayList<Object>();
         int size = 0;
@@ -161,7 +159,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
             query.setParameter(i+1, params.get(i));
         }
         if(range != null){
-            
+            //TODO: set the range
         }
         
         return query.getResultList();
@@ -185,11 +183,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
     }
 
     public void saveAndLoadComments(WeblogEntryComment comment) {
-        System.out.println("comment:" + comment.getStatus().toString());
-        persist(comment);
-        System.out.println("comment:" + comment.getStatus().toString());
-        //WeblogEntry entry = comment.getWeblogEntry();
-        //web.setComments(entry.getComments());
+        persist(comment);       
     }
        
     /**
@@ -199,7 +193,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
         TypedQuery<Long> q = getEntityManager().createNamedQuery(
                 "WeblogEntryComment.getCountDistinctByWebsite&Status", Long.class);
         q.setParameter(1, website);
-        //q.setParameter(2, ApprovalStatus.APPROVED);
+       
         return q.getResultList().get(0);
     }
 

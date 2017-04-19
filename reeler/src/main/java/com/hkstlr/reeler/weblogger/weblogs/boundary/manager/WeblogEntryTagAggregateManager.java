@@ -12,6 +12,8 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTagAggregate;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -26,16 +28,18 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class WeblogEntryTagAggregateManager extends AbstractManager<WeblogEntryTagAggregate> {
 
+    private static final Logger log = Logger.getLogger(WeblogEntryTagAggregateManager.class.getName());
+
     @PersistenceContext
     private EntityManager em;
 
+    public WeblogEntryTagAggregateManager() {
+        super(WeblogEntryTagAggregate.class);
+    }
+        
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public WeblogEntryTagAggregateManager() {
-        super(WeblogEntryTagAggregate.class);
     }
     
     /**
@@ -72,6 +76,7 @@ public class WeblogEntryTagAggregateManager extends AbstractManager<WeblogEntryT
             weblogTagData = weblogQuery.getSingleResult();
         } catch (NoResultException e) {
             weblogTagData = null;
+            log.log(Level.WARNING,"WeblogEntryTagAggregate.getByName&WebsiteOrderByLastUsedDesc",e);
         }
 
         TypedQuery<WeblogEntryTagAggregate> siteQuery = em.createNamedQuery(
@@ -82,6 +87,8 @@ public class WeblogEntryTagAggregateManager extends AbstractManager<WeblogEntryT
             siteTagData = siteQuery.getSingleResult();
         } catch (NoResultException e) {
             siteTagData = null;
+            log.log(Level.WARNING,"WeblogEntryTagAggregate"
+                    + ".getByName&WebsiteNullOrderByLastUsedDesc",e);
         }
         Timestamp lastUsed = new Timestamp((new Date()).getTime());
         

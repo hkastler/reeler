@@ -10,9 +10,6 @@ import javax.inject.Inject;
  */
 public final class Paginator {
 
-    @Inject
-    Logger log;
-
     private int pageSize;
     //pages have a 1 based index
     //list elements have 0 based index
@@ -20,8 +17,11 @@ public final class Paginator {
     private int numberOfPages = 1;
     private int numberOfItems = 0;
 
+    
     public Paginator() {
+        //required constructor
     }
+   
 
     public Paginator(int pageSize, int page, int numberOfItems) {
         this.pageSize = pageSize;

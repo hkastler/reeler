@@ -15,8 +15,8 @@
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
-
-   adapted from  org.apache.roller.weblogger.business.jpa.JPAUserManagerImpl.java;
+ *
+ *  adapted from  org.apache.roller.weblogger.business.jpa.JPAUserManagerImpl.java;
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
@@ -44,8 +44,7 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
 
-    @Inject
-    private Logger log;
+    private static final Logger log = Logger.getLogger(WeblogPermissionManager.class.getName());
 
     @PersistenceContext
     private EntityManager em;
@@ -53,23 +52,24 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public WeblogPermissionManager() {
     }
 
+    public WeblogPermissionManager(Class<WeblogPermission> entityClass) {
+        super(entityClass);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
-    public WeblogPermissionManager(Class<WeblogPermission> entityClass) {
-        super(entityClass);
-    }
-
     public WeblogPermission getWeblogPermission(Weblog weblog, User user) throws WebloggerException {
         TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogId",
-                 WeblogPermission.class);
+                WeblogPermission.class);
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         try {
             return q.getSingleResult();
-        } catch (NoResultException ignored) {
+        } catch (NoResultException e) {
+            log.log(Level.WARNING,"getWeblogPermission",e);
             return null;
         }
     }
@@ -81,7 +81,8 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         q.setParameter(2, weblog.getHandle());
         try {
             return q.getSingleResult();
-        } catch (NoResultException ignored) {
+        } catch (NoResultException e) {
+            log.log(Level.WARNING,"getWeblogPermissionIncludingPending",e);
             return null;
         }
     }
@@ -96,7 +97,8 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
-        } catch (NoResultException ignored) {
+        } catch (NoResultException e) {
+            log.log(Level.WARNING,"WeblogPermission.getByUserName&WeblogIdIncludingPending",e);
         }
 
         // permission already exists, so add any actions specified in perm argument
@@ -262,9 +264,9 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         // if permission a weblog permission
         if (perm instanceof WeblogPermission) {
             // if user has specified permission in weblog return true
-            Query qWeblog = em.createNamedQuery("Weblog.findById", Weblog.class);
+            TypedQuery<Weblog> qWeblog = em.createNamedQuery("Weblog.findById", Weblog.class);
             qWeblog.setParameter("id", perm.getObjectId());
-            Weblog weblog = (Weblog) qWeblog.getResultList();
+            Weblog weblog = qWeblog.getSingleResult();
             WeblogPermission existingPerm = getWeblogPermission(weblog, user);
             if (existingPerm != null && existingPerm.implies(perm)) {
                 return true;
