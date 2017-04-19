@@ -41,7 +41,7 @@ public class ReelerUIBean implements Serializable {
     private transient Logger log = Logger.getLogger(ReelerUIBean.class.getName());
 
     @EJB
-    Weblogger weblogger;
+    private transient Weblogger weblogger;
 
     private User user;
 
@@ -51,9 +51,9 @@ public class ReelerUIBean implements Serializable {
 
     private Map<String, String> pages = new LinkedHashMap<>();
 
-    private final static String pageHome = "/weblogger/reeler-ui";
+    private static final String PAGE_HOME = "/weblogger/reeler-ui";
 
-    private final static String path = pageHome + "/weblog";
+    private static final String PATH = PAGE_HOME + "/weblog";
 
     private Weblog currentWeblog = new Weblog();
 
@@ -169,8 +169,8 @@ public class ReelerUIBean implements Serializable {
         });
     }
 
-    public String getPath() {
-        return path;
+    public String getPATH() {
+        return PATH;
     }
 
     public Weblog getCurrentWeblog() {
@@ -189,8 +189,8 @@ public class ReelerUIBean implements Serializable {
         this.pages = pages;
     }
 
-    public String getPageHome() {
-        return pageHome;
+    public String getPAGE_HOME() {
+        return PAGE_HOME;
     }
 
     public void action(Weblog weblog, String page) throws WebloggerException {
@@ -199,7 +199,7 @@ public class ReelerUIBean implements Serializable {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             StringBuilder actionPath = new StringBuilder(context.getRequestContextPath());
-            actionPath.append(this.path).append("/");
+            actionPath.append(this.PATH).append("/");
             if ("config".equals(page)) {
                 actionPath.append("settings/");
             }
@@ -217,7 +217,7 @@ public class ReelerUIBean implements Serializable {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             StringBuilder createPath = new StringBuilder(context.getRequestContextPath());
-            createPath.append(this.path);
+            createPath.append(this.PATH);
             createPath.append("/create.xhtml");
             context.redirect(createPath.toString());
         } catch (IOException ex) {

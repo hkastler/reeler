@@ -13,10 +13,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 
-/**
- *
- * @author henry.kastler
- */
+
 /**
  *
  * @author henry.kastler
@@ -30,7 +27,7 @@ public class SettingsUIBean {
         
     private Map<String,String> pages = new LinkedHashMap<>();
     
-    private String path;
+    private static String PATH;
       
     public SettingsUIBean() {
     }
@@ -42,7 +39,7 @@ public class SettingsUIBean {
         pages.put("members", "Members");
         pages.put("pings", "Pings");
         pages.put("maintenance", "Maintenance");
-        this.path = reelerUiBean.getPath() + "/settings";
+        this.PATH = reelerUiBean.getPATH() + "/settings";
        
     }
     
@@ -54,12 +51,12 @@ public class SettingsUIBean {
         this.pages = pages;
     }
 
-    public String getPath() {
-        return path;
+    public String getPATH() {
+        return PATH;
     }
 
-    public void setPath(String path) {
-        this.path = path;
+    public void setPATH(String path) {
+        this.PATH = path;
     }
        
 }

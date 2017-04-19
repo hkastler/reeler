@@ -262,7 +262,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         weblogEntry.setUpdateTime(setCalFromDate(new Date()));
         setupTagsAndSave();
         FacesMessageManager.addSuccessMessage("weblogEntryForm", "Entry updated");
-        return reelerUiBean.getPath() + "/entry.xhtml";
+        return reelerUiBean.getPATH() + "/entry.xhtml";
     }
 
     private void setupAndSave(String facesMsg) throws WebloggerException {

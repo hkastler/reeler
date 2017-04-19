@@ -7,8 +7,6 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-
-
 import com.hkstlr.reeler.app.control.WebloggerException;
 //import com.hkstlr.reeler.weblogger.boundary.manager.MediaFileManager;
 //import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
@@ -17,28 +15,19 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 
 public class WeblogCustomTheme extends WeblogTheme {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	Logger log = Logger.getLogger(WeblogCustomTheme.class.getName());
+    private static final long serialVersionUID = 1L;
 
-	//@Inject
-	//WeblogManager weblogManager;
-	
-	//@Inject
-	//MediaFileManager mediaFileManager;
-	
-	public WeblogCustomTheme(Weblog weblog) {
+    private transient Logger log = Logger.getLogger(WeblogCustomTheme.class.getName());
+
+    public WeblogCustomTheme(Weblog weblog) {
         super(weblog);
     }
 
     public String getId() {
         return CUSTOM;
     }
-    
+
     public String getName() {
         return CUSTOM;
     }
@@ -54,11 +43,11 @@ public class WeblogCustomTheme extends WeblogTheme {
     public String getAuthor() {
         return "N/A";
     }
-    
+
     public Date getLastModified() {
         return this.weblog.getLastModified();
     }
-    
+
     public boolean isEnabled() {
         return true;
     }
@@ -70,36 +59,34 @@ public class WeblogCustomTheme extends WeblogTheme {
 
     /**
      * Get the collection of all templates associated with this Theme.
-     * @throws WebloggerException 
+     *
+     * @throws WebloggerException
      */
     public List<? extends ThemeTemplate> getTemplates() throws WebloggerException {
         return null;//weblogManager.getTemplates(this.weblog);
     }
-    
-    
+
     /**
-     * Lookup the stylesheet template for this theme.
-     * Returns null if no stylesheet can be found.
+     * Lookup the stylesheet template for this theme. Returns null if no
+     * stylesheet can be found.
      */
     public ThemeTemplate getStylesheet() throws WebloggerException {
         return getTemplateByAction(ComponentType.STYLESHEET);
     }
 
-    
     /**
-     * Lookup the default template.
-     * Returns null if the template cannot be found.
+     * Lookup the default template. Returns null if the template cannot be
+     * found.
      */
-    public ThemeTemplate getDefaultTemplate(){
-    	ThemeTemplate themeTemplate = null;
+    public ThemeTemplate getDefaultTemplate() {
+        ThemeTemplate themeTemplate = null;
         themeTemplate = null;//weblogManager.getTemplateByAction(this.weblog, ComponentType.WEBLOG);
         return themeTemplate;
     }
-    
-    
+
     /**
-     * Lookup the specified template by action.
-     * Returns null if the template cannot be found.
+     * Lookup the specified template by action. Returns null if the template
+     * cannot be found.
      */
     public ThemeTemplate getTemplateByAction(ComponentType action) throws WebloggerException {
         if (action == null) {
@@ -107,14 +94,14 @@ public class WeblogCustomTheme extends WeblogTheme {
         }
         return null;// weblogManager.getTemplateByAction(this.weblog, action);
     }
-    
-    
+
     /**
-     * Lookup the specified template by name.
-     * Returns null if the template cannot be found.
-     * @throws WebloggerException 
+     * Lookup the specified template by name. Returns null if the template
+     * cannot be found.
+     *
+     * @throws WebloggerException
      */
-    public ThemeTemplate getTemplateByName(String name) throws WebloggerException{
+    public ThemeTemplate getTemplateByName(String name) throws WebloggerException {
         if (name == null) {
             return null;
         }
@@ -122,11 +109,10 @@ public class WeblogCustomTheme extends WeblogTheme {
         tt = null;//weblogManager.getTemplateByName(this.weblog, name);
         return tt;
     }
-    
-    
+
     /**
-     * Lookup the specified template by link.
-     * Returns null if the template cannot be found.
+     * Lookup the specified template by link. Returns null if the template
+     * cannot be found.
      */
     public ThemeTemplate getTemplateByLink(String link) throws WebloggerException {
         if (link == null) {
@@ -134,11 +120,10 @@ public class WeblogCustomTheme extends WeblogTheme {
         }
         return null;//weblogManager.getTemplateByLink(this.weblog, link);
     }
-    
-    
+
     /**
-     * Lookup the specified resource by path.
-     * Returns null if the resource cannot be found.
+     * Lookup the specified resource by path. Returns null if the resource
+     * cannot be found.
      */
     public ThemeResource getResource(String path) throws WebloggerException {
         ThemeResource resource = null;
@@ -146,22 +131,22 @@ public class WeblogCustomTheme extends WeblogTheme {
         return resource;
     }
 
-	@Override
-	public List<ThemeResource> getResources() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public List<ThemeResource> getResources() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public ThemeResource getPreviewImage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public ThemeResource getPreviewImage() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    @Override
+    public int compareTo(Object o) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
 }

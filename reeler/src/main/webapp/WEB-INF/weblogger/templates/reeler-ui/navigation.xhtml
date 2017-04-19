@@ -8,14 +8,14 @@
     <div class="row">   
         <div class="col-lg-12">
             <ul class="nav nav-tabs">
-                <li class="active" ><a href="#{request.contextPath}#{pageBean.path}/#{pageBean.pages['index']}.xhtml">#{messages[ pageBean.pages['index'][1] ]}</a></li>
+                <li class="active" ><a href="#{request.contextPath}#{pageBean.PATH}/#{pageBean.pages['index']}.xhtml">#{messages[ pageBean.pages['index'][1] ]}</a></li>
             </ul>
             <div class="row">   
                 <div class="col-lg-12">
                     <ul class="nav nav-tabs">
                         <ui:repeat value="#{pageBean.pages.keySet().toArray()}" var="key">
                             <li class="#{pageBean.page == key ? 'active': ''}" >                                                        
-                                <a href="#{request.contextPath}#{pageBean.path}/#{key}.xhtml"
+                                <a href="#{request.contextPath}#{pageBean.PATH}/#{key}.xhtml"
                                    id="nav">
                                     #{((pageBean.page == key) and (customLabel ne null)) ? customLabel : messages[pageBean.pages[key][0]]}
                                 </a>

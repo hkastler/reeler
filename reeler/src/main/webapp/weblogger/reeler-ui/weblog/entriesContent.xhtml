@@ -20,7 +20,7 @@
                     <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">
                         <ui:param name="page" value="#{weblogEntriesBean.pageNum}"/>
                         <ui:param name="paginator" value="#{weblogEntriesBean.paginator}"/>
-                        <ui:param name="outcome" value="#{request.contextPath}#{reelerUiBean.path}/entries.xhtml"/>
+                        <ui:param name="outcome" value="#{request.contextPath}#{reelerUiBean.PATH}/entries.xhtml"/>
                         <ui:param name="hrefStyle" value="queryString"/>
                         <ui:param name="position" value="top"/>
                     </ui:include>
@@ -91,7 +91,7 @@
                                         <h:outputText value="#{messages._edit}"/>
                                     </f:facet>
                                     <div class="text-center">
-                                        <a outcome="#{reelerUiBean.path}/entry.xhtml"
+                                        <a outcome="#{reelerUiBean.PATH}/entry.xhtml"
                                            jsfc="h:link">
                                             <f:param name="action" value="edit"/>
                                             <f:param name="id" value="#{entry.id}"/>
@@ -104,7 +104,7 @@
                                         <h:outputText value="#{messages._delete}"/>
                                     </f:facet>
                                     <div class="text-center">
-                                        <a outcome="#{reelerUiBean.path}/entry.xhtml"
+                                        <a outcome="#{reelerUiBean.PATH}/entry.xhtml"
                                            jsfc="h:link">
                                             <f:param name="action" value="delete"/>
                                             <f:param name="id" value="#{entry.id}"/>
