@@ -18,9 +18,6 @@ package com.hkstlr.reeler.weblogger.media.boundary.manager;
  * directory of this distribution.
  * //original package org.apache.roller.weblogger.business;
  */
-
-
-
 import com.hkstlr.reeler.app.control.AppConstants;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
@@ -38,19 +35,17 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-
 /**
  * Manages contents of the file uploaded to Roller weblogs.
- * 
+ *
  * This base implementation writes file content to a file system.
  */
-
 public class FileContentManager {
 
     private static Logger log = Logger.getLogger(FileContentManager.class.getName());
 
     private String storageDir = null;
-    
+
     @Inject
     WebloggerConfig webloggerConfig;
 
@@ -63,7 +58,6 @@ public class FileContentManager {
                 .getProperty("mediafiles.storage.dir");
 
         // Note: System property expansion is now handled by WebloggerConfig.
-
         if (inStorageDir == null || inStorageDir.trim().length() < 1) {
             inStorageDir = System.getProperty("user.home") + File.separator
                     + "roller_data" + File.separator + "mediafiles";
@@ -82,9 +76,10 @@ public class FileContentManager {
     }
 
     /**
-     * @throws IOException 
-     * @see org.apache.FileContentManager.weblogger.business.FileContentManager#getFileContent(Weblog,
-     *      String)
+     * @throws IOException
+     * @see
+     * org.apache.FileContentManager.weblogger.business.FileContentManager#getFileContent(Weblog,
+     * String)
      */
     public FileContent getFileContent(Weblog weblog, String fileId)
             throws InvalidPathException, IOException {
@@ -103,8 +98,9 @@ public class FileContentManager {
     }
 
     /**
-     * @see org.apache.FileContentManager.weblogger.business.FileContentManager#saveFileContent(Weblog,
-     *      String, java.io.InputStream)
+     * @see
+     * org.apache.FileContentManager.weblogger.business.FileContentManager#saveFileContent(Weblog,
+     * String, java.io.InputStream)
      */
     public void saveFileContent(Weblog weblog, String fileId, InputStream is)
             throws FileNotFoundException, InvalidPathException, IOException {
@@ -127,25 +123,19 @@ public class FileContentManager {
             }
             log.info("The file has been written to ["
                     + saveFile.getAbsolutePath() + "]");
-            bos.close();
+
         } catch (Exception e) {
             throw new IOException("ERROR uploading file", e);
         } finally {
-            try {
-                if (bos != null) {
-                    bos.flush();
-                    bos.close();
-                }
-            } catch (Exception ex) {
-                //ignore
-            }
+            bos.flush();
+            bos.close();
         }
-
     }
 
     /**
-     * @see org.apache.FileContentManager.weblogger.business.FileContentManager#deleteFile(Weblog,
-     *      String)
+     * @see
+     * org.apache.FileContentManager.weblogger.business.FileContentManager#deleteFile(Weblog,
+     * String)
      */
     public void deleteFile(Weblog weblog, String fileId)
             throws FileNotFoundException, InvalidPathException, IOException {
@@ -166,7 +156,8 @@ public class FileContentManager {
     }
 
     /**
-     * @see org.apache.FileContentManager.weblogger.business.FileContentManager#overQuota(Weblog)
+     * @see
+     * org.apache.FileContentManager.weblogger.business.FileContentManager#overQuota(Weblog)
      */
     public boolean overQuota(Weblog weblog) {
 
@@ -195,8 +186,9 @@ public class FileContentManager {
     }
 
     /**
-     * @see org.apache.FileContentManager.weblogger.business.FileContentManager#canSave(Weblog,
-     *      String, String, long, RollerMessages)
+     * @see
+     * org.apache.FileContentManager.weblogger.business.FileContentManager#canSave(Weblog,
+     * String, String, long, RollerMessages)
      */
     public boolean canSave(Weblog weblog, String fileName, String contentType,
             long size) {
@@ -215,7 +207,7 @@ public class FileContentManager {
         log.fine("max allowed file size = " + maxFileBytes);
         log.fine("attempted save file size = " + size);
         if (size > maxFileBytes) {
-            String[] args = { fileName, maxFileMB.toString() };
+            String[] args = {fileName, maxFileMB.toString()};
             //messages.addError("error.upload.filemax", args);
             return false;
         }
@@ -244,13 +236,13 @@ public class FileContentManager {
                 .getProperty("uploads.types.allowed");
         String forbids = WebloggerRuntimeConfig
                 .getProperty("uploads.types.forbid");
-        
+
         String[] allowFiles = allows.trim().split(",");
-        
+
         String[] forbidFiles = forbids.trim().split(",");
-        
+
         if (!checkFileType(allowFiles, forbidFiles, fileName, contentType)) {
-            String[] args = { fileName, contentType };
+            String[] args = {fileName, contentType};
             //messages.addError("error.upload.forbiddenFile", args);
             return false;
         }
@@ -299,7 +291,6 @@ public class FileContentManager {
         // allow user to specify file extensions (e.g. gif, png, jpeg) but will
         // now also allow them to specify content-type rules (e.g. */*, image/*,
         // text/xml, etc.).
-
         // if content type is invalid, reject file
         if (contentType == null || contentType.indexOf('/') == -1) {
             return false;
@@ -315,7 +306,6 @@ public class FileContentManager {
         }
 
         // First check against what is ALLOWED
-
         // check file against allowed file extensions
         if (allowFiles != null && allowFiles.length > 0) {
             for (int y = 0; y < allowFiles.length; y++) {
@@ -346,7 +336,6 @@ public class FileContentManager {
         }
 
         // First check against what is FORBIDDEN
-
         // check file against forbidden file extensions, overrides any allows
         if (forbidFiles != null && forbidFiles.length > 0) {
             for (int x = 0; x < forbidFiles.length; x++) {
@@ -400,7 +389,8 @@ public class FileContentManager {
 
     /**
      * Construct the full real path to a resource in a weblog's uploads area.
-     * @throws IOException 
+     *
+     * @throws IOException
      */
     private File getRealFile(Weblog weblog, String fileId)
             throws InvalidPathException, IOException {
@@ -423,7 +413,7 @@ public class FileContentManager {
             throw new FileNotFoundException("Invalid path [" + filePath + "], "
                     + "file does not exist.");
         } else if (!file.canRead()) {
-            throw new InvalidPathException(filePath,"Invalid path [" + filePath + "], "
+            throw new InvalidPathException(filePath, "Invalid path [" + filePath + "], "
                     + "cannot read from path.");
         }
 
@@ -431,7 +421,7 @@ public class FileContentManager {
             // make sure someone isn't trying to sneek outside the uploads dir
             if (!file.getCanonicalPath().startsWith(
                     weblogDir.getCanonicalPath())) {
-                throw new InvalidPathException(filePath,"Invalid path " + filePath + "], "
+                throw new InvalidPathException(filePath, "Invalid path " + filePath + "], "
                         + "trying to get outside uploads dir.");
             }
         } catch (IOException ex) {
