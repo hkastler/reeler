@@ -16,9 +16,10 @@ package com.hkstlr.reeler.weblogger.media.boundary.manager;
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
+ * //original package org.apache.roller.weblogger.business;
  */
 
-//original package org.apache.roller.weblogger.business;
+
 
 import com.hkstlr.reeler.app.control.AppConstants;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
@@ -37,8 +38,6 @@ import java.util.logging.Logger;
 
 import javax.inject.Inject;
 
-
-//import org.apache.roller.weblogger.util.RollerMessages;
 
 /**
  * Manages contents of the file uploaded to Roller weblogs.
@@ -128,6 +127,7 @@ public class FileContentManager {
             }
             log.info("The file has been written to ["
                     + saveFile.getAbsolutePath() + "]");
+            bos.close();
         } catch (Exception e) {
             throw new IOException("ERROR uploading file", e);
         } finally {
@@ -136,7 +136,8 @@ public class FileContentManager {
                     bos.flush();
                     bos.close();
                 }
-            } catch (Exception ignored) {
+            } catch (Exception ex) {
+                //ignore
             }
         }
 
