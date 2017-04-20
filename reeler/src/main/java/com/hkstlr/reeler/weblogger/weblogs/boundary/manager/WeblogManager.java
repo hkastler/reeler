@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
@@ -84,7 +83,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
             = Collections.reverseOrder(StatCountCountComparator.getInstance());
 
     @PersistenceContext
-    private EntityManager em;
+    EntityManager em;
 
     @EJB
     UserManager userManager;
@@ -96,7 +95,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
     WeblogPermissionManager weblogPermissionManager;
 
     @EJB
-    AutoPingManager autoPingMgr;
+    AutoPingManager autoPingManager;
 
     @EJB
     PingTargetManager pingTargetMgr;
@@ -198,7 +197,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
             if (pingTarget.isAutoEnabled()) {
                 AutoPing autoPing = new AutoPing(pingTarget, newWeblog);
-                autoPingMgr.saveAutoPing(autoPing);
+                autoPingManager.saveAutoPing(autoPing);
             }
         }
         em.flush();
@@ -257,7 +256,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         }
 
         // Remove the weblog's auto ping configurations
-        //AutoPingManager autoPingMgr = roller.getAutopingManager();
+        //AutoPingManager autoPingManager = roller.getAutopingManager();
         List<AutoPing> autopings = null;//autoPingMgr.getAutoPingsByWebsite(weblog);
         for (AutoPing autoPing : autopings) {
             this.em.remove(autoPing);
@@ -422,7 +421,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
             if (pingTarget.isAutoEnabled()) {
                 AutoPing autoPing = new AutoPing(pingTarget, newWeblog);
-                autoPingMgr.saveAutoPing(autoPing);
+                autoPingManager.saveAutoPing(autoPing);
             }
         }
 

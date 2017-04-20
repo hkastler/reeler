@@ -77,7 +77,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
     private WeblogManager weblogManager;
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
 
     
     public WeblogEntryManager() {
