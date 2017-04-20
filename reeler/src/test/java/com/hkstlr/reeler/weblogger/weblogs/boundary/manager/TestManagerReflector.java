@@ -46,7 +46,7 @@ public class TestManagerReflector {
         
         
         Field[] classFields = cutClass.getDeclaredFields();
-        //get all the managers, but not EnitityManager
+        //get all the managers, but not EntityManager
         Field[] managerFields = Arrays.stream(classFields)
                                     .filter(f -> 
                                             f.getType().getName().matches("(.*)boundary(.*)Manager(.*)")
