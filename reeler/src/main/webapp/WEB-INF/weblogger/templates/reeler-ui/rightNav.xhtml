@@ -16,7 +16,7 @@
                 </h5>
 
                 <div class="panel-body">
-                    <a href="#{request.contextPath}#{reelerUiBean.PATH}/profile/index.xhtml">Edit User Profile</a>
+                    <a href="#{request.contextPath}#{reelerUiBean.PAGE_HOME}/user/profile/index.xhtml">Edit User Profile</a>
                     Change user info, locale, timezone
                     <hr/>
                     <h:form><a action="#{reelerUiBean.newWeblog()}" jsfc="h:commandLink">
@@ -27,7 +27,7 @@
                                                               .stream()
                                                               .anyMatch(r->r.roleName.equals('admin')
                                                               )}">
-                        <a href="#{request.contextPath}#{reelerUiBean.PATH}/admin/">Server Administration</a>
+                        <a href="#{request.contextPath}#{adminUIBean.PATH}/">Server Administration</a>
                         Make site-wide administration changes
                     </div>
                 </div>

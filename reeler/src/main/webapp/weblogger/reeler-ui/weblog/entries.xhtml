@@ -35,7 +35,7 @@
 
             <ui:define name="postBody">
                 <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
-                <script src="#{request.contextPath}/js/datetimepicker/jquery.datetimepicker.js"></script>
+                <script src="#{request.contextPath}/js/vendor/datetimepicker/jquery.datetimepicker.js"></script>
                 <script>
                     Date.parseDate = function (input, format) {
                         return moment(input, format).toDate();

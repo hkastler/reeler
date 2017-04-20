@@ -128,9 +128,15 @@
 
         <br />
 
-        <input type="submit" id="profile_0" value="Save"/>
+        <input type="submit" 
+               id="profile_0" 
+               value="#{messages._save}" 
+               class="btn btn-primary"/>
 
-        <input type="button" value="Cancel" onclick="window.location = '/roller/roller-ui/menu.rol'" />
+        <input type="button" 
+               value="#{messages._cancel}"
+               onclick="window.location.href = '#{request.contextPath}#{reelerUiBean.PAGE_HOME}'"
+               class="btn btn-secondary"/>
 
     </form>
 </ui:composition>

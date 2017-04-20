@@ -25,9 +25,9 @@ public class AdminUIBean {
     
     private Map<String, String[]> pages = new LinkedHashMap<>();
 
-    private final String path = "/weblogger/reeler-ui/admin";
+    private static final String PATH = "/weblogger/reeler-ui/admin";
     
-    private final String template = "/WEB-INF/weblogger/templates/reeler-ui/pageContentTemplate.xhtml";
+    private static final String template = "/WEB-INF/weblogger/templates/reeler-ui/pageContentTemplate.xhtml";
     
     @ManagedProperty(value="#{param.page}")
     private String page;
@@ -55,8 +55,8 @@ public class AdminUIBean {
         this.pages = pages;
     }
 
-    public String getPath() {
-        return path;
+    public String getPATH() {
+        return PATH;
     }
 
     public String getPage() {
