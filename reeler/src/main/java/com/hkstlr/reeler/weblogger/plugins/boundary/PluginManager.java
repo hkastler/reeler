@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 
 //import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -156,13 +155,8 @@ public class PluginManager {
                     } else {
                         log.warning(pluginClass + " is not a PagePlugin");
                     }
-                } catch (ClassNotFoundException e) {
-                    log.severe("ClassNotFoundException for " + plugin);
-                } catch (InstantiationException e) {
-                    log.severe("InstantiationException for " + plugin);
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    log.severe("IllegalAccessException for " + plugin);
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException  e) {
+                    log.log(Level.SEVERE, "Exception for " + plugin, e);
                 }
             }
         }

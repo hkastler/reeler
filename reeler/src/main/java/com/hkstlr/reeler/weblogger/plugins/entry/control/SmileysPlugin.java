@@ -20,21 +20,15 @@ package com.hkstlr.reeler.weblogger.plugins.entry.control;
 
 import java.util.Enumeration;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.inject.Inject;
-
-//import org.apache.commons.lang3.StringEscapeUtils;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.plugins.entities.PluginInterface;
 import java.io.IOException;
-//import com.hkstlr.reeler.weblogger.control.config.WebloggerRuntimeConfig;
 
 
 /**
@@ -57,12 +51,12 @@ public class SmileysPlugin extends WeblogEntryPlugin implements PluginInterface<
     
    public SmileysPlugin() {
         super();
-        log.warning("SmileysPlugin instantiated.");
+        log.fine("SmileysPlugin instantiated.");
     }
     
     public SmileysPlugin(Class pluginClass) {
         super(pluginClass);
-        log.warning("SmileysPlugin instantiated.");
+        log.fine("SmileysPlugin instantiated.");
     } 
     
     

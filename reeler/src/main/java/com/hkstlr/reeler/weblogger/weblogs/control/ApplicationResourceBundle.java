@@ -17,7 +17,7 @@ import javax.inject.Named;
 @Named("labels")
 public class ApplicationResourceBundle {
 
-    public ResourceBundle res = null;
+    private ResourceBundle res = null;
     
     public ApplicationResourceBundle() {
          if(res == null){

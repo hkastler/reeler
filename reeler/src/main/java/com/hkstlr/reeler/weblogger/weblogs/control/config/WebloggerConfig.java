@@ -29,10 +29,8 @@ import javax.inject.Named;
 
 import com.hkstlr.reeler.app.control.AuthMethod;
 import com.hkstlr.reeler.app.control.PropertyExpander;
-import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.util.logging.Level;
 import javax.ejb.ConcurrencyManagement;
-import javax.ejb.ConcurrencyManagementType;
 import javax.ejb.Startup;
 
 /**
@@ -142,8 +140,8 @@ public class WebloggerConfig {
                 }
 
             } catch (Exception e) {
-                log.severe("WebloggerConfig failed:" + e.getMessage());
-                e.printStackTrace();
+                log.log(Level.SEVERE,"WebloggerConfig failed:",e);
+                
             }
         }
     }

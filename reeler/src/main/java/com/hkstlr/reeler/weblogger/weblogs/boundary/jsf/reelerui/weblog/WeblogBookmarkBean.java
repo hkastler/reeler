@@ -30,7 +30,7 @@ public class WeblogBookmarkBean {
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
 
-    public List<WeblogBookmark> bookmarks = new ArrayList<>();
+    private List<WeblogBookmark> bookmarks = new ArrayList<>();
 
     public WeblogBookmarkBean() {
     }

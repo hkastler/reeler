@@ -11,7 +11,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
     } catch (err) {
-        console(err.toString());
+        //console(err.toString());
     }
     //console.log($(this));
     var disabledValue = $(this).attr("data-disabled");
@@ -38,7 +38,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
                     $('#content').empty();
                     $('#content').html(response.toString());
                 } catch (err) {                    
-                    console.log(err.toString());
+                    //console.log(err.toString());
                 }
             },
             error: function () {
@@ -54,7 +54,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
                     $('#sideNav').empty();
                     $('#sideNav').html(response.toString());
                 } catch (err) {
-                    console.log(err.toString());
+                    //console.log(err.toString());
                 }
             },
             error: function () {
