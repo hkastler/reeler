@@ -11,11 +11,11 @@ $(document).on("click", "[id|='nav'] a", function (e) {
         e.preventDefault();
         e.stopImmediatePropagation();
     } catch (err) {
-        //console(err.toString());
+        //do nothing
     }
-    //console.log($(this));
+    
     var disabledValue = $(this).attr("data-disabled");
-    //console.log(disabledValue);
+    
     if (disabledValue === "true" || disabledValue === "disabled") {
         return false;
     }
@@ -26,7 +26,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
     
     $(this).parent('li').siblings().removeClass("active");
     $(this).parent('li').addClass('active');
-    //alert(myHref);
+    
     var ajaxHref = myHref.substr(0, myHref.lastIndexOf("."));
     try {
         $.ajax({
@@ -34,15 +34,15 @@ $(document).on("click", "[id|='nav'] a", function (e) {
             url: ajaxHref + "Content.xhtml",
             success: function (response) {
                 try {
-                    //alert(response.toString());
+                    
                     $('#content').empty();
                     $('#content').html(response.toString());
                 } catch (err) {                    
-                    //console.log(err.toString());
+                    //do nothing
                 }
             },
             error: function () {
-                //alert(e.toString());
+                //do nothing
             }
         });
         $.ajax({
@@ -50,18 +50,18 @@ $(document).on("click", "[id|='nav'] a", function (e) {
             url: ajaxHref + "SideNav.xhtml",
             success: function (response) {
                 try {
-                    //alert(response.toString());
+                    
                     $('#sideNav').empty();
                     $('#sideNav').html(response.toString());
                 } catch (err) {
-                    //console.log(err.toString());
+                    //do nothing
                 }
             },
             error: function () {
-                //alert(e.toString());
+                //do nothing
             }
         });
-        console.log(label);
+        
         window.history.pushState({url:myHref}, label, myHref);
         if (document.title != label) {
             document.title = label;
