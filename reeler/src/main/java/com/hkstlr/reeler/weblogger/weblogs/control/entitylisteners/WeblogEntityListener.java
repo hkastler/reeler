@@ -8,6 +8,7 @@ package com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.persistence.PostLoad;
@@ -18,7 +19,6 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreRemove;
 import javax.persistence.PreUpdate;
 import javax.validation.Validator;
-import org.ocpsoft.logging.Logger;
 
 /**
  *

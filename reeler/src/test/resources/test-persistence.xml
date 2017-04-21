@@ -7,10 +7,9 @@
     <persistence-unit name="rollerPU">
         <jta-data-source>java:global/jdbc/ReelerDB</jta-data-source>
         <properties>
-        	<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
             <property name="javax.persistence.schema-generation.database.action"
                       value="drop-and-create" />
-            <property name="eclipselink.logging.level" value="FINEST" />
         </properties>
     </persistence-unit>
 </persistence>

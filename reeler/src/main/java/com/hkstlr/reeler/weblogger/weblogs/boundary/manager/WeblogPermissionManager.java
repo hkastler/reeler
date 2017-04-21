@@ -47,7 +47,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     private static final Logger log = Logger.getLogger(WeblogPermissionManager.class.getName());
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
 
     public WeblogPermissionManager() {
     }

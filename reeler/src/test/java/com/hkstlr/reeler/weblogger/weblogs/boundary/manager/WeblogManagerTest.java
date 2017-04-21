@@ -6,16 +6,32 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.weblogger.TestSetup;
+import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import static org.mockito.BDDMockito.given;
+import org.mockito.InjectMocks;
+import org.mockito.Matchers;
+import static org.mockito.Matchers.anyString;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import org.mockito.MockitoAnnotations;
 
 /**
  *
@@ -24,22 +40,34 @@ import static org.mockito.Mockito.verify;
 public class WeblogManagerTest {
 
     private static final Logger log = Logger.getLogger(WeblogManagerTest.class.getName());
-    
-    WeblogManager cut;
-    
+
+    @Mock
+    private EntityManager em;
+
+    @InjectMocks
+    private WeblogManager cut;
+
+    @InjectMocks
+    private WeblogPermissionManager weblogPermissionManager;
+
+    @Mock
+    private WebloggerConfig webloggerConfig;
+
     public WeblogManagerTest() {
     }
-       
+
     @Before
     public void setUp() throws NamingException {
-        
-        this.cut = new WeblogManager();
-        this.cut.em = mock(EntityManager.class);
-        
+
+        MockitoAnnotations.initMocks(this);
+        this.cut.em = em;
+        this.cut.weblogPermissionManager = weblogPermissionManager;
+        this.cut.weblogPermissionManager.em = em;
+
     }
-        
+
     @Test
-    public void testWeblogManager(){
+    public void testWeblogManager() {
         //WeblogManager weblogManager = new WeblogManager();
         TestManagerReflector tmr = new TestManagerReflector();
         tmr.testManagerClass(cut);
@@ -52,11 +80,30 @@ public class WeblogManagerTest {
     public void testCreate() throws Exception {
         System.out.println("create");
         Weblog weblog = TestSetup.getWeblog();
-           
+
         cut.create(weblog);
-        verify(this.cut.em,times(1)).persist(weblog);
+        verify(this.cut.em, times(1)).persist(weblog);
     }
 
-   
+    /*@Test
+    public void testAddWeblog() throws Exception {
+    System.out.println("addWeblog");
+    Weblog weblog = TestSetup.getWeblog();
+    User user = TestSetup.getUser();
+    cut.addWeblog(weblog, user);
+    List<String> actions = new ArrayList<>();
+    TypedQuery weblogPermissionQuery = mock(TypedQuery.class);
     
+    weblogPermissionQuery.setParameter(1, user.getUserName());
+    weblogPermissionQuery.setParameter(2, weblog.getHandle());
+    WeblogPermission perm = new WeblogPermission(weblog, actions);
+    when(weblogPermissionQuery.getSingleResult()).thenReturn(perm);
+    String qName = "WeblogPermission.getByUserName&WeblogIdIncludingPending";
+    //when(this.cut.weblogPermissionManager.em.createNamedQuery(qName)).thenReturn(weblogPermissionQuery);
+    WeblogPermissionManager wpm = Mockito.spy(this.cut.weblogPermissionManager);
+    doNothing().when(wpm).grantWeblogPermission(weblog, user, actions, false);
+    //when(weblogPermissionQuery.getResultList()).thenReturn();
+    verify(this.cut.em, times(1)).merge(weblog);
+    }*/
+
 }
