@@ -28,6 +28,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.plugins.entities.PluginInterface;
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * Converts ascii emoticons into HTML image tags.
@@ -72,7 +73,7 @@ public class SmileysPlugin extends WeblogEntryPlugin implements PluginInterface<
         try {
             smileyDefs.load(SmileysPlugin.class.getResourceAsStream("smileys.properties"));
         } catch (IOException ex) {
-
+            log.log(Level.WARNING,"SmileysPlugin",ex);
         }
 
         // don't do this work if Smileys already loaded

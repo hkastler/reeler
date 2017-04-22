@@ -23,6 +23,9 @@
 
 package com.hkstlr.reeler.weblogger.weblogs.control.config.runtime;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * Represents the definition of a single runtime property.
  *
@@ -37,6 +40,8 @@ package com.hkstlr.reeler.weblogger.weblogs.control.config.runtime;
  * @author Allen Gilliland
  */
 public class PropertyDef {
+
+    private static final Logger log = Logger.getLogger(PropertyDef.class.getName());    
     
     private String name = null;
     private String key = null;
@@ -49,6 +54,7 @@ public class PropertyDef {
     /** Creates a new instance of PropertyDef */
     public PropertyDef() {}
 
+    @Override
     public String toString() {
         return "["+name+","+key+","+type+","+defaultValue+","+rows+","+cols+"]";
     }
@@ -98,8 +104,8 @@ public class PropertyDef {
         try {
             int r = Integer.parseInt(rows);
             this.rows = r;
-        } catch(Exception e) {
-            // hmmm ... bogus value
+        } catch(NumberFormatException e) {
+            log.log(Level.FINE,"setRows",e);
         }
     }
     public int getCols() {
@@ -115,8 +121,8 @@ public class PropertyDef {
         try {
             int c = Integer.parseInt(cols);
             this.cols = c;
-        } catch(Exception e) {
-            // hmmm ... bogus value
+        } catch(NumberFormatException e) {
+            log.log(Level.FINE,"setCols",e);
         }
     }
 }

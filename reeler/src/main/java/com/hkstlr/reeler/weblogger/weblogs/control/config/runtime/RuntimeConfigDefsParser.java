@@ -131,8 +131,9 @@ public class RuntimeConfigDefsParser {
 
         prop.setType(element.getElementsByTagName("type").item(0).getTextContent());
 
-        System.out.println("name:" + element.getAttribute("name"));
-        System.out.println("defaultValue:" + element.getElementsByTagName("default-value").item(0).getTextContent());
+        log.log(Level.FINER, "name:{0}", element.getAttribute("name"));
+        log.log(Level.FINER, "defaultValue:{0}", element.getElementsByTagName("default-value").item(0).getTextContent());
+        
         prop.setDefaultValue(element.getElementsByTagName("default-value").item(0).getTextContent());
 
         try {

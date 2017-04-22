@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.pages;
 
+import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.CalendarPrinter;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
@@ -16,9 +17,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -30,10 +33,10 @@ public class CalendarPrinterBean {
     Logger log = Logger.getLogger(CalendarPrinterBean.class.getName());
     
     @Inject
-    CalendarPrinter calendarPrinter;
+    private CalendarPrinter calendarPrinter;
     
-    @Inject
-    WeblogEntryManager wem;
+    @EJB
+    private Weblogger weblogger;
     
     @ManagedProperty(value = "#{param.handle}")
     private String handle;
@@ -45,8 +48,9 @@ public class CalendarPrinterBean {
     private String dateString = new String();
     
     List<Calendar> weblogDates = new ArrayList();
-
+    
     public CalendarPrinterBean() {
+        //default constructor
     }
     
     @PostConstruct
@@ -92,7 +96,7 @@ public class CalendarPrinterBean {
     }
     
     public List<Calendar> loadWeblogDates(String dateString, Weblog weblog){
-        return wem.getWeblogEntryDatesForCalendar(dateString, weblog);
+        return weblogger.getWeblogEntryManager().getWeblogEntryDatesForCalendar(dateString, weblog);
     }
     
     public String calendarTable(String path, Weblog weblog) throws ParseException {        

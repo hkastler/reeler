@@ -18,7 +18,6 @@ import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
@@ -36,6 +35,8 @@ import javax.ejb.EJB;
 @ManagedBean
 @RequestScoped
 public class WeblogBean {
+
+    private static final Logger log = Logger.getLogger(WeblogBean.class.getName());    
 
     @EJB
     Weblogger weblogger;
@@ -65,8 +66,6 @@ public class WeblogBean {
 
     private List<WeblogBookmark> bookmarks;
 
-    @Inject
-    private Logger log;
 
     private Weblog weblog;
 
@@ -93,7 +92,7 @@ public class WeblogBean {
             
             
         } catch (Exception e) {
-          
+          log.log(Level.WARNING,"WeblogBean.init()",e);
         }
 
     }

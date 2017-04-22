@@ -14,7 +14,6 @@ import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import javax.faces.convert.FacesConverter;
 import javax.inject.Inject;
 
 /**
@@ -24,7 +23,7 @@ import javax.inject.Inject;
 
 public class WeblogConverter implements Converter{
     
-    @Inject
+    @EJB
     private WeblogManager wm;
 
     
@@ -34,16 +33,12 @@ public class WeblogConverter implements Converter{
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
        
         try {
-            String id = value;
-            //.find apparently only works with numeric fields
-            log.info("id:" + id);
-            Weblog web = wm.findById(id);//session.load(CatalogValue .class, id);
-            log.info("returned Weblog:");
+            String id = value;           
+            Weblog web = wm.findById(id);
             return web;
-        } catch (Exception ex) {
-            log.info("yes it's a fail");
+        } catch (Exception ex) {           
             String message = ex.getMessage();
-            log.log(Level.INFO,"reason:",ex);
+            log.log(Level.WARNING,"reason:",ex);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, message));
         }
 

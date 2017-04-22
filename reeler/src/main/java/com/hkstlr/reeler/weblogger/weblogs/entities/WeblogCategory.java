@@ -82,8 +82,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.name = name;
         this.description = description;
         this.image = image;
-        //weblog.getWeblogCategories().add(this);
-        calculatePosition();
+        calculatePosition(this.weblog.getWeblogCategories().size());
     }
 
     public String getName() {
@@ -126,16 +125,12 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.weblog = weblog;
     }
     
-    public void calculatePosition() {
-        int size = weblog.getWeblogCategories().size();
-        if(size==0){
-            this.position = 0;
-        }
-       
+    public void calculatePosition(int size) {
+               
         if (size == 0) {
             this.position = 0;
         } else {
-             Optional<Integer> maxPosition = Optional.of(weblog.getWeblogCategories().stream()
+             Optional<Integer> maxPosition = Optional.ofNullable(weblog.getWeblogCategories().stream()
                 .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
                 .get()
                 .getPosition());
@@ -152,7 +147,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        
         if (!(object instanceof WeblogCategory)) {
             return false;
         }

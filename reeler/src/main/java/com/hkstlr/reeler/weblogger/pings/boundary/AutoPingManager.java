@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -36,7 +37,7 @@ public class AutoPingManager extends AbstractManager<AutoPing> {
     @Inject
     private Logger logger;
     
-    @Inject
+    @EJB
     private PingQueueEntryManager pqem;
     
     @PersistenceContext

@@ -153,13 +153,12 @@ public class WebloggerConfig {
      * @return String Value of property requested, null if not found
      */
     public static String getProperty(String key) {
-        log.info("Fetching property [" + key + "=" + config.getProperty(key) + "]");
+        log.finer("Fetching property [" + key + "=" + config.getProperty(key) + "]");
         String value = config.getProperty(key);
         
         //for system properties
         if (value.startsWith("$")) {
-            String newValue = value;
-            newValue = value.substring(2, value.indexOf("}"));
+            String newValue = value.substring(2, value.indexOf("}"));
             String theEndPart = value.split("}")[1];
             newValue = System.getProperty(newValue);
             newValue = newValue.concat(theEndPart);
