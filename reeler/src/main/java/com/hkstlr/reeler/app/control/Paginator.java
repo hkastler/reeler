@@ -81,7 +81,7 @@ public final class Paginator {
         int pageFirstItem = ((page * pageSize) - pageSize) + 1;
         if (pageFirstItem < 0) {
             pageFirstItem = 1;
-        };
+        }
 
         return pageFirstItem;
     }

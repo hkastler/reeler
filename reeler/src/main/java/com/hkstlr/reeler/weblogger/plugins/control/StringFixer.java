@@ -131,14 +131,15 @@ public class StringFixer {
     public static String encodeEmail(String str) {
         // obfuscate mailto's: turns them into hex encoded,
         // so that browsers can still understand the mailto link
+        String lstr = str;
         Matcher mailtoMatch = MAILTO_PATTERN.matcher(str);
         while (mailtoMatch.find()) {
             String email = mailtoMatch.group(1);
             String hexed = encode(email);
-            str = str.replaceFirst("mailto:" + email, "mailto:" + hexed);
+            lstr = lstr.replaceFirst("mailto:" + email, "mailto:" + hexed);
         }
 
-        return obfuscateEmail(str);
+        return obfuscateEmail(lstr);
     }
 
     /**
@@ -149,15 +150,16 @@ public class StringFixer {
      * @return
      */
     public static String obfuscateEmail(String str) {
+        String lstr = str;
         Matcher emailMatch = EMAIL_PATTERN.matcher(str);
         while (emailMatch.find()) {
             String at = emailMatch.group(1);            
-            str = str.replaceFirst(at, "-AT-");
+            lstr = lstr.replaceFirst(at, "-AT-");
             String dot = emailMatch.group(2) + emailMatch.group(3) + emailMatch.group(4);
             String newDot = emailMatch.group(2) + "-DOT-" + emailMatch.group(4);            
-            str = str.replaceFirst(dot, newDot);
+            lstr = lstr.replaceFirst(dot, newDot);
         }
-        return str;
+        return lstr;
     }
 
     /**

@@ -6,9 +6,13 @@
 package com.hkstlr.reeler.app.control;
 
 import com.hkstlr.reeler.weblogger.TestSetup;
+import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.io.StringReader;
 import java.lang.reflect.Field;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.Json;
@@ -61,37 +65,45 @@ public class JsonBuilderTest {
      * Test of toJsonString method, of class JsonBuilder.
      */
     @Test
-    public void testToJsonString_Object() {
+    public void testToJsonString_Object() throws Exception {
         System.out.println("toJsonString");
         Object o = weblogEntry;
         JsonBuilder instance = cut;
         String expResult = "testEntryLink";
         String result = instance.toJsonString(weblogEntry);
-        //log.info(result);
-        JsonParser parser = Json.createParser(new StringReader(result));
+        log.info(result);
+        User u = TestSetup.getUser();
+        UserRole ur = new UserRole("tester", u.getUserName());
+        Set<UserRole> roles = new HashSet<>();
+        roles.add(ur);
+        u.setRoles(roles);
+        log.info(cut.toJsonString(u));
+        log.info(cut.toJsonString(ur));
+        
+        /*JsonParser parser = Json.createParser(new StringReader(result));
         while (parser.hasNext()) {
-            JsonParser.Event event = parser.next();
-            switch (event) {
-                case START_ARRAY:
-                case END_ARRAY:
-                case START_OBJECT:
-                case END_OBJECT:
-                case VALUE_FALSE:
-                case VALUE_NULL:
-                case VALUE_TRUE:
-                    log.fine(event.toString());
-                    break;
-                case KEY_NAME:
-                   log.fine(event.toString() + " "
-                            + parser.getString() + " - ");
-                    break;
-                case VALUE_STRING:
-                case VALUE_NUMBER:
-                    log.fine(event.toString() + " "
-                            + parser.getString());
-                    break;
-            }
+        JsonParser.Event event = parser.next();
+        switch (event) {
+        case START_ARRAY:
+        case END_ARRAY:
+        case START_OBJECT:
+        case END_OBJECT:
+        case VALUE_FALSE:
+        case VALUE_NULL:
+        case VALUE_TRUE:
+        log.fine(event.toString());
+        break;
+        case KEY_NAME:
+        log.fine(event.toString() + " "
+        + parser.getString() + " - ");
+        break;
+        case VALUE_STRING:
+        case VALUE_NUMBER:
+        log.fine(event.toString() + " "
+        + parser.getString());
+        break;
         }
+        }*/
         assertTrue(result.contains(expResult));
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");

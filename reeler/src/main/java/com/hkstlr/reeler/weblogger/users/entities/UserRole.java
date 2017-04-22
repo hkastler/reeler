@@ -58,7 +58,7 @@ public class UserRole extends AbstractEntity implements Serializable {
     public UserRole() {
     }
 
-    public UserRole(String id, String rolename, String username) {
+    public UserRole(String rolename, String username) {
         this.roleName = rolename;
         this.userName = username;
     }

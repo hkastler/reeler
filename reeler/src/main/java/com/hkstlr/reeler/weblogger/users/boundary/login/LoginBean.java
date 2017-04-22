@@ -126,7 +126,7 @@ public class LoginBean implements Serializable {
                 
             }
 
-            
+            log.log(Level.INFO,"user:" + user.toJsonString());
             log.log(Level.INFO, "user?{0}", request.isUserInRole("user"));
             log.log(Level.INFO, "admin?{0}", request.isUserInRole("admin"));
 

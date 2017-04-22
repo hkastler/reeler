@@ -5,24 +5,14 @@
  */
 package com.hkstlr.reeler.weblogger.users.entities;
 
-import com.hkstlr.reeler.app.control.AppPermission;
-import com.hkstlr.reeler.app.control.AppPermissionInterface;
-import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
 import com.hkstlr.reeler.weblogger.users.control.UserEntityListener;
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.json.Json;
-import javax.json.JsonObjectBuilder;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;

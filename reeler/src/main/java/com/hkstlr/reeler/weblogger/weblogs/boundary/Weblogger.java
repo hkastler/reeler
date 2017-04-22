@@ -37,9 +37,6 @@ public class Weblogger {
     @EJB
     private UserManager userManager;
 
-    /*  @EJB
-    private WeblogBookmarkManager bookmarkManager*/;
-
     @EJB
     private WeblogManager weblogManager;
 
@@ -125,13 +122,7 @@ public class Weblogger {
         return userManager;
     }
 
-    /**
-     *
-     * Get BookmarkManager associated with this Weblogger instance.
-     */
-    /* public WeblogBookmarkManager getBookmarkManager() {
-    return bookmarkManager;
-    }*/
+    
     /**
      *
      * Get OAuthManager associated with this Weblogger instance.
