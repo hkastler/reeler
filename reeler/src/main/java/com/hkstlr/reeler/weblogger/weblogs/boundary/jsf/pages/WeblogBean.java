@@ -48,7 +48,7 @@ public class WeblogBean {
     private String categoryName;
 
     @ManagedProperty(value = "#{param.dateString}")
-    private String dateString = new String();
+    private String dateString;
 
     @ManagedProperty(value = "#{param.pageNum}")
     private Integer pageNum;
@@ -76,20 +76,25 @@ public class WeblogBean {
 
     @PostConstruct
     public void init() {
+        if(dateString == null){
+            dateString = "";
+        }
+        
         if (pageNum == null) {
             pageNum = 1;
         }
         
         try {
             this.weblog = getWeblogByHandle(handle);
-            int numberOfEntries = getEntryCount(weblog);
-            
-            if (pageSize == null) {
-                pageSize = weblog.getEntryDisplayCount();
-                
+            if(this.weblog != null){
+                int numberOfEntries = getEntryCount(weblog);
+
+                if (pageSize == null) {
+                    pageSize = weblog.getEntryDisplayCount();
+
+                }
+                paginator = new Paginator(pageSize,pageNum,numberOfEntries);
             }
-            paginator = new Paginator(pageSize,pageNum,numberOfEntries);
-            
             
         } catch (Exception e) {
           log.log(Level.WARNING,"WeblogBean.init()",e);
@@ -168,8 +173,6 @@ public class WeblogBean {
     public void setDefaultOutcome(String defaultOutcome) {
         this.defaultOutcome = defaultOutcome;
     }
-    
-    
 
     public List<WeblogBookmark> getBookmarks() {
         return bookmarks;
@@ -198,23 +201,26 @@ public class WeblogBean {
     private Weblog getWeblogByHandle(String handle) {
 
         if (handle == null) {
-            WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().findByPinnedToMain().get(0);
-            Weblog weblog = weblogEntry.getWebsite();
-            return weblog;
+            try{
+                WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().findByPinnedToMain().get(0);
+                return weblogEntry.getWebsite();
+            }catch(Exception e){
+                log.log(Level.FINER,null,e);
+                Weblog fallback = new Weblog();
+                return fallback;
+            }
         }
 
-        Weblog weblog = null;
+        Weblog lweblog = null;
         try {
-            weblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
-            //List<WeblogEntry> weblogEntries = weblogger.getWeblogEntryManager().getWeblogEntriesForWeblog(weblog);
-            //weblog.setWeblogEntries(weblogEntries);
+            lweblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
             List<WeblogBookmark> weblogBookmarks = weblogger.getWeblogBookmarkManager().getBookmarksForWeblog(weblog);
             setBookmarks(weblogBookmarks);
         } catch (WebloggerException ex) {
             log.log(Level.SEVERE, null, ex);
         }
 
-        return weblog;
+        return lweblog;
     }
 
     public WeblogEntry getLatestWeblogEntryForWeblog() {

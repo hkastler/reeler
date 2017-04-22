@@ -185,7 +185,7 @@ public class UserManager extends AbstractManager<User> {
             Date endDate,
             int offset,
             int length) throws WebloggerException {
-        List<User> userList = new ArrayList<>();
+        List<User> userList;
         Query q = getNamedQuery("User.getByEnabled&EndDate&StartDateOrderByStartDateDesc");
         q.setParameter(1, enabled);
         q.setParameter(2, startDate);
