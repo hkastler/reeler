@@ -15,7 +15,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -46,9 +45,10 @@ public class SelectItemBean {
     private transient Logger log;
   
     /**
-     * Creates a new instance of USBean
+     * Creates a new instance of SelectItemBean
      */
     public SelectItemBean() {
+        //constructor
     }
     
     @PostConstruct
@@ -125,7 +125,7 @@ public class SelectItemBean {
         SelectItem[] items = new SelectItem[12];
         
         for(int i=0; i<=11; i++){
-            String month = getMonth(i+1);
+            
             String strMonth = Integer.toString(i+1);
             if(strMonth.length()==1){
                 strMonth= "0"+strMonth;
@@ -159,7 +159,7 @@ public class SelectItemBean {
         SelectItem[] items = new SelectItem[cats.size()];
         
         for(int i=0; i<=cats.size(); i++){
-            String month = getMonth(i+1);
+            
             String strMonth = Integer.toString(i+1);
             if(strMonth.length()==1){
                 strMonth= "0"+strMonth;
@@ -183,9 +183,7 @@ public class SelectItemBean {
     }
     
     private SelectItem[] getMinuteSelectItems() {
-        //Integer[] hours = new Integer[24];
-       
-       
+              
         SelectItem[] items = new SelectItem[60];
         int counter = 0;
         for(int i=0; i<60; i++){
@@ -197,9 +195,6 @@ public class SelectItemBean {
     }
     
     private SelectItem[] getSecondSelectItems() {
-        //Integer[] hours = new Integer[24];
-       
-       
         SelectItem[] items = new SelectItem[60];
         int counter = 0;
         for(int i=0; i<60; i++){
@@ -211,7 +206,6 @@ public class SelectItemBean {
     }
     
     private SelectItem[] getCommentDaysSelectItems() {
-        //Integer[] hours = new Integer[24];
         String dayLabel = "days";
        
         SelectItem[] items = new SelectItem[7];
@@ -266,12 +260,8 @@ public class SelectItemBean {
        }              
                
        
-        Comparator<SelectItem> localeNameSort = new Comparator<SelectItem>() {
-            @Override
-            public int compare(SelectItem si1, SelectItem si2) {
-            return  si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0,1));
-        }
-        };
+        Comparator<SelectItem> localeNameSort = (SelectItem si1, SelectItem si2) 
+                -> si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0,1));
         
         Collections.sort(ftLocale,localeNameSort);
        
@@ -282,18 +272,13 @@ public class SelectItemBean {
      public SelectItem[] getTimeZoneItems() {
        
        String[] timeZones = TimeZone.getAvailableIDs();
-       List<SelectItem> ftZones = new ArrayList<SelectItem>();        
+       List<SelectItem> ftZones = new ArrayList<>();        
        for (String tz : timeZones) { 
            ftZones.add(new SelectItem(tz,tz) );
        }              
-              
-       
-        Comparator<SelectItem> timeZoneNameSort = new Comparator<SelectItem>() {
-            @Override
-            public int compare(SelectItem si1, SelectItem si2) {
-            return  si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0,1));
-        }
-        };
+        
+       Comparator<SelectItem> timeZoneNameSort = (SelectItem si1, SelectItem si2) 
+                -> si1.getLabel().substring(0,1).compareTo(si2.getLabel().substring(0,1));
         
         Collections.sort(ftZones,timeZoneNameSort);
        

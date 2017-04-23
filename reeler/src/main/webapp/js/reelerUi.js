@@ -2,9 +2,9 @@
 //after the pagination container node gets rewritten by ajax
 $(document).on("click", "[id|='nav'] a", function (e) {
 
-    var page = $(this).attr("data-page");
+    var dataPage = $(this).attr("data-page");
     //ckeditor doesnt render via ajax
-    if (page == 'entry') {
+    if (page === 'entry') {
         return;
     }
     try {
@@ -63,7 +63,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
         });
         
         window.history.pushState({url:myHref}, label, myHref);
-        if (document.title != label) {
+        if (document.title !== label) {
             document.title = label;
         }
     } catch (err) {

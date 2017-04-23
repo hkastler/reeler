@@ -132,10 +132,11 @@ public class JsonBuilderTest {
     @Test
     public void testToJsonObject() {
         System.out.println("toJsonObject");
-        Object o = weblogEntry;
+        WeblogEntry o = weblogEntry;
         //String[] skipFields = new String[]{};
         JsonBuilder instance = cut;
         //JsonObject expResult = null;
+        log.info(cut.toJsonObject(weblogEntry.getWebsite(), skipFields).toString());
         JsonObject result = instance.toJsonObject(o, skipFields);
         //log.info("result:" + result.toString());
         WeblogEntry resultWeblog = new WeblogEntry();

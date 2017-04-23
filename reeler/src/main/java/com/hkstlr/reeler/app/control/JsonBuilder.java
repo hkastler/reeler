@@ -1,7 +1,5 @@
 package com.hkstlr.reeler.app.control;
 
-import com.hkstlr.reeler.app.entities.AbstractEntity;
-import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
@@ -29,6 +27,7 @@ public class JsonBuilder {
     private static final Logger log = Logger.getLogger(JsonBuilder.class.getName());
 
     public JsonBuilder() {
+        //default constructor
     }
 
     public String toJsonString(Object o) {
@@ -80,8 +79,8 @@ public class JsonBuilder {
                         builder.add(fieldName, (Boolean) fieldValue);
                     } else if (fieldValue instanceof Long) {
                         builder.add(fieldName, (Long) fieldValue);
-                    } else if (fieldValue instanceof Date){    
-                        String formattedCalDate = DateFormatter.jsFormat.format((Date)fieldValue);
+                    } else if (fieldValue instanceof Date) {
+                        String formattedCalDate = DateFormatter.jsFormat.format((Date) fieldValue);
                         builder.add(fieldName, formattedCalDate);
                     } else if (fieldValue instanceof GregorianCalendar) {
                         Date calDate = new Date(((GregorianCalendar) fieldValue).getTimeInMillis());
@@ -94,32 +93,17 @@ public class JsonBuilder {
                         }
                         builder.add(fieldName, arrayBuilder);
                     } else if (fieldValue instanceof Set) {
-
                         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
                         for (Object item : (Set) fieldValue) {
                             arrayBuilder.add(this.toJsonObject(item, new String[]{}));
                         }
                         builder.add(fieldName, arrayBuilder);
-                    } else {
-                        
-                        try {
-                            builder.add(fieldName, fieldValue.toString());
-                        } catch (Exception e) {
-                            String className = fieldValue.getClass().getName();
-                            log.log(Level.SEVERE, null, e);
-                            try {
-
-                                JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-                                builder.add(className, arrayBuilder);
-                                builder.addNull(fieldName);
-
-                            } catch (Exception ex) {
-                                Logger.getLogger(JsonBuilder.class.getName()).log(Level.SEVERE, null, ex);
-
-                            }
-                        }
+                    }else  {
+                       
+                        builder.add(fieldName,fieldValue.toString());
                     }
-                } else {
+                    
+                }else {
                     builder.addNull(fieldName);
                 }
             } catch (IllegalArgumentException | IllegalAccessException ex) {
@@ -127,7 +111,6 @@ public class JsonBuilder {
             }
         }
 
-        
         return builder.build();
     }
 
@@ -189,30 +172,32 @@ public class JsonBuilder {
         Field[] classFields = o.getClass().getDeclaredFields();
         Field[] superClassFields = o.getClass().getSuperclass().getDeclaredFields();
 
-        Field[] fields = Stream.concat(Arrays.stream(superClassFields), Arrays.stream(classFields))
+        return Stream.concat(Arrays.stream(superClassFields), Arrays.stream(classFields))
                 .toArray(Field[]::new);
-        return fields;
+
     }
 
     public Field[] filterFieldsByName(Field[] fieldsToFilter, String[] skipFields) {
-
+        Field[] lFields = fieldsToFilter;
         for (String skipField : skipFields) {
-            fieldsToFilter = Arrays.stream(fieldsToFilter).filter(f -> (!f.getName().equalsIgnoreCase(skipField)))
+            lFields = Arrays.stream(lFields).filter(f -> !skipField.equalsIgnoreCase(f.getName()))
                     .toArray(Field[]::new);
         }
 
-        return fieldsToFilter;
+        return lFields;
     }
 
     public Field[] filterInverses(Field[] fieldsToFilter) {
-        
+
         Field[] lFields = fieldsToFilter;
         for (Field field : fieldsToFilter) {
 
             Annotation[] annotations = field.getAnnotations();
             for (Annotation ann : annotations) {
-                if (ann.annotationType().getName().equals("javax.persistence.ManyToMany")) {
-
+                if ( "javax.persistence.ManyToMany".equals(ann.annotationType().getName())
+                        ||
+                        "javax.persistence.OneToMany".equals(ann.annotationType().getName())) {
+                    log.finer(field.getName() + StringPool.COLON + ann.annotationType().getName());
                     for (Method method : ann.annotationType().getDeclaredMethods()) {
                         if ("mappedBy".equals(method.getName())) {
                             try {

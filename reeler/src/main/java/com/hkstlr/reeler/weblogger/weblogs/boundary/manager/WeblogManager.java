@@ -316,6 +316,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 agg.setTotal(agg.getTotal() - stat.getCount());
             } catch (NoResultException ignored) {
                 // nothing to update
+                log.log(Level.FINEST,null,ignored);
             }
         }
     }
@@ -438,6 +439,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
+            log.log(Level.WARNING,"findByHandle",e);
             weblog = null;
         }
 

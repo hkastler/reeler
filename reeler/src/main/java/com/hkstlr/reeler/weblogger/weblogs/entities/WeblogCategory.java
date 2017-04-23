@@ -134,7 +134,9 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
                 .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
                 .get()
                 .getPosition());
-            this.position = maxPosition.orElse(0) + 1;
+            if(maxPosition.isPresent()){
+                this.position = maxPosition.orElse(0) + 1;
+            }
         }
     }
 

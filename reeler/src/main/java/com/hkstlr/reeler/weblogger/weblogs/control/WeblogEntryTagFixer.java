@@ -61,7 +61,6 @@ public class WeblogEntryTagFixer {
         if (tagsarr == null) {
             return Collections.emptyList();
         }
-        System.out.println("returning: " + tagsarr.toString());
         return Arrays.asList(tagsarr);
     }
 }
