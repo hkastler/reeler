@@ -17,10 +17,12 @@ package com.hkstlr.reeler.weblogger.oauth.boundary.manager;
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
+ * original in package org.apache.roller.weblogger.business.jpa;
  */
 
-//package org.apache.roller.weblogger.business.jpa;
 
+
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.oauth.control.Digester;
 import com.hkstlr.reeler.weblogger.oauth.entities.OAuthAccessorRecord;
 import com.hkstlr.reeler.weblogger.oauth.entities.OAuthConsumerRecord;
@@ -168,7 +170,7 @@ public class OAuthManager{
         // for now use md5 of name + current time as token
         String token_data = consumer_key + System.nanoTime();
         
-        String token = new String();
+        String token = StringPool.BLANK;
         try {
             token = Digester.MD5(token_data);
         } catch (UnsupportedEncodingException ex) {
@@ -176,7 +178,7 @@ public class OAuthManager{
         }
         // for now use md5 of name + current time + token as secret
         String secret_data = consumer_key + System.nanoTime() + token;
-        String secret = new String();
+        String secret = StringPool.BLANK;
         try {
             secret = Digester.MD5(secret_data);
         } catch (UnsupportedEncodingException ex) {

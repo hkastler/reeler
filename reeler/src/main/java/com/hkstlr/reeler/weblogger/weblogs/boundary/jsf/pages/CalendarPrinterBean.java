@@ -5,8 +5,8 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.pages;
 
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.CalendarPrinter;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
@@ -21,7 +21,6 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.inject.Inject;
-import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -45,7 +44,7 @@ public class CalendarPrinterBean {
     private String anchor;
     
     @ManagedProperty(value = "#{param.dateString}")
-    private String dateString = new String();
+    private String dateString = StringPool.BLANK;
     
     List<Calendar> weblogDates = new ArrayList();
     
@@ -59,7 +58,7 @@ public class CalendarPrinterBean {
             dateString = DateFormatter.dateFormat.format(new Date());
         }
         if(handle == null){
-            handle = new String();
+            handle = StringPool.BLANK;
         }
     }
 

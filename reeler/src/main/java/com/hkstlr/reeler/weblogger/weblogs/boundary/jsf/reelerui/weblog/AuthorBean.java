@@ -83,9 +83,9 @@ public abstract class AuthorBean<T> {
     }
     
     public void setActionLabel(){
-        if(action.equals("create")){
+        if("create".equals(action)){
             actionLabel = "Create";
-        }else if(action.equals("edit")){
+        }else if("edit".equals(action)){
             actionLabel = "Edit";
         }
     }

@@ -289,6 +289,7 @@ public class WebloggerConfig {
      * AuthMethod enum object.
      * <p />
      *
+     * @return 
      * @throws IllegalArgumentException if property value defined in the
      * properties file is missing or not the property name of any AuthMethod
      * enum object.

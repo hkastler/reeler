@@ -4,6 +4,7 @@ adapted from package org.apache.roller.weblogger.util.Utilities;
 
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
+import com.hkstlr.reeler.app.control.StringPool;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -11,19 +12,22 @@ import java.util.List;
 public class StringChanger {
 
     public static String toTitleCase(String input) {
-        input = input.toLowerCase();
-        char c = input.charAt(0);
-        String s = new String("" + c);
+        String rStr = input.toLowerCase();
+        char c = rStr.charAt(0);
+        String s = StringPool.BLANK + c;
         String f = s.toUpperCase();
-        return f + input.substring(1);
+        return f + rStr.substring(1);
     }
 
     // --------------------------------------------------------------------------
     /**
      * Convert string with delimiters to string list.
+     * @param instr
+     * @param delim
+     * @return 
      */
     public static List<String> stringToStringList(String instr, String delim) {
-        List<String> stringList = new ArrayList<String>();
+        List<String> stringList = new ArrayList<>();
         String[] str = instr.split(delim);
         Collections.addAll(stringList, str);
         return stringList;
@@ -32,17 +36,20 @@ public class StringChanger {
     // ------------------------------------------------------------------------
     /**
      * Convert string array to string with delimeters.
+     * @param stringList
+     * @param delim
+     * @return 
      */
     public static String stringListToString(List<String> stringList,
             String delim) {
         StringBuilder bldr = new StringBuilder();
-        for (String s : stringList) {
+        stringList.forEach((s) -> {
             if (bldr.length() > 0) {
                 bldr.append(delim).append(s);
             } else {
                 bldr.append(s);
             }
-        }
+        });
         return bldr.toString();
     }
     

@@ -35,14 +35,13 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
+import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.ConfigDef;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.DisplayGroup;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.PropertyDef;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.RuntimeConfigDefs;
-import java.util.ResourceBundle;
 
-;
 
 /**
  * Manages global properties for Reeler.
@@ -82,7 +81,7 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
      * @inheritDoc
      */
     @PostConstruct
-    public void init() {
+    public void init(){
 
         runtimeConfigDefs
                 = WebloggerRuntimeConfig.getRuntimeConfigDefs();
@@ -99,13 +98,19 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
         } catch (Exception e) {
             log.log(Level.SEVERE, "Failed to initialize runtime configuration properties."
                     + "Please check that the database has been upgraded!", e);
-            throw new RuntimeException(e);
+            try {
+                throw new WebloggerException(e.getMessage());
+            } catch (WebloggerException ex) {
+                Logger.getLogger(RuntimeConfigManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
     }
 
     /**
      * Retrieve a single property by name.
+     * @param name
+     * @return 
      */
     public RuntimeConfigProperty getProperty(String name) {
         Query query = em.createNamedQuery("RuntimeConfigProperty.findByName");
@@ -120,10 +125,10 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
      * Properties are returned in a Map to make them easy to lookup. The Map
      * uses the property name as the key and the RuntimeConfigProperty object as
      * the value.
+     * @return 
      */
     public Map<String, String> getProperties() {
 
-        HashMap<String, String> configProps = new HashMap<String, String>();
         List<RuntimeConfigProperty> list = em.createNamedQuery("RuntimeConfigProperty.findAll",
                 RuntimeConfigProperty.class).getResultList();
         /*
@@ -132,19 +137,22 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
          * hash still needs to be the RuntimeConfigProperty object so that
          * we can save the elements again after they have been updated
          */
-        for (RuntimeConfigProperty prop : list) {
-            log.info(prop.getName() + ":" + prop.getValue());
+        list.stream().map((prop) -> {
+            log.log(Level.INFO, "{0}:{1}", new Object[]{prop.getName(), prop.getValue()});
+            return prop;
+        }).forEachOrdered((prop) -> {
             try {
                 props.put(prop.getName(), prop.getValue());
             } catch (Exception e) {
                 log.log(Level.WARNING,"props.put issue:",e);
             }
-        }
+        });
         return props;
     }
 
     /**
      * Save a single property.
+     * @param property
      */
     public void saveProperty(RuntimeConfigProperty property) {
         this.em.persist(property);
@@ -190,20 +198,22 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
     revised from the original
     props initialized as key value pairs
      */
-    private Map initializeMissingProps(Map<String, String> props) {
-
-        if (props == null) {
-            props = new HashMap<>();
+    private Map initializeMissingProps(Map<String, String> varProps) {
+        
+        Map<String, String> lprops = new HashMap<>();
+        
+        if (varProps != null) {
+            lprops = varProps;
         }
 
         // start by getting our runtimeConfigDefs
-        RuntimeConfigDefs runtimeConfigDefs
+        runtimeConfigDefs
                 = WebloggerRuntimeConfig.getRuntimeConfigDefs();
 
         // can't do initialization without our config defs
         if (runtimeConfigDefs == null) {
             log.log(Level.SEVERE, "runtimeConfigDefs null");
-            return props;
+            return lprops;
         }
 
         // iterate through all the definitions and add properties
@@ -213,12 +223,12 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
                 for (PropertyDef propDef : dGroup.getPropertyDefs()) {
 
                     // do we already have this prop?  if not then add it
-                    if (!props.containsKey(propDef.getName())) {
+                    if (!lprops.containsKey(propDef.getName())) {
                         // RuntimeConfigProperty newprop =
                         //      new RuntimeConfigProperty(
                         //              propDef.getName(), propDef.getDefaultValue());
 
-                        props.put(propDef.getName(), propDef.getDefaultValue());
+                        lprops.put(propDef.getName(), propDef.getDefaultValue());
 
                         log.info("Property " + propDef.getName()
                                 + " not yet in roller_properties database table, will initialize with "
@@ -228,7 +238,7 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
             }
         }
 
-        return props;
+        return lprops;
     }
 
     public Map<String, String> getProps() {

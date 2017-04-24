@@ -125,7 +125,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.weblog = weblog;
     }
     
-    public void calculatePosition(int size) {
+    private void calculatePosition(int size) {
                
         if (size == 0) {
             this.position = 0;

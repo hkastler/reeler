@@ -194,10 +194,11 @@ public class JsonBuilder {
 
             Annotation[] annotations = field.getAnnotations();
             for (Annotation ann : annotations) {
-                if ( "javax.persistence.ManyToMany".equals(ann.annotationType().getName())
+                log.finest("annotation type:" + ann.annotationType().getTypeName());
+                if ( "javax.persistence.ManyToMany".equals(ann.annotationType().getTypeName())
                         ||
-                        "javax.persistence.OneToMany".equals(ann.annotationType().getName())) {
-                    log.finer(field.getName() + StringPool.COLON + ann.annotationType().getName());
+                        "javax.persistence.OneToMany".equals(ann.annotationType().getTypeName())) {
+                    log.finer(field.getName() + StringPool.COLON + ann.annotationType().getTypeName());
                     for (Method method : ann.annotationType().getDeclaredMethods()) {
                         if ("mappedBy".equals(method.getName())) {
                             try {

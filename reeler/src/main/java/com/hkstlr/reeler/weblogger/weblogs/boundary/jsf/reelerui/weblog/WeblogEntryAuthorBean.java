@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
@@ -59,13 +60,13 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     private Date pubDate = new Date();
 
-    private String strDateTimeOfPubDate = new String();
+    private String strDateTimeOfPubDate = StringPool.BLANK;
     
     private String localDateTimeFormat;
 
-    private String enclosureURL = new String();
+    private String enclosureURL = StringPool.BLANK;
 
-    private String tagBag = new String();
+    private String tagBag = StringPool.BLANK;
     
     public WeblogEntryAuthorBean() {
         super(WeblogEntry.class);
@@ -197,8 +198,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     public Calendar setCalFromStrPubDate(String strPubDate) {
 
-        //Timestamp ts = null;
-        if (strPubDate.equals("")) {
+        if (StringPool.BLANK.equals(strPubDate)) {
             cal.setTime(new Date());
             return cal;
         }
