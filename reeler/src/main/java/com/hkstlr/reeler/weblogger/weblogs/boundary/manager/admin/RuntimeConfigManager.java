@@ -36,7 +36,6 @@ import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.ConfigDef;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.DisplayGroup;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.PropertyDef;
@@ -49,24 +48,14 @@ import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.RuntimeConfigD
 @Stateless
 public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty> {
 
-    public RuntimeConfigManager() {
-        super(RuntimeConfigProperty.class);
-        
-    }
-
-    /**
+     /**
      * The logger instance for this class.
      */
     private Logger log = Logger.getLogger(RuntimeConfigManager.class.getName());
 
     @PersistenceContext
-    private EntityManager em;
-
-    @Override
-    protected EntityManager getEntityManager() {
-        return em;
-    }
-
+    private EntityManager em;    
+    
     private Map<String, String> props = new HashMap<>();
 
     private RuntimeConfigDefs runtimeConfigDefs;
@@ -76,15 +65,23 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
     private List<DisplayGroup> displayGroups;
 
     private List<PropertyDef> propertyDefs;
+    
+    public RuntimeConfigManager() {
+        super(RuntimeConfigProperty.class);
+        
+    } 
+
+
+    @Override
+    protected EntityManager getEntityManager() {
+        return em;
+    }
 
     /**
      * @inheritDoc
      */
     @PostConstruct
     public void init(){
-
-        runtimeConfigDefs
-                = WebloggerRuntimeConfig.getRuntimeConfigDefs();
 
         try {
             // retrieve properties from database
@@ -207,8 +204,7 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
         }
 
         // start by getting our runtimeConfigDefs
-        runtimeConfigDefs
-                = WebloggerRuntimeConfig.getRuntimeConfigDefs();
+        runtimeConfigDefs = getRuntimeConfigDefs();
 
         // can't do initialization without our config defs
         if (runtimeConfigDefs == null) {

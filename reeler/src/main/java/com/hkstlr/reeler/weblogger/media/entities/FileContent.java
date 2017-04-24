@@ -20,6 +20,7 @@ package com.hkstlr.reeler.weblogger.media.entities;
 
 // original package org.apache.roller.weblogger.pojos;
 
+import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.io.File;
 import java.io.FileInputStream;
@@ -70,13 +71,15 @@ public class FileContent {
     
     /**
      * Returns the input stream for the underlying file.
+     * @return 
+     * @throws com.hkstlr.reeler.app.control.WebloggerException
      */
-    public InputStream getInputStream() {
+    public InputStream getInputStream() throws WebloggerException {
         try {
             return new FileInputStream(resourceFile);
         } catch (java.io.FileNotFoundException ex) {
             // should never happen, rethrow as runtime exception
-            throw new RuntimeException("Error constructing input stream", ex);
+            throw new WebloggerException("Error constructing input stream", ex);
         }
     }
 }

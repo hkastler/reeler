@@ -16,9 +16,9 @@ package com.hkstlr.reeler.weblogger.weblogs.control.config;
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
+ * package org.apache.roller.weblogger.config;
+ *
  */
-
-//package org.apache.roller.weblogger.config;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,13 +26,14 @@ import java.io.StringWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 
-//import com.hkstlr.reeler.weblogger.boundary.manager.PropertiesManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.RuntimeConfigDefs;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.RuntimeConfigDefsParser;
 import com.hkstlr.reeler.weblogger.weblogs.entities.RuntimeConfigProperty;
 import com.hkstlr.reeler.app.control.AppConstants;
+import com.hkstlr.reeler.app.control.StringPool;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
+import javax.ejb.EJB;
 
 
 /**
@@ -54,9 +55,8 @@ public final class WebloggerRuntimeConfig {
     private static String relativeContextURL = null;
     private static String absoluteContextURL = null;
     
-    //@Inject
-    //static
-    //PropertiesManager pmgr;
+    @EJB
+    RuntimeConfigManager runtimeConfigManager;
     
     // prevent instantiations
     private WebloggerRuntimeConfig() {}
@@ -65,19 +65,21 @@ public final class WebloggerRuntimeConfig {
     /**
      * Retrieve a single property from the PropertiesManager ... returns null
      * if there is an error
+     * @param name
+     * @return 
      **/
-    public static String getProperty(String name) {
+    public String getProperty(String name) {
         
         String value = null;
         
         try {
-            //PropertiesManager pmgr = WebloggerFactory.getWeblogger().getPropertiesManager();
-            RuntimeConfigProperty prop = null;//pmgr.getProperty(name);
+            
+            RuntimeConfigProperty prop = runtimeConfigManager.getProperty(name);
             if(prop != null) {
                 value = prop.getValue();
             }
         } catch(Exception e) {
-            log.warning("Trouble accessing property: "+name + e);
+            log.log(Level.WARNING,"Trouble accessing property: "+name , e);
         }
         
         log.fine("fetched property ["+name+"="+value+"]");
@@ -89,10 +91,10 @@ public final class WebloggerRuntimeConfig {
     /**
      * Retrieve a property as a boolean ... defaults to false if there is an error
      **/
-    public static boolean getBooleanProperty(String name) {
+    public boolean getBooleanProperty(String name) {
         
         // get the value first, then convert
-        String value = WebloggerRuntimeConfig.getProperty(name);
+        String value = getProperty(name);
         
         if (value == null) {
             return false;
@@ -105,10 +107,10 @@ public final class WebloggerRuntimeConfig {
     /**
      * Retrieve a property as an int ... defaults to -1 if there is an error
      **/
-    public static int getIntProperty(String name) {
+    public int getIntProperty(String name) {
         
         // get the value first, then convert
-        String value = WebloggerRuntimeConfig.getProperty(name);
+        String value = getProperty(name);
         
         if (value == null) {
             return -1;
@@ -125,7 +127,7 @@ public final class WebloggerRuntimeConfig {
     }
     
     
-    public static RuntimeConfigDefs getRuntimeConfigDefs() {
+    public RuntimeConfigDefs getRuntimeConfigDefs() {
         
         if(configDefs == null) {
             
@@ -156,7 +158,7 @@ public final class WebloggerRuntimeConfig {
      * properties we change at runtime via the UI and how to setup
      * the display for editing those properties.
      */
-    public static String getRuntimeConfigDefsAsString() {
+    public String getRuntimeConfigDefsAsString() {
         
         log.fine("Trying to load runtime config defs file");
         
@@ -178,7 +180,7 @@ public final class WebloggerRuntimeConfig {
             log.log(Level.SEVERE,"Error loading runtime config defs file", e);
         }
         
-        return "";
+        return StringPool.BLANK;
     }
     
     
@@ -199,7 +201,7 @@ public final class WebloggerRuntimeConfig {
      * property if it is set, otherwise it will return the non-persisted
      * value which is set by the InitFilter.
      */
-    public static String getAbsoluteContextURL() {
+    public String getAbsoluteContextURL() {
         
         // db prop takes priority if it exists
         String absURL = getProperty("site.absoluteurl");
@@ -216,12 +218,12 @@ public final class WebloggerRuntimeConfig {
      *
      * This property is *not* persisted in any way.
      */
-    public static void setRelativeContextURL(String url) {
+    public void setRelativeContextURL(String url) {
         relativeContextURL = url;
     }
     
     
-    public static String getRelativeContextURL() {
+    public String getRelativeContextURL() {
         return relativeContextURL;
     }
     
@@ -230,7 +232,7 @@ public final class WebloggerRuntimeConfig {
      * Convenience method for Roller classes trying to determine if a given
      * weblog handle represents the front page blog.
      */
-    public static boolean isFrontPageWeblog(String weblogHandle) {
+    public boolean isFrontPageWeblog(String weblogHandle) {
         
         String frontPageHandle = getProperty("site.frontpage.weblog.handle");
         
@@ -243,7 +245,7 @@ public final class WebloggerRuntimeConfig {
      * weblog handle represents the front page blog configured to render
      * site-wide data.
      */
-    public static boolean isSiteWideWeblog(String weblogHandle) {
+    public boolean isSiteWideWeblog(String weblogHandle) {
         
         boolean siteWide = getBooleanProperty("site.frontpage.weblog.aggregated");
         

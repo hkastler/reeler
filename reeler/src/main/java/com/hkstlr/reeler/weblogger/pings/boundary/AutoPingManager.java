@@ -37,6 +37,9 @@ public class AutoPingManager extends AbstractManager<AutoPing> {
     @Inject
     private Logger logger;
     
+    @Inject
+    private PingConfig pingConfig;
+    
     @EJB
     private PingQueueEntryManager pqem;
     
@@ -78,7 +81,7 @@ public class AutoPingManager extends AbstractManager<AutoPing> {
     }
 
     public void queueApplicableAutoPings(WeblogEntry changedWeblogEntry) throws WebloggerException {
-        if (PingConfig.getSuspendPingProcessing()) {
+        if (pingConfig.getSuspendPingProcessing()) {
            
                 logger.warning("Ping processing is suspended." + " No auto pings will be queued.");
             

@@ -16,9 +16,10 @@ package com.hkstlr.reeler.weblogger.media.boundary.manager;
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
- * //original package org.apache.roller.weblogger.business;
+ * original package org.apache.roller.weblogger.business;
  */
 import com.hkstlr.reeler.app.control.AppConstants;
+import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
@@ -31,6 +32,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.nio.file.InvalidPathException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -48,6 +50,10 @@ public class FileContentManager {
 
     @Inject
     WebloggerConfig webloggerConfig;
+    
+    @Inject
+    WebloggerRuntimeConfig webloggerRuntimeConfig;
+    
 
     /**
      * Create file content manager.
@@ -68,10 +74,6 @@ public class FileContentManager {
         }
 
         this.storageDir = inStorageDir.replace('/', File.separatorChar);
-
-    }
-
-    public void initialize() {
 
     }
 
@@ -159,10 +161,10 @@ public class FileContentManager {
      * @see
      * org.apache.FileContentManager.weblogger.business.FileContentManager#overQuota(Weblog)
      */
-    public boolean overQuota(Weblog weblog) {
+    public boolean overQuota(Weblog weblog) throws WebloggerException {
 
-        String maxDir = WebloggerRuntimeConfig
-                .getProperty("uploads.dir.maxsize");
+        String maxDir;
+        maxDir = webloggerRuntimeConfig.getProperty("uploads.dir.maxsize");
 
         // maxDirSize in megabytes
         BigDecimal maxDirSize = new BigDecimal(maxDir);
@@ -178,7 +180,7 @@ public class FileContentManager {
         } catch (Exception ex) {
             // shouldn't ever happen, this means user's uploads dir is bad
             // rethrow as a runtime exception
-            throw new RuntimeException(ex);
+            throw new WebloggerException(ex);
         }
     }
 
@@ -191,30 +193,30 @@ public class FileContentManager {
      * String, String, long, RollerMessages)
      */
     public boolean canSave(Weblog weblog, String fileName, String contentType,
-            long size) {
+            long size) throws WebloggerException {
 
         // first check, is uploading enabled?
-        if (!WebloggerRuntimeConfig.getBooleanProperty("uploads.enabled")) {
+        if (!webloggerRuntimeConfig.getBooleanProperty("uploads.enabled")) {
             //messages.addError("error.upload.disabled");
             return false;
         }
 
         // second check, does upload exceed max size for file?
         BigDecimal maxFileMB = new BigDecimal(
-                WebloggerRuntimeConfig.getProperty("uploads.file.maxsize"));
+                webloggerRuntimeConfig.getProperty("uploads.file.maxsize"));
         int maxFileBytes = (int) (AppConstants.ONE_MB_IN_BYTES * maxFileMB
                 .doubleValue());
         log.fine("max allowed file size = " + maxFileBytes);
         log.fine("attempted save file size = " + size);
         if (size > maxFileBytes) {
-            String[] args = {fileName, maxFileMB.toString()};
+            //String[] args = {fileName, maxFileMB.toString()};
             //messages.addError("error.upload.filemax", args);
             return false;
         }
 
         // third check, does file cause weblog to exceed quota?
         BigDecimal maxDirMB = new BigDecimal(
-                WebloggerRuntimeConfig.getProperty("uploads.dir.maxsize"));
+                webloggerRuntimeConfig.getProperty("uploads.dir.maxsize"));
         long maxDirBytes = (long) (AppConstants.ONE_MB_IN_BYTES * maxDirMB
                 .doubleValue());
         try {
@@ -228,22 +230,18 @@ public class FileContentManager {
             // shouldn't ever happen, means the weblogs uploads dir is bad
             // somehow
             // rethrow as a runtime exception
-            throw new RuntimeException(ex);
+            throw new WebloggerException(ex);
         }
 
         // fourth check, is upload type allowed?
-        String allows = WebloggerRuntimeConfig
-                .getProperty("uploads.types.allowed");
-        String forbids = WebloggerRuntimeConfig
-                .getProperty("uploads.types.forbid");
+        String allows = webloggerRuntimeConfig.getProperty("uploads.types.allowed");
+        String forbids = webloggerRuntimeConfig.getProperty("uploads.types.forbid");
 
         String[] allowFiles = allows.trim().split(",");
 
         String[] forbidFiles = forbids.trim().split(",");
 
         if (!checkFileType(allowFiles, forbidFiles, fileName, contentType)) {
-            String[] args = {fileName, contentType};
-            //messages.addError("error.upload.forbiddenFile", args);
             return false;
         }
 
@@ -372,7 +370,7 @@ public class FileContentManager {
      * Super simple contentType range rule matching
      */
     private boolean matchContentType(String rangeRule, String contentType) {
-        if (rangeRule.equals("*/*")) {
+        if ("*/*".equals(rangeRule)) {
             return true;
         }
         if (rangeRule.equals(contentType)) {
@@ -380,7 +378,7 @@ public class FileContentManager {
         }
         String ruleParts[] = rangeRule.split("/");
         String typeParts[] = contentType.split("/");
-        if (ruleParts[0].equals(typeParts[0]) && ruleParts[1].equals("*")) {
+        if (ruleParts[0].equals(typeParts[0]) && "*".equals(ruleParts[1])) {
             return true;
         }
 
@@ -425,8 +423,9 @@ public class FileContentManager {
                         + "trying to get outside uploads dir.");
             }
         } catch (IOException ex) {
+            log.log(Level.WARNING,null,ex);
             // rethrow as FilePathException
-            throw new IOException(ex.getMessage());
+            throw new IOException(ex.getMessage());            
         }
 
         return file;

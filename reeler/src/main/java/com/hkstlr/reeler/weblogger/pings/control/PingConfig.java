@@ -23,6 +23,7 @@ package com.hkstlr.reeler.weblogger.pings.control;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.pings.boundary.PingTargetManager;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
 import java.util.Collections;
@@ -36,6 +37,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.ejb.EJB;
+import javax.inject.Inject;
 
 // This may need to move to a different package, but it seems appropriate here in the current structure.
 // Previous placement in the presentation.pings package introduced the undesirable dependency of the
@@ -52,6 +54,9 @@ public final class PingConfig {
     
     @EJB
     PingTargetManager pingTargetManager;
+    
+    @Inject
+    WebloggerRuntimeConfig webloggerRuntimeConfig;
     
     private static Logger log = Logger.getLogger(PingConfig.class.getName());
 
@@ -164,8 +169,9 @@ public final class PingConfig {
      *
      * @return the configured (or default) value of the suspend ping processing setting.
      */
-    public static boolean getSuspendPingProcessing() {
-        return WebloggerRuntimeConfig.getBooleanProperty(PINGS_SUSPEND_PING_PROCESSING_PROP);
+    public boolean getSuspendPingProcessing() {
+        return webloggerRuntimeConfig.getBooleanProperty(PINGS_SUSPEND_PING_PROCESSING_PROP);
+                
     }
 
     /**
