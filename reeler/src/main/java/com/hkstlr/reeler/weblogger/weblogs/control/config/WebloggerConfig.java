@@ -158,7 +158,7 @@ public class WebloggerConfig {
         
         //for system properties
         if (value.startsWith("$")) {
-            String newValue = value.substring(2, value.indexOf("}"));
+            String newValue = value.substring(2, value.indexOf('}'));
             String theEndPart = value.split("}")[1];
             newValue = System.getProperty(newValue);
             newValue = newValue.concat(theEndPart);

@@ -106,14 +106,19 @@ public class SmileysPlugin extends WeblogEntryPlugin implements PluginInterface<
     /**
      * Find occurences of ascii emoticons and turn them into HTML image
      * pointers.
+     * @param entry
+     * @param text
+     * @return 
      */
+    @Override
     public String render(WeblogEntry entry, String text) {
-        Matcher matcher = null;
+        String lText = text;
+        Matcher matcher;
         for (int i = 0; i < smileyPatterns.length; i++) {
-            matcher = smileyPatterns[i].matcher(text);
-            text = matcher.replaceAll(imageTags[i]);
+            matcher = smileyPatterns[i].matcher(lText);
+            lText = matcher.replaceAll(imageTags[i]);
         }
-        return text;
+        return lText;
     }
 
     /*

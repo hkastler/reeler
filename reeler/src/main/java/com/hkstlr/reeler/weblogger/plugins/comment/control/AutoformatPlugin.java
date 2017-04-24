@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.StringReader;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -99,7 +100,7 @@ public class AutoformatPlugin extends WeblogEntryCommentPlugin {
             }
             
         } catch(Exception e) {
-            LOG.warning("trouble rendering text." + e.getLocalizedMessage());
+            LOG.log(Level.WARNING,"trouble rendering text." + e.getLocalizedMessage(),e);
         }
         
         LOG.finer("ending value:\n" + buf.toString());

@@ -7,7 +7,6 @@ package com.hkstlr.reeler.weblogger.pings.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,10 +23,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
-import java.sql.Timestamp;
 import java.util.Calendar;
 
-;
 
 /**
  *

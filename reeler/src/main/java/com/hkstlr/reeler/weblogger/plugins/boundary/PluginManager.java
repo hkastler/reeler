@@ -1,5 +1,6 @@
 package com.hkstlr.reeler.weblogger.plugins.boundary;
 
+import com.hkstlr.reeler.app.control.WebloggerException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -7,8 +8,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
-//import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -41,8 +40,7 @@ public class PluginManager {
      * Creates a new instance of PluginManagerImpl
      */
     public PluginManager() {
-        
-        
+        //constructor        
     }
     
     @PostConstruct
@@ -57,7 +55,7 @@ public class PluginManager {
 
     public boolean hasPagePlugins() {
         log.fine("mPluginClasses.size(): " + mPagePlugins.size());
-        return (mPagePlugins != null && mPagePlugins.size() > 0);
+        return (!mPagePlugins.isEmpty());
     }
 
     /**
@@ -70,7 +68,7 @@ public class PluginManager {
                 WeblogEntryPlugin plugin = (WeblogEntryPlugin) pluginClass.newInstance();
                 plugin.init(website);
                 ret.put(plugin.getName(), plugin);
-            } catch (Exception e) {
+            } catch (WebloggerException | IllegalAccessException | InstantiationException e) {
                 log.log(Level.WARNING, "Unable to init() PagePlugin: ", e);
             }
         }
@@ -115,7 +113,7 @@ public class PluginManager {
 
         String content = text;
 
-        if (commentPlugins.size() > 0) {
+        if (!commentPlugins.isEmpty()) {
             for (WeblogEntryCommentPlugin plugin : commentPlugins) {
                 if (comment.getPlugins() != null
                         && comment.getPlugins().contains(plugin.getId())) {
@@ -186,13 +184,13 @@ public class PluginManager {
                     log.fine("Configured comment plugin: " + plugins[i]);
 
                 } catch (ClassCastException e) {
-                    log.warning("ClassCastException for " + plugins[i]);
+                    log.log(Level.WARNING,"ClassCastException for " + plugins[i],e);
                 } catch (ClassNotFoundException e) {
-                    log.warning("ClassNotFoundException for " + plugins[i]);
+                    log.log(Level.WARNING, "ClassNotFoundException for " + plugins[i],e);
                 } catch (InstantiationException e) {
-                    log.warning("InstantiationException for " + plugins[i]);
+                    log.log(Level.WARNING, "InstantiationException for " + plugins[i],e);
                 } catch (IllegalAccessException e) {
-                    log.warning("IllegalAccessException for " + plugins[i]);
+                    log.log(Level.WARNING,"IllegalAccessException for " + plugins[i],e);
                 }
             }
         }

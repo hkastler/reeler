@@ -47,7 +47,8 @@ public class WeblogEntryTagFixer {
         return sb.toString();
     }
 
-    public static String normalizeTag(String tag, Locale locale) {
+    public static String normalizeTag(String vtag, Locale locale) {
+        String tag = vtag;
         tag = stripInvalidTagCharacters(tag);
         return locale == null ? tag.toLowerCase() : tag.toLowerCase(locale);
     }

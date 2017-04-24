@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,6 +31,9 @@ import javax.persistence.TypedQuery;
  */
 @Stateless
 public class PingTargetManager extends AbstractManager<PingTarget> {
+
+    private static final Logger log = Logger.getLogger(PingTargetManager.class.getName());
+      
 
     @PersistenceContext
     private EntityManager em;
@@ -102,11 +107,12 @@ public class PingTargetManager extends AbstractManager<PingTarget> {
             URL parsedUrl = new URL(url);
             // OK.  If we get here, it parses ok.  Now just check 
             // that the protocol is http and there is a host portion.
-            boolean isHttp = parsedUrl.getProtocol().equals("http");
+            boolean isHttp = "http".equals(parsedUrl.getProtocol());
             boolean hasHost = (parsedUrl.getHost() != null) && 
                 (parsedUrl.getHost().trim().length() > 0);
             return isHttp && hasHost;
         } catch (MalformedURLException e) {
+            log.log(Level.WARNING,null,e);
             return false;
         }
     }
@@ -123,11 +129,11 @@ public class PingTargetManager extends AbstractManager<PingTarget> {
             if (host == null || host.trim().length() == 0) {
                 return false;
             }
+            //this is not a useless assignment, as an error will be thrown if host is not a valid InetAddress
             InetAddress addr = InetAddress.getByName(host);
             return true;
-        } catch (MalformedURLException e) {
-            return false;
-        } catch (UnknownHostException e) {
+        } catch (MalformedURLException | UnknownHostException e) {
+            log.log(Level.WARNING,null,e);
             return false;
         }
     }

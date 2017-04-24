@@ -16,15 +16,14 @@ public class PasswordDigester {
     public static String getDigestedPassword(String password) throws NoSuchAlgorithmException, UnsupportedEncodingException{
         
         String encyptionAlgo = WebloggerConfig.getProperty("passwds.encryption.algorithm");
-        //passwds.encryption.algorithm "SHA-256"
-        //System.out.println("encryptionAlgo:" + encyptionAlgo);
+        
         MessageDigest md = MessageDigest.getInstance(encyptionAlgo);
         md.update(password.getBytes());
  
         byte byteData[] = md.digest();
  
         //convert the byte to hex 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < byteData.length; i++) {
             sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
         }

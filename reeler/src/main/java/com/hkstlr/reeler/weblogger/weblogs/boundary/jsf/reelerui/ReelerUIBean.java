@@ -229,11 +229,12 @@ public class ReelerUIBean implements Serializable {
         try {
             setUserWeblogs();
         } catch (Exception e) {
+            log.log(Level.SEVERE,null,e);
         }
         try {
             setWeblogPermissions();
         } catch (WebloggerException ex) {
-            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
+            log.log(Level.SEVERE, null, ex);
         }
     }
 

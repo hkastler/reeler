@@ -31,16 +31,14 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
     }
     
     @PostConstruct
-    private void init(){
+    private void init(){       
         
-        log.info("action:" + this.action);
-        setActionLabel();
-        
+        setActionLabel();        
         
         if(this.id != null && !this.id.isEmpty()){
             this.weblogCategory = weblogger.getWeblogCategoryManager().findById(id);
         }else{
-            log.info("initing new WeblogCatgory for " + reelerUiBean.getCurrentWeblog().getName());
+            
             this.weblogCategory = new WeblogCategory();
             this.weblogCategory.setWeblog(reelerUiBean.getCurrentWeblog());
         }
@@ -86,7 +84,7 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final WeblogCategoryAuthorBean other = (WeblogCategoryAuthorBean) obj;
+       
         return true;
     }
 

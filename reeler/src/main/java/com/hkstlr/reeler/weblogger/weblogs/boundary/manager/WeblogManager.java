@@ -738,13 +738,18 @@ public class WeblogManager extends AbstractManager<Weblog> {
         return query.getResultList();
     }
 
-    public List<StatCount> getMostCommentedWeblogs(Date startDate, Date endDate,
+    public List<StatCount> getMostCommentedWeblogs(Date vStartDate, Date vEndDate,
             int offset, int length)
             throws WebloggerException {
 
         Query query;
+        
+        Date startDate = vStartDate;
+        Date endDate;
 
-        if (endDate == null) {
+        if (vEndDate != null) {
+            endDate = vEndDate;
+        }else{
             endDate = new Date();
         }
 

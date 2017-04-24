@@ -21,6 +21,7 @@ package com.hkstlr.reeler.weblogger.pings.control;
 
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.pings.boundary.PingTargetManager;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
@@ -34,6 +35,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.ejb.EJB;
 
 // This may need to move to a different package, but it seems appropriate here in the current structure.
 // Previous placement in the presentation.pings package introduced the undesirable dependency of the
@@ -47,6 +49,10 @@ import java.util.regex.Pattern;
  * @author <a href="mailto:anil@busybuddha.org">Anil Gangolli</a>
  */
 public final class PingConfig {
+    
+    @EJB
+    PingTargetManager pingTargetManager;
+    
     private static Logger log = Logger.getLogger(PingConfig.class.getName());
 
 
@@ -172,7 +178,7 @@ public final class PingConfig {
      *
      * @see org.apache.roller.weblogger.ui.core.RollerContext#contextInitialized(javax.servlet.ServletContextEvent)
      */
-    public static void initializeCommonTargets(List<PingTarget> pingTargets) throws WebloggerException {
+    public void initializeCommonTargets(List<PingTarget> pingTargets) throws WebloggerException {
         String configuredVal = WebloggerConfig.getProperty(PINGS_INITIAL_COMMON_TARGETS_PROP);
         if (configuredVal == null || configuredVal.trim().length() == 0) {
             if (log.isLoggable(Level.FINE)) {
@@ -205,7 +211,7 @@ public final class PingConfig {
                 String url = m.group(2).trim();
                 log.info("Creating common ping target '" + name + "' from configuration properties.");
                 PingTarget pingTarget = new PingTarget(null, name, url, false);
-                //pingTargetMgr.savePingTarget(pingTarget);
+                pingTargetManager.savePingTarget(pingTarget);
             } else {
                 log.warning("Unable to parse configured initial ping target '" + thisTarget + "'. Skipping this target. Check your setting of the property " + PINGS_INITIAL_COMMON_TARGETS_PROP);
             }

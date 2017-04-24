@@ -542,8 +542,9 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
      * @param name
      * @throws WebloggerException
      */
-    public void addTag(String name) throws WebloggerException {
+    public void addTag(String vname) throws WebloggerException {
         Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
+        String name = vname;
         name = WeblogEntryTagFixer.normalizeTag(name, localeObject);
         if (name.length() == 0) {
             return;

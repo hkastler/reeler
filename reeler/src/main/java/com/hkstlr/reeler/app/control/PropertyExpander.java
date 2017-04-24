@@ -15,9 +15,10 @@
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
+ * original package org.apache.roller.util;
  */
 
-// original package org.apache.roller.util;
+
 package com.hkstlr.reeler.app.control;
 
 

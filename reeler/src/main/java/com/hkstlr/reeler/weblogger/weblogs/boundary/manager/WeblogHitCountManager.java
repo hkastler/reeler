@@ -12,6 +12,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogHitCount;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -62,6 +63,7 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
+            log.log(Level.WARNING,null,e);
             return null;
         }
     }
@@ -129,6 +131,7 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
         try {
             hitCount = q.getSingleResult();
         } catch (NoResultException e) {
+            log.log(Level.WARNING,null,e);
             hitCount = null;
         }
         
@@ -165,6 +168,7 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
             save(hitCount);
         } catch (NoResultException e) {
             // ignore: no hit count for weblog
+            log.log(Level.WARNING,null,e);
         }       
 
     }
