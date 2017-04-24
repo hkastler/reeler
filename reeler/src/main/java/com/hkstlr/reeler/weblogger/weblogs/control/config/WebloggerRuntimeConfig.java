@@ -235,6 +235,9 @@ public final class WebloggerRuntimeConfig {
     public boolean isFrontPageWeblog(String weblogHandle) {
         
         String frontPageHandle = getProperty("site.frontpage.weblog.handle");
+        if(frontPageHandle == null){
+            return false;
+        }
         
         return (frontPageHandle.equals(weblogHandle));
     }

@@ -1,18 +1,16 @@
 package com.hkstlr.reeler.weblogger.themes.entities;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
-import com.hkstlr.reeler.weblogger.themes.entities.TemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.control.RenditionType;
 
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
+import java.util.EnumMap;
 
 public abstract class ThemeTemplate {
-	
-	
-	private String id = null;
+
+    private String id = null;
     private ComponentType action = null;
     private String name = null;
     private String description = null;
@@ -21,18 +19,19 @@ public abstract class ThemeTemplate {
     private Date lastModified = null;
     private boolean hidden = false;
     private boolean navbar = false;
-    private String  outputContentType = null;
+    private String outputContentType = null;
     private String type = null;
 
     //hash map to cache template Code objects parsed
-    private Map<RenditionType, TemplateRendition> templateRenditionHashMap = new HashMap<RenditionType, TemplateRendition>();
-    
-    public ThemeTemplate() {}
-    
+    private Map<RenditionType, TemplateRendition> templateRenditionHashMap = new EnumMap<>(RenditionType.class);
+
+    public ThemeTemplate() {
+    }
+
     public ThemeTemplate(String id, ComponentType action, String name,
-            String desc, String contents, String link, Date date, 
+            String desc, String contents, String link, Date date,
             boolean hidden, boolean navbar) {
-        
+
         this.id = id;
         this.action = action;
         this.name = name;
@@ -115,10 +114,10 @@ public abstract class ThemeTemplate {
     public void setOutputContentType(String outputContentType) {
         this.outputContentType = outputContentType;
     }
-    
+
     public String toString() {
-        return (id + "," + name + "," + description + "," + link + "," + 
-                lastModified + "\n\n" + contents + "\n");
+        return (id + "," + name + "," + description + "," + link + ","
+                + lastModified + "\n\n" + contents + "\n");
     }
 
     public ComponentType getAction() {
@@ -133,7 +132,7 @@ public abstract class ThemeTemplate {
         return type;
     }
 
-    public TemplateRendition getTemplateRendition(RenditionType type){
+    public TemplateRendition getTemplateRendition(RenditionType type) {
         return templateRenditionHashMap.get(type);
     }
 
@@ -141,10 +140,8 @@ public abstract class ThemeTemplate {
         this.type = type;
     }
 
-    public void addTemplateRendition(CustomTemplateRendition customTemplateRendition){
+    public void addTemplateRendition(CustomTemplateRendition customTemplateRendition) {
         //this.templateRenditionHashMap.put(customTemplateRendition.getType(), customTemplateRendition);
     }
-
-	
 
 }

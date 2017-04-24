@@ -69,7 +69,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING,"getWeblogPermission",e);
+            log.log(Level.WARNING, "getWeblogPermission", e);
             return null;
         }
     }
@@ -82,7 +82,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING,"getWeblogPermissionIncludingPending",e);
+            log.log(Level.WARNING, "getWeblogPermissionIncludingPending", e);
             return null;
         }
     }
@@ -98,7 +98,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING,"WeblogPermission.getByUserName&WeblogIdIncludingPending",e);
+            log.log(Level.WARNING, "WeblogPermission.getByUserName&WeblogIdIncludingPending", e);
         }
 
         // permission already exists, so add any actions specified in perm argument
@@ -124,6 +124,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
+            log.log(Level.FINE, null, ignored);
         }
 
         // permission already exists, so add any actions specified in perm argument
@@ -149,6 +150,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
+            log.log(Level.FINE, null, ignored);
         }
 
         // permission already exists, so complain 
@@ -174,6 +176,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             existingPerm = q.getSingleResult();
 
         } catch (NoResultException ignored) {
+            log.log(Level.FINE, null, ignored);
             throw new WebloggerException("ERROR: permission not found");
         }
         // set pending to false
@@ -192,6 +195,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
+            log.log(Level.FINE, null, ignored);
             throw new WebloggerException("ERROR: permission not found");
         }
         // remove permission
@@ -209,6 +213,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             oldperm = q.getSingleResult();
         } catch (NoResultException ignored) {
+            log.log(Level.FINE, null, ignored);
             throw new WebloggerException("ERROR: permission not found");
         }
 
@@ -262,15 +267,13 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public boolean checkPermission(WeblogPermission perm, User user) throws WebloggerException {
 
         // if permission a weblog permission
-        if (perm instanceof WeblogPermission) {
-            // if user has specified permission in weblog return true
-            TypedQuery<Weblog> qWeblog = em.createNamedQuery("Weblog.findById", Weblog.class);
-            qWeblog.setParameter("id", perm.getObjectId());
-            Weblog weblog = qWeblog.getSingleResult();
-            WeblogPermission existingPerm = getWeblogPermission(weblog, user);
-            if (existingPerm != null && existingPerm.implies(perm)) {
-                return true;
-            }
+        // if user has specified permission in weblog return true
+        TypedQuery<Weblog> qWeblog = em.createNamedQuery("Weblog.findById", Weblog.class);
+        qWeblog.setParameter("id", perm.getObjectId());
+        Weblog weblog = qWeblog.getSingleResult();
+        WeblogPermission existingPerm = getWeblogPermission(weblog, user);
+        if (existingPerm != null && existingPerm.implies(perm)) {
+            return true;
         }
 
         // if Blog Server admin would still have weblog permission above
