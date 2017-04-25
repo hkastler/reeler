@@ -2,13 +2,14 @@ package com.hkstlr.reeler.app.entities;
 
 import java.io.InputStream;
 
-public class Resource {
+public class Resource{
 
     private String name;
     private String path;
     private Long lastModified;
     private Long length;
     private InputStream inputStream;
+
 
     public String getName() {
         return name;

@@ -11,11 +11,13 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.app.entities.Resource;
 import com.hkstlr.reeler.weblogger.media.boundary.manager.MediaFileManager;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFile;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
+import java.io.File;
 import java.util.Objects;
 import javax.ejb.EJB;
 
@@ -35,7 +37,7 @@ public class WeblogSharedTheme extends WeblogTheme {
     private transient WeblogManager weblogManager;
     
     @EJB
-    MediaFileManager mediaFileManager;
+    private transient MediaFileManager mediaFileManager;
     
     public WeblogSharedTheme(Weblog weblog, SharedTheme theme) {
         super(weblog);
@@ -82,8 +84,7 @@ public class WeblogSharedTheme extends WeblogTheme {
                 pages.put(template.getName(), template);
             }
         } catch(Exception e) {
-            // db error
-            log.warning(e.getMessage());
+            log.log(Level.WARNING,null,e);
         }
          
         // now get theme pages if needed and put them in place of db pages
@@ -222,7 +223,9 @@ public class WeblogSharedTheme extends WeblogTheme {
 
         // if we didn't find it in our theme then look in weblog uploads
         if (resource == null) {
-            MediaFile mf = mediaFileManager.getMediaFileByOriginalPath(this.weblog, path);            
+            MediaFile mf = mediaFileManager.getMediaFileByOriginalPath(this.weblog, path);
+            File file = new File(mf.getOriginalPath());
+            resource = new ThemeResource(path,file);
         }
 
         return resource;

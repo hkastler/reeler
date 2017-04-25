@@ -137,6 +137,7 @@ public class MediaFile extends Resource implements Serializable {
     private MediaFileDirectory directory;
 
     public MediaFile() {
+        
     }
 
     public MediaFile(String id) {

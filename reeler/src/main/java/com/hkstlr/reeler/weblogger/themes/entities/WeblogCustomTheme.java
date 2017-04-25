@@ -11,6 +11,7 @@ import com.hkstlr.reeler.weblogger.media.entities.MediaFile;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
+import java.io.File;
 import java.util.Objects;
 import java.util.logging.Level;
 import javax.ejb.EJB;
@@ -73,6 +74,7 @@ public class WeblogCustomTheme extends WeblogTheme {
     /**
      * Get the collection of all templates associated with this Theme.
      *
+     * @return 
      * @throws WebloggerException
      */
     public List<? extends ThemeTemplate> getTemplates() throws WebloggerException {
@@ -162,10 +164,17 @@ public class WeblogCustomTheme extends WeblogTheme {
     /**
      * Lookup the specified resource by path. Returns null if the resource
      * cannot be found.
+     * @param path
+     * @return 
+     * @throws com.hkstlr.reeler.app.control.WebloggerException
      */
-    public ThemeResource getResource(String path) throws WebloggerException {
-        ThemeResource resource = null;
+    @Override
+    public ThemeResource getResource(String path){
+        ThemeResource resource;
         MediaFile mf = mediaFileManager.getMediaFileByOriginalPath(this.weblog, path);
+        File file = new File(mf.getOriginalPath());
+        resource = new ThemeResource(path,file);
+       
         return resource;
     }
 

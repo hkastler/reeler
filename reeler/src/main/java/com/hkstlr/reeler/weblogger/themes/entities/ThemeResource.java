@@ -76,18 +76,10 @@ public class ThemeResource extends Resource implements Serializable {
     public InputStream getInputStream() {
         try {
             return new FileInputStream(resourceFile);
-        } catch (java.io.FileNotFoundException ex) {
-            try {
-                // should never happen, rethrow as runtime exception
-                throw new WebloggerException("Error constructing input stream");
-            }catch(RuntimeException e){
-                //throw new WebloggerException("Error constructing input stream");
-                
-            } catch (WebloggerException ex1) {
-                Logger.getLogger(ThemeResource.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        }
-        return null;
+        }catch (java.io.FileNotFoundException e){
+            Logger.getLogger(ThemeResource.class.getName()).log(Level.SEVERE, null, e);
+            throw new RuntimeException("error getting resourceFile", e);    
+         }
     }
 
 }
