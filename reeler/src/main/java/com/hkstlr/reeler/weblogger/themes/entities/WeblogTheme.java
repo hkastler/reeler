@@ -2,6 +2,7 @@ package com.hkstlr.reeler.weblogger.themes.entities;
 
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import java.util.Objects;
 
 public abstract class WeblogTheme extends Theme {
 
@@ -25,6 +26,26 @@ public abstract class WeblogTheme extends Theme {
         
     public Weblog getWeblog() {
         return this.weblog;
-    }	
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        
+        if (!(object instanceof Theme)) {
+            return false;
+        }
+        Theme other = (Theme) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
 
 }

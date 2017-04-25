@@ -11,10 +11,12 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.media.boundary.manager.MediaFileManager;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFile;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
+import java.util.Objects;
 import javax.ejb.EJB;
 
 public class WeblogSharedTheme extends WeblogTheme {
@@ -30,38 +32,42 @@ public class WeblogSharedTheme extends WeblogTheme {
     private SharedTheme theme = null;
 
     @EJB
-    private WeblogManager weblogManager;
-    // @Inject
-    // MediaFileManager mediaFileManager;
+    private transient WeblogManager weblogManager;
+    
+    @EJB
+    MediaFileManager mediaFileManager;
+    
     public WeblogSharedTheme(Weblog weblog, SharedTheme theme) {
         super(weblog);
         this.theme = theme;
     }
 
+    @Override
     public String getId() {
         return this.theme.getId();
     }
 
+    @Override
     public String getName() {
         return this.theme.getName();
     }
 
+    @Override
     public String getDescription() {
         return this.theme.getDescription();
     }
 
+    @Override
     public Date getLastModified() {
         return this.theme.getLastModified();
     }
 
+    @Override
     public boolean isEnabled() {
         return this.theme.isEnabled();
     }
 
-    public int compareTo(Theme other) {
-        return theme.compareTo(other);
-    }
-
+    
     /**
      * Get the collection of all templates associated with this Theme.
      */
@@ -70,16 +76,16 @@ public class WeblogSharedTheme extends WeblogTheme {
         Map<String, ThemeTemplate> pages = new TreeMap<String, ThemeTemplate>();
 
         // first get the pages from the db
-        /*
+        
         try {
-            for (ThemeTemplate template : //weblogManager.getTemplates(this.weblog)) {
+            for (ThemeTemplate template : weblogManager.getTemplates(this.weblog)) {
                 pages.put(template.getName(), template);
             }
         } catch(Exception e) {
             // db error
             log.warning(e.getMessage());
         }
-         */
+         
         // now get theme pages if needed and put them in place of db pages
         try {
             for (ThemeTemplate template : this.theme.getTemplates()) {
@@ -163,7 +169,7 @@ public class WeblogSharedTheme extends WeblogTheme {
 
         // if we didn't get the Template from a theme then look in the db
         if (template == null) {
-            template = null;//weblogManager.getTemplateByName(this.weblog, name);
+            template = weblogManager.getTemplateByName(this.weblog, name);
         }
 
         return template;
@@ -193,7 +199,7 @@ public class WeblogSharedTheme extends WeblogTheme {
 
         // if we didn't get the Template from a theme then look in the db
         if (template == null) {
-            template = null;//weblogManager.getTemplateByLink(this.weblog, link);
+            template = weblogManager.getTemplateByLink(this.weblog, link);
         }
 
         return template;
@@ -216,17 +222,12 @@ public class WeblogSharedTheme extends WeblogTheme {
 
         // if we didn't find it in our theme then look in weblog uploads
         if (resource == null) {
-            MediaFile mf = null; //mediaFileManager.getMediaFileByOriginalPath(this.weblog, path);            
+            MediaFile mf = mediaFileManager.getMediaFileByOriginalPath(this.weblog, path);            
         }
 
         return resource;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        // TODO Auto-generated method stub
-        return 0;
-    }
 
     @Override
     public List<ThemeResource> getResources() {
@@ -239,5 +240,36 @@ public class WeblogSharedTheme extends WeblogTheme {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public int compareTo(Theme other) {
+        return theme.compareTo(other);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return theme.compareTo(o);
+    }
+    
+    @Override
+    public boolean equals(Object object) {
+        
+        if (!(object instanceof Theme)) {
+            return false;
+        }
+        Theme other = (Theme) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+
 
 }

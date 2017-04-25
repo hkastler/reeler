@@ -1,3 +1,7 @@
+/*
+ * originally from org.apache.roller.weblogger.pojos.ThemeResource;
+*/
+
 package com.hkstlr.reeler.weblogger.themes.entities;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
@@ -10,7 +14,7 @@ import com.hkstlr.reeler.app.entities.Resource;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//import org.apache.roller.weblogger.pojos.ThemeResource;
+
 public class ThemeResource extends Resource implements Serializable {
 
     /**
@@ -76,6 +80,9 @@ public class ThemeResource extends Resource implements Serializable {
             try {
                 // should never happen, rethrow as runtime exception
                 throw new WebloggerException("Error constructing input stream");
+            }catch(RuntimeException e){
+                //throw new WebloggerException("Error constructing input stream");
+                
             } catch (WebloggerException ex1) {
                 Logger.getLogger(ThemeResource.class.getName()).log(Level.SEVERE, null, ex1);
             }

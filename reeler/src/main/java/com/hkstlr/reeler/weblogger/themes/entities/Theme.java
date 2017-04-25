@@ -7,6 +7,7 @@ import java.util.List;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
+import java.util.Objects;
 
 public abstract class Theme implements Comparable, Serializable {
 
@@ -86,6 +87,13 @@ public abstract class Theme implements Comparable, Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 61 * hash + Objects.hashCode(this.id);
+        return hash;
     }
     
     public int compareTo(Theme other) {

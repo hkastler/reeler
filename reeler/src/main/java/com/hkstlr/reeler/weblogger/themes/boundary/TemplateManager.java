@@ -17,7 +17,6 @@ import javax.inject.Inject;
  */
 
 @ManagedBean
-@Startup
 public class TemplateManager {
 
     @Inject
