@@ -36,6 +36,12 @@ public class WeblogEntryTest {
         cut = new WeblogEntry();
     }
     
+    @Test
+    public void testWeblogEntryEntity(){
+        TestEntityReflector ter = new TestEntityReflector();
+        ter.testEntityClass(cut);
+    }
+    
     @Test 
     public void testSetTagToWeblogEntry() throws WebloggerException {
               

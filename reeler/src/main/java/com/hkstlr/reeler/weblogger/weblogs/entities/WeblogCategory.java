@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogCategory.removeByWeblog", query = "DELETE FROM WeblogCategory w WHERE w.weblog = ?1")})
 public class WeblogCategory extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private transient static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull
@@ -62,8 +62,8 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     @Column(name = "position", nullable = false)
     private int position;
 
-    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = true, updatable = true)
     @ManyToOne(optional = false)
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = true, updatable = true)
     private Weblog weblog;
 
     public WeblogCategory() {
@@ -125,7 +125,11 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.weblog = weblog;
     }
     
-    private void calculatePosition(int size) {
+    /**
+     *
+     * @param size
+     */
+    protected final void calculatePosition(int size) {
                
         if (size == 0) {
             this.position = 0;

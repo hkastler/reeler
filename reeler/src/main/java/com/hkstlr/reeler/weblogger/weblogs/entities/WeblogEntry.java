@@ -47,7 +47,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TreeSet;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.json.JsonObject;
 import javax.persistence.Cacheable;
 import javax.persistence.UniqueConstraint;
@@ -105,9 +104,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
     }
 
-    
-
-    private static final long serialVersionUID = 1L;
+    private transient static final long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.anchor.NotNull}")
@@ -134,7 +131,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     private String text;
 
     @Basic
-    @Column(name = "pubtime")
+    @Column(name = "pubtime", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar pubTime;
 
@@ -226,7 +223,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
      // set to true when switching between pending/draft/scheduled and published
     // either the aggregate table needs the entry's tags added (for published)
     // or subtracted (anything else)
-    private Boolean   refreshAggregates = Boolean.FALSE;
+    private transient Boolean  refreshAggregates = Boolean.FALSE;
 
     public WeblogEntry() {
        //entity constructor
@@ -254,7 +251,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.commentDays = entry.commentDays;
         this.rightToLeft = entry.rightToLeft;
         this.pinnedToMain = entry.pinnedToMain;
-        this.status = status;
+        this.status = entry.status;
     }
     
     public WeblogEntry(Weblog weblog) {

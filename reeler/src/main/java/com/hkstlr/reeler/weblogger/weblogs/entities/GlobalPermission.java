@@ -21,7 +21,6 @@ import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.DiscriminatorValue;

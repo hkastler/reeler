@@ -69,6 +69,12 @@ public class WeblogTest {
     }
     
     @Test
+    public void testWeblogEntity(){
+        TestEntityReflector ter = new TestEntityReflector();
+        ter.testEntityClass(cut);
+    }
+    
+    @Test
     public void testGetClassFields() throws ClassNotFoundException {
         System.out.println("classFields");
         //Weblog instance = new Weblog();
@@ -79,8 +85,7 @@ public class WeblogTest {
         log.info(Integer.toString(fields.length));
         for(Field field : fields){
             log.info("field:" + field.getName());
-            log.info("fieldType:" + field.getType().getName());
-            
+            log.info("fieldType:" + field.getType().getName());            
         }
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");

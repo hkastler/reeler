@@ -110,6 +110,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "tagline", length = 255)
     private String tagline;
 
+    @NotNull
     @Size(max = 255)
     @Column(name = "creator", length = 255, nullable=false)
     private String creator;

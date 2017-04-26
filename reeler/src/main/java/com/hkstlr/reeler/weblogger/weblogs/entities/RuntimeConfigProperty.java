@@ -49,11 +49,11 @@ public class RuntimeConfigProperty implements Serializable {
     }
 
     public RuntimeConfigProperty(String name, String defaultValue) {
-		this.name = name;
-		this.value = defaultValue;
-	}
+        this.name = name;
+        this.value = defaultValue;
+    }
 
-	public String getName() {
+    public String getName() {
         return name;
     }
 
@@ -83,7 +83,7 @@ public class RuntimeConfigProperty implements Serializable {
             return false;
         }
         RuntimeConfigProperty other = (RuntimeConfigProperty) object;
-        if ((this.name == null && other.name != null) || (this.name != null && !this.name.equals(other.name))) {
+        if (!this.name.equals(other.name)) {
             return false;
         }
         return true;
@@ -93,5 +93,5 @@ public class RuntimeConfigProperty implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.RuntimeConfigProperty[ name=" + name + " ]";
     }
-    
+
 }

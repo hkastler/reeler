@@ -6,31 +6,17 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.weblogger.TestSetup;
-import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.BDDMockito.given;
 import org.mockito.InjectMocks;
-import org.mockito.Matchers;
-import static org.mockito.Matchers.anyString;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 /**

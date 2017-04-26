@@ -61,7 +61,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogEntryComment.getMostCommentedWeblogEntryByWebsite&amp;EndDate&amp;StartDate", query = "SELECT COUNT(c), c.weblogEntry.website.handle, c.weblogEntry.anchor, c.weblogEntry.title FROM WeblogEntryComment c WHERE c.weblogEntry.website = ?1 AND c.weblogEntry.pubTime < ?2 AND c.weblogEntry.pubTime > ?3 GROUP BY c.weblogEntry.website.handle, c.weblogEntry.anchor, c.weblogEntry.title")})
 public class WeblogEntryComment extends AbstractEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private transient static final long serialVersionUID = 1L;
     
     // approval status states
     public enum ApprovalStatus {
@@ -123,8 +123,9 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     @Column(name = "contenttype", nullable = false, length = 128)
     private String contentType;
 
-    @JoinColumn(name = "entryid", referencedColumnName = "id", nullable = false)
+    @NotNull
     @ManyToOne(optional = false)
+    @JoinColumn(name = "entryid", referencedColumnName = "id", nullable = false)
     private WeblogEntry weblogEntry;
 
     public WeblogEntryComment() {
@@ -294,7 +295,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
             return false;
         }
         WeblogEntryComment other = (WeblogEntryComment) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;
