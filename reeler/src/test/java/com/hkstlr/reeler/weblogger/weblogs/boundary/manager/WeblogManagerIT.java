@@ -69,6 +69,10 @@ public class WeblogManagerIT {
                 .addPackage("com.hkstlr.reeler.weblogger.plugins.entities")
                 .addPackage("com.hkstlr.reeler.weblogger.plugins.entry.control")
                 
+                .addPackage("com.hkstlr.reeler.weblogger.pings.control")
+                .addPackage("com.hkstlr.reeler.weblogger.pings.boundary")                
+                .addPackage("com.hkstlr.reeler.weblogger.pings.entities")
+                
                 .addAsWebInfResource("test-persistence-web.xml", "web.xml")
                 .addAsWebInfResource("jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml");

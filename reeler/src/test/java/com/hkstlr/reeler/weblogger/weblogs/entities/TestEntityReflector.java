@@ -78,7 +78,7 @@ public class TestEntityReflector {
         //if the field is not transient, and does not have the OneToMany annotation then it must have 
         //either the @Column or @JoinColumn annotation
         for (Field f : classFields) {
-            log.info("field:" + f.getName());
+            //log.info("field:" + f.getName());
             boolean isTransient = Modifier.isTransient(f.getModifiers());
             if (!isTransient) {
                 Annotation columnAnno = f.getDeclaredAnnotation(javax.persistence.Column.class);
@@ -92,13 +92,13 @@ public class TestEntityReflector {
                     //if there's a @Column anno                    
                     if (hasColumnAnno) {
                         for (Method method : columnAnno.annotationType().getDeclaredMethods()) {
-                            log.info("method:" + method.getName());
+                            //log.info("method:" + method.getName());
                             //make sure there's a name
                             if ("name".equals(method.getName())) {
                                 try {
                                     Object value = method.invoke(columnAnno, (Object[]) null);
                                     assertTrue(!value.toString().isEmpty());
-                                    log.info("value:" + value.toString());
+                                    //log.info("value:" + value.toString());
 
                                 } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                                     log.log(Level.SEVERE, null, ex);
@@ -111,7 +111,7 @@ public class TestEntityReflector {
                             if ("length".equals(method.getName()) && "java.lang.String".equals(f.getType().getName())) {
                                 try {
                                     Object value = method.invoke(columnAnno, (Object[]) null);
-                                    log.info("value:" + value.toString());
+                                    //log.info("value:" + value.toString());
                                     if (Boolean.parseBoolean(value.toString()) == false) {
                                         Annotation sizeAnno = f.getDeclaredAnnotation(javax.validation.constraints.Size.class);
                                         assertNotNull(sizeAnno);
@@ -127,7 +127,7 @@ public class TestEntityReflector {
                             if ("nullable".equals(method.getName())) {
                                 try {
                                     Object value = method.invoke(columnAnno, (Object[]) null);
-                                    log.info("value:" + value.toString());
+                                    //log.info("value:" + value.toString());
                                     if (Boolean.parseBoolean(value.toString()) == false) {
                                         Annotation notNullAnno = f.getDeclaredAnnotation(javax.validation.constraints.NotNull.class);
                                         assertNotNull(notNullAnno);

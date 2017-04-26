@@ -6,6 +6,6 @@
     <data-source>
         <name>java:global/jdbc/ReelerDB</name>
         <class-name>org.h2.jdbcx.JdbcDataSource</class-name>
-        <url>jdbc:h2:/tmp/reeler-test-database</url>
+        <url>jdbc:h2:mem:ReelerDB</url>
     </data-source>
 </web-app>

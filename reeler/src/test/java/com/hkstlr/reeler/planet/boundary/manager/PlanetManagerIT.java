@@ -24,6 +24,8 @@ import com.hkstlr.reeler.planet.entities.PlanetGroup;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.junit.Ignore;
+
 
 @RunWith(Arquillian.class)
 public class PlanetManagerIT {
@@ -109,10 +111,10 @@ public class PlanetManagerIT {
         // Make sure it was correctly removed.
         try {
             planet = cut.findById(planet.getId());
-            log.log(Level.INFO, "findingById:{0} success", planet.getId());
+            
         } catch (Exception e) {
-        	planet = null;
-            System.out.println("planet deleted");
+            planet = null;
+            log.log(Level.INFO, "deleted", e);
         }
         
         assertNull(planet);

@@ -9,7 +9,7 @@
     <container qualifier="chameleon" default="true">
         <configuration>
             <property name="chameleonTarget">wildfly:10.0.1.Final:remote</property>
-            <property name="managementAddress">localhost</property>
+            <property name="managementAddress">cosmicmachine</property>
             <property name="managementPort">10990</property>
             <property name="username">admin</property>
             <property name="password">adminadmin1</property>

@@ -37,8 +37,7 @@ public class AutoPingManager extends AbstractManager<AutoPing> {
     @Inject
     private Logger logger;
     
-    @Inject
-    private PingConfig pingConfig;
+    
     
     @EJB
     private PingQueueEntryManager pqem;
@@ -80,22 +79,7 @@ public class AutoPingManager extends AbstractManager<AutoPing> {
         removeAutoPings(q.getResultList());
     }
 
-    public void queueApplicableAutoPings(WeblogEntry changedWeblogEntry) throws WebloggerException {
-        if (pingConfig.getSuspendPingProcessing()) {
-           
-                logger.warning("Ping processing is suspended." + " No auto pings will be queued.");
-            
-            return;
-        }
-
-        
-        List<AutoPing> applicableAutopings = getApplicableAutoPings(changedWeblogEntry);
-        for (AutoPing autoPing : applicableAutopings) {
-            pqem.addQueueEntry(autoPing
-                    ,TimeZone.getTimeZone(changedWeblogEntry.getWebsite().getTimeZone())
-                    ,new Locale(changedWeblogEntry.getWebsite().getLocale()));
-        }
-    }
+   
 
     public List<AutoPing> getAutoPingsByWebsite(Weblog website) throws WebloggerException {
         TypedQuery<AutoPing> q = em.createNamedQuery("AutoPing.getByWebsite", AutoPing.class);
