@@ -110,7 +110,7 @@ public class WeblogManagerIT {
         testWeblog.setLocale("en_US");
         testWeblog.setTimeZone("America/Los_Angeles");
         testWeblog.setDateCreated(new java.util.Date());
-        //testWeblog.setCreator("hkstlr");
+        testWeblog.setCreator("hkstlr");
         
         log.log(Level.INFO, "id:{0}", testWeblog.getId());
         
