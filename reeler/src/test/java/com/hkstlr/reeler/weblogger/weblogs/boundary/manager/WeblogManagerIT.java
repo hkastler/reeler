@@ -11,6 +11,7 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.TestSetup;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import java.io.File;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -75,7 +76,10 @@ public class WeblogManagerIT {
                 
                 .addAsWebInfResource("test-persistence-web.xml", "web.xml")
                 .addAsWebInfResource("jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
-                .addAsResource("test-persistence.xml", "META-INF/persistence.xml");
+                .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
+                .addAsResource(new File("/com/hkstlr/reeler/app/control/config/reeler.properties")
+                ,"/com/hkstlr/reeler/app/control/config/reeler.properties");
+                
     }
 
     @EJB
@@ -106,7 +110,7 @@ public class WeblogManagerIT {
         testWeblog.setLocale("en_US");
         testWeblog.setTimeZone("America/Los_Angeles");
         testWeblog.setDateCreated(new java.util.Date());
-        testWeblog.setCreator("hkstlr");
+        //testWeblog.setCreator("hkstlr");
         
         log.log(Level.INFO, "id:{0}", testWeblog.getId());
         

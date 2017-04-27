@@ -120,26 +120,38 @@ public class WeblogManager extends AbstractManager<Weblog> {
         weblog.setLastModified(new java.util.Date());
         //for backwards compatibility with roller
         weblog.setEditorTheme("basic");
+        //addWeblogContents(weblog, user);
         em.merge(weblog);
-        log.info("Weblog " + weblog.getName() + " persisted");
-        log.info("adding contents");
-        addWeblogContents(weblog, user);
+        addPermission(weblog, user);
+        
+        //addWeblogContents(weblog, user);
+    }
+    
+    private boolean addPermission(Weblog newWeblog, User user){
+        // grant weblog creator ADMIN permission
+        List<String> actions = new ArrayList<String>();
+        actions.add(WeblogPermission.ADMIN);
+        
+        try {
+            weblogPermissionManager.grantWeblogPermission(
+                    newWeblog, user, actions, false);
+            return true;
+        } catch (Exception e) {
+            return false;
+            //throw new WebloggerException();
+        }
+        
     }
 
     private void addWeblogContents(Weblog newWeblog, User user)
             throws WebloggerException {
 
-        // grant weblog creator ADMIN permission
-        List<String> actions = new ArrayList<String>();
-        actions.add(WeblogPermission.ADMIN);
-        weblogPermissionManager.grantWeblogPermission(
-                newWeblog, user, actions, false);
+        
 
         String cats = WebloggerConfig.getProperty("newuser.categories");
         WeblogCategory firstCat = null;
         if (cats != null) {
             String[] splitcats = cats.split(",");
-            int counter = 0;
             for (String cat : splitcats) {
                 if (cat.trim().length() == 0) {
                     continue;
@@ -154,9 +166,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                     firstCat = c;
                 }
                 newWeblog.getWeblogCategories().add(c);
-                //this.em.merge(c);
-
-                counter++;
+                
             }
         }
 

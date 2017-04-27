@@ -8,7 +8,9 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.TestSetup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,8 +40,13 @@ public class WeblogEntryTest {
     
     @Test
     public void testWeblogEntryEntity(){
-        TestEntityReflector ter = new TestEntityReflector();
-        ter.testEntityClass(cut);
+        try {
+            TestEntityReflector ter = new TestEntityReflector();
+            ter.testEntityClass(cut);
+            ter.testTableAnotation(cut.getClass(), "weblogentry");
+        } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(WeblogEntryTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     @Test 

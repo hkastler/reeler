@@ -16,7 +16,6 @@ import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import javax.annotation.Resource;
@@ -35,13 +34,13 @@ public class UserManager extends AbstractManager<User> {
     @PersistenceContext
     private EntityManager em;
 
+    public UserManager() {
+        super(User.class);
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
-    }
-
-    public UserManager() {
-        super(User.class);
     }
 
     //--------------------------------------------------------------- user CRUD    
@@ -53,9 +52,8 @@ public class UserManager extends AbstractManager<User> {
      * the new user is the first user and give that user the admin role if so.
      *
      * @param newUser User object to be added.
-     * @throws WebloggerException If there is a problem.
      */
-    public void addUser(User newUser) throws WebloggerException {
+    public void addUser(User newUser) {        
         create(newUser);
     }
 
@@ -63,26 +61,24 @@ public class UserManager extends AbstractManager<User> {
      * Save a user.
      *
      * @param user User to be saved.
-     * @throws WebloggerException If there is a problem.
      */
-    public void saveUser(User user) throws WebloggerException {
+    public void saveUser(User user) {
+        em.merge(user);
     }
 
     /**
      * Remove a user.
      *
      * @param user User to be removed.
-     * @throws WebloggerException If there is a problem.
      */
-    
-    public void removeUser(User user) throws WebloggerException {
+    public void removeUser(User user){
         remove(user);
     }
 
     /**
      * Get count of enabled users
      */
-    public long getUserCount() throws WebloggerException {
+    public long getUserCount(){
         return count();
     }
 
@@ -93,8 +89,7 @@ public class UserManager extends AbstractManager<User> {
      * @return
      * @throws WebloggerException
      */
-    public User getUserByActivationCode(String activationCode)
-            throws WebloggerException {
+    public User getUserByActivationCode(String activationCode){
         User user = findByField("activationCode", activationCode);
         return user;
     }
@@ -107,9 +102,8 @@ public class UserManager extends AbstractManager<User> {
      * @return the user object with specified id or null if not found
      * @throws WebloggerException
      */
-    public User getUser(String id) throws WebloggerException {
-        User user = findById(id);
-        return user;
+    public User getUser(String id){
+        return findById(id);
     }
 
     /**
@@ -122,9 +116,9 @@ public class UserManager extends AbstractManager<User> {
      * @return The user, or null if not found or not enabled.
      * @throws WebloggerException If there is a problem.
      */
-    public User getUserByUserName(String userName) throws WebloggerException {
-        User user = findByField("userName", userName);
-        return user;
+    public User getUserByUserName(String userName){
+        return findByField("userName", userName);
+       
     }
 
     /**
@@ -135,13 +129,12 @@ public class UserManager extends AbstractManager<User> {
      * @return The user, or null if not found or of the proper enabled status.
      * @throws WebloggerException If there is a problem.
      */
-    public User getUserByUserName(String userName, Boolean enabled)
-            throws WebloggerException {
+    public User getUserByUserName(String userName, Boolean enabled){
         Query query = getEntityManager().createNamedQuery("User.getByUserName&Enabled");
         query.setParameter(1, userName);
         query.setParameter(2, enabled);
-        User user = (User) query.getSingleResult();
-        return user;
+        return (User) query.getSingleResult();
+        
     }
 
     /**
@@ -154,10 +147,8 @@ public class UserManager extends AbstractManager<User> {
      * @return The user, or null if not found or not enabled.
      * @throws WebloggerException If there is a problem.
      */
-    public User getUserByOpenIdUrl(String openIdUrl)
-            throws WebloggerException {
-        User user = findByField("openIdUrl", openIdUrl);
-        return user;
+    public User getUserByOpenIdUrl(String openIdUrl){
+        return findByField("openIdUrl", openIdUrl);        
     }
 
     /**
@@ -176,15 +167,13 @@ public class UserManager extends AbstractManager<User> {
      * @param offset The index of the first result to return.
      * @param length The number of results to return.
      * @return List A list of UserDatUsers which match the criteria.
-     * @throws WebloggerException If there is a problem.
      */
-    
     public List<User> getUsers(
             Boolean enabled,
             Date startDate,
             Date endDate,
             int offset,
-            int length) throws WebloggerException {
+            int length){
         List<User> userList;
         Query q = getNamedQuery("User.getByEnabled&EndDate&StartDateOrderByStartDateDesc");
         q.setParameter(1, enabled);
@@ -202,11 +191,11 @@ public class UserManager extends AbstractManager<User> {
      * @param startsWith String to match userNames and emailAddresses against
      * @param offset Offset into results (for paging)
      * @param length Max to return (for paging)
-     * @param enabled True for only enalbed, false for disabled, null for all
+     * @param enabled True for only enabled, false for disabled, null for all
      * @return List of (up to length) users that match startsWith string
      */
     public List<User> getUsersStartingWith(String startsWith,
-            Boolean enabled, int offset, int length) throws WebloggerException {
+            Boolean enabled, int offset, int length){
         return null;
     }
 
@@ -214,31 +203,28 @@ public class UserManager extends AbstractManager<User> {
      * Get map with 26 entries, one for each letter A-Z and containing Longs
      * reflecting the number of users whose names start with each letter.
      */
-    public Map<String, Long> getUserNameLetterMap() throws WebloggerException {
+    public Map<String, Long> getUserNameLetterMap(){
         return null;
     }
 
     /**
      * Get collection of users whose names begin with specified letter
      */
-    public List<User> getUsersByLetter(char letter, int offset, int length)
-            throws WebloggerException {
+    public List<User> getUsersByLetter(char letter, int offset, int length){
         return null;
     }
-
-    
 
     //--------------------------------------------------------------- role CRUD
     /**
      * Grant role to user.
      */
-    public void grantRole(String roleName, User user) throws WebloggerException {
+    public void grantRole(String roleName, User user){
     }
 
     /**
      * Revoke role from user.
      */
-    public void revokeRole(String roleName, User user) throws WebloggerException {
+    public void revokeRole(String roleName, User user){
     }
 
     /**
@@ -246,7 +232,7 @@ public class UserManager extends AbstractManager<User> {
      *
      * @deprecated Use checkPermission() instead.
      */
-    public boolean hasRole(String roleName, User user) throws WebloggerException {
+    public boolean hasRole(String roleName, User user){
         return false;
     }
 
@@ -256,9 +242,8 @@ public class UserManager extends AbstractManager<User> {
      *
      * @deprecated Use checkPermission() instead.
      */
-    public List<String> getRoles(User user) throws WebloggerException {
+    public List<String> getRoles(User user){
         return null;
     }
-
 
 }

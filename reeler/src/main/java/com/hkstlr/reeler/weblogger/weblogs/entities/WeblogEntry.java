@@ -30,7 +30,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -97,7 +96,6 @@ import javax.persistence.UniqueConstraint;
     , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :weblog ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
     
-    @Transient
     private transient Logger log = Logger.getLogger(WeblogEntry.class.getName());
 
     public enum PubStatus {
@@ -502,13 +500,12 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         }
         
         List<String> incomingTagNames = WeblogEntryTagFixer.splitStringAsTags(tagNames);
-        Set<String> incomingTags = new HashSet<String>(incomingTagNames.size());
+        Set<String> incomingTags = new HashSet<>(incomingTagNames.size());
         Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
 
-        for (String name : incomingTagNames) {
+        incomingTagNames.forEach((name) -> {
             incomingTags.add(WeblogEntryTagFixer.normalizeTag(name, localeObject));
-            
-        }
+        });
         
         //loop through originalTags
         List<WeblogEntryTag> existingTags = new ArrayList<>(tags);
@@ -536,12 +533,12 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
      /**
      * Roller lowercases all tags based on locale because there's not a 1:1 mapping
      * between uppercase/lowercase characters across all languages.  
-     * @param name
+     * @param tname
      * @throws WebloggerException
      */
-    public void addTag(String vname) throws WebloggerException {
+    public void addTag(String tname) throws WebloggerException {
         Locale localeObject = getWebsite() != null ? getWebsite().getLocaleInstance() : Locale.getDefault();
-        String name = vname;
+        String name = tname;
         name = WeblogEntryTagFixer.normalizeTag(name, localeObject);
         if (name.length() == 0) {
             return;

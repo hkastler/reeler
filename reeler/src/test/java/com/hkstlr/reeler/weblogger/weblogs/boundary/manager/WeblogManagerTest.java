@@ -6,17 +6,23 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.weblogger.TestSetup;
+import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -33,11 +39,9 @@ public class WeblogManagerTest {
     @InjectMocks
     private WeblogManager cut;
 
-    @InjectMocks
-    private WeblogPermissionManager weblogPermissionManager;
-
     @Mock
     private WebloggerConfig webloggerConfig;
+    
 
     public WeblogManagerTest() {
     }
@@ -47,8 +51,6 @@ public class WeblogManagerTest {
 
         MockitoAnnotations.initMocks(this);
         this.cut.em = em;
-        this.cut.weblogPermissionManager = weblogPermissionManager;
-        this.cut.weblogPermissionManager.em = em;
 
     }
 
@@ -69,6 +71,17 @@ public class WeblogManagerTest {
 
         cut.create(weblog);
         verify(this.cut.em, times(1)).persist(weblog);
+    }
+    
+    @Test
+    public void testAddWeblog() throws Exception {
+        System.out.println("addWeblog");
+    Weblog weblog = TestSetup.getWeblog();
+    User user = TestSetup.getUser();
+    cut.addWeblog(weblog, user);
+    //doNothing().when(cut.weblogPermissionManager).grantWeblogPermission(weblog, user, null,false);
+    //when(WebloggerConfig.getProperty("newuser.categories")).thenReturn("General, Technology");
+    //verify(this.cut.em, times(1)).merge(weblog);
     }
 
     /*@Test
