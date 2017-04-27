@@ -29,10 +29,11 @@
                 </p>
                 <hr/>
                 <!-- Date/Time -->       
-                <p>Posted on 
+                <p>Posted on
                     <h:outputText value="#{weblogEntryBean.weblogEntry.pubTime.time}" >
                         <f:convertDateTime dateStyle="default"
-                                           type="both"/>
+                                           type="both"
+                                           timeZone="#{weblogEntryBean.weblog.timeZone}"/>
                     </h:outputText>
                 </p>
                 <p jsf:id="pTags" rendered="#{weblogEntryBean.weblogEntry.tags.size() gt 0}">

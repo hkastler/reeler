@@ -157,7 +157,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "locale", length = 20)
     private String locale;
 
-    @Basic
+    @Basic(optional = false)
     @Size(max = 50)
     @Column(name = "timezone", length = 50)
     private String timeZone;

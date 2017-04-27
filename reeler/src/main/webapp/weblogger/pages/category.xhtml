@@ -35,7 +35,8 @@
                     <!-- Date/Time -->
                     <br/>
                     <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
-                        <f:convertDateTime dateStyle="default"/>
+                        <f:convertDateTime dateStyle="default"
+                                           timeZone="#{weblogEntry.website.timeZone}"/>
                     </h:outputText></p>
                     <!-- Post Content -->
                     <h:outputText value="#{weblogEntry.text}" escape="false" />

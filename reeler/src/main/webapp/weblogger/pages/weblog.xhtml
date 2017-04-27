@@ -44,10 +44,11 @@
                     by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
                     <!-- Date/Time -->                    
                     <p>
-                        Posted on 
+                        Posted on                     
                         <h:outputText value="#{weblogEntry.pubTime.time}" >                            
                             <f:convertDateTime dateStyle="default"
-                                               type="both"/>
+                                               type="both"
+                                               timeZone="#{weblogBean.weblog.timeZone}"/>
                         </h:outputText>
                     </p>
                     <!-- Post Content -->
