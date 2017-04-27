@@ -26,7 +26,7 @@ import javax.persistence.Query;
 public class WeblogCategoryManager extends AbstractManager<WeblogCategory> {
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
     
     
     public WeblogCategoryManager() {

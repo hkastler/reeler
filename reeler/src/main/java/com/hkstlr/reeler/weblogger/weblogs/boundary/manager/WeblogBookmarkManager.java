@@ -24,7 +24,7 @@ import javax.persistence.Query;
 public class WeblogBookmarkManager extends AbstractManager<WeblogBookmark> {
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
     
     public WeblogBookmarkManager() {
         super(WeblogBookmark.class);

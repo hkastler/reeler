@@ -10,6 +10,7 @@ import com.hkstlr.reeler.weblogger.TestSetup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.Before;
@@ -39,7 +40,7 @@ public class WeblogEntryTest {
     }
     
     @Test
-    public void testWeblogEntryEntity(){
+    public void testWeblogEntryEntity() throws Exception{
         try {
             TestEntityReflector ter = new TestEntityReflector();
             ter.testEntityClass(cut);
@@ -47,7 +48,17 @@ public class WeblogEntryTest {
         } catch (NoSuchMethodException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(WeblogEntryTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        cut.setAnchor("anchor");
+        cut.setPublishEntry(true);
+        WeblogEntry we = new WeblogEntry(cut);
+        assertTrue(we.getAnchor().equals(cut.getAnchor()));
+        assertTrue(we.isPublishEntry() == cut.isPublishEntry());
+        
+        cut.setData(TestSetup.getWeblogEntry());
+        assertTrue(cut.getWebsite().getName().equals("Test Weblog"));
     }
+    
     
     @Test 
     public void testSetTagToWeblogEntry() throws WebloggerException {
@@ -75,7 +86,26 @@ public class WeblogEntryTest {
         assertTrue(cut.getTags().size()==2);
         assertTrue(!cut.getTags().contains(whatTag));
         assertTrue(cut.getTags().contains(helloTag));
+        cut.setTags((List)tags);
+        assertTrue(cut.getTags().size()==2);
         
+        String tagString = cut.getTagsAsString();
+        assertTrue(tagString.contains("hello"));
+        
+        cut.addTag("");
+        assertTrue(cut.getTags().size()==2);
+        
+        cut.setTagsAsString("hello");
+        assertTrue(cut.getTags().size()==1);
+        
+        cut.addTag("hello");
+        assertTrue(cut.getTags().size()==1);
+        
+        cut.addTag("baz");
+        assertTrue(cut.getTags().size()==2);
+        
+        cut.setTagsAsString("");
+        assertTrue(cut.getTags().isEmpty());
         //cut.removeTag(cutTag);
         //assertEquals(cut, tag.getWeblogEntry());
         //assertTrue(cut.getTags().contains(tag));

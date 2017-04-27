@@ -46,7 +46,7 @@ import javax.persistence.TypedQuery;
 public class WeblogEntryCommentManager extends AbstractManager {
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
     
     public WeblogEntryCommentManager() {
         super(WeblogEntryComment.class);

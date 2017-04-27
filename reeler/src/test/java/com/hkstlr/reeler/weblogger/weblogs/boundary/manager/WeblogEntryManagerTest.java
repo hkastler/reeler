@@ -65,6 +65,216 @@ public class WeblogEntryManagerTest {
         verify(this.cut.em,times(1)).persist(weblogEntry);
     }
 
+    /**
+     * Test of save method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testSave() throws Exception {
+    }
+
+    /**
+     * Test of persist method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testPersist() throws Exception {
+    }
+
+    /**
+     * Test of edit method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testEdit() throws Exception {
+    }
+
+    /**
+     * Test of remove method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testRemove() throws Exception {
+    }
+
+    /**
+     * Test of removeAll method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testRemoveAll() throws Exception {
+    }
+
+    /**
+     * Test of find method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFind() throws Exception {
+    }
+
+    /**
+     * Test of findById method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFindById() throws Exception {
+    }
+
+    /**
+     * Test of findByField method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFindByField() throws Exception {
+    }
+
+    /**
+     * Test of findAll method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFindAll() throws Exception {
+    }
+
+    /**
+     * Test of findRange method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFindRange() throws Exception {
+    }
+
+    /**
+     * Test of count method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testCount() throws Exception {
+    }
+
+    /**
+     * Test of getNamedQuery method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetNamedQuery_String() throws Exception {
+    }
+
+    /**
+     * Test of getNamedQuery method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetNamedQuery_String_Class() throws Exception {
+    }
+
+    /**
+     * Test of getNamedQueryCommitFirst method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetNamedQueryCommitFirst() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntryByHandleAndAnchor method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntryByHandleAndAnchor() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntriesForWeblog method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntriesForWeblog() throws Exception {
+    }
+
+    /**
+     * Test of findByPinnedToMain method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFindByPinnedToMain() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntry method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntry() throws Exception {
+    }
+
+    /**
+     * Test of findForEdit method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testFindForEdit() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntriesByCategoryName method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntriesByCategoryName() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntriesByCategoryNameAndWeblog method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntriesByCategoryNameAndWeblog() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntriesByDateAndWeblog method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntriesByDateAndWeblog() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntryDatesForCalendar method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntryDatesForCalendar() throws Exception {
+    }
+
+    /**
+     * Test of getLatestEntryForWeblog method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetLatestEntryForWeblog() throws Exception {
+    }
+
+    /**
+     * Test of saveWeblogEntry method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testSaveWeblogEntry() throws Exception {
+    }
+
+    /**
+     * Test of removeWeblogEntry method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testRemoveWeblogEntry() throws Exception {
+    }
+
+    /**
+     * Test of getTags method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetTags() throws Exception {
+    }
+
+    /**
+     * Test of getWeblogEntryCountForWeblog method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetWeblogEntryCountForWeblog() throws Exception {
+    }
+
+    /**
+     * Test of getPaginatedEntries method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetPaginatedEntries() throws Exception {
+    }
+
+    /**
+     * Test of getAllEntriesPaginated method, of class WeblogEntryManager.
+     */
+    @Test
+    public void testGetAllEntriesPaginated() throws Exception {
+    }
+
    
     
 }

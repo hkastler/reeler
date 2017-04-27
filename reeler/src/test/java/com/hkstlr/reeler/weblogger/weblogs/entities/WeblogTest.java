@@ -74,22 +74,22 @@ public class WeblogTest {
         ter.testEntityClass(cut);
     }
     
-    @Test
+    /*@Test
     public void testGetClassFields() throws ClassNotFoundException {
-        System.out.println("classFields");
-        //Weblog instance = new Weblog();
-        Class weblogClass = Class.forName(Weblog.class.getName());
-        
-        log.info("getting fields");
-        Field[] fields = weblogClass.getDeclaredFields();
-        log.info(Integer.toString(fields.length));
-        for(Field field : fields){
-            log.info("field:" + field.getName());
-            log.info("fieldType:" + field.getType().getName());            
-        }
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
+    System.out.println("classFields");
+    //Weblog instance = new Weblog();
+    Class weblogClass = Class.forName(Weblog.class.getName());
+    
+    log.info("getting fields");
+    Field[] fields = weblogClass.getDeclaredFields();
+    log.info(Integer.toString(fields.length));
+    for(Field field : fields){
+    log.info("field:" + field.getName());
+    log.info("fieldType:" + field.getType().getName());
     }
+    // TODO review the generated test code and remove the default call to fail.
+    //fail("The test case is a prototype.");
+    }*/
 
     /**
      * Test of getLocale method, of class Weblog.

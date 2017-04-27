@@ -9,20 +9,15 @@ import com.hkstlr.reeler.weblogger.TestSetup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 /**
