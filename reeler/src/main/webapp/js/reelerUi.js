@@ -4,7 +4,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
 
     var dataPage = $(this).attr("data-page");
     //ckeditor doesnt render via ajax
-    if (page === 'entry') {
+    if (dataPage === 'entry') {
         return;
     }
     try {
@@ -19,7 +19,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
     if (disabledValue === "true" || disabledValue === "disabled") {
         return false;
     }
-    var page = $(this).attr("data-page");
+    
     var myHref = $(this).attr("href");
     var label = $(this).text();
     label = $.trim(label);
@@ -34,9 +34,12 @@ $(document).on("click", "[id|='nav'] a", function (e) {
             url: ajaxHref + "Content.xhtml",
             success: function (response) {
                 try {
+                    var loader = $('#loader').html();
                     
-                    $('#content').empty();
+                    $('#content').html(loader);
                     $('#content').html(response.toString());
+                    
+                    
                 } catch (err) {                    
                     //do nothing
                 }
