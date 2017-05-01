@@ -98,7 +98,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
     AutoPingManager autoPingManager;
 
     @EJB
-    PingTargetManager pingTargetMgr;
+    PingTargetManager pingTargetManager;
     
     private static final Logger log = Logger.getLogger(WeblogManager.class.getName());
     
@@ -124,7 +124,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         em.merge(weblog);
         addPermission(weblog, user);
         
-        //addWeblogContents(weblog, user);
+        addWeblogContents(weblog, user);
     }
     
     private boolean addPermission(Weblog newWeblog, User user){
@@ -146,8 +146,6 @@ public class WeblogManager extends AbstractManager<Weblog> {
     private void addWeblogContents(Weblog newWeblog, User user)
             throws WebloggerException {
 
-        
-
         String cats = WebloggerConfig.getProperty("newuser.categories");
         WeblogCategory firstCat = null;
         if (cats != null) {
@@ -156,7 +154,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 if (cat.trim().length() == 0) {
                     continue;
                 }
-                log.info("weblog:" + newWeblog.getId());
+                
                 WeblogCategory c = new WeblogCategory(
                         newWeblog,
                         cat,
@@ -199,18 +197,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 }
             }
         }
-
-        //roller.getMediaFileManager().createDefaultMediaFileDirectory(newWeblog);
-        // flush so that all data up to this point can be available in db
-        //this.strategy.flush();
         // add any auto enabled ping targets
-        for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
+        for (PingTarget pingTarget : this.pingTargetManager.getCommonPingTargets()) {
             if (pingTarget.isAutoEnabled()) {
                 AutoPing autoPing = new AutoPing(pingTarget, newWeblog);
-                autoPingManager.saveAutoPing(autoPing);
+                this.autoPingManager.saveAutoPing(autoPing);
             }
         }
-        em.flush();
     }
 
     public void removeWeblog(Weblog weblog) throws WebloggerException {
@@ -429,7 +422,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         // flush so that all data up to this point can be available in db
         //this.strategy.flush();
         // add any auto enabled ping targets
-        for (PingTarget pingTarget : pingTargetMgr.getCommonPingTargets()) {
+        for (PingTarget pingTarget : pingTargetManager.getCommonPingTargets()) {
             if (pingTarget.isAutoEnabled()) {
                 AutoPing autoPing = new AutoPing(pingTarget, newWeblog);
                 autoPingManager.saveAutoPing(autoPing);

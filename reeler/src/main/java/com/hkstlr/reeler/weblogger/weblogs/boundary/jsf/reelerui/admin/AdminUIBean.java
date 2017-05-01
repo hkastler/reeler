@@ -55,7 +55,7 @@ public class AdminUIBean {
         this.pages = pages;
     }
 
-    public String getPATH() {
+    public String getPath() {
         return PATH;
     }
 

@@ -24,27 +24,24 @@
         <f:view>
             <article>
                 <!-- Title -->
-                <script id="title_template" type="text/html">
-                    <h1 class="mt-4">{{title}}</h1>
-                </script>
-
+                <h1 class="mt-4" id="title"></h1>
+                               
                 <!-- Author -->
                 <p class="lead">
-                    by <a href="#">
-                        <script id="creatorUserName_template" type="text/html">{{creatorUserName}}</script>
-                    </a>
+                    by <a href="#">                        
+                        <span id="author"></span>
+                        </a>
                 </p>
                 <hr/>
                 <!-- Date/Time -->       
-                <p>Posted on <script id="pubTime_template" type="text/html">{{pubTime}}</script>
-
-                </p>
+                <p id="pubTime"></p>
+                
                 <p jsf:id="pTags" rendered="#{weblogEntryBean.weblogEntry.tags.size() gt 0}">
                     Tags: #{weblogEntryBean.weblogEntry.tagsAsString}
                 </p>
                 <hr/>
                 <!-- Post Content -->
-                <span id="postContent"></span>
+                <div id="postContent"></div>
                 <hr/>
             </article>
             <!-- Comments Form -->
@@ -161,17 +158,26 @@
         <script>
             $(document).ready(function () {
                 var weblog = #{weblogEntryBean.weblog.toJsonObject()};
-                //document.getElementById('yourElementId').title = 
+                
                 var weblogEntry = #{weblogEntryBean.weblogEntry.toJsonObject()};
-                var template = "{{name}} - {{tagline}}";
-                var html = Mustache.to_html(template, weblog);
-                $('#navbarBrandText').html(html);
-                var template = document.getElementById("title_template").innerHTML;
-                var output = Mustache.render(template, weblogEntry);
-
-                $('#pubTime').html();
-                $('#postContent').html(Mustache.render("{{content}}", weblogEntry));
-                document.getElementById('postContent').innerHTML = Mustache.render("{{content}}", weblogEntry);
+                
+                $('#navbarBrandText').html(Mustache.to_html("{{name}} - {{tagline}}", weblog));      
+                
+                $('#title').html(Mustache.render("{{{title}}}", weblogEntry));                
+                
+                $('#author').html(Mustache.render("{{creatorUserName}}", weblogEntry));
+                var viewPubTime = {
+                    viewDt: function(){
+                        dt = new Date(weblogEntry.pubTime);
+                        
+                        wLocale = weblog.locale.replace("_","-");
+                        return dt.toLocaleDateString() + " at " + dt.toLocaleTimeString();
+                    }
+                }
+                $('#pubTime').html( Mustache.render("Posted on {{viewDt}}", viewPubTime));
+                
+                $('#postContent').html(Mustache.render("{{{text}}}", weblogEntry));
+                
             });
         </script>
     </ui:define>

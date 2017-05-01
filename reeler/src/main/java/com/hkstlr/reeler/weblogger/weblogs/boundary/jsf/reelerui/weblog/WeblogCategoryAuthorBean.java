@@ -62,7 +62,7 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
         log.info(weblogCategory.toString());
         weblogger.getWeblogCategoryManager().save(weblogCategory);
         log.info("saved:" + this.weblogCategory.getId());
-        FacesMessageManager.addSuccessMessage("weblogCategoryForm", "Category Saved");
+        //FacesMessageManager.addSuccessMessage("weblogCategoryForm", "Category Saved");
     }
        
     

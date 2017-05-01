@@ -14,6 +14,7 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +37,7 @@ public class PingTargetManager extends AbstractManager<PingTarget> {
       
 
     @PersistenceContext
-    private EntityManager em;
+    public EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -140,9 +141,19 @@ public class PingTargetManager extends AbstractManager<PingTarget> {
 
     public List<PingTarget> getCommonPingTargets()
             throws WebloggerException {
-        TypedQuery<PingTarget> q = getNamedQuery(
+        TypedQuery<PingTarget> q = em.createNamedQuery(
                 "PingTarget.getPingTargetsOrderByName", PingTarget.class);
         return q.getResultList();
     }
+
+    public EntityManager getEm() {
+        return em;
+    }
+
+    public void setEm(EntityManager em) {
+        this.em = em;
+    }
+    
+    
     
 }

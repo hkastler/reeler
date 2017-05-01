@@ -25,8 +25,6 @@
     <welcome-file-list>
         <welcome-file>index.xhtml</welcome-file>
     </welcome-file-list>
-    
-    
     <security-constraint>
         <display-name>Admin</display-name>
         <web-resource-collection>
@@ -38,15 +36,12 @@
             <description/>
             <role-name>admin</role-name>
         </auth-constraint>
-        
         <!--
         <user-data-constraint>
             <transport-guarantee>CONFIDENTIAL</transport-guarantee>
         </user-data-constraint>
         -->
     </security-constraint>
-  
-    
     <security-constraint>
         <display-name>User</display-name>
         <web-resource-collection>
@@ -65,8 +60,6 @@
         </user-data-constraint>
         -->
     </security-constraint>
-    
-
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>reelerRealm</realm-name>
@@ -74,9 +67,7 @@
             <form-login-page>/weblogger/login/index.xhtml</form-login-page>
             <form-error-page>/weblogger/login/error.xhtml</form-error-page>
         </form-login-config>
-        
     </login-config>
-    
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>login</web-resource-name>
@@ -88,7 +79,6 @@
         </user-data-constraint>
         -->
     </security-constraint>
-
     <security-role>
         <description/>
         <role-name>admin</role-name>
@@ -96,6 +86,10 @@
     <security-role>
         <description/>
         <role-name>user</role-name>
-    </security-role>  
-    
+    </security-role>
+    <ejb-local-ref>
+        <ejb-ref-name>webloggerConfig</ejb-ref-name>
+        <ejb-ref-type>Session</ejb-ref-type>
+        <ejb-link>#WebloggerConfig</ejb-link>
+    </ejb-local-ref>
 </web-app>

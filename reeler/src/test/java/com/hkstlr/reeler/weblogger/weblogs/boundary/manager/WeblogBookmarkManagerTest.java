@@ -12,6 +12,7 @@ import org.junit.Before;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import static org.mockito.MockitoAnnotations.initMocks;
 
 /**
  *
@@ -33,7 +34,7 @@ public class WeblogBookmarkManagerTest {
    @Before
     public void setUp() throws NamingException {
 
-        MockitoAnnotations.initMocks(this);
+        initMocks(this);
         this.cut.em = em;
 
     }

@@ -28,7 +28,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.inject.Inject;
 
 /**
  *
@@ -58,11 +57,12 @@ public class ReelerUIBean implements Serializable {
     private Weblog currentWeblog = new Weblog();
 
     public ReelerUIBean() {
-        setUserFromSession();
+        //default constructor
     }
 
     @PostConstruct
     public void init() {
+        setUserFromSession();
         log.log(Level.INFO, "expected that a session bean would init only once");
         pages.put("entry", "Create Entry");
         pages.put("entries", "Entries");
@@ -110,10 +110,8 @@ public class ReelerUIBean implements Serializable {
             
             finalUblogs.add(blog);
             //refresh the current weblog
-            if (currentWeblog != null) {
-                if (blog.equals(currentWeblog)) {
-                    currentWeblog = blog;
-                }
+            if (currentWeblog != null && blog.equals(currentWeblog)) {
+                currentWeblog = blog;                
             }
         }
         this.userWeblogs = null;
@@ -148,7 +146,7 @@ public class ReelerUIBean implements Serializable {
         this.userWeblogPermissions = weblogPermissionMap;
     }
 
-    public void setWeblogPermissions() throws WebloggerException {
+    public void setWeblogPermissions() {
         setWeblogPermissions(this.userWeblogs);
     }
 
@@ -162,14 +160,13 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void setUserFromSession() {
-
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
         user.getPermissions().forEach((t) -> {
             log.info(t.toString());
         });
     }
 
-    public String getPATH() {
+    public String getPath() {
         return PATH;
     }
 
@@ -189,7 +186,7 @@ public class ReelerUIBean implements Serializable {
         this.pages = pages;
     }
 
-    public String getPAGE_HOME() {
+    public String getPageHome() {
         return PAGE_HOME;
     }
 
@@ -231,20 +228,12 @@ public class ReelerUIBean implements Serializable {
         } catch (Exception e) {
             log.log(Level.SEVERE,null,e);
         }
-        try {
-            setWeblogPermissions();
-        } catch (WebloggerException ex) {
-            log.log(Level.SEVERE, null, ex);
-        }
+        setWeblogPermissions();
     }
 
     public void blogrollsViewAction() {
         setUserWeblogs();
-        try {
-            setWeblogPermissions();
-        } catch (WebloggerException ex) {
-            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        setWeblogPermissions();
     }
 
 }
