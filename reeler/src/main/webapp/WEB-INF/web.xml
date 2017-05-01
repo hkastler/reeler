@@ -87,9 +87,4 @@
         <description/>
         <role-name>user</role-name>
     </security-role>
-    <ejb-local-ref>
-        <ejb-ref-name>webloggerConfig</ejb-ref-name>
-        <ejb-ref-type>Session</ejb-ref-type>
-        <ejb-link>#WebloggerConfig</ejb-link>
-    </ejb-local-ref>
 </web-app>
