@@ -7,9 +7,6 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.LoggerExposer;
-import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.TestSetup;
-import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.io.File;
 import java.util.Date;

@@ -5,11 +5,11 @@
  */
 package com.hkstlr.reeler.weblogger.media.boundary.manager;
 
-
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFile;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFileDirectory;
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -18,11 +18,11 @@ import javax.persistence.Query;
  *
  * @author henry.kastler
  */
-
+@Stateless
 public class MediaFileManager extends AbstractManager<MediaFile> {
 
     @PersistenceContext
-    private EntityManager em;
+    protected EntityManager em;
 
     @Override
     protected EntityManager getEntityManager() {
@@ -33,37 +33,35 @@ public class MediaFileManager extends AbstractManager<MediaFile> {
         super(MediaFile.class);
     }
 
-	public MediaFileDirectory getDefaultMediaFileDirectory(Weblog weblog) {
-		// TODO Auto-generated method stub
-		Query query = em.createQuery("SELECT r FROM MediaFileDirectory r WHERE r.weblog = :weblog");
-		query.setParameter("weblog", weblog);
-		MediaFileDirectory result = (MediaFileDirectory)query.getResultList().get(0);
-		return result;
-	}
+    public MediaFileDirectory getDefaultMediaFileDirectory(Weblog weblog) {
+        Query query = em.createQuery("SELECT r FROM MediaFileDirectory r WHERE r.weblog = :weblog");
+        query.setParameter("weblog", weblog);
+        return (MediaFileDirectory) query.getResultList().get(0);
+    }
 
-	public void removeAllFiles(Weblog weblog) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void removeAllFiles(Weblog weblog) {
+        // TODO Auto-generated method stub
 
-	public void createDefaultMediaFileDirectory(Weblog newWeblog) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	public MediaFile getMediaFileByOriginalPath(Weblog weblog, String string) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public void createDefaultMediaFileDirectory(Weblog newWeblog) {
+        // TODO Auto-generated method stub
 
-	public void removeMediaFile(Weblog weblog, MediaFile oldmf) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	public void createMediaFile(Weblog weblog, MediaFile mf) {
-		// TODO Auto-generated method stub
-		
-	}
-    
+    public MediaFile getMediaFileByOriginalPath(Weblog weblog, String string) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    public void removeMediaFile(Weblog weblog, MediaFile oldmf) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public void createMediaFile(Weblog weblog, MediaFile mf) {
+        // TODO Auto-generated method stub
+
+    }
+
 }

@@ -39,6 +39,7 @@ import javax.persistence.TypedQuery;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.media.boundary.manager.MediaFileManager;
 import com.hkstlr.reeler.weblogger.pings.boundary.AutoPingManager;
 import com.hkstlr.reeler.weblogger.pings.boundary.PingTargetManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
@@ -100,6 +101,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
     @EJB
     PingTargetManager pingTargetManager;
     
+    @EJB
+    MediaFileManager mediaFileManager;
+    
     private static final Logger log = Logger.getLogger(WeblogManager.class.getName());
     
     public WeblogManager() {
@@ -120,25 +124,25 @@ public class WeblogManager extends AbstractManager<Weblog> {
         weblog.setLastModified(new java.util.Date());
         //for backwards compatibility with roller
         weblog.setEditorTheme("basic");
-        //addWeblogContents(weblog, user);
+        //addWeblog.merge1
         em.merge(weblog);
-        addPermission(weblog, user);
-        
+        em.flush();
+        addPermission(weblog, user);        
         addWeblogContents(weblog, user);
     }
     
     private boolean addPermission(Weblog newWeblog, User user){
         // grant weblog creator ADMIN permission
-        List<String> actions = new ArrayList<String>();
+        List<String> actions = new ArrayList<>();
         actions.add(WeblogPermission.ADMIN);
         
         try {
             weblogPermissionManager.grantWeblogPermission(
                     newWeblog, user, actions, false);
             return true;
-        } catch (Exception e) {
-            return false;
-            //throw new WebloggerException();
+        } catch (WebloggerException e) {
+            log.log(Level.WARNING,null,e);
+            return false;            
         }
         
     }
@@ -172,8 +176,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         if (firstCat != null) {
             newWeblog.setBloggerCategory(firstCat);
         }
-
-        this.em.merge(newWeblog);
+        
 
         // add default bookmarks
         WeblogBookmarkFolder defaultFolder = new WeblogBookmarkFolder(
@@ -204,6 +207,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 this.autoPingManager.saveAutoPing(autoPing);
             }
         }
+        
+        //addWeblog.merge2
+        this.em.merge(newWeblog);
+        this.em.flush();
     }
 
     public void removeWeblog(Weblog weblog) throws WebloggerException {
@@ -251,7 +258,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
         removeCounts.executeUpdate();
 
         // Remove the weblog's ping queue entries
-        TypedQuery<PingQueueEntry> q = em.createNamedQuery("PingQueueEntry.getByWebsite", PingQueueEntry.class);
+        TypedQuery<PingQueueEntry> q = em.createNamedQuery(
+                "PingQueueEntry.getByWebsite", PingQueueEntry.class);
         q.setParameter(1, weblog);
         List queueEntries = q.getResultList();
         for (Object obj : queueEntries) {
@@ -259,15 +267,14 @@ public class WeblogManager extends AbstractManager<Weblog> {
         }
 
         // Remove the weblog's auto ping configurations
-        //AutoPingManager autoPingManager = roller.getAutopingManager();
-        List<AutoPing> autopings = null;//autoPingMgr.getAutoPingsByWebsite(weblog);
+        List<AutoPing> autopings = autoPingManager.getAutoPingsByWebsite(weblog);
         for (AutoPing autoPing : autopings) {
             this.em.remove(autoPing);
         }
 
         // remove associated templates
-        TypedQuery<WeblogTemplate> templateQuery = em.createNamedQuery("WeblogTemplate.getByWeblog",
-                WeblogTemplate.class);
+        TypedQuery<WeblogTemplate> templateQuery = em.createNamedQuery(
+                "WeblogTemplate.getByWeblog", WeblogTemplate.class);
         templateQuery.setParameter(1, weblog);
         List<WeblogTemplate> templates = templateQuery.getResultList();
 
@@ -276,8 +283,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
         }
 
         // remove folders (including bookmarks)
-        TypedQuery<WeblogBookmarkFolder> folderQuery = em.createNamedQuery("WeblogBookmarkFolder.getByWebsite",
-                WeblogBookmarkFolder.class);
+        TypedQuery<WeblogBookmarkFolder> folderQuery = em.createNamedQuery(
+                "WeblogBookmarkFolder.getByWebsite", WeblogBookmarkFolder.class);
         folderQuery.setParameter(1, weblog);
         List<WeblogBookmarkFolder> folders = folderQuery.getResultList();
         for (WeblogBookmarkFolder wbf : folders) {
@@ -287,9 +294,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
         // remove mediafile metadata
         // remove uploaded files
         //MediaFileManager mfmgr = WebloggerFactory.getWeblogger().getMediaFileManager();
-        //mediaFileManager.removeAllFiles(weblog);
+        mediaFileManager.removeAllFiles(weblog);
         // remove entries
-        TypedQuery<WeblogEntry> refQuery = em.createNamedQuery("WeblogEntry.getByWebsite", WeblogEntry.class);
+        TypedQuery<WeblogEntry> refQuery = em.createNamedQuery(
+                "WeblogEntry.getByWebsite", WeblogEntry.class);
         refQuery.setParameter(1, weblog);
         List<WeblogEntry> entries = refQuery.getResultList();
         for (WeblogEntry entry : entries) {
@@ -360,75 +368,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     private void addWeblogContents(Weblog newWeblog)
             throws WebloggerException {
-
-        // grant weblog creator ADMIN permission
-        List<String> actions = new ArrayList<String>();
-        actions.add(WeblogPermission.ADMIN);
         User user = userManager.getUserByUserName(newWeblog.getCreator());
-        weblogPermissionManager.grantWeblogPermission(
-                newWeblog, user, actions);
-
-        String cats = WebloggerConfig.getProperty("newuser.categories");
-        WeblogCategory firstCat = null;
-        if (cats != null) {
-            String[] splitcats = cats.split(",");
-            for (String split : splitcats) {
-                if (split.trim().length() == 0) {
-                    continue;
-                }
-                WeblogCategory c = new WeblogCategory(
-                        newWeblog,
-                        split,
-                        null,
-                        null);
-                if (firstCat == null) {
-                    firstCat = c;
-                }
-                this.em.merge(c);
-            }
-        }
-
-        // Use first category as default for Blogger API
-        if (firstCat != null) {
-            newWeblog.setBloggerCategory(firstCat);
-        }
-
-        this.em.merge(newWeblog);
-
-        // add default bookmarks
-        WeblogBookmarkFolder defaultFolder = new WeblogBookmarkFolder(
-                "default", newWeblog);
-        this.em.merge(defaultFolder);
-
-        String blogroll = WebloggerConfig.getProperty("newuser.blogroll");
-        if (blogroll != null) {
-            String[] splitroll = blogroll.split(",");
-            for (String splitItem : splitroll) {
-                String[] rollitems = splitItem.split("\\|");
-                if (rollitems.length > 1) {
-                    WeblogBookmark b = new WeblogBookmark(
-                            defaultFolder,
-                            rollitems[0],
-                            "",
-                            rollitems[1].trim(),
-                            null,
-                            null);
-                    this.em.merge(b);
-                }
-            }
-        }
-
-        //roller.getMediaFileManager().createDefaultMediaFileDirectory(newWeblog);
-        // flush so that all data up to this point can be available in db
-        //this.strategy.flush();
-        // add any auto enabled ping targets
-        for (PingTarget pingTarget : pingTargetManager.getCommonPingTargets()) {
-            if (pingTarget.isAutoEnabled()) {
-                AutoPing autoPing = new AutoPing(pingTarget, newWeblog);
-                autoPingManager.saveAutoPing(autoPing);
-            }
-        }
-
+        addWeblogContents(newWeblog, user);
     }
 
     public Weblog getWeblog(String id) throws WebloggerException {

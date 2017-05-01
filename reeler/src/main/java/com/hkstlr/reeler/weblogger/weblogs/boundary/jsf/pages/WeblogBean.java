@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.pages;
 
+import com.hkstlr.reeler.app.control.PageBean;
 import com.hkstlr.reeler.app.control.Paginator;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import java.util.List;
@@ -15,7 +16,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
@@ -34,7 +34,7 @@ import javax.ejb.EJB;
  */
 @ManagedBean
 @RequestScoped
-public class WeblogBean {
+public class WeblogBean extends PageBean {
 
     private static final Logger log = Logger.getLogger(WeblogBean.class.getName());    
 
@@ -50,14 +50,6 @@ public class WeblogBean {
     @ManagedProperty(value = "#{param.dateString}")
     private String dateString;
 
-    @ManagedProperty(value = "#{param.pageNum}")
-    private Integer pageNum;
-
-    @ManagedProperty(value = "#{param.pageSize}")
-    private Integer pageSize;
-
-    private Paginator paginator;
-    
     private String defaultOutcome;
 
     private Date date;
@@ -72,10 +64,12 @@ public class WeblogBean {
     private WeblogHitCount weblogHitCount;
 
     public WeblogBean() {
+        super();
     }
 
     @PostConstruct
     public void init() {
+        
         if(dateString == null){
             dateString = "";
         }
@@ -91,7 +85,6 @@ public class WeblogBean {
 
                 if (pageSize == null) {
                     pageSize = weblog.getEntryDisplayCount();
-
                 }
                 paginator = new Paginator(pageSize,pageNum,numberOfEntries);
             }
@@ -140,31 +133,7 @@ public class WeblogBean {
 
     public void setDateString(String dateString) {
         this.dateString = dateString;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Paginator getPaginator() {
-        return paginator;
-    }
-
-    public void setPaginator(Paginator paginator) {
-        this.paginator = paginator;
-    }
+    }    
 
     public String getDefaultOutcome() {
         return defaultOutcome;
@@ -276,11 +245,9 @@ public class WeblogBean {
     }
 
     public void weblogViewAction() {
-        /*this.viewEntries = weblogger.getWeblogEntryManager()
-        .getWeblogEntriesForWeblog(weblog);*/
         int[] range = new int[2];
-        range[0] = paginator.getPageFirstItem()-1;
-        range[1] = paginator.getPageLastItem()-1;
+        range[0] = getPaginator().getPageFirstItem()-1;
+        range[1] = getPaginator().getPageLastItem()-1;
         this.viewEntries = weblogger.getWeblogEntryManager().getPaginatedEntries(weblog,range);
     }
 

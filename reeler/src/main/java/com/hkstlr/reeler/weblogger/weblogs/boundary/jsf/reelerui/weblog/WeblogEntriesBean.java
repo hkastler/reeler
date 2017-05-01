@@ -7,13 +7,10 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.app.control.PageBean;
 import com.hkstlr.reeler.app.control.Paginator;
-import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.ReelerUIBean;
-import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentSearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;

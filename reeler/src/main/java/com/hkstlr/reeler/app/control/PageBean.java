@@ -5,8 +5,6 @@
  */
 package com.hkstlr.reeler.app.control;
 
-import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedProperty;
 
 
@@ -15,8 +13,6 @@ import javax.faces.bean.ManagedProperty;
  * @author henry.kastler
  */
 public class PageBean {
-
-    private static final Logger log = Logger.getLogger(PageBean.class.getName());    
     
     @ManagedProperty(value = "#{param.page}")
     protected Integer pageNum;
@@ -27,12 +23,7 @@ public class PageBean {
     protected Paginator paginator = new Paginator();
     
     public PageBean() {
-    }
-    
-    @PostConstruct
-    public void init(){
-          
-        
+        //default constructor
     }
     
     public Integer getPageNum() {
@@ -61,8 +52,5 @@ public class PageBean {
     public void setPaginator(Paginator paginator) {
         this.paginator = paginator;
     }
-    
-    
-    
     
 }
