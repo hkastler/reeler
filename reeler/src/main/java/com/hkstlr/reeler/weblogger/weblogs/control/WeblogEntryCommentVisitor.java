@@ -14,7 +14,7 @@ import java.util.logging.Logger;
  */
 public class WeblogEntryCommentVisitor {
 
-    private static final Logger log = Logger.getLogger(WeblogEntryCommentVisitor.class.getName());
+    private static final Logger LOG = Logger.getLogger(WeblogEntryCommentVisitor.class.getName());
 
        
     private boolean spam;
@@ -83,34 +83,33 @@ public class WeblogEntryCommentVisitor {
     }
     
     public void setSpamAndApproval(){
-        log.info("spam:" + spam);
-        log.info("approved:" + approved);
+        LOG.finest("spam:" + spam);
+        LOG.finest("approved:" + approved);
         if (this.spam && this.approved) {
-            log.info("both spam and approved");
+            LOG.finest("both spam and approved");
             if (!this.getWeblogEntryComment().getApproved()) {
-                log.info("this comment was not approved before");
+                LOG.finest("this comment was not approved before");
                 this.getWeblogEntryComment().setApproved();
                 this.spam = false;
-                //msg.append("Approved");
+                
             }else if (!this.getWeblogEntryComment().getSpam()) {
-                log.info("this comment was not spam before");
+                LOG.finest("this comment was not spam before");
                 this.getWeblogEntryComment().setSpam();
                 this.approved = false;
-                //msg.append("Spam");
+                
             }
         }else if (this.isSpam()) {
-            log.info("isSpam, setting");
+            LOG.finest("isSpam, setting");
             this.getWeblogEntryComment().setSpam();
             this.approved = false;
             
         } else if (this.isApproved()) {
-            log.info("isApproved, setting");
+            LOG.finest("isApproved, setting");
             this.getWeblogEntryComment().setApproved();
             this.spam = false;
-            //msg.append("Approved");
         } else {
             //it is no longer approved
-            log.info("is neither spam nor approved");
+            LOG.finest("is neither spam nor approved");
             this.getWeblogEntryComment().setStatus(WeblogEntryComment.ApprovalStatus.PENDING);
         }
         

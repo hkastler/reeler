@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -62,7 +61,7 @@ import javax.persistence.criteria.Root;
 @Stateless
 public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
-    private static final Logger log = Logger.getLogger(WeblogEntryManager.class.getName());
+    private static final Logger LOG = Logger.getLogger(WeblogEntryManager.class.getName());
 
     @EJB
     private WeblogEntryCommentManager wecm;
@@ -100,7 +99,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         try {
             weblog = (Weblog) website.getSingleResult();
         } catch (Exception e) {
-            log.log(Level.WARNING,"Weblog.findByHandle",e);
+            LOG.log(Level.WARNING,"Weblog.findByHandle",e);
         }
 
 
@@ -116,7 +115,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             weblogEntry = new WeblogEntry();
             weblogEntry.setTitle("not found");
             weblogEntry.setText("not found");
-            log.log(Level.WARNING, "weblog: {0} not found", new Object[]{anchor, e});
+            LOG.log(Level.WARNING, "weblog: {0} not found", new Object[]{anchor, e});
         }
 
         return weblogEntry;

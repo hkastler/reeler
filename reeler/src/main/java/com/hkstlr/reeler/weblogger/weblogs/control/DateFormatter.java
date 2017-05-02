@@ -15,7 +15,8 @@ import java.util.Locale;
  */
 public class DateFormatter {
 
-    public DateFormatter() {
+    private DateFormatter() {
+        //constructor
     }
     
     /**

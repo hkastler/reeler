@@ -10,6 +10,7 @@ import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import java.security.Permission;
+import java.security.PermissionCollection;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -84,6 +85,8 @@ public class AbstractPermissionEntity extends java.security.Permission {
     @Column(name = "actions", length = 255)
     protected String actions;
     
+    PermissionCollection permissionCollection;
+    
 
     public AbstractPermissionEntity(String name) {
         super(name);
@@ -91,6 +94,7 @@ public class AbstractPermissionEntity extends java.security.Permission {
     }
     
     
+    @Override
     public String getActions() {
         return actions;
     }
@@ -213,7 +217,7 @@ public class AbstractPermissionEntity extends java.security.Permission {
             return false;
         }
         AbstractPermissionEntity other = (AbstractPermissionEntity) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (!this.id.equals(other.id)) {
             return false;
         }
         return true;

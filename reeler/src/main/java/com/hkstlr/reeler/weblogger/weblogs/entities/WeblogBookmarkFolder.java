@@ -8,14 +8,12 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -48,7 +46,7 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
-    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable=true, updatable = true)
+    @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = true, updatable = true)
     @ManyToOne(optional = false)
     private Weblog weblog;
 
@@ -95,30 +93,27 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += id.hashCode();
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+        
         if (!(object instanceof WeblogBookmarkFolder)) {
             return false;
         }
         WeblogBookmarkFolder other = (WeblogBookmarkFolder) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return this.id.equals(other.id);
     }
 
-   @Override
-    public String toJsonString(){
+    @Override
+    public String toJsonString() {
         return this.toJsonObject().toString();
     }
-    
+
     @Override
-    public JsonObject toJsonObject(){
+    public JsonObject toJsonObject() {
         return new JsonBuilder().toJsonObject(this, new String[]{"weblog"});
     }
 }

@@ -43,7 +43,7 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
 
-    private static final Logger log = Logger.getLogger(WeblogPermissionManager.class.getName());
+    private static final Logger LOG = Logger.getLogger(WeblogPermissionManager.class.getName());
 
     @PersistenceContext
     protected EntityManager em;
@@ -68,20 +68,25 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "getWeblogPermission", e);
+            LOG.log(Level.WARNING, "getWeblogPermission", e);
             return null;
         }
     }
-
-    public WeblogPermission getWeblogPermissionIncludingPending(Weblog weblog, User user) throws WebloggerException {
+    
+    private TypedQuery<WeblogPermission> permissionQuery(){
         TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
                 WeblogPermission.class);
+        return q;
+    }
+
+    public WeblogPermission getWeblogPermissionIncludingPending(Weblog weblog, User user) throws WebloggerException {
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         try {
             return q.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "getWeblogPermissionIncludingPending", e);
+            LOG.log(Level.WARNING, "getWeblogPermissionIncludingPending", e);
             return null;
         }
     }
@@ -89,15 +94,14 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public void grantWeblogPermission(Weblog weblog, User user, List<String> actions) throws WebloggerException {
 
         // first, see if user already has a permission for the specified object
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
-                WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "WeblogPermission.getByUserName&WeblogIdIncludingPending", e);
+            LOG.log(Level.WARNING, "WeblogPermission.getByUserName&WeblogIdIncludingPending", e);
         }
 
         // permission already exists, so add any actions specified in perm argument
@@ -115,16 +119,14 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public void grantWeblogPermission(Weblog weblog, User user, List<String> actions, boolean pending) throws WebloggerException {
         
         // first, see if user already has a permission for the specified object
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
-                WeblogPermission.class);
-        
+        TypedQuery<WeblogPermission> q = permissionQuery();        
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
-            log.log(Level.FINE, null, ignored);
+            LOG.log(Level.FINE, null, ignored);
         }
 
         // permission already exists, so add any actions specified in perm argument
@@ -142,15 +144,14 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public void grantWeblogPermissionPending(Weblog weblog, User user, List<String> actions) throws WebloggerException {
 
         // first, see if user already has a permission for the specified object
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
-                WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
-            log.log(Level.FINE, null, ignored);
+            LOG.log(Level.FINE, null, ignored);
         }
 
         // permission already exists, so complain 
@@ -167,8 +168,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public void confirmWeblogPermission(Weblog weblog, User user) throws WebloggerException {
 
         // get specified permission
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
-                WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         WeblogPermission existingPerm;
@@ -176,7 +176,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             existingPerm = q.getSingleResult();
 
         } catch (NoResultException ignored) {
-            log.log(Level.FINE, null, ignored);
+            LOG.log(Level.FINE, null, ignored);
             throw new WebloggerException("ERROR: permission not found");
         }
         // set pending to false
@@ -187,15 +187,14 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public void declineWeblogPermission(Weblog weblog, User user) throws WebloggerException {
 
         // get specified permission
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
-                WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         WeblogPermission existingPerm;
         try {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
-            log.log(Level.FINE, null, ignored);
+            LOG.log(Level.FINE, null, ignored);
             throw new WebloggerException("ERROR: permission not found");
         }
         // remove permission
@@ -205,15 +204,14 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     public void revokeWeblogPermission(Weblog weblog, User user, List<String> actions) throws WebloggerException {
 
         // get specified permission
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByUserName&WeblogIdIncludingPending",
-                WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, user.getUserName());
         q.setParameter(2, weblog.getHandle());
         WeblogPermission oldperm;
         try {
             oldperm = q.getSingleResult();
         } catch (NoResultException ignored) {
-            log.log(Level.FINE, null, ignored);
+            LOG.log(Level.FINE, null, ignored);
             throw new WebloggerException("ERROR: permission not found");
         }
 
@@ -244,8 +242,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
     }
 
     public List<WeblogPermission> getWeblogPermissionsIncludingPending(Weblog weblog) throws WebloggerException {
-        TypedQuery<WeblogPermission> q = em.createNamedQuery("WeblogPermission.getByWeblogIdIncludingPending",
-                WeblogPermission.class);
+        TypedQuery<WeblogPermission> q = permissionQuery();
         q.setParameter(1, weblog.getHandle());
         return q.getResultList();
     }
@@ -285,8 +282,8 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             return true;
         }
 
-        if (log.isLoggable(Level.FINE)) {
-            log.fine("PERM CHECK FAILED: user " + user.getUserName() + " does not have " + perm.toString());
+        if (LOG.isLoggable(Level.FINE)) {
+            LOG.fine("PERM CHECK FAILED: user " + user.getUserName() + " does not have " + perm.toString());
         }
         return false;
     }

@@ -1,16 +1,12 @@
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
-import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
 import java.io.Serializable;
 import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.apache.commons.lang3.builder.EqualsBuilder;
-//import org.apache.commons.lang3.builder.HashCodeBuilder;
-//import com.hkstlr.reeler.weblogger.boundary.manager.UserManager;
-//import com.hkstlr.reeler.weblogger.boundary.manager.WeblogManager;
+
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -45,7 +41,7 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
     public static final String EDIT_DRAFT = "edit_draft";
     public static final String POST = "post";
     public static final String ADMIN = "admin";
-    public static final List<String> ALL_ACTIONS = new ArrayList<String>();
+    protected static final List<String> ALL_ACTIONS = new ArrayList<String>();
 
     protected static final long serialVersionUID = 1L;
 
@@ -86,6 +82,13 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
         super.setUserName(user.getUserName());
         super.setPending(pending);
     }
+     
+    public WeblogPermission(Weblog weblog, List<String> actions) {
+        super("WeblogPermission user: N/A");
+        super.setActionsAsList(actions);
+        super.setObjectType("Weblog");
+        super.setObjectId(weblog.getHandle());
+    } 
     
     public List<WeblogPermission> getWeblogPermissions(Weblog weblog) {
         // TODO Auto-generated method stub
@@ -111,22 +114,9 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-
-    public WeblogPermission(Weblog weblog, List<String> actions) {
-        super("WeblogPermission user: N/A");
-        super.setActionsAsList(actions);
-        super.setObjectType("Weblog");
-        super.setObjectId(weblog.getHandle());
+    public static List<String> getAllActions(){
+        return ALL_ACTIONS;
     }
-    
-    
-
-    /*public User getUser() throws WebloggerException {
-    if (getUserName() != null) {
-    return null;//userManager.getUserByUserName(getUserName());
-    }
-    return null;
-    }*/
 
     public boolean implies(Permission perm) {
         if (perm instanceof WeblogPermission) {

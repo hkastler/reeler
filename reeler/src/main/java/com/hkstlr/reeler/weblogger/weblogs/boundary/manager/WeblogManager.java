@@ -60,7 +60,6 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTagAggregate;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
-//import com.hkstlr.reeler.weblogger.search.entities.WeblogEntrySearchCriteria;
 import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
 import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
 import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
@@ -80,8 +79,6 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     private Map<String, String> weblogHandleToIdMap = new HashMap<>();
 
-    private static final Comparator<StatCount> STAT_COUNT_COUNT_REVERSE_COMPARATOR
-            = Collections.reverseOrder(StatCountCountComparator.getInstance());
 
     @PersistenceContext
     EntityManager em;
@@ -104,7 +101,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
     @EJB
     MediaFileManager mediaFileManager;
     
-    private static final Logger log = Logger.getLogger(WeblogManager.class.getName());
+    private static final Logger LOG = Logger.getLogger(WeblogManager.class.getName());
     
     public WeblogManager() {
         super(Weblog.class);        
@@ -141,7 +138,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                     newWeblog, user, actions, false);
             return true;
         } catch (WebloggerException e) {
-            log.log(Level.WARNING,null,e);
+            LOG.log(Level.WARNING,null,e);
             return false;            
         }
         
@@ -293,8 +290,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
         // remove mediafile metadata
         // remove uploaded files
-        //MediaFileManager mfmgr = WebloggerFactory.getWeblogger().getMediaFileManager();
         mediaFileManager.removeAllFiles(weblog);
+        
         // remove entries
         TypedQuery<WeblogEntry> refQuery = em.createNamedQuery(
                 "WeblogEntry.getByWebsite", WeblogEntry.class);
@@ -312,7 +309,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
         // remove permissions
         for (WeblogPermission perm : weblogPermissionManager.getWeblogPermissions(weblog)) {
             User permUser = userManager.getUserByUserName(perm.getUserName());
-            weblogPermissionManager.revokeWeblogPermission(weblog, permUser, WeblogPermission.ALL_ACTIONS);
+            weblogPermissionManager.revokeWeblogPermission(weblog, 
+                    permUser, 
+                    WeblogPermission.getAllActions());
         }
 
     }
@@ -327,7 +326,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 agg.setTotal(agg.getTotal() - stat.getCount());
             } catch (NoResultException ignored) {
                 // nothing to update
-                log.log(Level.FINEST,null,ignored);
+                LOG.log(Level.FINEST,null,ignored);
             }
         }
     }
@@ -350,14 +349,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     public void saveTemplateRendition(CustomTemplateRendition rendition) throws WebloggerException {
         this.em.persist(rendition);
-
-        //saveWeblog(rendition.getWeblogCustomTemplate().getWeblog());
+        saveWeblog(rendition.getWeblogCustomTemplate().getWeblog());
     }
 
     public void removeTemplate(WeblogTemplate template) throws WebloggerException {
         this.em.remove(template);
         // update weblog last modified date.  date updated by saveWeblog()
-        //saveWeblog(template.getWeblog());
+        saveWeblog(template.getWeblog());
     }
 
     public void addWeblog(Weblog newWeblog) throws WebloggerException {
@@ -383,7 +381,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING,"findByHandle",e);
+            LOG.log(Level.WARNING,"findByHandle",e);
             weblog = null;
         }
 
@@ -396,6 +394,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     /**
      * Return weblog specified by handle.
+     * @param handle
+     * @param visible
+     * @return 
+     * @throws com.hkstlr.reeler.app.control.WebloggerException 
      */
     public Weblog getWeblogByHandle(String handle, Boolean visible)
             throws WebloggerException {
@@ -412,7 +414,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
             if (weblog != null) {
                 // only return weblog if enabled status matches
                 if (visible == null || visible.equals(weblog.isVisible())) {
-                    log.fine("weblogHandleToId CACHE HIT - " + handle);
+                    LOG.fine("weblogHandleToId CACHE HIT - " + handle);
                     return weblog;
                 }
             } else {
@@ -427,13 +429,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "getByHandle", e);
+            LOG.log(Level.WARNING, "getByHandle", e);
             weblog = null;
         }
 
         // add mapping to cache
         if (weblog != null) {
-            log.fine("weblogHandleToId CACHE MISS - " + handle);
+            LOG.fine("weblogHandleToId CACHE MISS - " + handle);
             this.weblogHandleToIdMap.put(weblog.getHandle(), weblog.getId());
         }
 
@@ -447,13 +449,21 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     /**
      * Get weblogs of a user
+     * @param enabled
+     * @param active
+     * @param startDate
+     * @param endDate
+     * @param offset
+     * @param length
+     * @return 
+     * @throws com.hkstlr.reeler.app.control.WebloggerException 
      */
     public List<Weblog> getWeblogs(
             Boolean enabled, Boolean active,
             Date startDate, Date endDate, int offset, int length) throws WebloggerException {
 
-        //if (endDate == null) endDate = new Date();
-        List<Object> params = new ArrayList<Object>();
+        
+        List<Object> params = new ArrayList<>();
         int size = 0;
         String queryString;
         StringBuilder whereClause = new StringBuilder();
@@ -509,22 +519,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     @Transactional
     public List<Weblog> getUserWeblogs(User user, boolean enabledOnly) throws WebloggerException {
-        List<Weblog> weblogs = new ArrayList<Weblog>();
+        List<Weblog> weblogs = new ArrayList<>();
         if (user == null) {
             return weblogs;
         }
         List<WeblogPermission> perms = weblogPermissionManager.getWeblogPermissions(user);
         for (WeblogPermission perm : perms) {
             Weblog weblog = getWeblogByHandle(perm.getObjectId());
-            /*List<WeblogEntry> entries = weblog.getWeblogEntries();
-            List<WeblogBookmarkFolder> folders = weblog.getBookmarkFolders();
-            for(WeblogBookmarkFolder folder : folders){
-            List<WeblogBookmark> bookmarks = folder.getBookmarks();
-            log.log(Level.FINE, "number of bookmarks:" + bookmarks.size());
-            }
-            log.log(Level.FINE,"number of entries:"  + weblog.getWeblogEntries().size());
-            log.log(Level.FINE, "number of folders:" + weblog.getBookmarkFolders().size());
-            log.log(Level.FINE,"blog returned:" + weblog.getName());*/
             if ((!enabledOnly || weblog.isVisible()) && weblog.isActive()) {
                 weblogs.add(weblog);
             }
@@ -533,12 +534,12 @@ public class WeblogManager extends AbstractManager<Weblog> {
     }
 
     public List<User> getWeblogUsers(Weblog weblog, boolean enabledOnly) throws WebloggerException {
-        List<User> users = new ArrayList<User>();
+        List<User> users = new ArrayList<>();
         List<WeblogPermission> perms = weblogPermissionManager.getWeblogPermissions(weblog);
         for (WeblogPermission perm : perms) {
             User user = userManager.getUserByUserName(perm.getUserName());
             if (user == null) {
-                log.warning("ERROR user is null, userName:" + perm.getUserName());
+                LOG.warning("ERROR user is null, userName:" + perm.getUserName());
                 continue;
             }
             if (!enabledOnly || user.getIsEnabled()) {
@@ -578,7 +579,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "getByWeblog&Link", e);
+            LOG.log(Level.WARNING, "getByWeblog&Link", e);
             return null;
         }
     }
@@ -606,7 +607,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "WeblogTemplate.getByAction", e);
+            LOG.log(Level.WARNING, "WeblogTemplate.getByAction", e);
             return null;
         }
     }
@@ -634,7 +635,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             return query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, "WeblogTemplate.getByWeblog&Name", e);
+            LOG.log(Level.WARNING, "WeblogTemplate.getByWeblog&Name", e);
             return null;
         }
     }
@@ -731,10 +732,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 results.add(sc);
             }
         }
-
+        
         // Original query ordered by desc # comments.
         // JPA QL doesn't allow queries to be ordered by aggregates; do it in memory
-        Collections.sort(results, STAT_COUNT_COUNT_REVERSE_COMPARATOR);
+        Collections.sort(results, Collections.reverseOrder(StatCountCountComparator.getInstance()));
 
         return results;
     }
@@ -759,13 +760,12 @@ public class WeblogManager extends AbstractManager<Weblog> {
         }
 
         // if Blog Server admin would still have weblog permission above
-        //ObjectPermission globalPerm = new GlobalPermission(user);
         GlobalPermission globalPerm = new GlobalPermission();
         if (globalPerm.implies(perm)) {
             return true;
         }
 
-        log.warning("PERM CHECK FAILED: user " + user.getUserName() + " does not have " + perm.toString());
+        LOG.warning("PERM CHECK FAILED: user " + user.getUserName() + " does not have " + perm.toString());
 
         return false;
     }
