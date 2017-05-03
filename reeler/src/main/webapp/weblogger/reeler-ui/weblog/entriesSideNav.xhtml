@@ -7,7 +7,7 @@
                 xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
     <f:view>       
         <ui:include src="sideNavSearchForm.xhtml">
-            <ui:param name="page" value="entries"/>
+            <ui:param name="pageName" value="entries"/>
             <ui:param name="radioButtonName" value="approvedString"/>
             <ui:param name="radioButtonValues" value="#{weblogEntryAuthorBean.getStatuses()}"/>            
         </ui:include>

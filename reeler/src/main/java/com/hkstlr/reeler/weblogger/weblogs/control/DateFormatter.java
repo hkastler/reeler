@@ -44,6 +44,7 @@ public class DateFormatter {
      */
     public static final DateFormat jsFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
     
+    public static final DateFormat datePickerFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
     
     static public DateFormat localeDefaultDateFormat(Locale currentLocale) {
         DateFormat localeDateFormat = DateFormat.getDateInstance(DateFormat.SHORT ,currentLocale);

@@ -24,7 +24,6 @@ import java.util.Date;
 import java.util.List;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry.PubStatus;
 
 public class WeblogEntrySearchCriteria {
@@ -42,8 +41,8 @@ public class WeblogEntrySearchCriteria {
     private Date startDate;
     // End date or null for no end date.
     private Date endDate;
-    // Category name or null for all categories.
-    private String catName;
+    // Category Id or null for all categories.
+    private String categoryId;
     // If provided, array of tags to search blog entries for, just one needs to match to retrieve entry
     private List<String> tags;
     // Publication status of the weblog entry (DRAFT, PUBLISHED, etc.)
@@ -93,12 +92,12 @@ public class WeblogEntrySearchCriteria {
         this.endDate = endDate;
     }
 
-    public String getCatName() {
-        return catName;
+    public String getCategoryId() {
+        return categoryId;
     }
 
-    public void setCatName(String catName) {
-        this.catName = catName;
+    public void setCategoryId(String categoryId) {
+        this.categoryId = categoryId;
     }
 
     public List<String> getTags() {

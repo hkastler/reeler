@@ -5,6 +5,7 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:jsf="http://xmlns.jcp.org/jsf"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
       xmlns:ps="http://xmlns.jcp.org/jsf/passthrough"
       >
@@ -24,6 +25,10 @@
     <c:choose>
         <c:when test="#{hrefStyle == 'queryString'}">
             <c:set var="pageStr" value="?page="/>
+            <c:if test="#{fn:containsIgnoreCase(outcome, '?')}">
+                <c:set var="pageStr" value="&amp;page="/>
+            </c:if>
+             
             <c:set var="pageSizeStr" value="&amp;pageSize="/>
         </c:when>
         <c:otherwise>
@@ -48,6 +53,7 @@
                        data-page="#{paginator.page-1}"
                        data-pageSize="#{paginator.pageSize}"
                        data-categoryId="#{categoryId}"
+                       
                        >
                         &larr;
                     </a>   

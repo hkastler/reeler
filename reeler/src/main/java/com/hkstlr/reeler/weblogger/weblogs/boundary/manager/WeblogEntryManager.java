@@ -33,10 +33,13 @@ import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.AppConstants;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentSearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.control.TagStat;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntrySearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryAttribute;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
@@ -404,5 +407,65 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return q.getResultList();
         
     }  
+    
+    public List<WeblogEntry> getBySearchCriteria(WeblogEntrySearchCriteria wesc) {
+                    
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();   
+        Root<WeblogEntry> t = cq.from(WeblogEntry.class);
+        
+        cq.select(t); 
+        
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
+        List<Predicate> predicates = new ArrayList<>();
+                
+        predicates.add(cb.equal(t.get("website"), wesc.getWeblog())); 
+        
+        if(wesc.getCategoryId() != null && !wesc.getCategoryId().isEmpty()){
+            //should be a join?
+            WeblogCategory category = em.find(WeblogCategory.class, wesc.getCategoryId());
+            predicates.add(cb.equal(t.get("category"), category));
+        }
+        
+        if(wesc.getText() != null && !wesc.getText().isEmpty()){
+            String lcased = wesc.getText().toLowerCase();
+            Predicate textP;
+            textP = cb.or(
+                    cb.like(cb.lower(t.get("title")), StringPool.PERCENT+ lcased +StringPool.PERCENT),
+                    cb.like(cb.lower(t.get("text")),StringPool.PERCENT+ lcased +StringPool.PERCENT)
+            );
+            predicates.add(textP);
+        }
+        
+        if(wesc.getStartDate() != null && wesc.getEndDate() != null){
+            Predicate p;
+            Calendar startDate = Calendar.getInstance();
+            Calendar endDate = Calendar.getInstance();
+            if (wesc.getWeblog() != null) {
+                startDate = Calendar.getInstance(wesc.getWeblog().getTimeZoneInstance());
+                endDate = Calendar.getInstance(wesc.getWeblog().getTimeZoneInstance());
+            }
+            startDate.setTime(wesc.getStartDate());
+            endDate.setTime(wesc.getEndDate());
+            p = cb.between(t.<Calendar>get("pubTime"), startDate, endDate);
+            predicates.add(p);
+        }
+        
+        if(wesc.getStatus()!=null){
+            predicates.add(cb.equal(t.get("status"), wesc.getStatus().toString()));
+        }
+        
+        cq.where(predicates.toArray(new Predicate[]{}));
+        cq.orderBy(cb.desc(t.get("pubTime")));  
+        
+        Query q = getEntityManager().createQuery(cq);    
+        if(wesc.getMaxResults() > 0){
+            q.setMaxResults(wesc.getMaxResults());
+        }
+        q.setFirstResult(wesc.getOffset());
+        
+        return q.getResultList();
+        
+    }  
+    
    
 }
