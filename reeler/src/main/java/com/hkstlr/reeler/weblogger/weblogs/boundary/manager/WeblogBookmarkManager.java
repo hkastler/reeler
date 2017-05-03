@@ -10,11 +10,14 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmarkFolder;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -39,7 +42,29 @@ public class WeblogBookmarkManager extends AbstractManager<WeblogBookmark> {
         String qlString = "SELECT b FROM WeblogBookmark b JOIN b.folder WHERE b.folder.weblog = ?1";
         Query query = getEntityManager().createQuery(qlString);
         query.setParameter(1, weblog);
-        return query.getResultList();
+        
+        List<WeblogBookmark> bookmarks = query.getResultList();
+        
+        
+        return bookmarks;
+    }
+    
+    public List<WeblogBookmarkFolder> getBookmarkFoldersForWeblog(Weblog weblog) {
+        String qlString = "SELECT bf FROM WeblogBookmarkFolder bf"
+                + " WHERE bf.weblog = ?1";
+        Query query = getEntityManager().createQuery(qlString);
+        query.setParameter(1, weblog);
+        
+        return  query.getResultList();
+        
+    }
+    
+    public WeblogBookmarkFolder getFolderById(String id) {
+        TypedQuery<WeblogBookmarkFolder> q = getEntityManager()
+                .createNamedQuery("WeblogBookmarkFolder.findById"
+                        , WeblogBookmarkFolder.class);
+        q.setParameter("id", id);
+        return q.getSingleResult();
     }
 
 }

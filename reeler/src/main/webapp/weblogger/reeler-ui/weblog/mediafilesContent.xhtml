@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <ui:param name="weblog" value="#{reelerUiBean.currentWeblog}"/>
+    <f:metadata>            
+        <f:viewAction action="#{weblogEntriesBean.entriesViewAction}"/>
+    </f:metadata>
+    <div class="panel panel-primary">
+        <div class="panel-heading panel-title">
+            Media Files
+        </div>
+
+        <div class="panel-body">
+            <div class="row">
+                <ui:remove>
+                    <div class="text-center" style="margin: 0 auto" id="top-paginatorContainer">
+                        <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">
+                            <ui:param name="page" value="#{weblogEntriesBean.pageNum}"/>
+                            <ui:param name="paginator" value="#{weblogEntriesBean.paginator}"/>
+                            <ui:param name="outcome" value="#{request.contextPath}#{weblogEntriesBean.outcome}"/>
+                            <ui:param name="hrefStyle" value="queryString"/>
+                            <ui:param name="position" value="top"/>
+                        </ui:include>
+                    </div>
+                </ui:remove>
+            </div>
+            <hr/>
+            <div class="row">
+                <div class="col-lg-12">                    
+                    Not yet implemented     
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer"></div>
+    </div>
+</ui:composition>
+

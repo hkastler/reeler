@@ -11,6 +11,8 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmarkFolder;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class ReelerUIBean implements Serializable {
 
-    private transient Logger log = Logger.getLogger(ReelerUIBean.class.getName());
+    private transient Logger LOG = Logger.getLogger(ReelerUIBean.class.getName());
 
     @EJB
     private transient Weblogger weblogger;
@@ -63,7 +65,7 @@ public class ReelerUIBean implements Serializable {
     @PostConstruct
     public void init() {
         setUserFromSession();
-        log.log(Level.INFO, "expected that a session bean would init only once");
+        LOG.log(Level.INFO, "expected that a session bean would init only once");
         pages.put("entry", "Create Entry");
         pages.put("entries", "Entries");
         pages.put("comments", "Comments");
@@ -82,7 +84,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public List<UserRole> getUserRolesAsList(Set<UserRole> roles) {
-        return new ArrayList<UserRole>(roles);
+        return new ArrayList<>(roles);
     }
 
     public Map<String, String> getUserWeblogPermissions() {
@@ -162,7 +164,7 @@ public class ReelerUIBean implements Serializable {
     public void setUserFromSession() {
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
         user.getPermissions().forEach((t) -> {
-            log.info(t.toString());
+            LOG.info(t.toString());
         });
     }
 
@@ -191,7 +193,7 @@ public class ReelerUIBean implements Serializable {
     }
 
     public void action(Weblog weblog, String page) throws WebloggerException {
-        log.finer("setting weblog and redirecting...");
+        LOG.finer("setting weblog and redirecting...");
         this.currentWeblog = weblog;
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
@@ -203,7 +205,7 @@ public class ReelerUIBean implements Serializable {
             actionPath.append(page).append(".xhtml");
             context.redirect(actionPath.toString());
         } catch (IOException ex) {
-            log.log(Level.SEVERE,"action error",ex);
+            LOG.log(Level.SEVERE,"action error",ex);
             
         }
     }
@@ -218,7 +220,7 @@ public class ReelerUIBean implements Serializable {
             createPath.append("/create.xhtml");
             context.redirect(createPath.toString());
         } catch (IOException ex) {
-            log.log(Level.SEVERE,"newWeblog",ex);
+            LOG.log(Level.SEVERE,"newWeblog",ex);
         }
     }
 
@@ -226,7 +228,7 @@ public class ReelerUIBean implements Serializable {
         try {
             setUserWeblogs();
         } catch (Exception e) {
-            log.log(Level.SEVERE,null,e);
+            LOG.log(Level.SEVERE,null,e);
         }
         setWeblogPermissions();
     }
@@ -234,6 +236,12 @@ public class ReelerUIBean implements Serializable {
     public void blogrollsViewAction() {
         setUserWeblogs();
         setWeblogPermissions();
+        List<WeblogBookmark> bookmarks = weblogger.getWeblogBookmarkManager().getBookmarksForWeblog(currentWeblog);
+        List<WeblogBookmarkFolder> folders = weblogger.getWeblogBookmarkManager().getBookmarkFoldersForWeblog(currentWeblog);
+        LOG.info("numberOfFolders:" + folders.size());
+        
+        this.currentWeblog.setBookmarkFolders(folders);
+        LOG.info("currentWeblog.numberOfFolders:" + this.currentWeblog.getBookmarkFolders().size());
     }
 
 }

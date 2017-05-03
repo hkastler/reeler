@@ -14,6 +14,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -50,7 +51,7 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
     @ManyToOne(optional = false)
     private Weblog weblog;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "folder")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "folder", fetch = FetchType.EAGER)
     private List<WeblogBookmark> bookmarks;
 
     public WeblogBookmarkFolder() {

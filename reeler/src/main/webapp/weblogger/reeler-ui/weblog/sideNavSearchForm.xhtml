@@ -30,20 +30,21 @@
                                         name="weblogEntryCategory"
                                         title="#{messages.WeblogEntry_category}" 
                                         class="form-control">
-                                        <option value="">Select</option>
-                                        <ui:repeat value="#{weblogEntryAuthorBean.weblog.weblogCategories}"
-                                                   var="category">
-                                            
-                                                <option value="#{category.id}">#{category.name} </option>
-                                                  
-                                            
-                                        </ui:repeat>
-                                    </select> 
-                                    
+                                        <option value="">Select</option>                                        
+                                            <c:forEach items="#{weblogEntryAuthorBean.weblog.weblogCategories}"
+                                                       var="category">
+                                                <c:choose >
+                                                    <c:when test="#{param.weblogEntryCategory ne category.id}">
+                                                        <option value="#{category.id}">#{category.name} </option>
+                                                    </c:when >
+                                                    <c:otherwise>
+                                                        <option value="#{category.id}" selected="selected">#{category.name} </option>
+                                                    </c:otherwise>                                                        
+                                                </c:choose>
+                                            </c:forEach>                                        
+                                    </select>                                     
                                 </div>
                             </div>
-
-
 
                             <div class="form-group">
                                 <label for="searchString" class="sideformrow">Search string</label>   
@@ -113,10 +114,7 @@
                                    id="searchFormSubmit"
                                    class="btn btn-info"
                                    value="Filter"/>
-                            <input type="reset" 
-                                   id="searchFormReset"
-                                   class="btn btn-secondary"
-                                   value="Reset"/>
+                            
                         </form>
 
                     </div>

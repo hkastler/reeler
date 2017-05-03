@@ -69,6 +69,7 @@ public class WeblogBookmark extends AbstractEntity implements Serializable {
     private WeblogBookmarkFolder folder;
 
     public WeblogBookmark() {
+        //default constructor
     }
 
     public WeblogBookmark(String name, String url, int priority) {
@@ -144,7 +145,7 @@ public class WeblogBookmark extends AbstractEntity implements Serializable {
         return folder;
     }
 
-    public void setFolderid(WeblogBookmarkFolder folder) {
+    public void setFolder(WeblogBookmarkFolder folder) {
         this.folder = folder;
     }
 

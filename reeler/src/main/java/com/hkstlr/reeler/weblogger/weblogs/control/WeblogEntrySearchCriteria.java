@@ -31,7 +31,7 @@ public class WeblogEntrySearchCriteria {
     public enum SortOrder {ASCENDING, DESCENDING}
     public enum SortBy {PUBLICATION_TIME, UPDATE_TIME}
 
-    // TODO: See if can switch from name of Category to Category object
+    
 
     // Weblog or null to get for all weblogs.
     private Weblog weblog;

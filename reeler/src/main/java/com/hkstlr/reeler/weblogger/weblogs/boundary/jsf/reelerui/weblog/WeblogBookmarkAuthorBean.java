@@ -7,9 +7,11 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmarkFolder;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
 
@@ -25,6 +27,9 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
     private Logger log;
     
     private WeblogBookmark weblogBookmark;
+    
+    @ManagedProperty(value = "#{param.folderid}")
+    private String folderid;
 
     public WeblogBookmarkAuthorBean() {
     }
@@ -34,7 +39,7 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
     }
     
     @PostConstruct
-    private void init(){
+    protected void init(){
         
         setActionLabel();
         if(this.id != null && !this.id.isEmpty()){
@@ -43,7 +48,9 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
             log.info("initing new WeblogCatgory for " + reelerUiBean.getCurrentWeblog().getName());
             
             this.weblogBookmark = new WeblogBookmark();
-            //this.weblogBookmark.setFolderid(folder);
+            WeblogBookmarkFolder wbf = weblogger.getWeblogBookmarkManager()
+                    .getFolderById(folderid);
+            this.weblogBookmark.setFolder(wbf);
         }
         
     }
@@ -55,10 +62,18 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
     public void setWeblogBookmark(WeblogBookmark weblogBookmark) {
         this.weblogBookmark = weblogBookmark;
     }
+
+    public String getFolderid() {
+        return folderid;
+    }
+
+    public void setFolderid(String folderid) {
+        this.folderid = folderid;
+    }
     
-   
+    
     public void save() {
-        weblogger.getWeblogBookmarkManager().save(weblogBookmark);
+        weblogger.getWeblogBookmarkManager().edit(weblogBookmark);
         FacesMessageManager.addSuccessMessage("weblogBookmarkForm", "Bookmark saved");
     }
     

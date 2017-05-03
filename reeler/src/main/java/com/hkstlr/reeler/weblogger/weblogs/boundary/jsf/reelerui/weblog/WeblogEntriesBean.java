@@ -37,7 +37,7 @@ import javax.faces.context.FacesContext;
 @RequestScoped
 public class WeblogEntriesBean extends PageBean {
 
-    private static final Logger log = Logger.getLogger(WeblogEntriesBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(WeblogEntriesBean.class.getName());
 
     @EJB
     private Weblogger weblogger;
@@ -82,16 +82,18 @@ public class WeblogEntriesBean extends PageBean {
         Optional<Boolean> filtered = Optional.ofNullable(
                 Boolean.parseBoolean(params.get("filter"))
         );
-        log.info("filtered:".concat(Boolean.toString(filtered.get())));
+        LOG.finest("filtered:".concat(Boolean.toString(filtered.get())));
 
         reelerUiBean.setUserWeblogs();
         Weblog weblog = reelerUiBean.getCurrentWeblog();
 
         if (filtered.get()) {
             this.outcome += "?1=1";
+            //these will be re-added by the paginator
             params.entrySet()
                     .stream()
                     .filter(p -> !"page".equals(p.getKey()))
+                    .filter(p -> !"pageSize".equals(p.getKey()))
                     .collect(Collectors.toMap(p -> p.getKey(), p -> p.getValue()))
                     .forEach(
                             (k, v) -> this.outcome += (StringPool.AMPERSAND + k + StringPool.EQUAL + v)
@@ -107,7 +109,8 @@ public class WeblogEntriesBean extends PageBean {
                 dt = DateFormatter.datePickerFormat.parse(params.get("endDateString"));
                 wesc.setEndDate(dt);
             } catch (ParseException ex) {
-                Logger.getLogger(WeblogEntriesBean.class.getName()).log(Level.SEVERE, null, ex);
+                //need a bit better error handling
+                LOG.log(Level.FINEST, null, ex);
             }
 
             String status = params.get("approvedString");
