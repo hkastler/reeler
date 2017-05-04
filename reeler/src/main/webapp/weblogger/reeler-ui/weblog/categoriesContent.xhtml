@@ -35,24 +35,28 @@
                                 <div class="col-lg-2">Edit</div>
                                 <div class="col-lg-2">Remove</div>
                             </div>
-
-                            <ui:repeat value="#{reelerUiBean.currentWeblog.weblogCategories}" var="category">
-                                <div class="row">
-                                    <div class="col-lg-2">#{category.name}</div>
-                                    <div class="col-lg-4">#{category.description}</div>
-                                    <div class="col-lg-2">#{category.image}</div>
-                                    <div class="col-lg-2">                                            
-                                        <a outcome="#{reelerUiBean.path}/category.xhtml"
-                                           jsfc="h:link">
-                                            <f:param name="action" value="edit"/>
-                                            <f:param name="id" value="#{category.id}"/>
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit
-                                        </a>                                                                                                                             
+                            <div class="alternating-row-container">
+                                <ui:repeat value="#{reelerUiBean.currentWeblog.weblogCategories}" var="category">
+                                    <div class="row">
+                                        <div class="col-lg-2">#{category.name}</div>
+                                        <div class="col-lg-4">#{category.description}</div>
+                                        <div class="col-lg-2">#{category.image}</div>
+                                        <div class="col-lg-2">                                            
+                                            <a outcome="#{reelerUiBean.path}/category.xhtml"
+                                               jsfc="h:link">
+                                                <f:param name="action" value="edit"/>
+                                                <f:param name="id" value="#{category.id}"/>
+                                                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>Edit
+                                            </a>                                                                                                                             
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <form jsfc="h:form"><a jsfc="h:commandLink" id="removeCategory">
+                                                    <i class="fa fa-times" aria-hidden="true"></i>Remove</a>
+                                            </form>
+                                        </div>
                                     </div>
-                                    <div class="col-lg-2"><form jsfc="h:form"><a jsfc="h:commandLink" id="removeCategory"><i class="fa fa-times" aria-hidden="true"></i>Remove</a></form></div>
-                                </div>
-                            </ui:repeat>
-
+                                </ui:repeat>
+                            </div>
                         </h:panelGroup>
 
                     </h:form>     

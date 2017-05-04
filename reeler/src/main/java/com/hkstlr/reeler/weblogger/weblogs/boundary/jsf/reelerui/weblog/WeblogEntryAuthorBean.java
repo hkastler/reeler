@@ -10,16 +10,20 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryAnchorBuilder;
+import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntrySearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import java.io.Serializable;
 
 import java.text.ParseException;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -218,14 +222,6 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         return cal;
     }
 
-    public String getAction() {
-        return action;
-    }
-
-    public void setAction(String action) {
-        this.action = action;
-    }
-
     public String getLocalDateTimeFormat() {
         String df = DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL).toFormat().toString();
         log.info("pattern:" + df);
@@ -240,6 +236,42 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             counter++;
         }
         return statuses;
+    }
+    
+    public List<WeblogEntry> getRecentEntries(){
+        
+        WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
+        wesc.setWeblog(weblog);
+        wesc.setMaxResults(10);
+        wesc.setSortBy(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME);
+        return weblogger.getWeblogEntryManager().getBySearchCriteria(wesc);
+         
+    }
+    
+    public List<WeblogEntry> getRecentDrafts(){
+        
+        WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
+        wesc.setWeblog(weblog);
+        wesc.setMaxResults(10);
+        wesc.setSortBy(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME);
+        wesc.setStatus(WeblogEntry.PubStatus.DRAFT);
+        return weblogger.getWeblogEntryManager().getBySearchCriteria(wesc);
+        
+    }
+    
+    public List<WeblogEntry> getPendingEntries(){
+        
+        WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
+        wesc.setWeblog(weblog);
+        wesc.setMaxResults(10);
+        wesc.setSortBy(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME);
+        wesc.setStatus(WeblogEntry.PubStatus.PENDING);
+        return weblogger.getWeblogEntryManager().getBySearchCriteria(wesc);
+        
+    }
+    
+    public List<WeblogEntryComment> getComments(){
+        return weblogger.getWeblogEntryCommentManager().getComments(weblogEntry);
     }
 
     public void saveAsDraft() throws WebloggerException {

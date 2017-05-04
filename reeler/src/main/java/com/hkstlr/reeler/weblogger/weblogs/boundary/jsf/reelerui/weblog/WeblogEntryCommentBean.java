@@ -11,6 +11,7 @@ import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryCommentVisitor;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,10 +32,13 @@ import javax.inject.Inject;
 public class WeblogEntryCommentBean extends PageBean {
 
     @EJB
-    Weblogger weblogger;
+    private transient Weblogger weblogger;
 
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
+    
+    @ManagedProperty(value = "#{param.entryid}")
+    private String entryid;
 
     private List<WeblogEntryCommentVisitor> weblogEntryCommentVisitors = new ArrayList<>();
 
@@ -51,19 +55,24 @@ public class WeblogEntryCommentBean extends PageBean {
         statuses.add(WeblogEntryComment.ApprovalStatus.SPAM);
         statuses.add(WeblogEntryComment.ApprovalStatus.APPROVED);
         statuses.add(WeblogEntryComment.ApprovalStatus.PENDING);
-        List<WeblogEntryComment> weblogEntryComments = weblogger.getWeblogEntryCommentManager()
+        List<WeblogEntryComment> weblogEntryComments;
+        if(entryid == null){
+            weblogEntryComments = weblogger.getWeblogEntryCommentManager()
                 .getCommentsForWeblog(weblog,statuses,null);
+        }else{
+            WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().findById(entryid);
+            weblogEntryComments = weblogger.getWeblogEntryCommentManager()
+                .getComments(weblogEntry);
+        }
+        
+        
         if(pageSize == null){
             pageSize = weblog.getEntryDisplayCount();
         }        
-        paginator = new Paginator(weblog.getEntryDisplayCount(),
+        paginator = new Paginator(weblogEntryComments.size(),
                                   this.getPageNum(),
                                   weblogEntryComments.size());
-        int[] range = new int[2];
-        range[0] = getPaginator().getPageFirstItem()-1;
-        range[1] = getPaginator().getPageLastItem()-1;
-        weblogEntryComments = weblogger.getWeblogEntryCommentManager()
-                .getCommentsForWeblog(weblog,statuses,range);
+        
         for (WeblogEntryComment wec : weblogEntryComments) {
             WeblogEntryCommentVisitor wecv = new WeblogEntryCommentVisitor(wec.getSpam(), wec.getApproved(), wec);
             weblogEntryCommentVisitors.add(wecv);
@@ -85,6 +94,16 @@ public class WeblogEntryCommentBean extends PageBean {
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
     }
+
+    public String getEntryid() {
+        return entryid;
+    }
+
+    public void setEntryid(String entryid) {
+        this.entryid = entryid;
+    }
+    
+    
 
     public void updateComment(WeblogEntryComment updatedComment) {
         weblogger.getWeblogEntryCommentManager().save(updatedComment);
