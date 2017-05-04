@@ -18,20 +18,16 @@ import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
-import org.junit.Assert;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Matchers;
 import org.mockito.Mock;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+ 
 import org.mockito.MockitoAnnotations;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -45,13 +41,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest(WebloggerConfig.class)
 public class WeblogManagerTest {
 
+    private WeblogManager cut;
+    
     private static final Logger log = Logger.getLogger(WeblogManagerTest.class.getName());
 
     @Mock
     private EntityManager em;
 
-    @InjectMocks
-    private WeblogManager cut;
+    
     
     @Mock
     private WeblogPermissionManager wpm;
@@ -69,6 +66,7 @@ public class WeblogManagerTest {
         
         PowerMockito.mockStatic(WebloggerConfig.class);
         MockitoAnnotations.initMocks(this);
+        this.cut = new WeblogManager();
         this.cut.em = em;
         this.cut.weblogPermissionManager = wpm;
         this.cut.weblogPermissionManager.em = em;
@@ -120,11 +118,7 @@ public class WeblogManagerTest {
         String qName = "WeblogPermission.getByUserName&WeblogIdIncludingPending";
         when(this.cut.weblogPermissionManager.em.createNamedQuery(qName)).thenReturn(mockQuery);    
         
-              
-        
-        WebloggerConfig config = new WebloggerConfig();
-        PowerMockito.whenNew(WebloggerConfig.class).withNoArguments().thenReturn(config);
-        when(config.getProperty("newuser.categories")).thenReturn("General,Technology");
+        when(WebloggerConfig.getProperty("newuser.categories")).thenReturn("General,Technology");
              
         List<PingTarget> pings = new ArrayList<>();
         PingTarget pt = new PingTarget();
