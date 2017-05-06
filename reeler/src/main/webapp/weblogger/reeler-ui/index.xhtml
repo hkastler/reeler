@@ -23,6 +23,7 @@
 
             <div class="panel-body">
                 Select a Blog to edit, manage, or configure.
+                <div class="panel-group">
                 <ui:repeat value="#{reelerUiBean.userWeblogs}" var="blog" varStatus="status">
                     <div class="panel panel-default">
                         <h3 class="panel-heading panel-title">#{blog.name}</h3>
@@ -30,22 +31,31 @@
                             <div class="row">
                                 <div class="col-6">
                                     <c:set var="link" value="#{request.contextPath}/#{blog.handle}/"/>
-                                    Link: <a href="#{link}" target="_blank">#{link}</a><br/>
-                                    Permission: <h:outputText value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
+                                    <i class="fa fa-external-link" aria-hidden="true"></i>Link: <a href="#{link}" target="_blank">#{link}</a><br/>
+                                    <i class="fa fa-id-card" aria-hidden="true"></i>Permission: <h:outputText 
+                                        value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
                                     Description: #{blog.about}<br/>
-                                    Members: <br/>
+                                    <i class="fa fa-user" aria-hidden="true"></i>Members: <br/>
                                     Today's hits:<br/>
                                 </div>
 
                                 <div class="col-6">
-                                    <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'entry')}"
+                                    <form jsfc="h:form">
+                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                        <a action="#{reelerUiBean.action(blog,'entry')}"
                                                            jsfc="h:commandLink"><f:param name="action" value="create"/>New Entry</a></form><br/>
-                                    <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'entries')}"
+                                    <form jsfc="h:form">
+                                        <i class="fa fa-book" aria-hidden="true"></i>
+                                        <a action="#{reelerUiBean.action(blog,'entries')}"
                                                            jsfc="h:commandLink">Entries()</a></form><br/>
-                                    <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'comments')}"
+                                    <form jsfc="h:form"><i class="fa fa-comments" aria-hidden="true"></i>
+                                        <a action="#{reelerUiBean.action(blog,'comments')}"
                                                            jsfc="h:commandLink">Comments()</a></form><br/>
-                                    <form jsfc="h:form"><a action="#{reelerUiBean.action(blog,'config')}"
-                                                           jsfc="h:commandLink">Settings</a></form><br/>
+                                    <form jsfc="h:form">
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
+                                        <a action="#{reelerUiBean.action(blog,'config')}"
+                                                           jsfc="h:commandLink">Settings</a>
+                                    </form><br/>
 
                                 </div>
 
@@ -53,6 +63,7 @@
                         </div>
                     </div>
                 </ui:repeat>
+                </div>
             </div>
             <div class="panel-footer"></div>
         </div>    

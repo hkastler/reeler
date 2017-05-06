@@ -54,7 +54,6 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     
     private Calendar cal;
 
-    //@ManagedProperty(value = "#{param.weblog}")
     private String handle;
     
     @ManagedProperty(value = "#{param.weblog}")
@@ -66,8 +65,6 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     private String strDateTimeOfPubDate = StringPool.BLANK;
     
-    private String localDateTimeFormat;
-
     private String enclosureURL = StringPool.BLANK;
 
     private String tagBag = StringPool.BLANK;

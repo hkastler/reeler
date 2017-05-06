@@ -14,11 +14,13 @@ import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 
 import java.util.Date;
 import java.util.Map;
 import javax.annotation.Resource;
+import javax.persistence.TypedQuery;
 import javax.validation.Validator;
 
 /**
@@ -244,6 +246,18 @@ public class UserManager extends AbstractManager<User> {
      */
     public List<String> getRoles(User user){
         return null;
+    }
+    
+    public JdbcrealmGroup getAdminGroup(){
+        TypedQuery q = em.createNamedQuery("JdbcrealmGroup.findByGroupname", JdbcrealmGroup.class);
+        q.setParameter("groupname", "admin");
+        return (JdbcrealmGroup) q.getSingleResult();
+    }
+    
+    public JdbcrealmGroup getUserGroup(){
+        TypedQuery q = em.createNamedQuery("JdbcrealmGroup.findByGroupname", JdbcrealmGroup.class);
+        q.setParameter("groupname", "user");
+        return (JdbcrealmGroup) q.getSingleResult();
     }
 
 }

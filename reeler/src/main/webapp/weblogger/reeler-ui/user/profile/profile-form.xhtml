@@ -5,22 +5,36 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-
-    <form jsf:id="profile" name="profile">
-
-        <input type="hidden" name="salt" value="s8EvQ5BNIwL2PwXGshcO" id="profile_salt"/>
-
+  
+    
+    <form jsfc="h:form" jsf:id="profile" name="profile" prependId="false">
+        
         <div class="formdiv">
-            <h2>Edit Profile</h2>
-
+            <h2>
+                <h:outputText value="#{formTitle}"/>
+            </h2>
+            <h:messages
+                layout="table"
+                infoClass="table alert alert-success"
+                errorClass="table alert alert-danger"/>
             <div class="form-group">
                 <label jsf:for="userName" class="control-label" >Username</label>
                 <input type="text"
                        class="form-control"
-                       jsf:id="userName" 
-                       value="#{reelerUiBean.user.userName}" 
-                       readonly="readonly" />
-                <span class="help-block">Usernames can't be changed.</span>
+                       jsfc="h:inputText"
+                       id="userName" 
+                       value="#{bean.user.userName}" 
+                       readonly="#{param.action eq 'edit' ? 'true':'false'}"
+                       />
+                
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin} or #{param.action eq 'edit'}">
+                    Usernames can't be changed.
+                </span>
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{isAdmin}">
+                    A short one-word username for the user account. 
+                    Please limit it to simple ASCII alphanumeric characters (a-z, A-Z and 0-9), 
+                    and do not use HTML
+                </span>
             </div>
 
             <div class="form-group">
@@ -28,10 +42,12 @@
                 <input type="text"
                        class="form-control"
                        jsf:id="screenName" 
-                       jsf:value="#{reelerUiBean.user.screenName}"/>
+                       jsf:value="#{bean.user.screenName}"/>
 
-                <span class="help-block">Your desired screen name (with no HTML). This is is what will be displayed 
-                    in your weblog and on weblog entries that you write.</span>
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    Your desired screen name (with no HTML). This is is what will be displayed 
+                    in your weblog and on weblog entries that you write.
+                </span>
 
             </div>
 
@@ -40,10 +56,12 @@
                 <input type="text"
                        class="form-control"
                        jsf:id="fullName"
-                       jsf:value="#{reelerUiBean.user.fullName}"/>
+                       jsf:value="#{bean.user.fullName}"/>
 
-                <span class="help-block">Your full name (with no HTML), first and last. 
-                    Some weblog themes will display this instead of (or in addition to) your screenname.</span>
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    Your full name (with no HTML), first and last. 
+                    Some weblog themes will display this instead of (or in addition to) your screenname.
+                </span>
 
             </div>
 
@@ -52,9 +70,10 @@
                 <input type="text" 
                        class="form-control"
                        jsf:id="emailAddress" 
-                       jsf:value="#{reelerUiBean.user.emailAddress}"/>
+                       jsf:value="#{bean.user.emailAddress}"/>
 
-                <span class="help-block">Please enter valid email address, the site administrator may disable your account 
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    Please enter valid email address, the site administrator may disable your account 
                     if he/she cannot reach you via email.</span>
 
             </div>
@@ -62,12 +81,13 @@
 
             <div class="form-group">
                 <label jsf:for="passwordText" class="control-label">Password</label>
-
                 <input type="password" 
                        class="form-control"
                        jsf:id="passwordText"/>
 
-                <span class="help-block">Your password.  Fill in only if you wish to change it.</span>
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    Your password.  Fill in only if you wish to change it.
+                </span>
 
             </div>
 
@@ -76,7 +96,9 @@
                 <input type="password" 
                        class="form-control"
                        jsf:id="passwordConfirm"/>
-                <span class="help-block">Confirm your password.</span>
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    Confirm your password.
+                </span>
             </div>
 
             <div class="form-group">
@@ -88,7 +110,7 @@
                     jsfc="h:selectOneMenu"
                     title="Locale" 
                     class="form-control" 
-                    value="#{weblogAuthorBean.weblog.locale}"
+                    value="#{bean.user.locale}"
                     required="true">
                     <option jsfc="f:selectItems" 
                             value="#{selectItemBean.localeItems}" 
@@ -97,20 +119,21 @@
                             itemLabel="#{locale.label}" />
 
                 </select>
-                <h:message for="locale" style="color: red"/>
-                <span class="help-block">Your preferred locale</span>
+                <h:message for="locale"/>
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    Your preferred locale
+                </span>
             </div>
 
             <div class="form-group">
                 <label jsf:for="timeZone" >Timezone</label>
-
                 <select
                     id="timeZone"
                     name="timeZone"
                     jsfc="h:selectOneMenu"
                     title="Time Zone" 
                     class="form-control" 
-                    value="#{weblogAuthorBean.weblog.timeZone}"
+                    value="#{bean.user.timeZone}"
                     required="true">
                     <option jsfc="f:selectItems" 
                             value="#{selectItemBean.timeZoneItems}" 
@@ -119,23 +142,59 @@
                             itemLabel="#{tz.label}" />
 
                 </select>
-                <h:message for="timeZone" style="color: red"/>
-                <div class="help-block">The timezone to be used for entry and display of this weblog.</div>
+                <h:message for="timeZone" />
+                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                    The timezone to be used for entry and display of this weblog.
+                </span>
+                
+                <div
+                    jsfc="h:panelGroup" 
+                    layout="block"
+                    rendered="#{isAdmin}">
+                    <div class="form-group">
+                        <label jsf:for="isEnabled">
+                            <h:selectBooleanCheckbox id="isEnabled" 
+                                                     value="#{bean.user.isEnabled}"/>
+                            Enabled
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label jsf:for="isAdministrator">
+                            <h:selectBooleanCheckbox id="isAdministrator"/>
+                            Administrator
+                        </label>
+                    </div>
+                </div>
             </div>
 
-
+            <input type="hidden" 
+                   jsfc="h:inputHidden" 
+                   name="id"
+                   rendered="#{userAdminBean.id ne null}"
+                   value="#{userAdminBean.id ne null ? id : ''}"/>
+            <input type="hidden" name="action" value="#{userAdminBean.action}"/>
         </div>
 
         <br />
-
-        <input type="submit" 
-               id="profile_0" 
-               value="#{messages._save}" 
-               class="btn btn-primary"/>
+        <input jsfc="h:commandButton"
+               type="submit" 
+               id="profile_save" 
+               value="Save User" 
+               class="btn btn-primary"
+               action="#{bean.createUser()}"
+               rendered="#{bean.action eq 'create'}"/>
+        
+        <input jsfc="h:commandButton"
+               type="submit" 
+               id="profile_edit" 
+               value="Edit User" 
+               class="btn btn-primary"
+               action="#{bean.updateUser()}"
+               rendered="#{bean.action eq 'edit'}"/>
 
         <input type="button" 
                value="#{messages._cancel}"
-               onclick="window.location.href = '#{request.contextPath}#{reelerUiBean.pageHome}'"
+               onclick="window.location.href = '#{request.contextPath}#{bean.pageHome}'"
                class="btn btn-secondary"/>
 
     </form>

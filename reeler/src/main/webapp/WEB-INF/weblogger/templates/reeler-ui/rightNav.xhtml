@@ -16,19 +16,19 @@
                 </h5>
 
                 <div class="panel-body">
-                    <a href="#{request.contextPath}#{reelerUiBean.pageHome}/user/profile/index.xhtml">Edit User Profile</a>
-                    Change user info, locale, timezone
+                    <a href="#{request.contextPath}#{reelerUiBean.pageHome}/user/profile/index.xhtml?action=edit">Edit User Profile</a>
+                    <span class="help-block">Change user info, locale, timezone</span>
                     <hr/>
                     <h:form><a action="#{reelerUiBean.newWeblog()}" jsfc="h:commandLink">
                         <f:param name="action" value="create"/>Create new blog</a></h:form>
-                    Create a new weblog         
+                    <span class="help-block">Create a new weblog</span>         
                     <hr/>
                     <div jsf:id="serverAdminLink" rendered="#{reelerUiBean.user.roles
                                                               .stream()
                                                               .anyMatch(r->r.roleName.equals('admin')
                                                               )}">
                         <a href="#{request.contextPath}#{adminUIBean.path}/">Server Administration</a>
-                        Make site-wide administration changes
+                        <span class="help-block">Make site-wide administration changes</span>
                     </div>
                 </div>
             </div>

@@ -6,7 +6,7 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
     <ui:define name="title">
-        <h:outputText value="Edit Profile"></h:outputText>            
+        <h:outputText value="#{userAdminBean.actionLabel} User"></h:outputText>            
     </ui:define>
 
     <ui:define name="head">
@@ -18,15 +18,15 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <ui:include src="profile-form.xhtml">
-                <ui:param name="formTitle" value="Edit Profile"/>
+            <ui:include src="/weblogger/reeler-ui/user/profile/profile-form.xhtml">
+                <ui:param name="formTitle" value="#{userAdminBean.actionLabel} User"/>
                 <ui:param name="bean" value="#{userAdminBean}"/>
-                <ui:param name="isAdmin" value="#{false}"/>
+                <ui:param name="isAdmin" value="#{true}"/>
             </ui:include>
         </f:view>
     </ui:define>
     <ui:define name="sideNav">
-       
+
     </ui:define>
 
     <ui:define name="postBody">
@@ -34,5 +34,3 @@
     </ui:define>
 
 </ui:composition>
-
-

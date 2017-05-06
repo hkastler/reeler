@@ -33,7 +33,7 @@ public abstract class AuthorBean<T> {
     protected String actionLabel;
 
     public AuthorBean() {
-        
+        //default constructor
     }
     
     public AuthorBean(Class<T> entityClass){

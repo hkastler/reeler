@@ -7,26 +7,49 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-    
+
     <ui:param name="pageBean" value="#{adminUIBean}"/>
     <f:metadata>    
         <f:viewAction action="#{adminUIBean.viewAction('users')}"/>              
     </f:metadata> 
 
     <ui:define name="pageContent">
-        <form jsfc="h:form">                
-            <input type="hidden" name="page" value="users"/>
-            <h:commandButton class="btn btn-primary"
+        <div><h3>Select user to administer</h3>
+            <p>Select user and click edit button to edit the user's profile and the user's weblogs.</p>
+        </div>
+        <form method="get" action="user-profile.xhtml">
+            <select
+                class="form-control"
+                name="id"
+                size="10">
+                <ui:repeat value="#{userAdminBean.getUsers()}"
+                           var="user">
+                    <option value="#{user.id}">
+                        #{user.userName}(#{user.emailAddress})
+                    </option>
+                </ui:repeat>
+            </select>
+
+
+            <input type="hidden" name="action" value="edit"/>
+            <input
+                type="submit"
+                class="btn btn-primary"
                              id="updateUsers" 
-                             value="#{messages.label_update} #{messages[adminUIBean.pages[adminUIBean.page][0]]}"
-                             action="#{userAdminBean.updateUser()}"/>
+                             value="Edit User"/>
             <input 
                 jsf:id="cancelButton"
                 type="button" 
                 class="btn btn-secondary"
                 value="Cancel" 
-                onclick="window.location = '#{request.contextPath}#{reelerUiBean.path}'"/>
+                onclick="window.location = '#{request.contextPath}#{reelerUiBean.pageHome}'"/>
         </form>
+        <div><h3>New user creation</h3></div>
+        <div>
+            <span class="help-block">
+                Or you can <a href="#{request.contextPath}#{reelerUiBean.pageHome}/admin/user-profile.xhtml">create a new user</a>
+            </span>
+        </div>
     </ui:define>   
 
 </ui:composition>

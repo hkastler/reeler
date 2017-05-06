@@ -68,9 +68,7 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
     
     public RuntimeConfigManager() {
         super(RuntimeConfigProperty.class);
-        
     } 
-
 
     @Override
     protected EntityManager getEntityManager() {
@@ -135,7 +133,7 @@ public class RuntimeConfigManager extends AbstractManager<RuntimeConfigProperty>
          * we can save the elements again after they have been updated
          */
         list.stream().map((prop) -> {
-            log.log(Level.INFO, "{0}:{1}", new Object[]{prop.getName(), prop.getValue()});
+            //log.log(Level.INFO, "{0}:{1}", new Object[]{prop.getName(), prop.getValue()});
             return prop;
         }).forEachOrdered((prop) -> {
             try {

@@ -1,6 +1,6 @@
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
-import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import com.hkstlr.reeler.app.entities.PermissionEntity;
 import java.io.Serializable;
 import java.security.Permission;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogPermission.getByUserName&WeblogId", query = "SELECT p FROM WeblogPermission p WHERE p.userName = ?1 AND p.objectId = ?2 AND p.pending <> true")
     , @NamedQuery(name = "WeblogPermission.getByUserName&WeblogIdIncludingPending", query = "SELECT p FROM WeblogPermission p WHERE p.userName = ?1 AND p.objectId = ?2")})
 
-public class WeblogPermission extends AbstractPermissionEntity implements Serializable {
+public class WeblogPermission extends PermissionEntity implements Serializable {
 
     public static final String EDIT_DRAFT = "edit_draft";
     public static final String POST = "post";
@@ -118,6 +118,7 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
         return ALL_ACTIONS;
     }
 
+    @Override
     public boolean implies(Permission perm) {
         if (perm instanceof WeblogPermission) {
             WeblogPermission rperm = (WeblogPermission) perm;
@@ -150,33 +151,10 @@ public class WeblogPermission extends AbstractPermissionEntity implements Serial
     
     
 
-    /*public String toString() {
-    return new JsonBuilder().toJsonString(this);
-    }*/
-
-    /*    public boolean equals(Object other) {
-    if (other == this) {
-    return true;
-    }
-    if (!(other instanceof WeblogPermission)) {
-    return false;
-    }
-    WeblogPermission o = (WeblogPermission)other;
-    return new EqualsBuilder()
-    .append(getUserName(), o.getUserName())
-    .append(getObjectId(), o.getObjectId())
-    .append(getActions(), o.getActions())
-    .isEquals();
-    }
-    
-    public int hashCode() {
-    return new HashCodeBuilder()
-    .append(getUserName())
-    .append(getObjectId())
-    .append(getActions())
-    .toHashCode();
-    }*/
-   
+    @Override
+    public String toString() {
+        return this.toJsonString();
+    }     
 
 
 }

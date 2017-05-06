@@ -15,7 +15,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
@@ -49,7 +49,7 @@ import javax.persistence.DiscriminatorValue;
     , @NamedQuery(name = "GlobalPermission.getByWeblogIdIncludingPending", query = "SELECT p FROM GlobalPermission p WHERE p.objectId = ?1")
     , @NamedQuery(name = "GlobalPermission.getByUserName&WeblogId", query = "SELECT p FROM GlobalPermission p WHERE p.userName = ?1 AND p.objectId = ?2 AND p.pending <> true")
     , @NamedQuery(name = "GlobalPermission.getByUserName&WeblogIdIncludingPending", query = "SELECT p FROM GlobalPermission p WHERE p.userName = ?1 AND p.objectId = ?2")})
-public class GlobalPermission extends AbstractPermissionEntity implements Serializable {
+public class GlobalPermission extends PermissionEntity implements Serializable {
 
     protected static final long serialVersionUID = 1L;
     

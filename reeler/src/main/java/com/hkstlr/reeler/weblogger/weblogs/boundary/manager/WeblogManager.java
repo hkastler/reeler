@@ -124,7 +124,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         em.merge(weblog);
         em.flush();
         addPermission(weblog, user);        
-        addWeblogContents(weblog, user);
+        addWeblogContents(weblog);
     }
     
     private boolean addPermission(Weblog newWeblog, User user){
@@ -143,7 +143,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         
     }
 
-    private void addWeblogContents(Weblog newWeblog, User user)
+    private void addWeblogContents(Weblog newWeblog)
             throws WebloggerException {
 
         String cats = WebloggerConfig.getProperty("newuser.categories");
@@ -177,6 +177,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         // add default bookmarks
         WeblogBookmarkFolder defaultFolder = new WeblogBookmarkFolder(
                 "default", newWeblog);
+        //addWeblog.merge2
         this.em.merge(defaultFolder);
 
         String blogroll = WebloggerConfig.getProperty("newuser.blogroll");
@@ -192,6 +193,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
                             rollitems[1].trim(),
                             null,
                             null);
+                    //this should also be counted
+                    //in the unit tests
+                    //but WebloggerConfig stands in the way
                     this.em.merge(b);
                 }
             }
@@ -204,7 +208,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
             }
         }
         
-        //addWeblog.merge2
+        //addWeblog.merge3
         this.em.merge(newWeblog);
         this.em.flush();
     }
@@ -363,14 +367,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
         this.addWeblogContents(newWeblog);
     }
 
-    private void addWeblogContents(Weblog newWeblog)
-            throws WebloggerException {
-        User user = userManager.getUserByUserName(newWeblog.getCreator());
-        addWeblogContents(newWeblog, user);
-    }
+    
 
     public Weblog getWeblog(String id) throws WebloggerException {
-        return (Weblog) this.em.find(Weblog.class, id);
+        return this.em.find(Weblog.class, id);
     }
 
     public Weblog findByHandle(String handle) throws WebloggerException {

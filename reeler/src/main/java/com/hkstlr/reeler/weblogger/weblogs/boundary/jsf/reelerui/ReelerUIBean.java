@@ -11,10 +11,12 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog.AuthorBean;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmarkFolder;
 import java.io.IOException;
 import java.io.Serializable;
+import java.security.Permission;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -103,7 +105,7 @@ public class ReelerUIBean implements Serializable {
 
             ublogs = weblogger.getWeblogManager().getUserWeblogs(user, true);
         } catch (WebloggerException ex) {
-            Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
         if (ublogs == null) {
             ublogs = new ArrayList<>();
@@ -124,33 +126,23 @@ public class ReelerUIBean implements Serializable {
         setUserWeblogs(this.user);
     }
 
-    public void setWeblogPermissions(List<Weblog> blogs) {
+    public void setWeblogPermissions() {
 
         Map<String, String> weblogPermissionMap = new HashMap<>();
 
-        for (Weblog blog : blogs) {
-            StringBuilder permString = new StringBuilder();
-            List<WeblogPermission> perms;
-            try {
-                perms = weblogger.getWeblogPermissionManager().getWeblogPermissions(blog);
-
-                for (WeblogPermission perm : perms) {
-                    permString.append(perm.getActions());
-                }
-
-            } catch (WebloggerException ex) {
-                Logger.getLogger(ReelerUIBean.class.getName()).log(Level.SEVERE, null, ex);
+        for (Permission perm : user.getPermissions()) {
+            
+            if(perm instanceof WeblogPermission){
+                WeblogPermission wp = (WeblogPermission) perm;
+                
+                weblogPermissionMap.put(wp.getObjectId(), wp.getActions());
             }
-
-            weblogPermissionMap.put(blog.getHandle(), permString.toString());
         }
 
         this.userWeblogPermissions = weblogPermissionMap;
     }
 
-    public void setWeblogPermissions() {
-        setWeblogPermissions(this.userWeblogs);
-    }
+    
 
     /**
      * Set the value of user
@@ -163,9 +155,7 @@ public class ReelerUIBean implements Serializable {
 
     public void setUserFromSession() {
         this.user = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
-        user.getPermissions().forEach((t) -> {
-            LOG.info(t.toString());
-        });
+        
     }
 
     public String getPath() {

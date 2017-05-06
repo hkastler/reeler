@@ -33,6 +33,7 @@ public class AdminUIBean {
     private String page;
 
     public AdminUIBean() {
+        //default constructor
     }
     
     @PostConstruct

@@ -119,6 +119,9 @@ public class WeblogManagerTest {
         when(this.cut.weblogPermissionManager.em.createNamedQuery(qName)).thenReturn(mockQuery);    
         
         when(WebloggerConfig.getProperty("newuser.categories")).thenReturn("General,Technology");
+        when(WebloggerConfig.getProperty("newuser.blogroll")).thenReturn("\\\n" +
+"Apache Software Foundation|http://apache.org,\\\n" +
+"Apache Roller Project|http://roller.apache.org");
              
         List<PingTarget> pings = new ArrayList<>();
         PingTarget pt = new PingTarget();
@@ -131,6 +134,7 @@ public class WeblogManagerTest {
         when(this.cut.pingTargetManager.em.createNamedQuery(Matchers.anyString())).thenReturn(mockQuery2);
         
         verify(this.cut.em, times(2)).merge(weblog);
+        verify(this.cut.em,times(3)).merge(Matchers.anyObject());
      }
 
 }

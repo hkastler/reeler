@@ -75,6 +75,7 @@ public abstract class AbstractEntity implements Serializable {
     }
     
     
+    @Override
     public String toString() {
         return this.getClass().getName() + StringPool.COLON + this.id;
     }

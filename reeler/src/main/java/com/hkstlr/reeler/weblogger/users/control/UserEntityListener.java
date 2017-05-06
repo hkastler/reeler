@@ -7,7 +7,7 @@ package com.hkstlr.reeler.weblogger.users.control;
 
 import com.hkstlr.reeler.app.control.AppPermission;
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogPermissionManager;
@@ -34,7 +34,7 @@ public class UserEntityListener {
     @PostLoad
     public void userPostLoad(User user) throws WebloggerException {
         
-        List<AbstractPermissionEntity> permissions = new ArrayList<>();
+        List<PermissionEntity> permissions = new ArrayList<>();
         
         List<WeblogPermission> weblogPermissions = wpm.getWeblogPermissions(user);
         for(WeblogPermission wp : weblogPermissions){

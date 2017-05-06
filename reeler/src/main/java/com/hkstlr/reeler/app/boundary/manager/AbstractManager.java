@@ -79,9 +79,9 @@ public abstract class AbstractManager<T> {
      */
     public void removeAll(Collection pos){
         EntityManager em = getEntityManager();
-        for (Object obj : pos) {
+        pos.forEach((obj) -> {
             em.remove(obj);
-        }
+        });
     }
 
     public T find(Object id) {
@@ -118,9 +118,7 @@ public abstract class AbstractManager<T> {
         try {
             record = (T) query.getSingleResult();
         } catch (NoResultException e) {
-            
-            log.log(Level.INFO, queryName+StringPool.COLON , e);
-
+            log.log(Level.WARNING, queryName+StringPool.COLON , e);
         }
         return record;
     }
@@ -136,7 +134,6 @@ public abstract class AbstractManager<T> {
         CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
         Root<T> t = cq.from(entityClass);
         cq.select(t);
-        cq.orderBy(cb.asc(t.get("pubTime")));
         
         Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);

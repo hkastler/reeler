@@ -6,7 +6,7 @@
 package com.hkstlr.reeler.weblogger.users.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
-import com.hkstlr.reeler.app.entities.AbstractPermissionEntity;
+import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.users.control.UserEntityListener;
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,13 +144,13 @@ public class User extends AbstractEntity {
     private Set<UserRole> roles;
 
     @Transient
-    private List<AbstractPermissionEntity> permissions = new ArrayList<>();
+    private List<PermissionEntity> permissions = new ArrayList<>();
 
     public User() {
-
+        //default constructor
     }
 
-    public User(String id, String userName, String password, String screenname, String fullname, String emailaddress, Date datecreated, boolean isenabled) {
+    public User(String userName, String password, String screenname, String fullname, String emailaddress, Date datecreated, boolean isenabled) {
         this.roles = new HashSet<>();
 
         this.userName = userName;
@@ -270,11 +270,11 @@ public class User extends AbstractEntity {
         this.roles = roles;
     }
 
-    public List<AbstractPermissionEntity> getPermissions() {
+    public List<PermissionEntity> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<AbstractPermissionEntity> permissions) {
+    public void setPermissions(List<PermissionEntity> permissions) {
         this.permissions = permissions;
     }
 

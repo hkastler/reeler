@@ -29,6 +29,7 @@ import javax.inject.Named;
 
 import com.hkstlr.reeler.app.control.AuthMethod;
 import com.hkstlr.reeler.app.control.PropertyExpander;
+import com.hkstlr.reeler.app.control.StringPool;
 import java.util.logging.Level;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.Startup;
@@ -45,11 +46,11 @@ public class WebloggerConfig {
 
     private static final String default_config = "/com/hkstlr/reeler/app/control/config/reeler.properties";
     private static final String custom_config = "/reeler-custom.properties";
-    private static String junit_config = "/roller-junit.properties";
-    private static String custom_jvm_param = "roller.custom.config";
+    private static final String junit_config = "/roller-junit.properties";
+    private static final String custom_jvm_param = "roller.custom.config";
     private static File custom_config_file = null;
 
-    private static Properties config = new Properties();
+    private static final Properties config = new Properties();
 
     private static Logger log = Logger.getLogger(WebloggerConfig.class.getName());
 
@@ -98,44 +99,42 @@ public class WebloggerConfig {
                     // make sure the file exists, then try and load it
                     if (custom_config_file != null && custom_config_file.exists()) {
                         is = new FileInputStream(custom_config_file);
-                        config.load(is);
-                        
+                        Properties customConfigLoad2 = new Properties();
+                        customConfigLoad2.load(is);
+                        tempConfig.putAll(customConfigLoad2);
                     } else {
                         log.fine("Failed to load custom properties from "
                                 + custom_config_file.getAbsolutePath());
                     }
 
                 }
-                //transfer to static storage            
-                this.config.putAll(tempConfig);
-                log.finest("config:" + config.toString());
                 // Now expand system properties for properties in the config.expandedProperties list,
                 // replacing them by their expanded values.
-                String expandedPropertiesDef = (String) config.get("config.expandedProperties");
+                String expandedPropertiesDef = (String) tempConfig.get("config.expandedProperties");
                 if (expandedPropertiesDef != null) {
-                    String[] expandedProperties = expandedPropertiesDef.split(",");
+                    String[] expandedProperties = expandedPropertiesDef.split(StringPool.COMMA);
                     for (int i = 0; i < expandedProperties.length; i++) {
                         String propName = expandedProperties[i].trim();
-                        String initialValue = (String) config.get(propName);
+                        String initialValue = (String) tempConfig.get(propName);
                         if (initialValue != null) {
                             String expandedValue = PropertyExpander.expandSystemProperties(initialValue);
-                            this.config.put(propName, expandedValue);
+                            tempConfig.put(propName, expandedValue);
                         }
                     }
                 }
-
-                // initialize logging subsystem via WebloggerConfig
-                //PropertyConfigurator.configure(WebloggerConfig.getPropertiesStartingWith("log4j."));
-                // finally we can start logging...
-                // some debugging for those that want it
+                
+                //transfer to static storage            
+                this.config.putAll(tempConfig);
+                log.finest("config:" + config.toString());
+                
                 if (log.isLoggable(Level.FINEST)) {
                     log.finest("WebloggerConfig looks like this ...");
 
-                    String key = null;
+                    String key;
                     Enumeration keys = config.keys();
                     while (keys.hasMoreElements()) {
                         key = (String) keys.nextElement();
-                        log.finest(key + "=" + config.getProperty(key));
+                        log.finest(key + StringPool.EQUAL + config.getProperty(key));
                     }
                 }
 
@@ -241,6 +240,8 @@ public class WebloggerConfig {
 
     /**
      * Get properties starting with a specified string.
+     * @param startingWith
+     * @return 
      */
     public static Properties getPropertiesStartingWith(String startingWith) {
         Properties props = new Properties();
