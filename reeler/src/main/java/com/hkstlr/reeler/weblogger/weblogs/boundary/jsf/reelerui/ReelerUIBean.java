@@ -11,7 +11,6 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
-import com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog.AuthorBean;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmarkFolder;
 import java.io.IOException;
@@ -41,7 +40,7 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class ReelerUIBean implements Serializable {
 
-    private transient Logger LOG = Logger.getLogger(ReelerUIBean.class.getName());
+    private static final transient Logger LOG = Logger.getLogger(ReelerUIBean.class.getName());
 
     @EJB
     private transient Weblogger weblogger;
@@ -188,7 +187,7 @@ public class ReelerUIBean implements Serializable {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             StringBuilder actionPath = new StringBuilder(context.getRequestContextPath());
-            actionPath.append(this.PATH).append("/");
+            actionPath.append(ReelerUIBean.PATH).append("/");
             if ("config".equals(page)) {
                 actionPath.append("settings/");
             }
@@ -206,7 +205,7 @@ public class ReelerUIBean implements Serializable {
         ExternalContext context = FacesContext.getCurrentInstance().getExternalContext();
         try {
             StringBuilder createPath = new StringBuilder(context.getRequestContextPath());
-            createPath.append(this.PATH);
+            createPath.append(ReelerUIBean.PATH);
             createPath.append("/create.xhtml");
             context.redirect(createPath.toString());
         } catch (IOException ex) {
@@ -226,12 +225,12 @@ public class ReelerUIBean implements Serializable {
     public void blogrollsViewAction() {
         setUserWeblogs();
         setWeblogPermissions();
-        List<WeblogBookmark> bookmarks = weblogger.getWeblogBookmarkManager().getBookmarksForWeblog(currentWeblog);
+       
         List<WeblogBookmarkFolder> folders = weblogger.getWeblogBookmarkManager().getBookmarkFoldersForWeblog(currentWeblog);
-        LOG.info("numberOfFolders:" + folders.size());
+        LOG.finer("numberOfFolders:" + folders.size());
         
         this.currentWeblog.setBookmarkFolders(folders);
-        LOG.info("currentWeblog.numberOfFolders:" + this.currentWeblog.getBookmarkFolders().size());
+        LOG.finer("currentWeblog.numberOfFolders:" + this.currentWeblog.getBookmarkFolders().size());
     }
 
 }

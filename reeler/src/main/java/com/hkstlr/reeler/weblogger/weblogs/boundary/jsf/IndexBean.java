@@ -25,7 +25,6 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
 
 /**
  *
@@ -37,20 +36,15 @@ public class IndexBean {
     
     @EJB
     Weblogger weblogger;
-    
-    //@Inject
-    //WeblogManager weblogManager;
-    
-    @Inject
-    private Logger log;
-    
+        
     private List<Weblog> weblogs;
 
     public IndexBean() {
+        //constructor
     }
     
     @PostConstruct
-    public void init(){
+    protected void init(){
         try {
             setWeblogs();
         } catch (WebloggerException ex) {
@@ -67,17 +61,9 @@ public class IndexBean {
     }
     
     public void setWeblogs() throws WebloggerException{
-       log.fine("setting weblogs");
-       List<Weblog> blogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
-        //Weblog blog = weblogManager.getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
-        //blog.setHandle("test-handle");
-        //blog.setName("Test Name");
-        //blogs.add(blog);
-        /*blogs.forEach((blog) -> {
-        blog.getWeblogEntries();
-        blog.getWeblogEntries().size();
-        });*/
        
+       List<Weblog> blogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
+             
        this.weblogs = blogs;
     }
     

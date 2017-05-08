@@ -131,7 +131,7 @@ public abstract class AbstractManager<T> {
 
     public List<T> findRange(int[] range) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
+        CriteriaQuery<Object> cq = cb.createQuery();
         Root<T> t = cq.from(entityClass);
         cq.select(t);
         

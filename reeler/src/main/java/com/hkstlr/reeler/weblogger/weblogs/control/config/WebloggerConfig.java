@@ -102,6 +102,7 @@ public class WebloggerConfig {
                         Properties customConfigLoad2 = new Properties();
                         customConfigLoad2.load(is);
                         tempConfig.putAll(customConfigLoad2);
+                        is.close();
                     } else {
                         log.fine("Failed to load custom properties from "
                                 + custom_config_file.getAbsolutePath());
