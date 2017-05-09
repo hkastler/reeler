@@ -37,7 +37,15 @@ public class PageBeanTest {
         assertEquals(pageNum,(int)cut.getPageNum());
     }
 
-    
+    /**
+     * Test of getPageNum method, of class PageBean.
+     */
+    @Test
+    public void testGetPageNumNull() {
+        int pageNum = 1;
+        cut.setPageNum(null);
+        assertEquals(pageNum,(int)cut.getPageNum());
+    }
 
     /**
      * Test of getPageSize method, of class PageBean.

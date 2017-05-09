@@ -30,6 +30,7 @@ import javax.inject.Named;
 import com.hkstlr.reeler.app.control.AuthMethod;
 import com.hkstlr.reeler.app.control.PropertyExpander;
 import com.hkstlr.reeler.app.control.StringPool;
+import java.io.IOException;
 import java.util.logging.Level;
 import javax.ejb.ConcurrencyManagement;
 import javax.ejb.Startup;
@@ -52,19 +53,19 @@ public class WebloggerConfig {
 
     private static final Properties config = new Properties();
 
-    private static Logger log = Logger.getLogger(WebloggerConfig.class.getName());
+    private static final Logger LOG = Logger.getLogger(WebloggerConfig.class.getName());
 
     public WebloggerConfig() {
-        
-        log.log(Level.FINE, "init WebloggerConfig");
+
+        LOG.log(Level.FINE, "init WebloggerConfig");
         if (config.isEmpty()) {
             try {
                 // we'll need this to get at our properties files in the classpath
                 Class configClass = Class.forName(WebloggerConfig.class.getName());
-                              
+
                 // first, lets load our default properties
                 InputStream is = configClass.getResourceAsStream(default_config);
-                log.fine("defaultConfigPath:" + default_config);
+                LOG.fine("defaultConfigPath:" + default_config);
 
                 //config is static, so we'll need temp vars
                 //TODO: less procedural
@@ -72,11 +73,10 @@ public class WebloggerConfig {
 
                 Properties configLoad = new Properties();
                 configLoad.load(is);
-                
+
                 tempConfig.putAll(configLoad);
 
-                
-                log.fine("customConfigPath:" + configClass.getResource(custom_config));
+                LOG.fine("customConfigPath:" + configClass.getResource(custom_config));
                 // now, see if we can find our custom config
                 is = configClass.getResourceAsStream(custom_config);
 
@@ -84,11 +84,11 @@ public class WebloggerConfig {
                     Properties customConfigLoad = new Properties();
                     customConfigLoad.load(is);
                     tempConfig.putAll(customConfigLoad);
-                    log.info("Successfully loaded custom properties file from classpath");
-                    log.fine("customPropFilePath : " + configClass.getResource(custom_config));
-                    log.finest("customConfigLoad:" + customConfigLoad.toString());
+                    LOG.info("Successfully loaded custom properties file from classpath");
+                    LOG.fine("customPropFilePath : " + configClass.getResource(custom_config));
+                    LOG.finest("customConfigLoad:" + customConfigLoad.toString());
                 } else {
-                    log.severe("No custom properties file found in classpath");
+                    LOG.severe("No custom properties file found in classpath");
                 }
 
                 // finally, check for an external config file
@@ -98,13 +98,23 @@ public class WebloggerConfig {
 
                     // make sure the file exists, then try and load it
                     if (custom_config_file != null && custom_config_file.exists()) {
-                        is = new FileInputStream(custom_config_file);
+                        try {
+                            is = new FileInputStream(custom_config_file);
+                            is.close();
+                        } catch (IOException e) {
+                            LOG.info("custom_config_file");
+
+                        } finally {
+                            if (is != null) {
+                                is.close();
+                            }
+                        }
                         Properties customConfigLoad2 = new Properties();
                         customConfigLoad2.load(is);
                         tempConfig.putAll(customConfigLoad2);
-                        is.close();
+
                     } else {
-                        log.fine("Failed to load custom properties from "
+                        LOG.fine("Failed to load custom properties from "
                                 + custom_config_file.getAbsolutePath());
                     }
 
@@ -123,25 +133,25 @@ public class WebloggerConfig {
                         }
                     }
                 }
-                
+
                 //transfer to static storage            
                 this.config.putAll(tempConfig);
-                log.finest("config:" + config.toString());
-                
-                if (log.isLoggable(Level.FINEST)) {
-                    log.finest("WebloggerConfig looks like this ...");
+                LOG.finest("config:" + config.toString());
+
+                if (LOG.isLoggable(Level.FINEST)) {
+                    LOG.finest("WebloggerConfig looks like this ...");
 
                     String key;
                     Enumeration keys = config.keys();
                     while (keys.hasMoreElements()) {
                         key = (String) keys.nextElement();
-                        log.finest(key + StringPool.EQUAL + config.getProperty(key));
+                        LOG.finest(key + StringPool.EQUAL + config.getProperty(key));
                     }
                 }
 
             } catch (Exception e) {
-                log.log(Level.SEVERE,"WebloggerConfig failed:",e);
-                
+                LOG.log(Level.SEVERE, "WebloggerConfig failed:", e);
+
             }
         }
     }
@@ -153,9 +163,9 @@ public class WebloggerConfig {
      * @return String Value of property requested, null if not found
      */
     public static String getProperty(String key) {
-        log.finer("Fetching property [" + key + "=" + config.getProperty(key) + "]");
+        LOG.finer("Fetching property [" + key + "=" + config.getProperty(key) + "]");
         String value = config.getProperty(key);
-        
+
         //for system properties
         if (value.startsWith("$")) {
             String newValue = value.substring(2, value.indexOf('}'));
@@ -177,7 +187,7 @@ public class WebloggerConfig {
      * @return String Value of property requested or defaultValue
      */
     public static String getProperty(String key, String defaultValue) {
-        log.finer("Fetching property ["+key+"="+config.getProperty(key)+",defaultValue="+defaultValue+"]");
+        LOG.finer("Fetching property [" + key + "=" + config.getProperty(key) + ",defaultValue=" + defaultValue + "]");
         String value = config.getProperty(key);
         if (value == null) {
             return defaultValue;
@@ -210,6 +220,9 @@ public class WebloggerConfig {
 
     /**
      * Retrieve a property as an int ... defaults to 0 if not present.
+     *
+     * @param name
+     * @return
      */
     public static int getIntProperty(String name) {
         return getIntProperty(name, 0);
@@ -241,8 +254,9 @@ public class WebloggerConfig {
 
     /**
      * Get properties starting with a specified string.
+     *
      * @param startingWith
-     * @return 
+     * @return
      */
     public static Properties getPropertiesStartingWith(String startingWith) {
         Properties props = new Properties();
@@ -291,7 +305,7 @@ public class WebloggerConfig {
      * AuthMethod enum object.
      * <p />
      *
-     * @return 
+     * @return
      * @throws IllegalArgumentException if property value defined in the
      * properties file is missing or not the property name of any AuthMethod
      * enum object.

@@ -82,7 +82,7 @@ public class GlobalPermission extends PermissionEntity implements Serializable {
      * @param user User of permission.
      * @param actions
      * @throws com.hkstlr.reeler.app.control.WebloggerException
-     * @throws org.apache.roller.weblogger.WebloggerException
+     * 
      */
     public GlobalPermission(User user, List<String> actions) throws WebloggerException {
         super("GlobalPermission user: " + user.getUserName());
@@ -93,7 +93,7 @@ public class GlobalPermission extends PermissionEntity implements Serializable {
      * Create global permission for one specific user initialized with the 
      * actions that are implied by the user's roles.
      * @param user User of permission.
-     * @throws org.apache.roller.weblogger.WebloggerException
+     * @throws com.hkstlr.reeler.app.control.WebloggerException
      */
     public GlobalPermission(User user) throws WebloggerException {
         super("GlobalPermission user: " + user.getUserName());
@@ -103,7 +103,7 @@ public class GlobalPermission extends PermissionEntity implements Serializable {
         Set<UserRole> userRoles = user.getRoles();        
         List<String> roles = new ArrayList<>();
         userRoles.forEach(userRole -> roles.add(getName()));
-        List<String> actionsList = new ArrayList<String>();        
+        List<String> actionsList = new ArrayList<>();        
         for (String role : roles) {
             String impliedActions = WebloggerConfig.getProperty("role.action." + role);
             if (impliedActions != null) {
