@@ -11,7 +11,6 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmark;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogBookmarkFolder;
 import java.io.IOException;
 import java.io.Serializable;

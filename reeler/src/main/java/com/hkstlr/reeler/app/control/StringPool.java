@@ -19,10 +19,6 @@ package com.hkstlr.reeler.app.control;
  */
 public class StringPool {
 
-    private StringPool() {
-        //constructor
-        throw new IllegalAccessError("Not Instanciable");
-    }
 
     public static final String AMPERSAND = "&";
 
@@ -166,4 +162,9 @@ public class StringPool {
 
     public static final String UTF8 = "UTF-8";
 
+    
+    private StringPool() {
+        //constructor
+        throw new IllegalAccessError("Not Instanciable");
+    }
 }

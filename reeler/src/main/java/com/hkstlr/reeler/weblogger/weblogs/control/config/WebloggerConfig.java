@@ -45,27 +45,27 @@ import javax.ejb.Startup;
 @ConcurrencyManagement
 public class WebloggerConfig {
 
-    private static final String default_config = "/com/hkstlr/reeler/app/control/config/reeler.properties";
-    private static final String custom_config = "/reeler-custom.properties";
-    private static final String junit_config = "/roller-junit.properties";
-    private static final String custom_jvm_param = "roller.custom.config";
-    private static File custom_config_file = null;
+    private static final String DEFAULT_CONFIG = "/com/hkstlr/reeler/app/control/config/reeler.properties";
+    private static final String CUSTOM_CONFIG = "/reeler-custom.properties";
+    private static final String JUNIT_CONFIG = "/roller-junit.properties";
+    private static final String CUSTOM_JVM_PARAM = "roller.custom.config";
+    private static File CUSTOM_CONFIG_FILE = null;
 
-    private static final Properties config = new Properties();
+    private static final Properties CONFIG = new Properties();
 
     private static final Logger LOG = Logger.getLogger(WebloggerConfig.class.getName());
 
-    public WebloggerConfig() {
+    private WebloggerConfig() {
 
         LOG.log(Level.FINE, "init WebloggerConfig");
-        if (config.isEmpty()) {
+        if (CONFIG.isEmpty()) {
             try {
                 // we'll need this to get at our properties files in the classpath
                 Class configClass = Class.forName(WebloggerConfig.class.getName());
 
                 // first, lets load our default properties
-                InputStream is = configClass.getResourceAsStream(default_config);
-                LOG.fine("defaultConfigPath:" + default_config);
+                InputStream is = configClass.getResourceAsStream(DEFAULT_CONFIG);
+                LOG.fine("defaultConfigPath:" + DEFAULT_CONFIG);
 
                 //config is static, so we'll need temp vars
                 //TODO: less procedural
@@ -76,33 +76,33 @@ public class WebloggerConfig {
 
                 tempConfig.putAll(configLoad);
 
-                LOG.fine("customConfigPath:" + configClass.getResource(custom_config));
+                LOG.fine("customConfigPath:" + configClass.getResource(CUSTOM_CONFIG));
                 // now, see if we can find our custom config
-                is = configClass.getResourceAsStream(custom_config);
+                is = configClass.getResourceAsStream(CUSTOM_CONFIG);
 
                 if (is != null) {
                     Properties customConfigLoad = new Properties();
                     customConfigLoad.load(is);
                     tempConfig.putAll(customConfigLoad);
                     LOG.info("Successfully loaded custom properties file from classpath");
-                    LOG.fine("customPropFilePath : " + configClass.getResource(custom_config));
+                    LOG.fine("customPropFilePath : " + configClass.getResource(CUSTOM_CONFIG));
                     LOG.finest("customConfigLoad:" + customConfigLoad.toString());
                 } else {
                     LOG.severe("No custom properties file found in classpath");
                 }
 
                 // finally, check for an external config file
-                String env_file = System.getProperty(custom_jvm_param);
+                String env_file = System.getProperty(CUSTOM_JVM_PARAM);
                 if (env_file != null && env_file.length() > 0) {
-                    custom_config_file = new File(env_file);
+                    CUSTOM_CONFIG_FILE = new File(env_file);
 
                     // make sure the file exists, then try and load it
-                    if (custom_config_file != null && custom_config_file.exists()) {
+                    if (CUSTOM_CONFIG_FILE != null && CUSTOM_CONFIG_FILE.exists()) {
                         try {
-                            is = new FileInputStream(custom_config_file);
+                            is = new FileInputStream(CUSTOM_CONFIG_FILE);
                             is.close();
                         } catch (IOException e) {
-                            LOG.info("custom_config_file");
+                            LOG.log(Level.FINE,"CUSTOM_CONFIG_FILE:",e);
 
                         } finally {
                             if (is != null) {
@@ -115,7 +115,7 @@ public class WebloggerConfig {
 
                     } else {
                         LOG.fine("Failed to load custom properties from "
-                                + custom_config_file.getAbsolutePath());
+                                + CUSTOM_CONFIG_FILE.getAbsolutePath());
                     }
 
                 }
@@ -135,17 +135,17 @@ public class WebloggerConfig {
                 }
 
                 //transfer to static storage            
-                this.config.putAll(tempConfig);
-                LOG.finest("config:" + config.toString());
+                this.CONFIG.putAll(tempConfig);
+                LOG.finest("config:" + CONFIG.toString());
 
                 if (LOG.isLoggable(Level.FINEST)) {
                     LOG.finest("WebloggerConfig looks like this ...");
 
                     String key;
-                    Enumeration keys = config.keys();
+                    Enumeration keys = CONFIG.keys();
                     while (keys.hasMoreElements()) {
                         key = (String) keys.nextElement();
-                        LOG.finest(key + StringPool.EQUAL + config.getProperty(key));
+                        LOG.finest(key + StringPool.EQUAL + CONFIG.getProperty(key));
                     }
                 }
 
@@ -163,8 +163,8 @@ public class WebloggerConfig {
      * @return String Value of property requested, null if not found
      */
     public static String getProperty(String key) {
-        LOG.finer("Fetching property [" + key + "=" + config.getProperty(key) + "]");
-        String value = config.getProperty(key);
+        LOG.finer("Fetching property [" + key + "=" + CONFIG.getProperty(key) + "]");
+        String value = CONFIG.getProperty(key);
 
         //for system properties
         if (value.startsWith("$")) {
@@ -187,8 +187,8 @@ public class WebloggerConfig {
      * @return String Value of property requested or defaultValue
      */
     public static String getProperty(String key, String defaultValue) {
-        LOG.finer("Fetching property [" + key + "=" + config.getProperty(key) + ",defaultValue=" + defaultValue + "]");
-        String value = config.getProperty(key);
+        LOG.finer("Fetching property [" + key + "=" + CONFIG.getProperty(key) + ",defaultValue=" + defaultValue + "]");
+        String value = CONFIG.getProperty(key);
         if (value == null) {
             return defaultValue;
         }
@@ -209,7 +209,7 @@ public class WebloggerConfig {
      */
     public static boolean getBooleanProperty(String name, boolean defaultValue) {
         // get the value first, then convert
-        String value = config.getProperty(name);
+        String value = CONFIG.getProperty(name);
 
         if (value == null) {
             return defaultValue;
@@ -249,7 +249,7 @@ public class WebloggerConfig {
      *
      */
     public static Enumeration keys() {
-        return config.keys();
+        return CONFIG.keys();
     }
 
     /**
@@ -260,9 +260,9 @@ public class WebloggerConfig {
      */
     public static Properties getPropertiesStartingWith(String startingWith) {
         Properties props = new Properties();
-        for (Enumeration it = config.keys(); it.hasMoreElements();) {
+        for (Enumeration it = CONFIG.keys(); it.hasMoreElements();) {
             String key = (String) it.nextElement();
-            props.put(key, config.get(key));
+            props.put(key, CONFIG.get(key));
         }
         return props;
     }
@@ -278,8 +278,8 @@ public class WebloggerConfig {
      */
     public static void setUploadsDir(String path) {
         // only do this if the user wants to use the webapp context
-        if ("${webapp.context}".equals(config.getProperty("uploads.dir"))) {
-            config.setProperty("uploads.dir", path);
+        if ("${webapp.context}".equals(CONFIG.getProperty("uploads.dir"))) {
+            CONFIG.setProperty("uploads.dir", path);
         }
     }
 
@@ -294,8 +294,8 @@ public class WebloggerConfig {
      */
     public static void setThemesDir(String path) {
         // only do this if the user wants to use the webapp context
-        if ("${webapp.context}".equals(config.getProperty("themes.dir"))) {
-            config.setProperty("themes.dir", path);
+        if ("${webapp.context}".equals(CONFIG.getProperty("themes.dir"))) {
+            CONFIG.setProperty("themes.dir", path);
         }
     }
 
