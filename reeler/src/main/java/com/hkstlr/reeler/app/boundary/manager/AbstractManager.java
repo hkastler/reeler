@@ -57,7 +57,6 @@ public abstract class AbstractManager<T> {
 
     public void save(T entity) {
         getEntityManager().merge(entity);
-        getEntityManager().flush();
     }
 
     public void persist(T entity) {

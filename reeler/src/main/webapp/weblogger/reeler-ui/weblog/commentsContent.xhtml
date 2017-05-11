@@ -53,9 +53,13 @@
                         </f:facet>
                         <div class="text-center alert alert-success" >
                             <h:form id="isApprovedForm">
+                                <h:inputHidden id="entryid"
+                                               value="#{weblogEntryCommentBean.entryid}"
+                                               rendered="#{weblogEntryCommentBean.entryid ne null}"/>
+                                    
                                 <h:selectBooleanCheckbox id="isApproved"
                                                          value="#{commentVisitor.approved}">
-
+                                    
                                     <f:ajax event="change"
                                             listener="#{weblogEntryCommentBean.setSpamAndApproval(commentVisitor)}"
                                             render="@form isSpamForm"/>
@@ -71,12 +75,16 @@
                         </f:facet>
                         <div class="text-center alert alert-warning">
                             <h:form id="isSpamForm">
+                                 <h:inputHidden id="entryid"
+                                               value="#{weblogEntryCommentBean.entryid}"
+                                               rendered="#{weblogEntryCommentBean.entryid ne null}"/>
                                 <h:selectBooleanCheckbox id="isSpam"
                                                          value="#{commentVisitor.spam}"
                                                          class="text-center">
                                     <f:ajax event="change"
                                             listener="#{weblogEntryCommentBean.setSpamAndApproval(commentVisitor)}"
                                             render="@form isApprovedForm"/>
+                                    
                                 </h:selectBooleanCheckbox>
                                 <div jsfc="h:messages" class="alert alert-warning list-unstyled"/>
                             </h:form>
