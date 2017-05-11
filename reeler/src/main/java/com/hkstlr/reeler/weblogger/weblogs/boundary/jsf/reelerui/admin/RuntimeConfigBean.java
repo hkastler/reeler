@@ -5,7 +5,10 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
 
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
+import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
+import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.RuntimeConfigDefs;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -15,6 +18,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
@@ -26,7 +30,7 @@ import javax.inject.Inject;
 @RequestScoped
 public class RuntimeConfigBean {
     
-    private static final Logger log = Logger.getLogger(RuntimeConfigBean.class.getName());
+    private static final Logger LOG = Logger.getLogger(RuntimeConfigBean.class.getName());
     
     @Inject
     private AdminUIBean adminUIBean;
@@ -34,19 +38,27 @@ public class RuntimeConfigBean {
     @Inject
     private RuntimeConfigManager runtimeConfigManager;
     
+    @Inject
+    private WebloggerRuntimeConfig webloggerRuntimeConfig;
+    
+    @Named
     private Map<String,String> runtimeConfigs;
+    
+    @Named
+    private RuntimeConfigDefs runtimeConfigDefs;
     
     private ResourceBundle res;
 
     public RuntimeConfigBean() {
+        //constructor
     }
     
     @PostConstruct
-    public void init(){
+    public void init(){       
+        runtimeConfigDefs = webloggerRuntimeConfig.getRuntimeConfigDefs();
+        runtimeConfigs = runtimeConfigManager.getProperties();
         
-        runtimeConfigs = runtimeConfigManager.getProperties();        
-        setRes("/ApplicationResources");
-        
+        setRes("/ApplicationResources");        
     }
 
     public RuntimeConfigManager getRuntimeConfigManager() {
@@ -56,6 +68,16 @@ public class RuntimeConfigBean {
     public void setRuntimeConfigManager(RuntimeConfigManager runtimeConfigManager) {
         this.runtimeConfigManager = runtimeConfigManager;
     }
+
+    public RuntimeConfigDefs getRuntimeConfigDefs() {
+        return runtimeConfigDefs;
+    }
+
+    public void setRuntimeConfigDefs(RuntimeConfigDefs runtimeConfigDefs) {
+        this.runtimeConfigDefs = runtimeConfigDefs;
+    }
+    
+    
 
     public Map<String, String> getRuntimeConfigs() {
         return runtimeConfigs;

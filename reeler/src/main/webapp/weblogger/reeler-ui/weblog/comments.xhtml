@@ -1,36 +1,62 @@
 <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
-    xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:jsf="http://xmlns.jcp.org/jsf">
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
 
 
-        
-        <ui:define name="title">
-            <h:outputText value="#{reelerUiBean.pages['comments']} Admin"></h:outputText>            
-        </ui:define>
 
-        <ui:define name="navigation">
-            <ui:include src="navigation.xhtml">
-                <ui:param name="page" value="comments"/>
-                <ui:param name="pageBean" value="#{reelerUiBean}"/>
-            </ui:include>
-        </ui:define>
+    <ui:define name="title">
+        <h:outputText value="#{reelerUiBean.pages['comments']} Admin"></h:outputText>            
+    </ui:define>
+
+    <ui:define name="head">
+        <link rel="stylesheet" type="text/css" href="#{request.contextPath}/css/datetimepicker/jquery.datetimepicker.css"/>
         
-        <ui:define name="content">
-            <f:view>
-                <f:metadata>        
-                    <f:viewAction action="#{weblogEntryCommentBean.commentsViewAction}"/>
-                </f:metadata>
-                <ui:include src="commentsContent.xhtml"/>                
-            </f:view>
-        </ui:define>
-        
-        <ui:define name="sideNav">
-            <ui:include src="commentsSideNav.xhtml"/>
-        </ui:define>
-        
-   
-    
+    </ui:define>
+    <ui:define name="navigation">
+        <ui:include src="navigation.xhtml">
+            <ui:param name="page" value="comments"/>
+            <ui:param name="pageBean" value="#{reelerUiBean}"/>
+        </ui:include>
+    </ui:define>
+
+    <ui:define name="content">
+        <f:view>
+            <f:metadata>        
+                <f:viewAction action="#{weblogEntryCommentBean.commentsViewAction}"/>
+            </f:metadata>
+            <ui:include src="commentsContent.xhtml"/>                
+        </f:view>
+    </ui:define>
+
+    <ui:define name="sideNav">
+        <ui:include src="commentsSideNav.xhtml"/>
+    </ui:define>
+
+    <ui:define name="postBody">
+                <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
+                <script src="#{request.contextPath}/js/vendor/datetimepicker/jquery.datetimepicker.js"></script>
+                <script>
+                    Date.parseDate = function (input, format) {
+                        return moment(input, format).toDate();
+                    };
+                    Date.prototype.dateFormat = function (format) {
+                        return moment(this).format(format);
+                    };
+
+                    $('#startDateString').datetimepicker({
+                        format: 'YYYY-MM-DDTHH:mm',
+                        formatTime: 'HH:mm',
+                        formatDate: 'YYYY MM DD'
+                    });
+                    $('#endDateString').datetimepicker({
+                        format: 'YYYY-MM-DDTHH:mm',
+                        formatTime: 'HH:mm',
+                        formatDate: 'YYYY MM DD'
+                    });
+                </script>           
+            </ui:define>
+
 </ui:composition>

@@ -20,7 +20,7 @@
                                 <h:link
                                     outcome="#{reelerUiBean.path}/comments.xhtml">
                                     <f:param name="entryid" value="#{weblogEntryAuthorBean.weblogEntry.id}"/>                                          
-                                    <i class="fa fa-pencil-square-o"></i> Comments[#{weblogEntryAuthorBean.getComments().size()}]
+                                    <i class="fa fa-comments"></i> Comments[#{weblogEntryAuthorBean.getComments().size()}]
                                 </h:link>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                         <div class="panel panel-body">
                             <div >
                                 <ul>
-                                    <ui:repeat value="#{weblogEntryAuthorBean.getPendingEntries()}"
+                                    <ui:repeat value="#{weblogEntryAuthorBean.pendingEntries}"
                                                var="entry">
                                         <li>
                                             <h:link
@@ -57,7 +57,7 @@
                         <div class="panel panel-body">
                             <div >
                                 <ul class="list-unstyled">
-                                    <ui:repeat value="#{weblogEntryAuthorBean.getRecentDrafts()}"
+                                    <ui:repeat value="#{weblogEntryAuthorBean.recentDrafts}"
                                                var="entry">
                                         <li >
                                             <h:link
@@ -81,7 +81,7 @@
                         <div class="panel panel-body">
                             <div >
                                 <ul class="list-unstyled">
-                                    <ui:repeat value="#{weblogEntryAuthorBean.getRecentEntries()}"
+                                    <ui:repeat value="#{weblogEntryAuthorBean.recentEntries}"
                                                var="entry">
                                         <li>
                                             <h:link

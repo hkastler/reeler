@@ -15,7 +15,7 @@
 
     <ui:define name="pageContent">
         <form id="globalConfig" name="globalConfig" jsfc="h:form">
-            <ui:repeat value="#{runtimeConfigBean.runtimeConfigManager.runtimeConfigDefs.configDefs}"
+            <ui:repeat value="#{runtimeConfigBean.runtimeConfigDefs.configDefs}"
                        var="configDef">
                 <ui:repeat value="#{configDef.displayGroups}" var="displayGroup">                    
                     <h3>#{runtimeConfigBean.res.getString(displayGroup.key)}</h3>

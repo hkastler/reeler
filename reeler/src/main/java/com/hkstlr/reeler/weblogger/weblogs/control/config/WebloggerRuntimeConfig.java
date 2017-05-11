@@ -49,7 +49,7 @@ public final class WebloggerRuntimeConfig {
     private static Logger log = Logger.getLogger(WebloggerRuntimeConfig.class.getName());
     
     private static String RUNTIME_CONFIG = "/com/hkstlr/reeler/weblogger/control/config/runtime/runtimeConfigDefs.xml";
-    private static RuntimeConfigDefs configDefs = null;
+    private RuntimeConfigDefs configDefs = null;
     
     // special case for our context urls
     private static String relativeContextURL = null;
@@ -58,8 +58,10 @@ public final class WebloggerRuntimeConfig {
     @EJB
     RuntimeConfigManager runtimeConfigManager;
     
-    // prevent instantiations
-    private WebloggerRuntimeConfig() {}
+    
+    private WebloggerRuntimeConfig() {
+        // prevent instantiations
+    }
     
     
     /**

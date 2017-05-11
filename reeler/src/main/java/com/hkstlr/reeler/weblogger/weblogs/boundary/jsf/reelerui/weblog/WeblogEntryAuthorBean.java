@@ -28,10 +28,12 @@ import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Produces;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  *
@@ -235,6 +237,8 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         return statuses;
     }
     
+    @Produces
+    @Named
     public List<WeblogEntry> getRecentEntries(){
         
         WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
