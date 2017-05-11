@@ -113,7 +113,7 @@ public class CalendarPrinterBean {
         
         weblogDates = loadWeblogDates(dateString, weblog);
         
-        return calendarPrinter.calendarTable(weblogDates, incomingDate, path, handle);
+        return calendarPrinter.calendarTable(weblogDates, incomingDate, path, weblog.getHandle());
     }
     
 }
