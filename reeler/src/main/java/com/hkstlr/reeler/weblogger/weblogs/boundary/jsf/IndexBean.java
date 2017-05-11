@@ -18,6 +18,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +39,8 @@ public class IndexBean {
     Weblogger weblogger;
         
     private List<Weblog> weblogs;
+    
+    private List<WeblogEntry> pinnedToMain;
 
     public IndexBean() {
         //constructor
@@ -59,16 +62,20 @@ public class IndexBean {
     public void setWeblogs(List<Weblog> weblogs) {
         this.weblogs = weblogs;
     }
+
+    public List<WeblogEntry> getPinnedToMain() {
+        return pinnedToMain;
+    }
+
+    public void setPinnedToMain(List<WeblogEntry> pinnedToMain) {
+        this.pinnedToMain = pinnedToMain;
+    }
     
     public void setWeblogs() throws WebloggerException{
        
-       List<Weblog> blogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
-             
-       this.weblogs = blogs;
-    }
-    
-    
-    
-    
+       this.pinnedToMain = weblogger.getWeblogEntryManager().findByPinnedToMain();
+       this.weblogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
+       
+    }    
     
 }

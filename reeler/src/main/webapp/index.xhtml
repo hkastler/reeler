@@ -7,7 +7,15 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <!-- Page Content -->
     <ui:define name="content">
-        
+        <div class="panel" jsfc="h:panelGroup" rendered="#{indexBean.pinnedToMain.size() gt 0}" layout="block">
+            
+            <hr/>
+            <ui:repeat value="#{indexBean.pinnedToMain}" var="entry" varStatus="status">
+                <h:outputText value="#{entry.title}" escape="false"/>
+                <h:outputText value="#{entry.text}" escape="false"/>
+                <hr/>
+            </ui:repeat>
+        </div>    
        <div class="panel" jsfc="h:panelGroup" rendered="#{indexBean.weblogs.size() gt 0}" layout="block">
             <h2>Blogs</h2>
             <hr/>
