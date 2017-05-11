@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.plugins.entry.control.WeblogEntryPlugin;
-import com.hkstlr.reeler.weblogger.themes.entities.WeblogCustomTemplate;
+
 import com.hkstlr.reeler.weblogger.weblogs.control.LocaleFixer;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -238,8 +238,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @OneToMany(mappedBy = "weblog", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private List<WeblogBookmarkFolder> bookmarkFolders  = new ArrayList<WeblogBookmarkFolder>();
 
-    @OneToMany(mappedBy = "weblog")
-    private List<WeblogCustomTemplate> weblogCustomTemplates;
+    
 
     @OneToMany(mappedBy = "website", fetch = FetchType.LAZY)
     private List<WeblogEntry> weblogEntries;
@@ -507,13 +506,7 @@ public class Weblog extends AbstractEntity implements Serializable {
         this.bookmarkFolders = bookmarkFolders;
     }
 
-    public List<WeblogCustomTemplate> getWeblogCustomTemplates() {
-        return weblogCustomTemplates;
-    }
-
-    public void setWeblogCustomTemplates(List<WeblogCustomTemplate> weblogCustomTemplates) {
-        this.weblogCustomTemplates = weblogCustomTemplates;
-    }
+    
 
     public List<WeblogEntry> getWeblogEntries() {
         return weblogEntries;

@@ -59,9 +59,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTagAggregate;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
-import com.hkstlr.reeler.weblogger.themes.control.ComponentType;
-import com.hkstlr.reeler.weblogger.themes.entities.CustomTemplateRendition;
-import com.hkstlr.reeler.weblogger.themes.entities.WeblogTemplate;
+
 import java.util.HashMap;
 import java.util.logging.Level;
 import javax.ejb.EJB;
@@ -272,16 +270,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
             this.em.remove(autoPing);
         }
 
-        // remove associated templates
-        TypedQuery<WeblogTemplate> templateQuery = em.createNamedQuery(
-                "WeblogTemplate.getByWeblog", WeblogTemplate.class);
-        templateQuery.setParameter(1, weblog);
-        List<WeblogTemplate> templates = templateQuery.getResultList();
-
-        for (WeblogTemplate template : templates) {
-            this.em.remove(template);
-        }
-
+       
         // remove folders (including bookmarks)
         TypedQuery<WeblogBookmarkFolder> folderQuery = em.createNamedQuery(
                 "WeblogBookmarkFolder.getByWebsite", WeblogBookmarkFolder.class);
@@ -340,26 +329,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         em.merge(weblog);
     }
 
-    /**
-     * @see
-     * org.apache.roller.weblogger.business.WeblogManager#saveTemplate(WeblogTemplate)
-     */
-    public void saveTemplate(WeblogTemplate template) throws WebloggerException {
-        this.em.persist(template);
-
-        saveWeblog(template.getWeblog());
-    }
-
-    public void saveTemplateRendition(CustomTemplateRendition rendition) throws WebloggerException {
-        this.em.persist(rendition);
-        saveWeblog(rendition.getWeblogCustomTemplate().getWeblog());
-    }
-
-    public void removeTemplate(WeblogTemplate template) throws WebloggerException {
-        this.em.remove(template);
-        // update weblog last modified date.  date updated by saveWeblog()
-        saveWeblog(template.getWeblog());
-    }
+    
 
     public void addWeblog(Weblog newWeblog) throws WebloggerException {
         this.em.persist(newWeblog);
@@ -548,110 +518,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         return users;
     }
 
-    public WeblogTemplate getTemplate(String id) throws WebloggerException {
-        // Don't hit database for templates stored on disk
-        if (id != null && id.endsWith(".vm")) {
-            return null;
-        }
-
-        return (WeblogTemplate) em.find(WeblogTemplate.class, id);
-    }
-
-    /**
-     * Use JPA directly because Weblogger's Query API does too much allocation.
-     */
-    public WeblogTemplate getTemplateByLink(Weblog weblog, String templateLink)
-            throws WebloggerException {
-
-        if (weblog == null) {
-            throw new WebloggerException("userName is null");
-        }
-
-        if (templateLink == null) {
-            throw new WebloggerException("templateLink is null");
-        }
-
-        TypedQuery<WeblogTemplate> query = getNamedQuery("WeblogTemplate.getByWeblog&Link",
-                WeblogTemplate.class);
-        query.setParameter(1, weblog);
-        query.setParameter(2, templateLink);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            LOG.log(Level.WARNING, "getByWeblog&Link", e);
-            return null;
-        }
-    }
-
-    /**
-     * @see
-     * org.apache.roller.weblogger.business.WeblogManager#getTemplateByAction(Weblog,
-     * ComponentType)
-     */
-    public WeblogTemplate getTemplateByAction(Weblog weblog, ComponentType action)
-            throws WebloggerException {
-
-        if (weblog == null) {
-            throw new WebloggerException("weblog is null");
-        }
-
-        if (action == null) {
-            throw new WebloggerException("Action name is null");
-        }
-
-        TypedQuery<WeblogTemplate> query = getNamedQuery("WeblogTemplate.getByAction",
-                WeblogTemplate.class);
-        query.setParameter(1, weblog);
-        query.setParameter(2, action);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            LOG.log(Level.WARNING, "WeblogTemplate.getByAction", e);
-            return null;
-        }
-    }
-
-    /**
-     * @see
-     * org.apache.roller.weblogger.business.WeblogManager#getTemplateByName(Weblog,
-     * java.lang.String)
-     */
-    public WeblogTemplate getTemplateByName(Weblog weblog, String templateName)
-            throws WebloggerException {
-
-        if (weblog == null) {
-            throw new WebloggerException("weblog is null");
-        }
-
-        if (templateName == null) {
-            throw new WebloggerException("Template name is null");
-        }
-
-        TypedQuery<WeblogTemplate> query = getNamedQuery("WeblogTemplate.getByWeblog&Name",
-                WeblogTemplate.class);
-        query.setParameter(1, weblog);
-        query.setParameter(2, templateName);
-        try {
-            return query.getSingleResult();
-        } catch (NoResultException e) {
-            LOG.log(Level.WARNING, "WeblogTemplate.getByWeblog&Name", e);
-            return null;
-        }
-    }
-
-    /**
-     * @see
-     * org.apache.roller.weblogger.business.WeblogManager#getTemplates(Weblog)
-     */
-    public List<WeblogTemplate> getTemplates(Weblog weblog) throws WebloggerException {
-        if (weblog == null) {
-            throw new WebloggerException("weblog is null");
-        }
-        TypedQuery<WeblogTemplate> q = em.createNamedQuery(
-                "WeblogTemplate.getByWeblogOrderByName", WeblogTemplate.class);
-        q.setParameter(1, weblog);
-        return q.getResultList();
-    }
+    
 
     public Map<String, Long> getWeblogHandleLetterMap() throws WebloggerException {
         String lc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
