@@ -175,7 +175,7 @@ public class WeblogEntryBean {
         if(!moderated){
              this.weblogEntryComment.setStatus(WeblogEntryComment.ApprovalStatus.APPROVED);
         }
-        
+        weblogger.getPluginManager().applyCommentPlugins(weblogEntryComment, weblogEntryComment.getContent());
         weblogger.getWeblogEntryCommentManager().saveAndLoadComments(this.weblogEntryComment);
         
         this.commentIsPosted = true;

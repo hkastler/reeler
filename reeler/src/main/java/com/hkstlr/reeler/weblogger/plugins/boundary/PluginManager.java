@@ -34,7 +34,7 @@ public class PluginManager {
     static Map<String, Class> mPagePlugins = new ConcurrentHashMap<String, Class>();
 
     // Comment plugins
-    private List<WeblogEntryCommentPlugin> commentPlugins = new ArrayList<WeblogEntryCommentPlugin>();
+    private final List<WeblogEntryCommentPlugin> commentPlugins = new ArrayList<>();
 
     /**
      * Creates a new instance of PluginManagerImpl
@@ -55,7 +55,7 @@ public class PluginManager {
 
     public boolean hasPagePlugins() {
         log.fine("mPluginClasses.size(): " + mPagePlugins.size());
-        return (!mPagePlugins.isEmpty());
+        return !mPagePlugins.isEmpty();
     }
 
     /**
@@ -105,7 +105,7 @@ public class PluginManager {
     /**
      * @inheritDoc
      */
-    public String applyCommentPlugins(WeblogEntryComment comment, String text) {
+    public WeblogEntryComment applyCommentPlugins(WeblogEntryComment comment, String text) {
 
         if (comment == null || text == null) {
             throw new IllegalArgumentException("comment cannot be null");
@@ -119,11 +119,12 @@ public class PluginManager {
                         && comment.getPlugins().contains(plugin.getId())) {
                     log.fine("Invoking comment plugin " + plugin.getId());
                     content = plugin.render(comment, content);
+                    comment.setContent(content);
                 }
             }
         }
 
-        return content;
+        return comment;
     }
 
     /**

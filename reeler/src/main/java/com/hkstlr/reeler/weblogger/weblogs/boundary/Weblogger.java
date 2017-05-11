@@ -218,7 +218,7 @@ public class Weblogger {
     /**
      * Get PluginManager associated with this Weblogger instance.
      */
-    PluginManager getPluginManager() {
+    public PluginManager getPluginManager() {
         return pluginManager;
     }
 

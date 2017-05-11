@@ -61,10 +61,7 @@ public class HTMLSubsetPlugin extends WeblogEntryCommentPlugin {
         // only do this if comment is HTML
         if ("text/html".equals(comment.getContentType())) {
             
-            	        
-	        // escape html
-	        output = null;//escapeHtml4(output);
-	        
+            	  
 	        // just use old utilities method
 	        output = StringFixer.transformToHTMLSubset(output);
 	        

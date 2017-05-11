@@ -34,6 +34,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment.ApprovalS
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -45,6 +46,10 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class WeblogEntryCommentManager extends AbstractManager {
 
+    private static final Logger LOG = Logger.getLogger(WeblogEntryCommentManager.class.getName());
+
+    
+    
     @PersistenceContext
     protected EntityManager em;
     
@@ -52,6 +57,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
         super(WeblogEntryComment.class);
     }
 
+    @Override
     protected EntityManager getEntityManager() {
         return em;
     }    
@@ -78,7 +84,10 @@ public class WeblogEntryCommentManager extends AbstractManager {
     }
     
     public List<WeblogEntryComment> getComments(WeblogEntry entry) {
-        Query query = em.createNamedQuery("WeblogEntryComment.findByWeblogEntry", WeblogEntryComment.class);
+        Query query = em.createQuery("SELECT c "
+                + "FROM WeblogEntryComment c "
+                + "WHERE c.weblogEntry = :weblogEntry "
+                + "ORDER BY c.postTime DESC", WeblogEntryComment.class);
         query.setParameter("weblogEntry", entry);
         List<WeblogEntryComment> comments = query.getResultList();
         if (comments == null) {
@@ -103,7 +112,7 @@ public class WeblogEntryCommentManager extends AbstractManager {
      */
     public List<WeblogEntryComment> getComments(WeblogEntryCommentSearchCriteria csc, int[]range) {
         
-        List<Object> params = new ArrayList<Object>();
+        List<Object> params = new ArrayList<>();
         int size = 0;
         StringBuilder queryString = new StringBuilder();
         queryString.append("SELECT c FROM WeblogEntryComment c ");
@@ -195,6 +204,11 @@ public class WeblogEntryCommentManager extends AbstractManager {
         q.setParameter(1, website);
        
         return q.getResultList().get(0);
+    }
+    
+    public void save(WeblogEntryComment comment){
+        LOG.info("saving comment:" + comment.getContent());
+        em.merge(comment);
     }
 
 }

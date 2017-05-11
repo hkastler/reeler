@@ -113,13 +113,18 @@ public class WeblogEntryCommentBean extends PageBean {
     public void setSpamAndApproval(WeblogEntryCommentVisitor visitedComment) {
 
         visitedComment.setSpamAndApproval();
+        log.info("saving comment:" + visitedComment.getWeblogEntryComment().getContent());
+        log.info("saving comment:" + visitedComment.getWeblogEntryComment().getApproved());
+        weblogger.getWeblogEntryCommentManager().save(visitedComment.getWeblogEntryComment());
+        weblogger.getWeblogEntryCommentManager().getComments(
+                visitedComment.getWeblogEntryComment().getWeblogEntry());
         if(visitedComment.getWeblogEntryComment().getSpam()){
            FacesMessageManager.addErrorMessage("Spam");           
         }
         if(visitedComment.getWeblogEntryComment().getApproved()){
            FacesMessageManager.addSuccessMessage("isApprovedForm", "Approved");
         }
-        weblogger.getWeblogEntryCommentManager().save(visitedComment.getWeblogEntryComment());
+       
         
     }
     

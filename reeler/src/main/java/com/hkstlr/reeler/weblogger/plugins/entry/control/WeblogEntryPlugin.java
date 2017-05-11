@@ -53,6 +53,11 @@ public class WeblogEntryPlugin extends AbstractPlugin<Object> implements PluginI
         return null;//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public void init(Object type) throws WebloggerException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 
 
 }

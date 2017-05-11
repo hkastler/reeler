@@ -79,8 +79,15 @@ public class WeblogBean extends PageBean {
         }
         
         try {
-            this.weblog = getWeblogByHandle(handle);
+            //null can be passed here
+            this.weblog = getWeblogByHandle(this.handle);
+            
             if(this.weblog != null){
+                
+                if(this.handle == null){
+                    setHandle(weblog.getHandle());
+                }
+                
                 int numberOfEntries = getEntryCount(weblog);
 
                 if (pageSize == null) {

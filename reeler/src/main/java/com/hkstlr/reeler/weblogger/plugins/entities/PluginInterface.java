@@ -37,9 +37,9 @@ public interface PluginInterface<T> {
     /**
      * Give plugin a chance to initialize and add objects the rendering model.
      *
-     * @param weblog     Weblog being processed
+     * @param type
      */
-    void init(Weblog weblog) throws WebloggerException;
+    void init(T type) throws WebloggerException;
 
     /**
      * Apply plugin to the specified text.
