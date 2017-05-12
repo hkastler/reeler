@@ -53,6 +53,7 @@ public class RuntimeConfigDefsParser {
      * Creates a new instance of RuntimeConfigDefsParser
      */
     public RuntimeConfigDefsParser() {
+        //constructor
     }
 
     /**

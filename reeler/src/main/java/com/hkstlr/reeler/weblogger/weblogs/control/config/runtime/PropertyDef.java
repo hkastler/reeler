@@ -52,7 +52,9 @@ public class PropertyDef {
     
     
     /** Creates a new instance of PropertyDef */
-    public PropertyDef() {}
+    public PropertyDef() {
+        //constructor
+    }
 
     @Override
     public String toString() {

@@ -221,12 +221,14 @@ public class UserManager extends AbstractManager<User> {
      * Grant role to user.
      */
     public void grantRole(String roleName, User user){
+        //TODO: implementation
     }
 
     /**
      * Revoke role from user.
      */
     public void revokeRole(String roleName, User user){
+        //TODO: implementation
     }
 
     /**

@@ -33,6 +33,7 @@ public class WeblogBookmarkBean {
     private List<WeblogBookmark> bookmarks = new ArrayList<>();
 
     public WeblogBookmarkBean() {
+        //constructor
     }
     
     @PostConstruct

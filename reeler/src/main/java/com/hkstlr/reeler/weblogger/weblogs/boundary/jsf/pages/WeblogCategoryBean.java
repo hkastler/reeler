@@ -21,6 +21,7 @@ public class WeblogCategoryBean {
     private WeblogCategory weblogCategory;
 
     public WeblogCategoryBean() {
+        //constructor
     }
 
     public WeblogCategory getWeblogCategory() {
@@ -36,10 +37,6 @@ public class WeblogCategoryBean {
     public void action(WeblogCategory weblogCategory, String page) throws WebloggerException {
         this.weblogCategory = weblogCategory;
         
-    }
-    
-    public void categoryViewAction() {
-
     }
 
 }

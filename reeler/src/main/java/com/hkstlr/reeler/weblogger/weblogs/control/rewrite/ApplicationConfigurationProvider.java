@@ -18,32 +18,32 @@ import org.ocpsoft.rewrite.servlet.config.rule.Join;
 import org.ocpsoft.rewrite.servlet.config.rule.TrailingSlash;
 
 @RewriteConfiguration
-public class ApplicationConfigurationProvider extends HttpConfigurationProvider
-{
-   @Override
-   public Configuration getConfiguration(ServletContext context){
-      return ConfigurationBuilder.begin()
-        .addRule().perform(Log.message(Level.DEBUG, "rewrite in the app"))
-        
-        // Join a URL to an internal resource that accepts a parameter
-        .addRule(Join.path("/").to("/index.xhtml"))
-        .addRule(Join.path("/{handle}").to("/weblogger/pages/weblog.xhtml"))
-        .addRule(Join.path("/{handle}/").to("/weblogger/pages/weblog.xhtml"))
-        .addRule(Join.path("/{handle}/page/{page}/pageSize/{pageSize}").to("/weblogger/pages/weblog.xhtml"))
-        .addRule(Join.path("/{handle}/entry/{anchor}").to("/weblogger/pages/entry.xhtml"))
-        .addRule(Join.path("/{handle}/entry-m/{anchor}").to("/weblogger/pages/entryMustache.xhtml"))       
-        .addRule(Join.path("/{handle}/category/{categoryName}").to("/weblogger/pages/category.xhtml"))
-        .addRule(Join.path("/{handle}/search").to("/weblogger/pages/search.xhtml"))
-        .addRule(Join.path("/{handle}/date/{dateString}").to("/weblogger/pages/date.xhtml"))
-        .addRule(TrailingSlash.append())
-        .when(Path.matches("/{x}"))
-        .where("x").matches("^(?!.*\\.xhtml.*).*$");
-   }
+public class ApplicationConfigurationProvider extends HttpConfigurationProvider {
 
-   @Override
-   public int priority(){
-      return 0;
-   }
+    private static final String WEBLOG_PATH = "/weblogger/pages/weblog.xhtml";
+    
+    @Override
+    public Configuration getConfiguration(ServletContext context) {
+        return ConfigurationBuilder.begin()
+                .addRule().perform(Log.message(Level.DEBUG, "rewrite in the app"))
+                // Join a URL to an internal resource that accepts a parameter
+                .addRule(Join.path("/").to("/index.xhtml"))
+                .addRule(Join.path("/{handle}").to(WEBLOG_PATH))
+                .addRule(Join.path("/{handle}/").to(WEBLOG_PATH))
+                .addRule(Join.path("/{handle}/page/{page}/pageSize/{pageSize}").to(WEBLOG_PATH))
+                .addRule(Join.path("/{handle}/entry/{anchor}").to("/weblogger/pages/entry.xhtml"))
+                .addRule(Join.path("/{handle}/entry-m/{anchor}").to("/weblogger/pages/entryMustache.xhtml"))
+                .addRule(Join.path("/{handle}/category/{categoryName}").to("/weblogger/pages/category.xhtml"))
+                .addRule(Join.path("/{handle}/search").to("/weblogger/pages/search.xhtml"))
+                .addRule(Join.path("/{handle}/date/{dateString}").to("/weblogger/pages/date.xhtml"))
+                .addRule(TrailingSlash.append())
+                .when(Path.matches("/{x}"))
+                .where("x").matches("^(?!.*\\.xhtml.*).*$");
+    }
 
-   
+    @Override
+    public int priority() {
+        return 0;
+    }
+
 }

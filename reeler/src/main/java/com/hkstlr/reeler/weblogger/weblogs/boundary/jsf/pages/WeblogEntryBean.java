@@ -18,10 +18,12 @@ import javax.inject.Inject;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -66,10 +68,11 @@ public class WeblogEntryBean {
     private Calendar allowCommentsCal;
 
     public WeblogEntryBean() {
+        //constructor
     }
 
     @PostConstruct
-    private void init() {
+    protected void init() {
         try {
             this.weblogEntry = getEntryByHandleAndAnchor(handle, anchor);
             
@@ -157,10 +160,15 @@ public class WeblogEntryBean {
     }
 
     public List<WeblogEntryComment> getComments(WeblogEntry entry) {
-        List<WeblogEntryComment> _comments;
+        List<WeblogEntryComment> _comments = new LinkedList<>();
 
-        _comments = weblogger.getWeblogEntryCommentManager()
+        List<WeblogEntryComment> comments = weblogger.getWeblogEntryCommentManager()
                 .getCommentsByWeblogEntryAndStatus(entry, WeblogEntryComment.ApprovalStatus.APPROVED);
+        comments.stream().map((comment) -> 
+                weblogger.getPluginManager().applyCommentPlugins(comment,comment.getContent()))
+                .forEachOrdered((comment) -> {
+                    _comments.add(comment);
+                });
 
         return _comments;
     }

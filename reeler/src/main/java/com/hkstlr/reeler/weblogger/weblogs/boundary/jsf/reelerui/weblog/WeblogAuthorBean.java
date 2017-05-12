@@ -38,26 +38,18 @@ public class WeblogAuthorBean implements Serializable {
     @Inject
     private ReelerUIBean reelerUiBean;
     
-    //@ManagedProperty(value = "#{}")
-    //private String selectedWeblogId;
-    
-     
     @Inject
     private Weblogger weblogger;
-    
     
     private static Logger log = Logger.getLogger(WeblogAuthorBean.class.getName());
 
     public WeblogAuthorBean() {
+        //constructor
     }
 
     @PostConstruct
-    private void init() {
-        log.info("current Weblog: " + weblog.getName());
+    protected void init() {
         
-        
-        //set the default categories
-        //this.weblog.setWeblogCategories(wcm.findAll());
     }
 
     public Weblog getWeblog() {
@@ -76,36 +68,16 @@ public class WeblogAuthorBean implements Serializable {
         this.reelerUiBean = reelerUiBean;
     }
 
-    /* public String getSelectedWeblogId() {
-    return selectedWeblogId;
-    }
-    
-    public void setSelectedWeblogId(String selectedWeblogId) {
-    this.selectedWeblogId = selectedWeblogId;
-    }*/
-    
-    
-       
 
     @Transactional(Transactional.TxType.MANDATORY)
     public void createWeblog() throws WebloggerException {
         
-        //set in addWeblogContents?
-        //WeblogPermission wp = new WeblogPermission(weblog, reelerUiBean.getUser(), "admin");
-        //wp.setPending(Boolean.FALSE);
-        //weblogger.getWeblogPermissionManager().save(wp);
         weblogger.getWeblogManager().addWeblog(weblog,reelerUiBean.getUser());
     }
     
     @Transactional(Transactional.TxType.MANDATORY)
     public void updateWeblog() throws WebloggerException {
         
-        //set in addWeblogContents?
-        //WeblogPermission wp = new WeblogPermission(weblog, reelerUiBean.getUser(), "admin");
-        //wp.setPending(Boolean.FALSE);
-        //weblogger.getWeblogPermissionManager().save(wp);
-        log.info("updating weblog");
-        log.info("weblog:" + weblog.getTagline());
         weblogger.getWeblogManager().saveWeblog(weblog);
         
         FacesMessageManager.addSuccessMessage("editWeblog", "Weblog Updated");
@@ -115,35 +87,6 @@ public class WeblogAuthorBean implements Serializable {
     public void configViewAction(){
         log.info("configViewAction here");
         log.info("currentWeblog:" + weblog.getName());       
-    }
-    
-     //@FacesConverter(forClass = Weblog.class)
-    public static class WeblogConverter implements Converter {
-
-       @Override
-    public Object getAsObject(FacesContext context, UIComponent component, String value) {
-       
-        try {
-            String id = value;
-            //.find apparently only works with numeric fields
-            log.info("id:" + id);
-            Weblog web = new Weblog();//weblogger.getWeblogManager().findById(id);//session.load(CatalogValue .class, id);
-            log.info("returned Weblog:");
-            return web;
-        } catch (Exception ex) {
-            log.info("yes it's a fail");
-            String message = ex.getMessage();
-            log.log(Level.INFO,"reason:",ex);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_FATAL, message, message));
-        }
-
-        return null;
-    }
-
-    @Override
-    public String getAsString(FacesContext context, UIComponent component, Object value) {
-         return ((Weblog) value).getId();
-    }
-
-    }
+    }    
+   
 }

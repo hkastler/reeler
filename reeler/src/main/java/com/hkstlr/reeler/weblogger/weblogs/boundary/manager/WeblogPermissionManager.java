@@ -44,11 +44,14 @@ import javax.persistence.TypedQuery;
 public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
 
     private static final Logger LOG = Logger.getLogger(WeblogPermissionManager.class.getName());
+    
+    private static final String NOT_FOUND = "ERROR: permission not found";
 
     @PersistenceContext
     protected EntityManager em;
 
     public WeblogPermissionManager() {
+        //constructor
     }
 
     public WeblogPermissionManager(Class<WeblogPermission> entityClass) {
@@ -177,7 +180,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
 
         } catch (NoResultException ignored) {
             LOG.log(Level.FINE, null, ignored);
-            throw new WebloggerException("ERROR: permission not found");
+            throw new WebloggerException(NOT_FOUND);
         }
         // set pending to false
         existingPerm.setPending(false);
@@ -195,7 +198,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             existingPerm = q.getSingleResult();
         } catch (NoResultException ignored) {
             LOG.log(Level.FINE, null, ignored);
-            throw new WebloggerException("ERROR: permission not found");
+            throw new WebloggerException(NOT_FOUND);
         }
         // remove permission
         this.em.remove(existingPerm);
@@ -212,7 +215,7 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
             oldperm = q.getSingleResult();
         } catch (NoResultException ignored) {
             LOG.log(Level.FINE, null, ignored);
-            throw new WebloggerException("ERROR: permission not found");
+            throw new WebloggerException(NOT_FOUND);
         }
 
         // remove actions specified in perm argument

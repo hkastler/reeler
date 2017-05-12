@@ -220,7 +220,7 @@ public final class WebloggerRuntimeConfig {
      *
      * This property is *not* persisted in any way.
      */
-    public void setRelativeContextURL(String url) {
+    public static void setRelativeContextURL(String url) {
         relativeContextURL = url;
     }
     

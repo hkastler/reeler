@@ -42,6 +42,10 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
     public static final String POST = "post";
     public static final String ADMIN = "admin";
     protected static final List<String> ALL_ACTIONS = new ArrayList<String>();
+    public static final String USER_WEBLOG_PERMISSION_NAME_PREFIX 
+            = "WeblogPermission user: ";
+    public static final String PERMISSION_OBJECT_TYPE =
+            com.hkstlr.reeler.weblogger.weblogs.entities.Weblog.class.getSimpleName();
 
     protected static final long serialVersionUID = 1L;
 
@@ -52,7 +56,7 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
     }
 
     public WeblogPermission() {
-        super("Weblog");
+        super(PERMISSION_OBJECT_TYPE);
     }
     
     public WeblogPermission(String name) {
@@ -60,60 +64,37 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
     }
 
     public WeblogPermission(Weblog weblog, User user, String actions) {
-        super("WeblogPermission user: " + user.getUserName());
+        super(USER_WEBLOG_PERMISSION_NAME_PREFIX + user.getUserName());
         super.setActions(actions);
-        super.setObjectType("Weblog");
+        super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
     }
 
     public WeblogPermission(Weblog weblog, User user, List<String> actions) {
-        super("WeblogPermission user: " + user.getUserName());
+        super(USER_WEBLOG_PERMISSION_NAME_PREFIX + user.getUserName());
         super.setActionsAsList(actions);
-        super.setObjectType("Weblog");
+        super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
     }
      public WeblogPermission(Weblog weblog, User user, List<String> actions, boolean pending) {
-        super("WeblogPermission user: " + user.getUserName());
+        super(USER_WEBLOG_PERMISSION_NAME_PREFIX + user.getUserName());
         super.setActionsAsList(actions);
-        super.setObjectType("Weblog");
+        super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
         super.setPending(pending);
     }
      
     public WeblogPermission(Weblog weblog, List<String> actions) {
-        super("WeblogPermission user: N/A");
+        super(USER_WEBLOG_PERMISSION_NAME_PREFIX + "N/A");
         super.setActionsAsList(actions);
-        super.setObjectType("Weblog");
+        super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
     } 
     
-    public List<WeblogPermission> getWeblogPermissions(Weblog weblog) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void revokeWeblogPermission(Weblog weblog, User user, List<String> allActions) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void grantWeblogPermission(Weblog newWeblog, String creator, List<String> actions) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public List<WeblogPermission> getWeblogPermissions(User user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    public void addActions(WeblogPermission perm) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
+      
     public static List<String> getAllActions(){
         return ALL_ACTIONS;
     }

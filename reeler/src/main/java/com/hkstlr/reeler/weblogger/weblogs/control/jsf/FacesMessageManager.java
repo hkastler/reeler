@@ -6,9 +6,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.control.jsf;
 
 import java.util.List;
-import java.util.logging.Logger;
 import javax.faces.application.FacesMessage;
-import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 /**
@@ -17,7 +15,8 @@ import javax.faces.context.FacesContext;
  */
 public class FacesMessageManager {
     
-    public FacesMessageManager() {
+    private FacesMessageManager() {
+        //constructor
     }
     
     public static void addErrorMessage(Exception ex, String defaultMsg) {

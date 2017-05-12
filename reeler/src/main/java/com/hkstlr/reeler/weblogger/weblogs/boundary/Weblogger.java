@@ -80,8 +80,7 @@ public class Weblogger {
 
     //@EJB
     //private FileContentManager fileContentManager;
-    //@EJB
-    //private ThemeManager themeManager;
+    
 
     @EJB
     private PluginManager pluginManager;
@@ -97,7 +96,7 @@ public class Weblogger {
     private String buildUser;
 
     public Weblogger() {
-
+        //constructor
     }
 
     /**
