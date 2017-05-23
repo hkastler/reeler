@@ -26,7 +26,6 @@ public class CalendarPrinter {
 
     private Logger log = Logger.getLogger(CalendarPrinter.class.getName());
 
-    //Date now = new Date();
     private Calendar calendar;
 
     Date now = new Date();
@@ -44,12 +43,8 @@ public class CalendarPrinter {
     String[] dayNames = symbols.getShortWeekdays();
 
     public CalendarPrinter() {
-        //calendar = new GregorianCalendar(2017, Calendar.MARCH, 1);
-    }
-
-    public CalendarPrinter(int year, int month, int day) {
-        //calendar = new GregorianCalendar(year, month, day);
-    }
+        //calendar 
+    }    
 
     @PostConstruct
     public void init() {
@@ -99,14 +94,14 @@ public class CalendarPrinter {
                 + "<i class=\"fa fa-arrow-{3}\"></i></a>";
         
         String formatted = format(template, args);
-        log.info(formatted);
+        
         return formatted;
     }
     private String calDateTemplate(Object[] args) {
         String template = "<a href=\"{0}/{1}/date/{2}\">";
         
         String formatted = format(template, args);
-        log.info(formatted);
+        
         return formatted;
     }
 

@@ -182,8 +182,8 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateCreated;
 
-    @Size(max = 2147483647)
-    @Column(name = "blacklist", length = 2147483647)
+    @Size
+    @Column(name = "blacklist")
     private String blacklist;
 
     @Basic(optional = false)
@@ -228,8 +228,8 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "icon", length = 255)
     private String iconPath;
 
-    @Size(max = 2147483647)
-    @Column(name = "analyticscode", length = 2147483647)
+    @Size
+    @Column(name = "analyticscode")
     private String analyticsCode;
 
     @OneToMany(mappedBy = "weblog", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)

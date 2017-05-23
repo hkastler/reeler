@@ -78,7 +78,7 @@ public class TestEntityReflector {
         //if the field is not transient, and does not have the OneToMany annotation then it must have 
         //either the @Column or @JoinColumn annotation
         for (Field f : classFields) {
-            //log.info("field:" + f.getName());
+            log.info("field:" + f.getName());
             boolean isTransient = Modifier.isTransient(f.getModifiers());
             if (!isTransient) {
                 Annotation columnAnno = f.getDeclaredAnnotation(javax.persistence.Column.class);

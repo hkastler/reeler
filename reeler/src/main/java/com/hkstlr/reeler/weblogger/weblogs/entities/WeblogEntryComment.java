@@ -76,12 +76,12 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     @Column(name = "email", length = 255)
     private String email;
 
-    @Size(max = 255)
-    @Column(name = "url", length = 255)
+    @Size
+    @Column(name = "url")
     private String url;
-
-    @Size(max = 2147483647)
-    @Column(name = "content", length = 2147483647)
+    
+    @Size
+    @Column(name = "content")
     private String content;
 
     @Basic(optional = false)

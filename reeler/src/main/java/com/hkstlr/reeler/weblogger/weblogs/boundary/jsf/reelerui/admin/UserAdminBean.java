@@ -5,7 +5,6 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
 
-import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;

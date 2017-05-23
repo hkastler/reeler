@@ -48,6 +48,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 import javax.json.JsonObject;
 import javax.persistence.Cacheable;
+import javax.persistence.Lob;
 import javax.persistence.UniqueConstraint;
 /**
  *
@@ -124,8 +125,9 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
 
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.text.NotNull}")
-    @Size(min = 1, max = 2147483647, message = "{WeblogEntry.text.NotNull}")
-    @Column(name = "text", nullable = false, length = 2147483647)
+    @Size
+    @Lob
+    @Column(name = "text", nullable = false)
     private String text;
 
     @Basic
@@ -184,8 +186,8 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Column(name = "status", nullable = false, length = 20)
     private String status = "Not Saved";
 
-    @Size(max = 2147483647)
-    @Column(name = "summary", length = 2147483647)
+    @Size
+    @Column(name = "summary")
     private String summary;
 
     @Size(max = 48)
@@ -196,8 +198,8 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Column(name = "content_src", length = 255)
     private String contentSrc;
 
-    @Size(max = 255)
-    @Column(name = "search_description", length = 255)
+    @Size
+    @Column(name = "search_description")
     private String searchDescription;
 
     @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, updatable = true, insertable = true)

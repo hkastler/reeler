@@ -52,8 +52,8 @@ public class WeblogEntryAttribute implements Serializable {
     
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 2147483647)
-    @Column(name = "value", nullable = false, length = 2147483647)
+    @Size(min = 1)
+    @Column(name = "value", nullable = false)
     private String value;
     
     @JoinColumn(name = "entryid", referencedColumnName = "id", nullable = false)

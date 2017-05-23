@@ -8,7 +8,6 @@ package com.hkstlr.reeler.weblogger.users.entities;
 import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import javax.json.Json;
@@ -49,10 +48,9 @@ public class UserRole extends AbstractEntity implements Serializable {
     @Column(name = "rolename", nullable = false, length = 255)
     private String roleName;
 
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "username", nullable = false, length = 255)
+    @Basic
+    @Size(max = 255)
+    @Column(name = "username",length = 255)
     private String userName;
 
     public UserRole() {

@@ -7,28 +7,14 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <!-- Page Content -->
     <ui:define name="content">
-        <div class="panel" jsfc="h:panelGroup" rendered="#{indexBean.pinnedToMain.size() gt 0}" layout="block">
-            
-            <hr/>
-            <ui:repeat value="#{indexBean.pinnedToMain}" var="entry" varStatus="status">
-                <h:outputText value="#{entry.title}" escape="false"/>
-                <h:outputText value="#{entry.text}" escape="false"/>
-                <hr/>
-            </ui:repeat>
-        </div>    
-       <div class="panel" jsfc="h:panelGroup" rendered="#{indexBean.weblogs.size() gt 0}" layout="block">
-            <h2>Blogs</h2>
-            <hr/>
-            <ui:repeat value="#{indexBean.weblogs}" var="weblog" varStatus="status">
-                <!-- handle -->
-                <h1 class="mt-4">
-                    <a href="#{request.contextPath}/#{weblog.handle}/">
-                        <h:outputText value="#{weblog.name}" />
-                    </a>
-                </h1>
-                <hr/>
-            </ui:repeat>
-        </div>       
+        
+        <ui:include src="weblogger/reeler-ui/setup/index.xhtml"/>
+        
+        <ui:include src="weblogger/pages/pinnedToMain.xhtml"
+                    rendered="#{indexBean.pinnedToMain.size() gt 0}"/>
+        
+        <ui:include src="weblogger/pages/bloglist.xhtml"                    
+                    rendered="#{indexBean.weblogs.size() gt 0}" />
     
     </ui:define>
     <!-- /.container -->

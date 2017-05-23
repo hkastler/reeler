@@ -33,7 +33,14 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.RuntimeConfigProperty;
 import com.hkstlr.reeler.app.control.AppConstants;
 import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.PostConstruct;
+import javax.ejb.ConcurrencyManagement;
 import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
+import javax.inject.Named;
 
 
 /**
@@ -44,23 +51,60 @@ import javax.ejb.EJB;
  * 
  * We also provide some methods for converting to different data types.
  */
-public final class WebloggerRuntimeConfig {
+
+@Named
+@Singleton
+@Startup
+@ConcurrencyManagement
+public class WebloggerRuntimeConfig {
     
-    private static Logger log = Logger.getLogger(WebloggerRuntimeConfig.class.getName());
+    private static final Logger LOG = Logger.getLogger(WebloggerRuntimeConfig.class.getName());
     
-    private static String RUNTIME_CONFIG = "/com/hkstlr/reeler/weblogger/control/config/runtime/runtimeConfigDefs.xml";
-    private RuntimeConfigDefs configDefs = null;
+    private static final String RUNTIME_CONFIG = "/com/hkstlr/reeler/weblogger/control/config/runtime/runtimeConfigDefs.xml";
+    private RuntimeConfigDefs configDefs;
     
     // special case for our context urls
-    private static String relativeContextURL = null;
-    private static String absoluteContextURL = null;
+    private static String relativeContextURL;
+    private static String absoluteContextURL;
+    private Map<String, String> props = new HashMap();
     
     @EJB
     RuntimeConfigManager runtimeConfigManager;
     
     
-    private WebloggerRuntimeConfig() {
+    protected WebloggerRuntimeConfig() {
         // prevent instantiations
+    }
+    
+    @PostConstruct
+    protected void init(){
+        LOG.info("init");
+        if(this.props.isEmpty()) {
+            this.props = runtimeConfigManager.getProperties();
+            if(this.props.isEmpty()){
+                LOG.info("loading from xml config file on first time run");
+                LOG.info(getRuntimeConfigDefsAsString());
+                configDefs = getRuntimeConfigDefs();
+                configDefs.getConfigDefs().forEach((cd) -> {
+                    cd.getDisplayGroups().forEach((dg) -> {
+                       dg.getPropertyDefs().forEach((prop) -> {
+                           LOG.info(prop.getName());
+                           props.put(prop.getName(), prop.getDefaultValue());
+                       });
+                    });
+                });
+                runtimeConfigManager.saveProperties(props);
+
+            }
+        } 
+    }
+
+    public Map<String, String> getProps() {
+        return props;
+    }
+
+    public void setProps(Map<String, String> props) {
+        this.props = props;
     }
     
     
@@ -81,10 +125,10 @@ public final class WebloggerRuntimeConfig {
                 value = prop.getValue();
             }
         } catch(Exception e) {
-            log.log(Level.WARNING,"Trouble accessing property: "+name , e);
+            LOG.log(Level.WARNING,"Trouble accessing property: "+name , e);
         }
         
-        log.fine("fetched property ["+name+"="+value+"]");
+        LOG.fine("fetched property ["+name+"="+value+"]");
 
         return value;
     }
@@ -122,7 +166,7 @@ public final class WebloggerRuntimeConfig {
         try {
             intval = Integer.parseInt(value);
         } catch(Exception e) {
-            log.log(Level.FINE,"Trouble converting to int: "+name, e);
+            LOG.log(Level.FINE,"Trouble converting to int: "+name, e);
         }
         
         return intval;
@@ -143,7 +187,7 @@ public final class WebloggerRuntimeConfig {
                 
             } catch(Exception e) {
                 // error while parsing :(
-                log.log(Level.SEVERE,"Error parsing runtime config defs", e);
+                LOG.log(Level.SEVERE,"Error parsing runtime config defs", e);
             }
             
         }
@@ -162,7 +206,7 @@ public final class WebloggerRuntimeConfig {
      */
     public String getRuntimeConfigDefsAsString() {
         
-        log.fine("Trying to load runtime config defs file");
+        LOG.fine("Trying to load runtime config defs file");
         
         try {
             InputStreamReader reader =
@@ -179,7 +223,7 @@ public final class WebloggerRuntimeConfig {
             
             return configString.toString();
         } catch(Exception e) {
-            log.log(Level.SEVERE,"Error loading runtime config defs file", e);
+            LOG.log(Level.SEVERE,"Error loading runtime config defs file", e);
         }
         
         return StringPool.BLANK;

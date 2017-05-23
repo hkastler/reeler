@@ -10,99 +10,15 @@
 
 
 
-    <ui:composition template="/WEB-INF/weblogger/templates/pages/defaultTemplate.xhtml">
+    
 
         <ui:define name="title">Login</ui:define>
 
         <ui:define name="content">
-            <div class="row">
-                <div class="col-lg-12"></div>
-            </div>
-            <div class="row">
-                <div class="col-lg-3"></div>
-                <div class="col-lg-6">
-                    <div class="panel panel-primary">
-
-                        <div class="panel-heading panel-title panel-primary">
-                            <i class="glyphicon glyphicon-log-in"></i>Sign In
-                        </div>
-
-
-                        <div class="panel-body">
-
-                            <h:form id="login" class="form-horizontal" role="form">
-                                <h:messages style="color: red"
-                                            layout="table"
-                                            globalOnly="false"/>
-
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <label for="username" class="control-label">Username</label>
-                                        <div>
-                                            <input type="text"
-                                                   jsfc="h:inputText"
-                                                   id="username"
-                                                   name="username"
-                                                   binding="#{username}"
-                                                   value="#{loginBean.username}"
-                                                   class="form-control"
-                                                   required="true"
-                                                   requiredMessage="Username is required"
-                                                   ps:required="true"
-                                                   ps:requiredMessage="Username is required"
-
-                                                   />
-
-
-                                        </div>
-                                    </div>
-                                </div>  
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <label for="password" class="control-label">Password</label>
-                                        <div>
-                                            <h:inputSecret id="password"                                                   
-                                                           class="form-control"
-                                                           value="#{loginBean.password}"
-                                                           required="true"
-                                                           binding="#{password}"
-                                                           requiredMessage="Password is required"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="btn-group">
-                                    <h:commandButton id="submit"
-                                                     class="btn btn-primary"
-                                                     value="Sign In"
-                                                     action="#{loginBean.validateUser}"
-                                                     />
-                                </div>
-
-
-
-                            </h:form>
-                        </div>
-
-                        <div class="panel-footer">
-                            <h:link outcome="/weblogger/login/reset-password">Forgot your password?</h:link>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3"></div>
-            </div>
+            <ui:include src="loginForm.xhtml"/>
         </ui:define>
-        <ui:define name="postBody">
-            <script>
-
-                $(document.getElementById("login:username")).focus(function () {
-
-
-                });
-
-            </script>
-
-        </ui:define>
-    </ui:composition>
+        
+    
 
     <!-- /.container -->
 </ui:composition>

@@ -37,8 +37,8 @@ public class RuntimeConfigProperty implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    @Size(max = 2147483647)
-    @Column(name = "value", length = 2147483647)
+    
+    @Column(name = "value")
     private String value;
 
     public RuntimeConfigProperty() {

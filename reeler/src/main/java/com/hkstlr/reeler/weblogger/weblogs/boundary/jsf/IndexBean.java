@@ -48,10 +48,16 @@ public class IndexBean {
     
     @PostConstruct
     protected void init(){
+        
         try {
             setWeblogs();
         } catch (WebloggerException ex) {
             Logger.getLogger(IndexBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if(weblogs.isEmpty()){
+            if(needsSetup()){
+                
+            }
         }
     }
 
@@ -76,6 +82,17 @@ public class IndexBean {
        this.pinnedToMain = weblogger.getWeblogEntryManager().findByPinnedToMain();
        this.weblogs = weblogger.getWeblogManager().getWeblogs(Boolean.TRUE, Boolean.TRUE, null, null, 0, 0);
        
-    }    
+    }
+    
+    public boolean needsSetup(){
+        
+       boolean needsSetup = false; 
+       long userCount = weblogger.getUserManager().getUserCount();
+       if(userCount == 0){
+           needsSetup = true;
+       }
+        
+       return needsSetup; 
+    }
     
 }

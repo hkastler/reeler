@@ -1,0 +1,18 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <div class="panel" jsfc="h:panelGroup" rendered="#{indexBean.pinnedToMain.size() gt 0}" layout="block">
+
+        <hr/>
+        <ui:repeat value="#{indexBean.pinnedToMain}" var="entry" varStatus="status">
+            <h:outputText value="#{entry.title}" escape="false"/>
+            <h:outputText value="#{entry.text}" escape="false"/>
+            <hr/>
+        </ui:repeat>
+    </div>
+</ui:composition>
+

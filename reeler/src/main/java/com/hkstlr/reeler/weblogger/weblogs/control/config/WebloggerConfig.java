@@ -47,7 +47,6 @@ public class WebloggerConfig {
 
     private static final String DEFAULT_CONFIG = "/com/hkstlr/reeler/app/control/config/reeler.properties";
     private static final String CUSTOM_CONFIG = "/reeler-custom.properties";
-    private static final String JUNIT_CONFIG = "/roller-junit.properties";
     private static final String CUSTOM_JVM_PARAM = "roller.custom.config";
     private static File CUSTOM_CONFIG_FILE = null;
 
@@ -55,7 +54,7 @@ public class WebloggerConfig {
 
     private static final Logger LOG = Logger.getLogger(WebloggerConfig.class.getName());
 
-    private WebloggerConfig() {
+    protected WebloggerConfig() {
 
         LOG.log(Level.FINE, "init WebloggerConfig");
         if (CONFIG.isEmpty()) {
