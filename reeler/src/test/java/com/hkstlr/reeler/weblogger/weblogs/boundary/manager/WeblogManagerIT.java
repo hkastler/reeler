@@ -20,12 +20,14 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 /**
  *
  * @author henry.kastler
  */
+@Ignore
 @RunWith(Arquillian.class)
 public class WeblogManagerIT {
     
@@ -53,8 +55,11 @@ public class WeblogManagerIT {
                 
                 
                 .addPackage("com.hkstlr.reeler.weblogger.weblogs.boundary.manager")
+                .addPackage("com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin")
                 .addPackage("com.hkstlr.reeler.weblogger.weblogs.control")
+                
                 .addPackage("com.hkstlr.reeler.weblogger.weblogs.control.config")
+                .addPackage("com.hkstlr.reeler.weblogger.weblogs.control.config.runtime")
                 .addPackage("com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners")
                 .addPackage("com.hkstlr.reeler.weblogger.weblogs.entities")
                 
