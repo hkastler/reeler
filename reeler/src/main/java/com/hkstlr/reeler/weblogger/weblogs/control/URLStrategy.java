@@ -33,8 +33,10 @@ public class URLStrategy {
     public String getLoginSuccessOutcome(User user) throws WebloggerException {
 
         List<Weblog> weblogs = wm.getUserWeblogs(user, true);
-                    
-        return "/weblogger/reeler-ui/weblog/entry.xhtml?weblog=".concat(weblogs.get(0).getId()).concat("faces-redirect=true") ;
+        if(!weblogs.isEmpty())            
+            return "/weblogger/reeler-ui/weblog/entry.xhtml?weblog=".concat(weblogs.get(0).getId()).concat("faces-redirect=true") ;
+        else
+           return getLoginSuccessOutcome();
     }
 
 }

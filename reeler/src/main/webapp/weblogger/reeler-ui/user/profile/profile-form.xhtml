@@ -5,10 +5,10 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-  
-    
+
+
     <form jsfc="h:form" jsf:id="profile" name="profile" prependId="false">
-        
+
         <div class="formdiv my-4">
             <h2>
                 <h:outputText value="#{formTitle}"/>
@@ -17,17 +17,17 @@
                 layout="table"
                 infoClass="table alert alert-success"
                 errorClass="table alert alert-danger"/>
-            <div class="form-group">
+            <div class="form-group #{userName.isValid()? '' : 'has-error'}">
                 <label jsf:for="userName" class="control-label #{userName.isValid()? '' : 'has-error'}" >Username</label>
                 <input type="text"
-                       class="form-control"
+                       class="form-control #{userName.isValid()? '' : 'has-error'}"
                        binding="#{userName}"
                        jsfc="h:inputText"
                        id="userName" 
                        value="#{bean.user.userName}" 
                        readonly="#{param.action eq 'edit' ? 'true':'false'}"
                        />
-                
+                <h:message for="userName" errorClass="control-label has-error"/>
                 <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin} or #{param.action eq 'edit'}">
                     Usernames can't be changed.
                 </span>
@@ -82,10 +82,11 @@
 
             <div class="form-group">
                 <label jsf:for="passwordText" class="control-label">Password</label>
-                <input type="password" 
-                       class="form-control"
-                       jsf:id="passwordText"/>
-
+                <h:inputSecret 
+                    class="form-control"
+                    id="passwordText"
+                    binding="#{passwordComponent}"/>
+                <h:message for="passwordText"/>
                 <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
                     Your password.  Fill in only if you wish to change it.
                 </span>
@@ -94,9 +95,15 @@
 
             <div class="form-group">
                 <label jsf:for="passwordConfirm" class="control-label">Password (Confirm)</label>
-                <input type="password" 
-                       class="form-control"
-                       jsf:id="passwordConfirm"/>
+                <h:inputSecret 
+                    class="form-control"
+                    id="passwordConfirm"
+                    required="#{not empty passwordText.value}">
+                    <f:validator validatorId="confirmPasswordValidator"/>
+                    <f:attribute name="passwordComponent" value="#{passwordComponent}"/>
+                </h:inputSecret>
+                <h:message for="passwordConfirm"
+                           errorClass="control-label has-error"/>
                 <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
                     Confirm your password.
                 </span>
@@ -147,33 +154,34 @@
                 <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
                     The timezone to be used for entry and display of this weblog.
                 </span>
-                
-                <div
-                    jsfc="h:panelGroup" 
-                    layout="block"
-                    rendered="#{isAdmin}">
-                    <div class="form-group">
-                        <label jsf:for="isEnabled">
-                            <h:selectBooleanCheckbox id="isEnabled" 
-                                                     value="#{bean.user.isEnabled}"/>
-                            Enabled
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label jsf:for="isAdministrator">
-                            <h:selectBooleanCheckbox id="isAdministrator"/>
-                            Administrator
-                        </label>
-                    </div>
+            </div>
+
+            <div
+                jsfc="h:panelGroup" 
+                layout="block"
+                rendered="#{isAdmin}">
+                <div class="form-group">
+                    <label jsf:for="isEnabled">
+                        <h:selectBooleanCheckbox id="isEnabled" 
+                                                 value="#{bean.user.isEnabled}"/>
+                        Enabled
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label jsf:for="isAdministrator">
+                        <h:selectBooleanCheckbox id="isAdministrator"/>
+                        Administrator
+                    </label>
                 </div>
             </div>
+            
 
             <input type="hidden" 
                    jsfc="h:inputHidden" 
                    name="id"
-                   rendered="#{userAdminBean.id ne null}"
-                   value="#{userAdminBean.id ne null ? id : ''}"/>
-            <input type="hidden" name="action" value="#{userAdminBean.action}"/>
+                   rendered="#{bean.id ne null}"
+                   value="#{bean.id ne null ? id : ''}"/>
+            <input type="hidden" name="action" value="#{bean.action}"/>
         </div>
 
         <br />
@@ -184,7 +192,7 @@
                class="btn btn-primary"
                action="#{bean.createUser()}"
                rendered="#{bean.action eq 'create'}"/>
-        
+
         <input jsfc="h:commandButton"
                type="submit" 
                id="profile_edit" 

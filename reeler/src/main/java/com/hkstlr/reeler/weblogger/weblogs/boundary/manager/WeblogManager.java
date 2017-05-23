@@ -161,7 +161,10 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 if (firstCat == null) {
                     firstCat = c;
                 }
-                newWeblog.getWeblogCategories().add(c);
+                em.merge(c);
+                em.flush();
+                WeblogCategory attachedCat = em.find(WeblogCategory.class, c.getId());
+                newWeblog.getWeblogCategories().add(attachedCat);
                 
             }
         }

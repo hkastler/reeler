@@ -26,6 +26,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.inject.Named;
 
 /**
  *
@@ -34,6 +35,8 @@ import javax.faces.bean.RequestScoped;
 @ManagedBean
 @RequestScoped
 public class IndexBean {
+
+    private static final Logger LOG = Logger.getLogger(IndexBean.class.getName());
     
     @EJB
     Weblogger weblogger;
@@ -50,14 +53,10 @@ public class IndexBean {
     protected void init(){
         
         try {
+            needsSetup();
             setWeblogs();
         } catch (WebloggerException ex) {
-            Logger.getLogger(IndexBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(weblogs.isEmpty()){
-            if(needsSetup()){
-                
-            }
+            LOG.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -84,14 +83,16 @@ public class IndexBean {
        
     }
     
+    @Named
     public boolean needsSetup(){
         
        boolean needsSetup = false; 
        long userCount = weblogger.getUserManager().getUserCount();
+       System.out.println("userCount:" + userCount);
        if(userCount == 0){
            needsSetup = true;
        }
-        
+       LOG.info(Boolean.toString(needsSetup));
        return needsSetup; 
     }
     
