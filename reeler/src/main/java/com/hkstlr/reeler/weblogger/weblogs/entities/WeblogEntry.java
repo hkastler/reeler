@@ -127,8 +127,6 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.text.NotNull}")
     @Size
-    @Lob
-    @Type(type="org.hibernate.type.StringClobType")
     @Column(name = "text", nullable = false, columnDefinition = "text")
     private String text;
 
