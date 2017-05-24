@@ -50,6 +50,7 @@ import javax.json.JsonObject;
 import javax.persistence.Cacheable;
 import javax.persistence.Lob;
 import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.Type;
 /**
  *
  * @author henry.kastler
@@ -127,6 +128,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @NotNull(message = "{WeblogEntry.text.NotNull}")
     @Size
     @Lob
+    @Type(type="org.hibernate.type.StringClobType")
     @Column(name = "text", nullable = false, columnDefinition = "text")
     private String text;
 
