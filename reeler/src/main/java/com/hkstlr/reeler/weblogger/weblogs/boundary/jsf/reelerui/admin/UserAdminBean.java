@@ -173,7 +173,7 @@ public class UserAdminBean {
     
     @RolesAllowed("user")
     public void updateUser() {       
-        System.out.println("updating user");
+        LOG.fine("updating user");
         userManager.edit(this.user);
         FacesMessageManager.addSuccessMessage(null, "User info updated");        
     }

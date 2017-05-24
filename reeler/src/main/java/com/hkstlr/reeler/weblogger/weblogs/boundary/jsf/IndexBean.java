@@ -88,7 +88,7 @@ public class IndexBean {
         
        boolean needsSetup = false; 
        long userCount = weblogger.getUserManager().getUserCount();
-       System.out.println("userCount:" + userCount);
+       
        if(userCount == 0){
            needsSetup = true;
        }
