@@ -25,6 +25,7 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.plugins.control.StringFixer;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.util.logging.Level;
@@ -84,47 +85,7 @@ public class ConvertLineBreaksPlugin extends WeblogEntryPlugin {
 
         mLogger.fine("Rendering string of length " + str.length());
 
-        /* setup a buffered reader and iterate through each line
-         * inserting html as needed
-         *
-         * NOTE: we consider a paragraph to be 2 endlines with no text between them
-         */
-        StringBuilder buf = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new StringReader(str));
-
-            String line = null;
-            boolean insidePara = false;
-            while ((line = br.readLine()) != null) {
-
-                if (!insidePara && line.trim().length() > 0) {
-                    // start of a new paragraph
-                    buf.append("\n<p>");
-                    buf.append(line);
-                    insidePara = true;
-                } else if (insidePara && line.trim().length() > 0) {
-                    // another line in an existing paragraph
-                    buf.append("<br/>\n");
-                    buf.append(line);
-                } else if (insidePara && line.trim().length() < 1) {
-                    // end of a paragraph
-                    buf.append("</p>\n\n");
-                    insidePara = false;
-                }
-            }
-
-            // if the text ends without an empty line then we need to
-            // terminate the last paragraph now
-            if (insidePara) {
-                buf.append("</p>\n\n");
-            }
-
-        } catch (Exception e) {
-            mLogger.log(Level.WARNING,"trouble rendering text." + e.getMessage(),e);
-            return str;
-        }
-
-        return buf.toString();
+        return StringFixer.newLineToHtml(str);
     }
 
 }

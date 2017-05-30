@@ -96,7 +96,7 @@ public class WebloggerConfig {
                     CUSTOM_CONFIG_FILE = new File(env_file);
 
                     // make sure the file exists, then try and load it
-                    if (CUSTOM_CONFIG_FILE != null && CUSTOM_CONFIG_FILE.exists()) {
+                    if (CUSTOM_CONFIG_FILE.exists()) {
                         try {
                             is = new FileInputStream(CUSTOM_CONFIG_FILE);
                             is.close();

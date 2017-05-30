@@ -48,9 +48,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 import javax.json.JsonObject;
 import javax.persistence.Cacheable;
-import javax.persistence.Lob;
 import javax.persistence.UniqueConstraint;
-import org.hibernate.annotations.Type;
 /**
  *
  * @author henry.kastler

@@ -2,6 +2,8 @@
 //replaced apache lib imports
 package com.hkstlr.reeler.weblogger.plugins.control;
 
+import java.io.BufferedReader;
+import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class StringFixer {
 
-    private static final Logger log = Logger.getLogger(StringFixer.class.getName());  
+    private static final Logger LOG = Logger.getLogger(StringFixer.class.getName());  
     
 
     public static final String TAG_SPLIT_CHARS = " ,\n\r\f\t";
@@ -193,7 +195,7 @@ public class StringFixer {
             return encodeHex(email.getBytes("UTF-8"));
             
         } catch (UnsupportedEncodingException e) {
-            log.log(Level.FINE,"emailEncodeIssue",e);
+            LOG.log(Level.FINE,"emailEncodeIssue",e);
             return email;
         }
 
@@ -212,6 +214,52 @@ public class StringFixer {
         }
 
         return hexString.toString();
+    }
+    
+    public static String newLineToHtml(String str){
+        
+        
+        /* setup a buffered reader and iterate through each line
+         * inserting html as needed
+         *
+         * NOTE: we consider a paragraph to be 2 endlines with no text between them
+         */
+        StringBuilder buf = new StringBuilder();
+        try {
+            BufferedReader br = new BufferedReader(new StringReader(str));
+
+            String line;
+            boolean insidePara = false;
+            while ((line = br.readLine()) != null) {
+
+                if (!insidePara && line.trim().length() > 0) {
+                    // start of a new paragraph
+                    buf.append("\n<p>");
+                    buf.append(line);
+                    insidePara = true;
+                } else if (insidePara && line.trim().length() > 0) {
+                    // another line in an existing paragraph
+                    buf.append("<br/>\n");
+                    buf.append(line);
+                } else if (insidePara && line.trim().length() < 1) {
+                    // end of a paragraph
+                    buf.append("</p>\n\n");
+                    insidePara = false;
+                }
+            }
+
+            // if the text ends without an empty line then we need to
+            // terminate the last paragraph now
+            if (insidePara) {
+                buf.append("</p>\n\n");
+            }
+
+        } catch (Exception e) {
+            LOG.log(Level.WARNING,"trouble rendering text." + e.getMessage(),e);
+            return str;
+        }
+
+        return buf.toString();
     }
 
 }

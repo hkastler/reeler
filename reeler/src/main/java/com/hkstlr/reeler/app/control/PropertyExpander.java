@@ -67,6 +67,7 @@ public final class PropertyExpander {
         }
         
         Matcher matcher = EXPANSION_PATTERN.matcher(input);
+        
 
         StringBuffer expanded = new StringBuffer(input.length());
         while (matcher.find()) {
