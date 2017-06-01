@@ -17,13 +17,14 @@ import java.util.StringTokenizer;
  * @author henry.kastler
  */
 public class WeblogEntryAnchorBuilder {
-
-    public WeblogEntryAnchorBuilder() {
-    }
-    
     
     public static final String TITLE_SEPARATOR
             = WebloggerConfig.getBooleanProperty("weblogentry.title.useUnderscoreSeparator") ? "_" : "-";
+        
+    
+    public WeblogEntryAnchorBuilder() {
+        //constructor
+    }
     
     public String createAnchorBase(WeblogEntry weblogEntry){
         return createAnchorBase(weblogEntry, 7);

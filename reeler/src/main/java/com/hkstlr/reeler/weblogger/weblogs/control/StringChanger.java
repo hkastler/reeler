@@ -11,6 +11,11 @@ import java.util.List;
 
 public class StringChanger {
 
+    private StringChanger() {
+        //constructor
+    }   
+    
+
     public static String toTitleCase(String input) {
         String rStr = input.toLowerCase();
         char c = rStr.charAt(0);
@@ -64,6 +69,9 @@ public class StringChanger {
     // ------------------------------------------------------------------------
     /**
      * Replaces occurrences of non-alphanumeric characters with a supplied char.
+     * @param str
+     * @param subst
+     * @return 
      */
     public static String replaceNonAlphanumeric(String str, char subst) {
         StringBuilder ret = new StringBuilder(str.length());

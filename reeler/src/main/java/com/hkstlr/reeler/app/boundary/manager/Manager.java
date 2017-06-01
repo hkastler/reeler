@@ -15,7 +15,6 @@
  */
 package com.hkstlr.reeler.app.boundary.manager;
 
-import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.util.List;
 import javax.persistence.TypedQuery;
 

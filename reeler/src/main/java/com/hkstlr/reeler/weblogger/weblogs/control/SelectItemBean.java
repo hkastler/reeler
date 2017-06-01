@@ -6,7 +6,6 @@
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
 
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory;
 import java.text.DateFormatSymbols;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -31,7 +30,7 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class SelectItemBean {
 
-    private SelectItem[] countryItems;
+    
     private SelectItem[] monthItems;    
     private SelectItem[] yearItems;
     private SelectItem[] weblogCategoryItems;
@@ -42,7 +41,7 @@ public class SelectItemBean {
     private SelectItem[] localeItems;
 
     @Inject
-    private transient Logger log;
+    private Logger log;
   
     /**
      * Creates a new instance of SelectItemBean
@@ -52,7 +51,7 @@ public class SelectItemBean {
     }
     
     @PostConstruct
-    private void init(){
+    protected void init(){
         monthItems = getMonthSelectItems();
         yearItems = getYearSelectItems();
         hourItems = getHourSelectItems();
@@ -155,20 +154,6 @@ public class SelectItemBean {
         return items;
     }
     
-    private SelectItem[] getWeblogCategoryItems(List<WeblogCategory> cats) {
-        SelectItem[] items = new SelectItem[cats.size()];
-        
-        for(int i=0; i<=cats.size(); i++){
-            
-            String strMonth = Integer.toString(i+1);
-            if(strMonth.length()==1){
-                strMonth= "0"+strMonth;
-            }
-            items[i] = new SelectItem(i+1,strMonth);
-        }
-        
-        return items;
-    }
     
     private SelectItem[] getHourSelectItems() {
               
@@ -252,7 +237,7 @@ public class SelectItemBean {
     public SelectItem[] getLocaleItems() {
        
        Locale[] locales = Calendar.getAvailableLocales();       
-       List<SelectItem> ftLocale = new ArrayList<SelectItem>();        
+       List<SelectItem> ftLocale = new ArrayList<>();        
        for (Locale locale : locales) { 
             if(locale.getDisplayCountry().length() > 0){
                 ftLocale.add(new SelectItem(locale.toString(),locale.getDisplayCountry()) );
@@ -265,8 +250,7 @@ public class SelectItemBean {
         
         Collections.sort(ftLocale,localeNameSort);
        
-        SelectItem[] cItems = ftLocale.toArray(new SelectItem[ftLocale.size()]);
-        return cItems;
+        return ftLocale.toArray(new SelectItem[ftLocale.size()]);
     }
     
      public SelectItem[] getTimeZoneItems() {
@@ -282,7 +266,8 @@ public class SelectItemBean {
         
         Collections.sort(ftZones,timeZoneNameSort);
        
-        SelectItem[] cItems = ftZones.toArray(new SelectItem[ftZones.size()]);
-        return cItems;
+        return ftZones.toArray(new SelectItem[ftZones.size()]);
     }
+     
+     
 }

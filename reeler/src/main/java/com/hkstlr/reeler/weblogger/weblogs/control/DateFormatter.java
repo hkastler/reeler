@@ -15,9 +15,6 @@ import java.util.Locale;
  */
 public class DateFormatter {
 
-    private DateFormatter() {
-        //constructor
-    }
     
     /**
      * yyyy MMM dd HH:mm
@@ -47,9 +44,12 @@ public class DateFormatter {
     public static final DateFormat datePickerFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
     
     static public DateFormat localeDefaultDateFormat(Locale currentLocale) {
-        DateFormat localeDateFormat = DateFormat.getDateInstance(DateFormat.SHORT ,currentLocale);
-        
-        return localeDateFormat;
+        return DateFormat.getDateInstance(DateFormat.SHORT ,currentLocale);
+    }
+    
+    
+    private DateFormatter() {
+        //constructor
     }
 
 }

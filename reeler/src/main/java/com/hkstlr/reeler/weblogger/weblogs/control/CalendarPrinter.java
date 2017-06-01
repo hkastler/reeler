@@ -24,13 +24,11 @@ import javax.annotation.PostConstruct;
  */
 public class CalendarPrinter {
 
-    private Logger log = Logger.getLogger(CalendarPrinter.class.getName());
-
     private Calendar calendar;
 
     Date now = new Date();
 
-    private int dayOfMonth;
+    
     private int dayOfWeek;
 
     private static final String TROPEN = "<tr>";
@@ -92,17 +90,13 @@ public class CalendarPrinter {
     private String arrowTemplate(Object[] args) {
         String template = "<a id=\"arrow-{3}\" href=\"{0}/{1}/date/{2}\">"
                 + "<i class=\"fa fa-arrow-{3}\"></i></a>";
-        
-        String formatted = format(template, args);
-        
-        return formatted;
+               
+        return format(template, args);
     }
     private String calDateTemplate(Object[] args) {
         String template = "<a href=\"{0}/{1}/date/{2}\">";
-        
-        String formatted = format(template, args);
-        
-        return formatted;
+                
+        return format(template, args);
     }
 
     private String tdAlignColspanTemplate(Object[] args) {
@@ -113,6 +107,9 @@ public class CalendarPrinter {
 
     public String calendarTable(List<Calendar> dates, Date incomingDate, String path, String handle) throws ParseException {
 
+        
+        int dayOfMonth;
+        
         String incomingMonth = DateFormatter.monthFormat.format(incomingDate);
         Integer intMonth = Integer.parseInt(incomingMonth);
         Integer previousMonth = intMonth - 1;

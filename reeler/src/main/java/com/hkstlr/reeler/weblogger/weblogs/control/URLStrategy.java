@@ -13,6 +13,7 @@ public class URLStrategy {
     WeblogManager wm;
 
     public URLStrategy() {
+        //constructor
     }
 
     public static String getOAuthRequestTokenURL() {
@@ -26,7 +27,7 @@ public class URLStrategy {
     }
 
     public static String getLoginSuccessOutcome() {
-        // TODO Auto-generated method stub
+        
         return "/weblogger/reeler-ui/index?faces-redirect=true";
     }
 
@@ -34,7 +35,7 @@ public class URLStrategy {
 
         List<Weblog> weblogs = wm.getUserWeblogs(user, true);
         if(!weblogs.isEmpty())            
-            return "/weblogger/reeler-ui/weblog/entry.xhtml?weblog=".concat(weblogs.get(0).getId()).concat("faces-redirect=true") ;
+            return "/weblogger/reeler-ui/weblog/entry.xhtml?weblog=".concat(weblogs.get(0).getId()).concat("&faces-redirect=true") ;
         else
            return getLoginSuccessOutcome();
     }

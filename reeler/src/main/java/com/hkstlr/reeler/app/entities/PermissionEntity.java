@@ -35,15 +35,14 @@ import javax.validation.constraints.Size;
  *
  * @author henry.kastler
  */
-
-@Inheritance(strategy=SINGLE_TABLE)
+@Inheritance(strategy = SINGLE_TABLE)
 @DiscriminatorColumn(name = "objecttype")
 @DiscriminatorValue(value = "objecttype")
 @MappedSuperclass
 public class PermissionEntity extends java.security.Permission {
 
     protected static final long serialVersionUID = 1L;
-    
+
     @Transient
     @Inject
     private Logger log;
@@ -67,9 +66,8 @@ public class PermissionEntity extends java.security.Permission {
     @Column(name = "objectid", length = 48)
     protected String objectId;
 
-    
     @Size(max = 255)
-    @Column(name = "objecttype", length = 255, insertable = true, updatable = false )
+    @Column(name = "objecttype", length = 255, insertable = true, updatable = false)
     protected String objectType;
 
     @Column(name = "pending")
@@ -79,32 +77,28 @@ public class PermissionEntity extends java.security.Permission {
     @NotNull
     @Column(name = "datecreated", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
-    protected Date dateCreated = new Date();    
-    
+    protected Date dateCreated = new Date();
+
     @Size(max = 255)
     @Column(name = "actions", length = 255)
     protected String actions;
-    
+
     PermissionCollection permissionCollection;
-    
 
     public PermissionEntity(String name) {
         super(name);
         this.id = UUID.randomUUID().toString();
     }
-    
-    
+
     @Override
     public String getActions() {
         return actions;
     }
 
-    
     public void setActions(String actions) {
         this.actions = actions;
     }
 
-    
     public void addActions(List<String> newActions) {
         List<String> updatedActions = getActionsAsList();
         for (String newAction : newActions) {
@@ -114,7 +108,7 @@ public class PermissionEntity extends java.security.Permission {
         }
         setActionsAsList(updatedActions);
     }
-    
+
     public void addActions(Permission perm) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -122,13 +116,13 @@ public class PermissionEntity extends java.security.Permission {
     public List<String> getActionsAsList() {
         return StringChanger.stringToStringList(getActions(), ",");
     }
-    
+
     public void setActionsAsList(List<String> actionsList) {
         setActions(StringChanger.stringListToString(actionsList, ","));
     }
 
     public boolean hasAction(String action) {
-         List<String> actionList = getActionsAsList();
+        List<String> actionList = getActionsAsList();
         return actionList.contains(action);
     }
 
@@ -142,23 +136,24 @@ public class PermissionEntity extends java.security.Permission {
         return true;
     }
 
-     /**
+    /**
      * True if permission specifies no actions
-     * @return 
+     *
+     * @return
      */
     public boolean isEmpty() {
-        return (getActions() == null || getActions().trim().length() == 0);
+        return getActions() == null || getActions().trim().length() == 0;
     }
 
     public void removeActions(List<String> actionsToRemove) {
-       List<String> updatedActions = getActionsAsList();
-        for (String actionToRemove : actionsToRemove) {
+        List<String> updatedActions = getActionsAsList();
+        actionsToRemove.forEach((actionToRemove) -> {
             updatedActions.remove(actionToRemove);
-        }
+        });
         log.fine("removeActions: " + updatedActions);
         setActionsAsList(updatedActions);
     }
-    
+
     public String getId() {
         return id;
     }
@@ -170,7 +165,7 @@ public class PermissionEntity extends java.security.Permission {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    
+
     public String getObjectId() {
         return objectId;
     }
@@ -212,15 +207,12 @@ public class PermissionEntity extends java.security.Permission {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof PermissionEntity)) {
             return false;
         }
         PermissionEntity other = (PermissionEntity) object;
-        if (!this.id.equals(other.id)) {
-            return false;
-        }
-        return true;
+        return this.id.equals(other.id);
     }
 
     @Override
@@ -229,7 +221,6 @@ public class PermissionEntity extends java.security.Permission {
         return false;
     }
 
-    
     public void addActions(AppPermission perm) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
@@ -238,14 +229,13 @@ public class PermissionEntity extends java.security.Permission {
     public String toString() {
         return this.getClass().getName() + StringPool.COLON + this.id;
     }
-    
-    public String toJsonString(){
+
+    public String toJsonString() {
         return new JsonBuilder().toJsonString(this);
     }
-    
-    public JsonObject toJsonObject(){
+
+    public JsonObject toJsonObject() {
         return new JsonBuilder().toJsonObject(this, new String[]{});
     }
 
-    
 }

@@ -9,6 +9,10 @@ import java.util.Locale;
  */
 public final class LocaleFixer {
 
+    public LocaleFixer() {
+        //constructor
+    }
+    
     public static Locale toLocale(String locale) {
         if (locale != null) {
             String parts[] = locale.split("_");

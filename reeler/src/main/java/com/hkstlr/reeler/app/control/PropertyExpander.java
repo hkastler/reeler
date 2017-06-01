@@ -15,7 +15,7 @@
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
- * original package org.apache.roller.util;
+ * original package org.apache.roller.util
  */
 
 
@@ -40,8 +40,10 @@ public final class PropertyExpander {
     private static final Pattern EXPANSION_PATTERN = Pattern.compile("(\\$\\{([^}]+?)\\})", java.util.regex.Pattern.MULTILINE);
     
     
-    // non-instantiable
-    private PropertyExpander() {}
+    
+    private PropertyExpander() {
+        // non-instantiable
+    }
     
     
     /**

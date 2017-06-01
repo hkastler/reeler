@@ -1,9 +1,5 @@
 package com.hkstlr.reeler.app.control;
 
-import java.util.logging.Logger;
-
-import javax.inject.Inject;
-
 /**
  *
  * @author henry.kastler
@@ -126,6 +122,7 @@ public final class Paginator {
         }
     }
     
+    @Override
     public String toString(){
         return new JsonBuilder().toJsonString(this);
     }

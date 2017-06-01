@@ -17,6 +17,11 @@ import java.util.Locale;
 public class WeblogEntryTagFixer {
     
     public static final String TAG_SPLIT_REGEX = "/[ ,]+/";
+
+    public WeblogEntryTagFixer() {
+        //constructor
+    }    
+    
     /**
      * @param tag
      * @return
@@ -33,11 +38,10 @@ public class WeblogEntryTagFixer {
 
             // fast-path exclusions quotes and commas are obvious
             // 34 = double-quote, 44 = comma
-            switch (c) {
-            case 34:
-            case 44:
+            if(c == 34 || c == 44){
                 continue;
             }
+            
 
             if ((33 <= c && c <= 126) || Character.isUnicodeIdentifierPart(c)
                     || Character.isUnicodeIdentifierStart(c)) {

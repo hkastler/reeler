@@ -1,5 +1,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
+import java.util.Objects;
+
 /*
 * Licensed to the Apache Software Foundation (ASF) under one or more
 *  contributor license agreements.  The ASF licenses this file to You
@@ -16,11 +18,9 @@ package com.hkstlr.reeler.weblogger.weblogs.control;
 * limitations under the License.  For additional information regarding
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
+* originally from package org.apache.roller.weblogger.pojos
 */
-//package org.apache.roller.weblogger.pojos;
 
-//import org.apache.commons.lang3.builder.EqualsBuilder;
-//import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * Represents a statistical count.
@@ -103,6 +103,7 @@ public class StatCount {
     
     //------------------------------------------------------- Good citizenship
 
+    @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append("{");
@@ -112,24 +113,26 @@ public class StatCount {
         return buf.toString();
     }
     
-    /*    public boolean equals(Object other) {
-    if (other == this) {
-    return true;
-    }
-    if (!(other instanceof StatCount)) {
-    return false;
-    }
-    StatCount o = (StatCount)other;
-    return new EqualsBuilder()
-    .append(getSubjectId(), o.getSubjectId())
-    .append(getTypeKey(), o.getTypeKey())
-    .isEquals();
-    }
-    
+    @Override
     public int hashCode() {
-    return new HashCodeBuilder()
-    .append(getSubjectId())
-    .append(getTypeKey())
-    .toHashCode();
-    }*/
+        return getSubjectId().concat(getTypeKey()).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final StatCount other = (StatCount) obj;
+        if (!Objects.equals(this.subjectId, other.subjectId)) {
+            return false;
+        }
+        return Objects.equals(this.typeKey, other.typeKey);
+    }
 }

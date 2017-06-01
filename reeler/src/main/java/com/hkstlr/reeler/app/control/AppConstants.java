@@ -22,8 +22,9 @@ package com.hkstlr.reeler.app.control;
 * limitations under the License.  For additional information regarding
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
+* originally from package org.apache.roller.util.RollerConstants
 */
-//package org.apache.roller.util.RollerConstants;
+
 
 
 public class AppConstants {

@@ -1,5 +1,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.control;
 
+import com.hkstlr.reeler.app.control.StringPool;
+
 public class TagStat implements java.io.Serializable {
 
     private static final long serialVersionUID = 1142064841813545198L;
@@ -11,6 +13,7 @@ public class TagStat implements java.io.Serializable {
     private int intensity;
 
     public TagStat() {
+        //constructor
     }
 
     public String getName() {
@@ -29,13 +32,15 @@ public class TagStat implements java.io.Serializable {
         this.count = count;
     }
 
+    @Override
     public String toString() {
-        StringBuilder str = new StringBuilder("{");
+        StringBuilder str = new StringBuilder(StringPool.OPEN_CURLY_BRACE);
 
-        str.append("name=" + name + " " + "count=" + count);
-        str.append('}');
+        str.append("name=").append(name).append(" count=").append(count);
+        
+        str.append(StringPool.CLOSE_CURLY_BRACE);
 
-        return (str.toString());
+        return str.toString();
     }
 
     public int getIntensity() {

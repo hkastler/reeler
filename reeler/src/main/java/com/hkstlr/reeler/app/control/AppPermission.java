@@ -1,7 +1,5 @@
 package com.hkstlr.reeler.app.control;
 
-import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.security.Permission;
 import java.util.Arrays;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.Date;
 
 public class AppPermission extends java.security.Permission implements AppPermissionInterface {
 
-    private static Logger log = Logger.getLogger(AppPermission.class.getName());
+    private static final Logger LOG = Logger.getLogger(AppPermission.class.getName());
 
     public AppPermission(String name) {
         super(name);
@@ -92,12 +90,13 @@ public class AppPermission extends java.security.Permission implements AppPermis
         for (String actionToRemove : actionsToRemove) {
             updatedActions.remove(actionToRemove);
         }
-        log.fine("updatedActions2: " + updatedActions);
+        LOG.fine("updatedActions2: " + updatedActions);
         setActionsAsList(updatedActions);
     }
 
     /**
      * True if permission specifies no actions
+     * @return 
      */
     @Override
     public boolean isEmpty() {

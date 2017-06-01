@@ -24,6 +24,7 @@ public class WeblogEntryCommentVisitor {
     private WeblogEntryComment weblogEntryComment;
 
     public WeblogEntryCommentVisitor() {
+        //constructor
     }
     
     public WeblogEntryCommentVisitor(boolean isSpam, WeblogEntryComment weblogEntryComment) {

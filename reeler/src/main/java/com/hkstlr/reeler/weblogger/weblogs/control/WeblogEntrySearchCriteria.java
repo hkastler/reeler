@@ -16,7 +16,7 @@ package com.hkstlr.reeler.weblogger.weblogs.control;
  * limitations under the License.  For additional information regarding
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
- * originally package org.apache.roller.weblogger.pojos;
+ * originally package org.apache.roller.weblogger.pojos
  */
 
 
