@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 import javax.ejb.Singleton;
 import javax.inject.Named;
 
-import com.hkstlr.reeler.app.control.AuthMethod;
+
 import com.hkstlr.reeler.app.control.PropertyExpander;
 import com.hkstlr.reeler.app.control.StringPool;
 import java.io.IOException;
@@ -298,19 +298,5 @@ public class WebloggerConfig {
         }
     }
 
-    /**
-     * Return the value of the authentication.method property as an AuthMethod
-     * enum value. Matching is done by checking the propertyName of each
-     * AuthMethod enum object.
-     * <p />
-     *
-     * @return
-     * @throws IllegalArgumentException if property value defined in the
-     * properties file is missing or not the property name of any AuthMethod
-     * enum object.
-     */
-    public static AuthMethod getAuthMethod() {
-        return AuthMethod.getAuthMethod(getProperty("authentication.method"));
-    }
 
 }
