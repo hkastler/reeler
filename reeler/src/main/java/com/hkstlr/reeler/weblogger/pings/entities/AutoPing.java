@@ -46,6 +46,7 @@ public class AutoPing extends AbstractEntity implements Serializable {
     private Weblog website;
 
     public AutoPing() {
+        super();
     }
 
     public AutoPing(PingTarget pingTarget, Weblog weblog) {

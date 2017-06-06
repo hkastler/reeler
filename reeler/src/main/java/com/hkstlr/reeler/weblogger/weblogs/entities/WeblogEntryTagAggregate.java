@@ -9,10 +9,8 @@ import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -72,6 +70,7 @@ public class WeblogEntryTagAggregate extends AbstractEntity implements Serializa
     private Date lastUsed;
 
     public WeblogEntryTagAggregate() {
+        //constructor
     }
 
     public WeblogEntryTagAggregate(Object object, Weblog website, String name, int amount) {

@@ -8,14 +8,12 @@ package com.hkstlr.reeler.weblogger.media.entities;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -25,7 +23,6 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -44,35 +41,30 @@ import javax.xml.bind.annotation.XmlTransient;
 public class MediaFileDirectory extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
+
     @Size(max = 255)
     @Column(name = "description", length = 255)
     private String description;
-    
+
     @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private Weblog weblog;
-    
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "directory")
     private List<MediaFile> mediaFiles;
 
     public MediaFileDirectory() {
+        super();
     }
 
     public MediaFileDirectory(String id, String name) {
         this.name = name;
-    }
-
-
-    public void setId(String id) {
-        
     }
 
     public String getName() {
@@ -90,24 +82,24 @@ public class MediaFileDirectory extends AbstractEntity implements Serializable {
     public void setDescription(String description) {
         this.description = description;
     }
-    
-	public Weblog getWeblog() {
-            return weblog;
-	}
 
-	public void setWeblog(Weblog weblog) {
-            this.weblog = weblog;
-	}
+    public Weblog getWeblog() {
+        return weblog;
+    }
 
-	public List<MediaFile> getMediaFiles() {
-		return mediaFiles;
-	}
+    public void setWeblog(Weblog weblog) {
+        this.weblog = weblog;
+    }
 
-	public void setMediaFiles(List<MediaFile> mediaFiles) {
-		this.mediaFiles = mediaFiles;
-	}
+    public List<MediaFile> getMediaFiles() {
+        return mediaFiles;
+    }
 
-	@Override
+    public void setMediaFiles(List<MediaFile> mediaFiles) {
+        this.mediaFiles = mediaFiles;
+    }
+
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -131,5 +123,5 @@ public class MediaFileDirectory extends AbstractEntity implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.MediaFileDirectory[ id=" + id + " ]";
     }
-    
+
 }

@@ -215,7 +215,7 @@ public final class PingConfig {
                 String name = m.group(1).trim();
                 String url = m.group(2).trim();
                 log.info("Creating common ping target '" + name + "' from configuration properties.");
-                PingTarget pingTarget = new PingTarget(null, name, url, false);
+                PingTarget pingTarget = new PingTarget(name, url, 0, true);
                 pingTargetManager.savePingTarget(pingTarget);
             } else {
                 log.warning("Unable to parse configured initial ping target '" + thisTarget + "'. Skipping this target. Check your setting of the property " + PINGS_INITIAL_COMMON_TARGETS_PROP);

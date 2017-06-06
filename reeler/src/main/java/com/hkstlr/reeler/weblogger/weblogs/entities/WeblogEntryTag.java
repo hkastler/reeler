@@ -76,6 +76,7 @@ public class WeblogEntryTag extends AbstractEntity implements Serializable {
     private WeblogEntry weblogEntry;
 
     public WeblogEntryTag() {
+        //constructor
     }
 
     public WeblogEntryTag(String name) {

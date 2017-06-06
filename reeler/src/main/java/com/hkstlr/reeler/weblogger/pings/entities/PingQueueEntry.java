@@ -77,6 +77,7 @@ public class PingQueueEntry extends AbstractEntity implements Serializable {
     private int attempts;
 
     public PingQueueEntry() {
+        super();
     }
 
     public PingQueueEntry(Calendar entryTime, PingTarget pingTarget,

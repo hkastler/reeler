@@ -65,79 +65,79 @@ public class MediaFile extends Resource implements Serializable {
     @Size(min = 1, max = 48)
     @Column(name = "id", nullable = false, length = 48)
     private String id;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
+
     @Size(max = 255)
     @Column(name = "description", length = 255)
     private String description;
-    
+
     @Size(max = 255)
     @Column(name = "origpath", length = 255)
     private String originalPath;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
     @Column(name = "content_type", nullable = false, length = 50)
     private String contentType;
-    
+
     @Size(max = 1023)
     @Column(name = "copyright_text", length = 1023)
     private String copyrightText;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 48)
     @ManyToOne()
     @JoinColumn(name = "weblogid", nullable = false)
     private Weblog weblog;
-    
+
     @Column(name = "width")
     private Integer width;
-    
+
     @Column(name = "height")
     private Integer height;
-    
+
     @Column(name = "size_in_bytes")
     private Integer sizeInBytes;
-    
+
     @Basic(optional = false)
     @NotNull
     @Column(name = "date_uploaded", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateUploaded;
-    
+
     @Column(name = "last_updated")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastUpdated;
-    
+
     @Size(max = 255)
     @Column(name = "anchor", length = 255)
     private String anchor;
-    
+
     @Size(max = 255)
     @Column(name = "creator", length = 255)
     private String creator;
     @Basic(optional = false)
-    
+
     @NotNull
     @Column(name = "is_public", nullable = false)
     private boolean isPublic;
-    
+
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE}, mappedBy = "mediaFile", fetch = FetchType.LAZY)
     private List<MediaFileTag> tags;
-    
+
     @JoinColumn(name = "directoryid", referencedColumnName = "id", nullable = false)
     @ManyToOne(optional = false)
     private MediaFileDirectory directory;
 
     public MediaFile() {
-        
+        super();
     }
 
     public MediaFile(String id) {
@@ -161,14 +161,6 @@ public class MediaFile extends Resource implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -178,14 +170,14 @@ public class MediaFile extends Resource implements Serializable {
     }
 
     public String getOriginalPath() {
-		return originalPath;
-	}
+        return originalPath;
+    }
 
-	public void setOriginalPath(String originalPath) {
-		this.originalPath = originalPath;
-	}
+    public void setOriginalPath(String originalPath) {
+        this.originalPath = originalPath;
+    }
 
-	public String getContentType() {
+    public String getContentType() {
         return contentType;
     }
 
@@ -202,14 +194,14 @@ public class MediaFile extends Resource implements Serializable {
     }
 
     public Weblog getWeblog() {
-		return weblog;
-	}
+        return weblog;
+    }
 
-	public void setWeblog(Weblog weblog) {
-		this.weblog = weblog;
-	}
+    public void setWeblog(Weblog weblog) {
+        this.weblog = weblog;
+    }
 
-	public Integer getWidth() {
+    public Integer getWidth() {
         return width;
     }
 
@@ -274,26 +266,26 @@ public class MediaFile extends Resource implements Serializable {
     }
 
     public List<MediaFileTag> getTags() {
-		return tags;
-	}
+        return tags;
+    }
 
-	public void setTags(List<MediaFileTag> tags) {
-		this.tags = tags;
-	}
+    public void setTags(List<MediaFileTag> tags) {
+        this.tags = tags;
+    }
 
-	public MediaFileDirectory getDirectory() {
-		return directory;
-	}
+    public MediaFileDirectory getDirectory() {
+        return directory;
+    }
 
-	public void setDirectory(MediaFileDirectory directory) {
-		this.directory = directory;
-	}
+    public void setDirectory(MediaFileDirectory directory) {
+        this.directory = directory;
+    }
 
-	public void setPublic(boolean isPublic) {
-		this.isPublic = isPublic;
-	}
+    public void setPublic(boolean isPublic) {
+        this.isPublic = isPublic;
+    }
 
-	@Override
+    @Override
     public int hashCode() {
         int hash = 0;
         hash += (id != null ? id.hashCode() : 0);
@@ -302,20 +294,17 @@ public class MediaFile extends Resource implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
+
         if (!(object instanceof MediaFile)) {
             return false;
         }
         MediaFile other = (MediaFile) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        return !this.id.equals(other.id);
     }
 
     @Override
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.MediaFile[ id=" + id + " ]";
     }
-    
+
 }

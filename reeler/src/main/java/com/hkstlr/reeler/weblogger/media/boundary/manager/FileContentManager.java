@@ -78,6 +78,9 @@ public class FileContentManager {
     }
 
     /**
+     * @param weblog
+     * @param fileId
+     * @return 
      * @throws IOException
      * @see
      * org.apache.FileContentManager.weblogger.business.FileContentManager#getFileContent(Weblog,

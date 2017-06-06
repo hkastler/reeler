@@ -5,8 +5,6 @@
  */
 package com.hkstlr.reeler.weblogger.media.boundary.manager;
 
-
-
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.media.entities.MediaFileDirectory;
@@ -17,7 +15,6 @@ import javax.persistence.PersistenceContext;
  *
  * @author henry.kastler
  */
-
 public class MediaFileDirectoryManager extends AbstractManager<MediaFileDirectory> {
 
     @PersistenceContext(unitName = "rollerPU")
@@ -32,19 +29,19 @@ public class MediaFileDirectoryManager extends AbstractManager<MediaFileDirector
         super(MediaFileDirectory.class);
     }
 
-	public MediaFileDirectory getMediaFileDirectoryByName(Weblog weblog, String path) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public MediaFileDirectory getMediaFileDirectoryByName(Weblog weblog, String path) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public MediaFileDirectory createMediaFileDirectory(Weblog weblog, String path) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public MediaFileDirectory createMediaFileDirectory(Weblog weblog, String path) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public MediaFileDirectory getDefaultMediaFileDirectory(Weblog weblog) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-    
+    public MediaFileDirectory getDefaultMediaFileDirectory(Weblog weblog) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

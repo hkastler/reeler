@@ -72,17 +72,15 @@ public class PingTarget extends AbstractEntity implements Serializable {
     private Collection<AutoPing> autopingCollection;
 
     public PingTarget() {
+        super();
     }
 
     public PingTarget(String name, String pingurl, int conditioncode, boolean autoenabled) {
+        super();
         this.name = name;
         this.pingurl = pingurl;
         this.conditioncode = conditioncode;
         this.autoEnabled = autoenabled;
-    }
-
-    public PingTarget(Object object, String name, String url, boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getName() {

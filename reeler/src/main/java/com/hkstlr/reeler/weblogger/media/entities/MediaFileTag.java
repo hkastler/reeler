@@ -7,12 +7,10 @@ package com.hkstlr.reeler.weblogger.media.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.List;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -51,9 +49,8 @@ public class MediaFileTag extends AbstractEntity implements Serializable {
     private MediaFile mediaFile;
 
     public MediaFileTag() {
+        super();
     }
-
-    
 
     public MediaFileTag(String id, String name) {
         this.name = name;

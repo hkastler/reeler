@@ -54,6 +54,7 @@ public class JdbcrealmGroup implements Serializable {
     
     
     public JdbcrealmGroup() {
+        //constructor
     }
 
     public JdbcrealmGroup(Integer jdbcrealmGroupId) {
