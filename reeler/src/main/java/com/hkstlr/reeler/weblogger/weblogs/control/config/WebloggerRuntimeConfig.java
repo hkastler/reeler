@@ -214,7 +214,7 @@ public class WebloggerRuntimeConfig {
             StringWriter configString = new StringWriter();
             
             char[] buf = new char[AppConstants.EIGHT_KB_IN_BYTES];
-            int length = 0;
+            int length;
             while((length = reader.read(buf)) > 0) {
                 configString.write(buf, 0, length);
             }
