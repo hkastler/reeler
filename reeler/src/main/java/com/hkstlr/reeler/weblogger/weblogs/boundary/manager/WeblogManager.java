@@ -151,7 +151,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
             for (String cat : splitcats) {
                 if (cat.trim().length() == 0) {
                     continue;
-                }
+                }                
                 
                 WeblogCategory c = new WeblogCategory(
                         newWeblog,
