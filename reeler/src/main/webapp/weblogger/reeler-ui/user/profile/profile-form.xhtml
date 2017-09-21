@@ -176,11 +176,10 @@
             </div>
             
 
-            <input type="hidden" 
-                   jsfc="h:inputHidden" 
-                   name="id"
+            <h:inputHidden
+                   id="id"
                    rendered="#{bean.id ne null}"
-                   value="#{bean.id ne null ? id : ''}"/>
+                   value="#{bean.id ne null ? bean.id : ''}"/>
             <input type="hidden" name="action" value="#{bean.action}"/>
         </div>
 
