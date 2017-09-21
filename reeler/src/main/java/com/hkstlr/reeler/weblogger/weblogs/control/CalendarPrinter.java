@@ -15,13 +15,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author henry.kastler
  */
+@Dependent
 public class CalendarPrinter {
 
     private Calendar calendar;
