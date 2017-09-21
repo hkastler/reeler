@@ -8,15 +8,19 @@
     <engine>
         <property name="deploymentExportPath">target/</property>
     </engine>
-    <container qualifier="remote_container" default="true">
+    <container qualifier="chameleon" default="true">
         <configuration>
             <property name="chameleonTarget">wildfly:10.1.0.Final:remote</property>
-            <property name="managementAddress">192.168.1.120</property>
+            <property name="managementAddress">cosmicmachine</property>
             <property name="managementPort">10990</property>
             <property name="username">admin</property>
             <property name="password">adminadmin1</property>
             <property name="allowConnectingToRunningServer">true</property>
         </configuration>
+        <protocol type="Servlet 3.0">
+            <property name="host">cosmicmachine</property>
+            <property name="port">10080</property>
+        </protocol>
     </container>
 </arquillian>
 
