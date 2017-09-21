@@ -11,10 +11,11 @@
     <container qualifier="chameleon" default="true">
         <configuration>
             <property name="chameleonTarget">wildfly:10.1.0.Final:remote</property>
-            <property name="managementAddress">192.168.1.120</property>
+            <property name="managementAddress">127.0.0.1</property>
             <property name="managementPort">10990</property>
             <property name="username">admin</property>
             <property name="password">adminadmin1</property>
+            <property name="allowConnectingToRunningServer">true</property>
         </configuration>
     </container>
 </arquillian>

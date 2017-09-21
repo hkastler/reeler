@@ -5,8 +5,6 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
-import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
-import com.hkstlr.reeler.app.control.LoggerExposer;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import java.io.File;
 import java.util.Date;
@@ -17,17 +15,16 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.junit.InSequence;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.junit.Ignore;
 import org.junit.runner.RunWith;
 
 /**
  *
  * @author henry.kastler
  */
-@Ignore
 @RunWith(Arquillian.class)
 public class WeblogManagerIT {
     
@@ -36,51 +33,16 @@ public class WeblogManagerIT {
         return ShrinkWrap
                 .create(WebArchive.class, "weblog-manager-test.war")
                 
+                .addPackages(true, "com.hkstlr")
                 
-                .addPackage(AbstractManager.class.getPackage())
-                .addPackage("com.hkstlr.reeler.app.control")
-                .addPackage("com.hkstlr.reeler.app.entities")                              
-                .addClass(LoggerExposer.class)
-                     
-                
-                .addPackage("com.hkstlr.reeler.weblogger.users.boundary.manager")
-                .addPackage("com.hkstlr.reeler.weblogger.users.control")
-                .addPackage("com.hkstlr.reeler.weblogger.users.entities")
-                
-                .addPackage("com.hkstlr.reeler.weblogger.pings.boundary")
-                .addPackage("com.hkstlr.reeler.weblogger.pings.entities")
-                
-                .addPackage("com.hkstlr.reeler.weblogger.themes.entities")
-                .addPackage("com.hkstlr.reeler.weblogger.themes.control")
-                
-                
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.boundary.manager")
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin")
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.control")
-                
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.control.config")
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.control.config.runtime")
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners")
-                .addPackage("com.hkstlr.reeler.weblogger.weblogs.entities")
-                
-                .addPackage("com.hkstlr.reeler.weblogger.media.boundary.manager")
-                .addPackage("com.hkstlr.reeler.weblogger.media.entities")
-                
-                .addPackage("com.hkstlr.reeler.weblogger.plugins.boundary")
-                .addPackage("com.hkstlr.reeler.weblogger.plugins.comment.control")
-                .addPackage("com.hkstlr.reeler.weblogger.plugins.control")
-                .addPackage("com.hkstlr.reeler.weblogger.plugins.entities")
-                .addPackage("com.hkstlr.reeler.weblogger.plugins.entry.control")
-                
-                .addPackage("com.hkstlr.reeler.weblogger.pings.control")
-                .addPackage("com.hkstlr.reeler.weblogger.pings.boundary")                
-                .addPackage("com.hkstlr.reeler.weblogger.pings.entities")
-                
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("test-persistence-web.xml", "web.xml")
                 .addAsWebInfResource("jboss-deployment-structure.xml", "jboss-deployment-structure.xml")
                 .addAsResource("test-persistence.xml", "META-INF/persistence.xml")
                 .addAsResource(new File("/com/hkstlr/reeler/app/control/config/reeler.properties")
-                ,"/com/hkstlr/reeler/app/control/config/reeler.properties");
+                ,"/com/hkstlr/reeler/app/control/config/reeler.properties")
+                .addAsResource(new File("/com/hkstlr/reeler/weblogger/control/config/runtime/runtimeConfigDefs.xml")
+                ,"/com/hkstlr/reeler/weblogger/control/config/runtime/runtimeConfigDefs.xml");
                 
     }
 
@@ -94,7 +56,7 @@ public class WeblogManagerIT {
     public void testCreate() throws Exception {
     	log.log(Level.INFO, "*************************");
     	log.log(Level.INFO, "testCreate");
-    	
+
         String name = "new weblog";
         String handle = "new-handle";
         String emailaddress = "x.y@test.com";
@@ -126,8 +88,8 @@ public class WeblogManagerIT {
             assertEquals("new-handle", weblog.getHandle());
         } catch (Exception e) {
             System.out.println("error findingById:" + testWeblog.getId());
-        }         
-
     }  
+    
+}
     
 }
