@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.weblogger.users.boundary.login;
+package com.hkstlr.reeler.weblogger.users.boundary.auth;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
@@ -42,22 +42,22 @@ public class LoginBean implements Serializable {
     public static final String USER_SESSION_KEY = "user";
 
     @EJB
-    private transient UserManager userManager;    
+    UserManager userManager;    
 
-    
-    private transient URLStrategy urlStrategy;
+    @Inject
+    private URLStrategy urlStrategy;
 
     
     private static final Logger log = Logger.getLogger(LoginBean.class.getName());
 
+    public LoginBean() {
+        //default constructor
+    }
 
     /**
      * Creates a new instance of LoginBean
-     * @param userManager
-     * @param urlStrategy
-     */
-    
-    @Inject 
+     * * @param urlStrategy
+     */     
     public LoginBean(URLStrategy urlStrategy) {
         this.urlStrategy = urlStrategy;
     }
