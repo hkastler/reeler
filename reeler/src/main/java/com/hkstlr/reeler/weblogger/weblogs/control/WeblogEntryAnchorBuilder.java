@@ -11,11 +11,13 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author henry.kastler
  */
+@Dependent
 public class WeblogEntryAnchorBuilder {
     
     public static final String TITLE_SEPARATOR
