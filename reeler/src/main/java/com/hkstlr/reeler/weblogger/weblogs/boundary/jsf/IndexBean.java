@@ -92,7 +92,7 @@ public class IndexBean {
        if(userCount == 0){
            needsSetup = true;
        }
-       LOG.info(Boolean.toString(needsSetup));
+       LOG.finest(Boolean.toString(needsSetup));
        return needsSetup; 
     }
     

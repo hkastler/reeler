@@ -78,17 +78,17 @@ public class WebloggerRuntimeConfig {
     
     @PostConstruct
     protected void init(){
-        LOG.info("init");
+        LOG.fine("init");
         if(this.props.isEmpty()) {
             this.props = runtimeConfigManager.getProperties();
             if(this.props.isEmpty()){
-                LOG.info("loading from xml config file on first time run");
-                LOG.info(getRuntimeConfigDefsAsString());
+                LOG.fine("loading from xml config file on first time run");
+                LOG.fine(getRuntimeConfigDefsAsString());
                 configDefs = getRuntimeConfigDefs();
                 configDefs.getConfigDefs().forEach((cd) -> {
                     cd.getDisplayGroups().forEach((dg) -> {
                        dg.getPropertyDefs().forEach((prop) -> {
-                           LOG.info(prop.getName());
+                           LOG.fine(prop.getName());
                            props.put(prop.getName(), prop.getDefaultValue());
                        });
                     });
