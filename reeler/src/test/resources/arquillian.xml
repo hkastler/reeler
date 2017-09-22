@@ -11,14 +11,14 @@
     <container qualifier="chameleon" default="true">
         <configuration>
             <property name="chameleonTarget">wildfly:10.1.0.Final:remote</property>
-            <property name="managementAddress">wildfly</property>
+            <property name="managementAddress">arquillian</property>
             <property name="managementPort">10990</property>
             <property name="username">admin</property>
             <property name="password">adminadmin1</property>
             <property name="allowConnectingToRunningServer">true</property>
         </configuration>
         <protocol type="Servlet 3.0">
-            <property name="host">cosmicmachine</property>
+            <property name="host">arquillian</property>
             <property name="port">10080</property>
         </protocol>
     </container>
