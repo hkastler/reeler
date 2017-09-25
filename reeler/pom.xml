@@ -329,7 +329,7 @@
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.exclusions>**/vendor/**</sonar.exclusions>
         <sonar.jacoco.reportPath>${basedir}/target/coverage-reports/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.host.url>http://sonar:9000</sonar.host.url>
         <sonar.exclusions>**/vendor/**</sonar.exclusions>
         <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
         <!-- # "@NonNull" values should not be set to null -->
