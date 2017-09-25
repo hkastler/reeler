@@ -327,8 +327,17 @@
         <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.war.plugin>2.5</version.war.plugin>
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
-        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.exclusions>**/vendor/**</sonar.exclusions>
         <sonar.jacoco.reportPath>${basedir}/target/coverage-reports/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.exclusions>**/vendor/**</sonar.exclusions>
+        <sonar.issue.ignore.multicriteria>e1,e2</sonar.issue.ignore.multicriteria>
+        <!-- # "@NonNull" values should not be set to null -->
+        <sonar.issue.ignore.multicriteria.e1.ruleKey>squid:S2637</sonar.issue.ignore.multicriteria.e1.ruleKey>
+        <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
+        <!-- # Constructor injection should be used instead of field injection -->
+        <sonar.issue.ignore.multicriteria.e2.ruleKey>squid:S3306</sonar.issue.ignore.multicriteria.e2.ruleKey>
+        <sonar.issue.ignore.multicriteria.e2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
     </properties>
     
 </project>
