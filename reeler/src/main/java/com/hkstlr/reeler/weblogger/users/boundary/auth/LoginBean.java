@@ -42,7 +42,7 @@ public class LoginBean implements Serializable {
     public static final String USER_SESSION_KEY = "user";
 
     @EJB
-    UserManager userManager;    
+    transient UserManager userManager;    
 
     @Inject
     private URLStrategy urlStrategy;
