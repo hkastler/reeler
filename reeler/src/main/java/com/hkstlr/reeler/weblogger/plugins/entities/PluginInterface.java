@@ -16,7 +16,6 @@
 package com.hkstlr.reeler.weblogger.plugins.entities;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 
 /**
  *

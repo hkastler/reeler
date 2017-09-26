@@ -19,11 +19,8 @@
 package com.hkstlr.reeler.weblogger.plugins.comment.control;
 
 import com.hkstlr.reeler.weblogger.plugins.control.StringFixer;
-import java.io.BufferedReader;
-import java.io.StringReader;
 
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 

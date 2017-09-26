@@ -5,10 +5,8 @@
  */
 package com.hkstlr.reeler.weblogger.users.control;
 
-import com.hkstlr.reeler.app.control.AppPermission;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.app.entities.PermissionEntity;
-import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogPermissionManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;

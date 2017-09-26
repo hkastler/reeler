@@ -6,7 +6,6 @@
 package com.hkstlr.reeler.weblogger.users.control;
 
 
-import com.hkstlr.reeler.app.control.StringPool;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.component.UIInput;

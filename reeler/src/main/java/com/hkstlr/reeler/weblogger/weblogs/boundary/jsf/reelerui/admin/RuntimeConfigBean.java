@@ -5,7 +5,6 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
 
-import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.admin.RuntimeConfigManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.runtime.RuntimeConfigDefs;

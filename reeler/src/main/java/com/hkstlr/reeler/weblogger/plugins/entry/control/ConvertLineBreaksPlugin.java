@@ -18,8 +18,6 @@
 package com.hkstlr.reeler.weblogger.plugins.entry.control;
 
 import com.hkstlr.reeler.app.control.StringPool;
-import java.io.BufferedReader;
-import java.io.StringReader;
 import java.util.logging.Logger;
 
 import javax.inject.Inject;
@@ -28,7 +26,6 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.plugins.control.StringFixer;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
-import java.util.logging.Level;
 
 /**
  * Simple page plugin that converts paragraphs of plain text into html
