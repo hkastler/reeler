@@ -8,19 +8,19 @@ public abstract class WeblogEntryCommentPlugin {
 	 /**
      * Briefly describes the function of the Plugin.  May contain HTML.
      */
-    abstract public String getDescription();
+    public abstract String getDescription();
     
     
     /**
      * A unique identifier for the plugin.
      */
-    abstract public String getId();
+    public abstract String getId();
     
     
     /**
      * Returns the display name of this Plugin.
      */
-    abstract public String getName();
+    public abstract String getName();
     
     
     /**
@@ -30,5 +30,5 @@ public abstract class WeblogEntryCommentPlugin {
      * @param str         String to which plugin should be applied.
      * @return            Results of applying plugin to string.
      */
-    abstract public String render(final WeblogEntryComment comment, String str);
+    public abstract String render(final WeblogEntryComment comment, String str);
 }
