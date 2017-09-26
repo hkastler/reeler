@@ -12,6 +12,8 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
 import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.List;
@@ -119,7 +121,7 @@ public class PingTargetManager extends AbstractManager<PingTarget> {
 
     
     public boolean isHostnameKnown(String url)
-            throws WebloggerException {
+            throws WebloggerException, URISyntaxException {
         if (url == null || url.trim().length() == 0) {
             return false;
         }
@@ -129,10 +131,10 @@ public class PingTargetManager extends AbstractManager<PingTarget> {
             if (host == null || host.trim().length() == 0) {
                 return false;
             }
-            //this is not a useless assignment, as an error will be thrown if host is not a valid InetAddress
-            InetAddress addr = InetAddress.getByName(host);
-            return true;
-        } catch (MalformedURLException | UnknownHostException e) {
+           //another test
+           new URI(url).parseServerAuthority();            
+           return true;
+        } catch (MalformedURLException e) {
             log.log(Level.WARNING,null,e);
             return false;
         }

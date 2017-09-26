@@ -87,7 +87,7 @@ public class WeblogEntriesBean extends PageBean {
         reelerUiBean.setUserWeblogs();
         Weblog weblog = reelerUiBean.getCurrentWeblog();
 
-        if (filtered.get()) {
+        if (filtered.isPresent() && filtered.get()) {
             this.outcome += "?1=1";
             //these will be re-added by the paginator
             params.entrySet()

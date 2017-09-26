@@ -134,7 +134,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         if (size == 0) {
             this.position = 0;
         } else {
-             Optional<Integer> maxPosition = Optional.ofNullable(weblog.getWeblogCategories().stream()
+             Optional<Integer> maxPosition = Optional.of(weblog.getWeblogCategories().stream()
                 .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
                 .get()
                 .getPosition());
