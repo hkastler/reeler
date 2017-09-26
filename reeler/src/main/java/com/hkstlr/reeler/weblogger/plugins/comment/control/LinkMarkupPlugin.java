@@ -43,7 +43,7 @@ public class LinkMarkupPlugin extends WeblogEntryCommentPlugin {
             "http[s]?://[^/][\\S]+", Pattern.CASE_INSENSITIVE);
 
     public LinkMarkupPlugin() {
-
+        //default constructor
     }
 
     /**

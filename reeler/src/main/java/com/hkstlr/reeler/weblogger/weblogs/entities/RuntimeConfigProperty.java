@@ -42,6 +42,7 @@ public class RuntimeConfigProperty implements Serializable {
     private String value;
 
     public RuntimeConfigProperty() {
+        //default constructor
     }
 
     public RuntimeConfigProperty(String name) {

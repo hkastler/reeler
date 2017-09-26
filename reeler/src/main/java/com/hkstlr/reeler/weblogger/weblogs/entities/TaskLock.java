@@ -50,32 +50,33 @@ public class TaskLock implements Serializable {
     @Size(min = 1, max = 48)
     @Column(name = "id", nullable = false, length = 48)
     private String id;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
     @Column(name = "name", nullable = false, length = 255)
     private String name;
-    
+
     @Column(name = "islocked")
     private Boolean isLocked;
-    
+
     @Column(name = "timeacquired")
     @Temporal(TemporalType.TIMESTAMP)
     private Date timeAcquired;
-    
+
     @Column(name = "timeleased")
     private Integer timeLeased;
-    
+
     @Column(name = "lastRun")
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastRun;
-    
+
     @Size(max = 255)
     @Column(name = "client", length = 255)
     private String clientId;
 
     public TaskLock() {
+        //default constructor
     }
 
     public TaskLock(String id) {
@@ -103,8 +104,6 @@ public class TaskLock implements Serializable {
         this.name = name;
     }
 
-    
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -129,5 +128,5 @@ public class TaskLock implements Serializable {
     public String toString() {
         return "com.hkstlr.reeler.weblogger.entities.TaskLock[ id=" + id + " ]";
     }
-    
+
 }

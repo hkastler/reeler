@@ -60,6 +60,7 @@ public class Newsfeed extends AbstractEntity implements Serializable {
     private Weblog weblog;
 
     public Newsfeed() {
+        //default constructor
     }
 
     public Newsfeed(String id, String name, String description, String link) {

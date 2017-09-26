@@ -51,6 +51,7 @@ public class OAuthConsumerRecord implements Serializable {
     private String userName;
 
     public OAuthConsumerRecord() {
+        //default constructor
     }
 
     public OAuthConsumerRecord(String consumerKey) {

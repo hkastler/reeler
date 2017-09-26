@@ -42,11 +42,6 @@ public class WeblogAuthorBean implements Serializable {
         //constructor
     }
 
-    @PostConstruct
-    protected void init() {
-        
-    }
-
     public Weblog getWeblog() {
         return weblog;
     }

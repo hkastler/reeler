@@ -33,7 +33,7 @@ public class HTMLSubsetPlugin extends WeblogEntryCommentPlugin {
       
     
     public HTMLSubsetPlugin() {
-        
+       //default constructor
     }
     
     

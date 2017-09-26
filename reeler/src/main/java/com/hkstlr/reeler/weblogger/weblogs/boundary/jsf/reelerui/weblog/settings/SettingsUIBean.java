@@ -30,6 +30,7 @@ public class SettingsUIBean {
     private static String PATH;
       
     public SettingsUIBean() {
+        //default constructor
     }
     
     @PostConstruct

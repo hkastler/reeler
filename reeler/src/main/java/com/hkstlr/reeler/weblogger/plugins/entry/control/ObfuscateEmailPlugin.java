@@ -15,7 +15,6 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  */
-
 package com.hkstlr.reeler.weblogger.plugins.entry.control;
 
 import java.util.logging.Logger;
@@ -23,54 +22,44 @@ import java.util.logging.Logger;
 import javax.inject.Inject;
 
 //import org.apache.commons.lang3.StringEscapeUtils;
-
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.plugins.control.StringFixer;
 
-
-
 /**
  * Obfuscate email addresses in entry text.
  */
 public class ObfuscateEmailPlugin extends WeblogEntryPlugin {
-    
-	@Inject
+
+    @Inject
     private Logger mLogger;
-    
+
     protected String name = "Email Scrambler";
-    
-    protected String description = "Automatically converts email addresses " +
-            "to me-AT-mail-DOT-com format.  Also &quot;scrambles&quot; mailto: links.";
-    
-    
+
+    protected String description = "Automatically converts email addresses "
+            + "to me-AT-mail-DOT-com format.  Also &quot;scrambles&quot; mailto: links.";
+
     public ObfuscateEmailPlugin() {
         super();
-       
+
     }
-    
+
     public ObfuscateEmailPlugin(Class pluginClass) {
         super(pluginClass);
         mLogger.fine("ObfuscateEmailPlugin instantiated.");
     }
-    
-    
+
     public String getName() {
         return name;
     }
-    
-    
+
     public String getDescription() {
         return null;//StringEscapeUtils.escapeEcmaScript(description);
     }
-    
-    
-    public void init(Weblog website) throws WebloggerException {}
-    
-    
+
     public String render(WeblogEntry entry, String str) {
         return StringFixer.encodeEmail(str);
     }
-    
+
 }

@@ -187,8 +187,7 @@ public class FileContentManager {
         }
     }
 
-    public void release() {
-    }
+    
 
     /**
      * @see

@@ -128,6 +128,7 @@ public class WeblogEntryComment extends AbstractEntity implements Serializable {
     private WeblogEntry weblogEntry;
 
     public WeblogEntryComment() {
+        //default constructor
     }
 
     public WeblogEntryComment(boolean notify, ApprovalStatus status, String contenttype) {

@@ -6,47 +6,34 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.plugins.entities.AbstractPlugin;
 import com.hkstlr.reeler.weblogger.plugins.entities.PluginInterface;
 
-public class WeblogEntryPlugin extends AbstractPlugin<Object> implements PluginInterface<Object>{
+public class WeblogEntryPlugin extends AbstractPlugin<Object> implements PluginInterface<Object> {
 
-   
     public WeblogEntryPlugin() {
         super();
     }
-    
+
     public WeblogEntryPlugin(Class pluginClass) {
         super(pluginClass);
     }
-    
-	/**
+
+    /**
      * Returns the display name of this Plugin.
      */
     public String getName() {
-		return null;
-	}
-    
-    
+        return null;
+    }
+
     /**
-     * Briefly describes the function of the Plugin.  May contain HTML.
+     * Briefly describes the function of the Plugin. May contain HTML.
      */
     public String getDescription() {
-		return null;
-	}
-    
-    
-    /**
-     * Give plugin a chance to initialize and add objects the rendering model.
-     *
-     * @param weblog     Weblog being processed
-     */
-   
-    public void init(Weblog weblog) throws WebloggerException {
-	}
-    
-   
-	public String render(WeblogEntry entry, String str) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+        return null;
+    }
+
+    public String render(WeblogEntry entry, String str) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
     @Override
     public String render(Class pluginClass, String str) {
@@ -57,7 +44,5 @@ public class WeblogEntryPlugin extends AbstractPlugin<Object> implements PluginI
     public void init(Object type) throws WebloggerException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-
 
 }

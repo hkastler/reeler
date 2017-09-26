@@ -76,6 +76,7 @@ public class OAuthAccessorRecord implements Serializable {
     private Boolean authorized;
 
     public OAuthAccessorRecord() {
+        //default constructor
     }
 
     public OAuthAccessorRecord(String consumerkey) {

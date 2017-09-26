@@ -55,6 +55,7 @@ public class WeblogBookmarkFolder extends AbstractEntity implements Serializable
     private List<WeblogBookmark> bookmarks;
 
     public WeblogBookmarkFolder() {
+        //default constructor
     }
 
     public WeblogBookmarkFolder(String name) {

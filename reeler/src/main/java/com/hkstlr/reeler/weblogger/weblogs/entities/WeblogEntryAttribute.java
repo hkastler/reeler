@@ -61,6 +61,7 @@ public class WeblogEntryAttribute implements Serializable {
     private WeblogEntry entry;
 
     public WeblogEntryAttribute() {
+        //default constructor
     }
 
     public WeblogEntryAttribute(String id) {

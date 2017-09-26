@@ -46,6 +46,7 @@ public class WeblogEntryCommentBean extends PageBean {
     private Logger log;
 
     public WeblogEntryCommentBean() {
+        //default constructor
     }
 
     @PostConstruct

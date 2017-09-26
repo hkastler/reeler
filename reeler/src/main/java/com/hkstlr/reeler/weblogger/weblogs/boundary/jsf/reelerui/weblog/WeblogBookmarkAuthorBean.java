@@ -32,6 +32,7 @@ public class WeblogBookmarkAuthorBean extends AuthorBean {
     private String folderid;
 
     public WeblogBookmarkAuthorBean() {
+        //default constructor
     }
 
     public WeblogBookmarkAuthorBean(Class entityClass) {

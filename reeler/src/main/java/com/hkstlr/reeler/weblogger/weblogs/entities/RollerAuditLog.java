@@ -65,6 +65,7 @@ public class RollerAuditLog implements Serializable {
     private Date changeTime;
 
     public RollerAuditLog() {
+        //default constructor
     }
 
     public RollerAuditLog(String id) {
