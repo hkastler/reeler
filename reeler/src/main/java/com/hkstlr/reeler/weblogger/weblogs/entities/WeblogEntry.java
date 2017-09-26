@@ -102,7 +102,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
     }
 
-    private transient static final long serialVersionUID = 1L;
+    private static final transient long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.anchor.NotNull}")

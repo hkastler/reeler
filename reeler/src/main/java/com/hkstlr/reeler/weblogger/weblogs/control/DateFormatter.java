@@ -43,7 +43,7 @@ public class DateFormatter {
     
     public static final DateFormat datePickerFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
     
-    static public DateFormat localeDefaultDateFormat(Locale currentLocale) {
+    public static DateFormat localeDefaultDateFormat(Locale currentLocale) {
         return DateFormat.getDateInstance(DateFormat.SHORT ,currentLocale);
     }
     

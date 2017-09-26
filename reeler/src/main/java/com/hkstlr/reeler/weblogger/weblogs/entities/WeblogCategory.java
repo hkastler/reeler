@@ -41,7 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogCategory.removeByWeblog", query = "DELETE FROM WeblogCategory w WHERE w.weblog = ?1")})
 public class WeblogCategory extends AbstractEntity implements Serializable {
 
-    private transient static final long serialVersionUID = 1L;
+    private static final transient long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull

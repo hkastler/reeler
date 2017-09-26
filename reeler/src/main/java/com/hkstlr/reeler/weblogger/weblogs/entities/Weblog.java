@@ -92,8 +92,6 @@ import javax.validation.constraints.Pattern;
     , @NamedQuery(name = "Weblog.getCountByHandleLike", query = "SELECT COUNT(w) FROM Weblog w WHERE UPPER(w.handle) like ?1")})
 public class Weblog extends AbstractEntity implements Serializable {
 
-    private transient static final Logger log = Logger.getLogger(Weblog.class.getName());
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)

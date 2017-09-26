@@ -7,7 +7,6 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Basic;
@@ -61,7 +60,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogEntryComment.getMostCommentedWeblogEntryByWebsite&amp;EndDate&amp;StartDate", query = "SELECT COUNT(c), c.weblogEntry.website.handle, c.weblogEntry.anchor, c.weblogEntry.title FROM WeblogEntryComment c WHERE c.weblogEntry.website = ?1 AND c.weblogEntry.pubTime < ?2 AND c.weblogEntry.pubTime > ?3 GROUP BY c.weblogEntry.website.handle, c.weblogEntry.anchor, c.weblogEntry.title")})
 public class WeblogEntryComment extends AbstractEntity implements Serializable {
 
-    private transient static final long serialVersionUID = 1L;
+    private static final transient long serialVersionUID = 1L;
     
     // approval status states
     public enum ApprovalStatus {
