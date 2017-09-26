@@ -82,7 +82,7 @@ public class WeblogEntriesBean extends PageBean {
         Optional<Boolean> filtered = Optional.ofNullable(
                 Boolean.parseBoolean(params.get("filter"))
         );
-        LOG.finest("filtered:".concat(Boolean.toString(filtered.get())));
+        
 
         reelerUiBean.setUserWeblogs();
         Weblog weblog = reelerUiBean.getCurrentWeblog();
