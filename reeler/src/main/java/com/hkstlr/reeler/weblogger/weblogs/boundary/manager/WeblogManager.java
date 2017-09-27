@@ -76,6 +76,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     private Map<String, String> weblogHandleToIdMap = new HashMap<>();
 
+    private String APPEND_AND = " AND ";
 
     @PersistenceContext
     EntityManager em;
@@ -445,7 +446,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         if (startDate != null) {
             Timestamp start = new Timestamp(startDate.getTime());
             if (whereClause.length() > 0) {
-                whereClause.append(" AND ");
+                whereClause.append(APPEND_AND);
             }
             params.add(size++, start);
             whereClause.append(" w.dateCreated > ?").append(size);
@@ -453,21 +454,21 @@ public class WeblogManager extends AbstractManager<Weblog> {
         if (endDate != null) {
             Timestamp end = new Timestamp(endDate.getTime());
             if (whereClause.length() > 0) {
-                whereClause.append(" AND ");
+                whereClause.append(APPEND_AND);
             }
             params.add(size++, end);
             whereClause.append(" w.dateCreated < ?").append(size);
         }
         if (enabled != null) {
             if (whereClause.length() > 0) {
-                whereClause.append(" AND ");
+                whereClause.append(APPEND_AND);
             }
             params.add(size++, enabled);
             whereClause.append(" w.visible = ?").append(size);
         }
         if (active != null) {
             if (whereClause.length() > 0) {
-                whereClause.append(" AND ");
+                whereClause.append(APPEND_AND);
             }
             params.add(size++, active);
             whereClause.append(" w.isActive = ?").append(size);
