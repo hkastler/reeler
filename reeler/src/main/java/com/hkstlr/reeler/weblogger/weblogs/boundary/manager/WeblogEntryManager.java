@@ -80,6 +80,9 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
     @PersistenceContext
     protected EntityManager em;
+    
+    private static final String WEBSITE_FIELD_NAME = "website";
+    private static final String PUBTIME_FIELD_NAME = "pubTime";
 
     
     public WeblogEntryManager() {
@@ -107,7 +110,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
 
         Query query = em.createNamedQuery("WeblogEntry.findByWebsiteAndAnchor");
-        query.setParameter("website", weblog);
+        query.setParameter(WEBSITE_FIELD_NAME, weblog);
         query.setParameter("anchor", anchor);
         
         try {
@@ -354,7 +357,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
         Root<WeblogEntry> weblogEntry = cq.from(WeblogEntry.class);
         cq.select(getEntityManager().getCriteriaBuilder().count(weblogEntry));
-        cq.where(cb.equal(weblogEntry.get("website"), weblog));
+        cq.where(cb.equal(weblogEntry.get(WEBSITE_FIELD_NAME), weblog));
         Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
@@ -370,12 +373,12 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
         List<Predicate> predicates = new ArrayList<>();
                 
-        predicates.add(cb.equal(t.get("website"), weblog));
+        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), weblog));
         predicates.add(cb.equal(t.get("publishEntry"), true));
-        predicates.add(cb.lessThanOrEqualTo(t.<Calendar>get("pubTime"), Calendar.getInstance()));        
+        predicates.add(cb.lessThanOrEqualTo(t.<Calendar>get(PUBTIME_FIELD_NAME), Calendar.getInstance()));        
         
         cq.where(predicates.toArray(new Predicate[]{}));
-        cq.orderBy(cb.desc(t.get("pubTime")));  
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));  
         
         Query q = getEntityManager().createQuery(cq);        
         q.setMaxResults(range[1] - range[0] + 1);
@@ -395,10 +398,10 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
         List<Predicate> predicates = new ArrayList<>();
                 
-        predicates.add(cb.equal(t.get("website"), weblog));       
+        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), weblog));       
         
         cq.where(predicates.toArray(new Predicate[]{}));
-        cq.orderBy(cb.desc(t.get("pubTime")));  
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));  
         
         Query q = getEntityManager().createQuery(cq);        
         q.setMaxResults(range[1] - range[0] + 1);
@@ -418,7 +421,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
         List<Predicate> predicates = new ArrayList<>();
                 
-        predicates.add(cb.equal(t.get("website"), wesc.getWeblog())); 
+        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), wesc.getWeblog())); 
         
         if(wesc.getCategoryId() != null && !wesc.getCategoryId().isEmpty()){
             //should be a join?
@@ -446,7 +449,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             }
             startDate.setTime(wesc.getStartDate());
             endDate.setTime(wesc.getEndDate());
-            p = cb.between(t.<Calendar>get("pubTime"), startDate, endDate);
+            p = cb.between(t.<Calendar>get(PUBTIME_FIELD_NAME), startDate, endDate);
             predicates.add(p);
         }
         
@@ -455,7 +458,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         }
         
         cq.where(predicates.toArray(new Predicate[]{}));
-        cq.orderBy(cb.desc(t.get("pubTime")));  
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));  
         
         Query q = getEntityManager().createQuery(cq);    
         if(wesc.getMaxResults() > 0){
