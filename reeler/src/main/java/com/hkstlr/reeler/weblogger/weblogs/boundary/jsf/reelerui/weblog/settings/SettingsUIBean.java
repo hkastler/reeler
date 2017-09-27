@@ -40,7 +40,7 @@ public class SettingsUIBean {
         pages.put("members", "Members");
         pages.put("pings", "Pings");
         pages.put("maintenance", "Maintenance");
-        SettingsUIBean.PATH = reelerUiBean.getPath() + "/settings";
+        setPath(reelerUiBean.getPath() + "/settings");
        
     }
     
@@ -56,7 +56,7 @@ public class SettingsUIBean {
         return PATH;
     }
 
-    public void setPath(String path) {
+    public static void setPath(String path) {
         SettingsUIBean.PATH = path;
     }
        

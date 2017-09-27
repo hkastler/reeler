@@ -26,7 +26,7 @@ public class AdminUIBean {
 
     private static final String PATH = "/weblogger/reeler-ui/admin";
     
-    private static final String template = "/WEB-INF/weblogger/templates/reeler-ui/pageContentTemplate.xhtml";
+    private static final String TEMPLATE = "/WEB-INF/weblogger/templates/reeler-ui/pageContentTemplate.xhtml";
     
     @ManagedProperty(value="#{param.page}")
     private String page;
@@ -68,7 +68,7 @@ public class AdminUIBean {
     }
 
     public String getTemplate() {
-        return template;
+        return TEMPLATE;
     }
     
     public void viewAction(String page){

@@ -22,12 +22,10 @@ public class AppPermission extends java.security.Permission implements AppPermis
     @Override
     public List<String> getActionsAsList() {
         return Arrays.asList(getActions().split(","));
-        //return Utilities.stringToStringList(getActions(), ",");
     }
 
     @Override
     public void setActionsAsList(List<String> actionsList) {
-        //setActions(Utilities.stringListToString(actionsList, ","));
         StringBuilder actions = new StringBuilder();
         for (String s : actionsList) {
             actions.append(s);

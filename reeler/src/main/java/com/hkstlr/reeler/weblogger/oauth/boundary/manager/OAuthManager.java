@@ -70,6 +70,9 @@ public class OAuthManager{
     
     @PersistenceContext
     private EntityManager em;
+    
+    private static final String USERID_FIELD = "userId";
+    private static final String AUTHORIZED_FIELD = "authorized";
 
    
     protected EntityManager getEntityManager() {
@@ -304,7 +307,7 @@ public class OAuthManager{
                 record.getConsumerSecret(),
                 getServiceProvider());
             if (record.getUserName() != null) {
-                consumer.setProperty("userId", record.getUserName());
+                consumer.setProperty(USERID_FIELD, record.getUserName());
             }
         }
         return consumer;
@@ -319,10 +322,10 @@ public class OAuthManager{
             accessor.requestToken = record.getRequestToken();
             accessor.tokenSecret = record.getTokenSecret();
             if (record.getAuthorized() != null) {
-                accessor.setProperty("authorized", record.getAuthorized());
+                accessor.setProperty(AUTHORIZED_FIELD, record.getAuthorized());
             }
             if (record.getUserName() != null) {
-                accessor.setProperty("userId", record.getUserName());
+                accessor.setProperty(USERID_FIELD, record.getUserName());
             }
         }
         return accessor;
@@ -349,8 +352,8 @@ public class OAuthManager{
         record.setRequestToken(accessor.requestToken);
         record.setAccessToken(accessor.accessToken);
         record.setTokenSecret(accessor.tokenSecret);
-        if (accessor.getProperty("userId") != null) {
-            record.setUserName((String)accessor.getProperty("userId"));
+        if (accessor.getProperty(USERID_FIELD) != null) {
+            record.setUserName((String)accessor.getProperty(USERID_FIELD));
         }
 
         if (record.getCreated() != null) {
@@ -365,8 +368,8 @@ public class OAuthManager{
             record.setUpdated(record.getCreated());
         }
 
-        if (accessor.getProperty("authorized") != null) {
-            record.setAuthorized((Boolean)accessor.getProperty("authorized"));
+        if (accessor.getProperty(AUTHORIZED_FIELD) != null) {
+            record.setAuthorized((Boolean)accessor.getProperty(AUTHORIZED_FIELD));
         }
         try {
             em.persist(record);
