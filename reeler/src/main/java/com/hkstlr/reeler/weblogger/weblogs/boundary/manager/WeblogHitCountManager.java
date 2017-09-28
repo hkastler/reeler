@@ -39,6 +39,8 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
     protected EntityManager getEntityManager() {
         return em;
     }
+    
+    private static final String GETBYWEBLOG = "WeblogHitCount.getByWeblog";
 
     public WeblogHitCountManager() {
         super(WeblogHitCount.class);
@@ -58,7 +60,7 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
      */
     public WeblogHitCount getHitCountByWeblog(Weblog weblog)
     throws WebloggerException {
-        TypedQuery<WeblogHitCount> q = em.createNamedQuery("WeblogHitCount.getByWeblog", WeblogHitCount.class);
+        TypedQuery<WeblogHitCount> q = em.createNamedQuery(GETBYWEBLOG, WeblogHitCount.class);
         q.setParameter(1, weblog);
         try {
             return q.getSingleResult();
@@ -125,7 +127,7 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
             throw new WebloggerException("Website cannot be NULL.");
         }
 
-        TypedQuery<WeblogHitCount> q = em.createNamedQuery("WeblogHitCount.getByWeblog", WeblogHitCount.class);
+        TypedQuery<WeblogHitCount> q = em.createNamedQuery(GETBYWEBLOG, WeblogHitCount.class);
         q.setParameter(1, weblog);
         WeblogHitCount hitCount;
         try {
@@ -159,7 +161,7 @@ public class WeblogHitCountManager extends AbstractManager<WeblogHitCount> {
      * @inheritDoc
      */
     public void resetHitCount(Weblog weblog) throws WebloggerException {
-        TypedQuery<WeblogHitCount> q = em.createNamedQuery("WeblogHitCount.getByWeblog", WeblogHitCount.class);
+        TypedQuery<WeblogHitCount> q = em.createNamedQuery(GETBYWEBLOG, WeblogHitCount.class);
         q.setParameter(1, weblog);
         WeblogHitCount hitCount;
         try {
