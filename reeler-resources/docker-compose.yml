@@ -1,0 +1,31 @@
+version: '2'
+
+networks:
+  flynetwork:
+    driver: bridge
+services:
+  wildfly:
+    build: 
+      context: ./
+      dockerfile: ./wildfly/Dockerfile
+    ports:
+      - "80:8080"
+      - "9990:9990"
+    networks:
+      - flynetwork
+    depends_on:
+      - reelerdb
+    volumes:
+      - C:\apps\reeler\:/opt/jboss/wildfly/standalone/deployments
+  reelerdb:
+    networks:
+      - flynetwork 
+    image: postgres
+    environment:
+      - POSTGRES_USER=roller
+      - POSTGRES_PASSWORD=keeprolling
+    ports:
+      - '5432:5432'
+
+
+

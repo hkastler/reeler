@@ -2,9 +2,7 @@
 
 # Start batching commands
 batch
-module add --name=org.postgres --resources=..\postgresql\postgresql-9.4-1204.jdbc4.jar --dependencies=javax.api,javax.transaction.api
-
-/subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgres",driver-class-name=org.postgresql.Driver)
+module add --name=org.postgresql --resources=/opt/jboss/wildfly/standalone/tmp/postgresql-42.1.4.jar --dependencies=javax.api,javax.transaction.api
 
 
 # Add the  PostgreSQL database driver to the datasources subsystem
@@ -15,7 +13,7 @@ module add --name=org.postgres --resources=..\postgresql\postgresql-9.4-1204.jdb
 data-source add \
     --name=RollerDS \
     --driver-name=postgresql \
-    --connection-url=jdbc:postgresql://localhost:5432/roller \
+    --connection-url=jdbc:postgresql://reelerdb:5432/roller \
     --jndi-name=java:/RollerDS \
     --user-name=roller \
     --password=keeprolling \
