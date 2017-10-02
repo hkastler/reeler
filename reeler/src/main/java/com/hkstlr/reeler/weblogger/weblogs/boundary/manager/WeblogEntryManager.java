@@ -127,10 +127,11 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return weblogEntry;
     }
 
+    @SuppressWarnings("unchecked")
     public List<WeblogEntry> getWeblogEntriesForWeblog(Weblog weblog) {
         Query query = em.createNamedQuery("WeblogEntry.getByWebsite");
         query.setParameter(1, weblog);
-        List<WeblogEntry> entries = query.getResultList();
+        List<WeblogEntry> entries = (List<WeblogEntry>) query.getResultList();
         if (entries == null) {
             entries = new ArrayList<>();
         }
