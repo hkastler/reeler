@@ -251,15 +251,46 @@ public class UserManager extends AbstractManager<User> {
     }
     
     public JdbcrealmGroup getAdminGroup(){
-        TypedQuery q = em.createNamedQuery("JdbcrealmGroup.findByGroupname", JdbcrealmGroup.class);
-        q.setParameter("groupname", "admin");
-        return (JdbcrealmGroup) q.getSingleResult();
+        String groupname = "admin";
+        TypedQuery<JdbcrealmGroup> q = getJdbcrealmGroup(groupname);
+        JdbcrealmGroup retGroup = null;
+        
+        try{
+            retGroup =  q.getSingleResult();
+        }catch(javax.persistence.NoResultException nre){
+            retGroup =  createJdbcrealmGroup(groupname);
+        }
+        return retGroup;
     }
+
+    public TypedQuery<JdbcrealmGroup> getJdbcrealmGroup(String groupname){
+        TypedQuery<JdbcrealmGroup> q = em.createNamedQuery("JdbcrealmGroup.findByGroupname", JdbcrealmGroup.class);
+        q.setParameter("groupname", groupname);
+        return q;
+    }
+
     
     public JdbcrealmGroup getUserGroup(){
-        TypedQuery q = em.createNamedQuery("JdbcrealmGroup.findByGroupname", JdbcrealmGroup.class);
-        q.setParameter("groupname", "user");
-        return (JdbcrealmGroup) q.getSingleResult();
+        String groupname = "user";
+        TypedQuery<JdbcrealmGroup> q = getJdbcrealmGroup(groupname);
+        JdbcrealmGroup retGroup = null;
+        
+        try{
+            retGroup =  q.getSingleResult();
+        }catch(javax.persistence.NoResultException nre){
+            retGroup =  createJdbcrealmGroup(groupname);
+        }
+        return retGroup;
     }
+
+
+    public JdbcrealmGroup createJdbcrealmGroup(String groupname){
+        JdbcrealmGroup retGroup = new JdbcrealmGroup();
+        retGroup.setGroupname(groupname);
+        em.persist(retGroup);
+        JdbcrealmGroup attachedRetGroup = getJdbcrealmGroup(groupname).getSingleResult();
+        return attachedRetGroup;
+    }
+    
 
 }

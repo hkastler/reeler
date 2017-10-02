@@ -59,6 +59,7 @@ public class SetupBean {
 
     @PostConstruct
     protected void init() {
+
         if (id == null && "edit".equals(action)) {
             User currentUser = (User) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("user");
             id = currentUser.getId();
@@ -125,22 +126,21 @@ public class SetupBean {
         String passwordText = params.get("passwordText");
         String hashPassText = PasswordDigester.getDigestedPassword(passwordText);
         this.user.setPassword(hashPassText);
-
-        this.user.setDateCreated(new Date());
-
+        
         List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<>(1);
         String roleName = "admin";
-
-        JdbcrealmGroup adminG = userManager.getAdminGroup();
-        jdbcrealmGroups.add(adminG);
+        JdbcrealmGroup adminGroup =  userManager.getAdminGroup();
+        
+        jdbcrealmGroups.add(adminGroup);
 
         user.setJdbcrealmGroups(jdbcrealmGroups);
 
         UserRole role = new UserRole(roleName, this.user.getUserName());
         Set<UserRole> roles = new HashSet<>();
         roles.add(role);
-        user.setRoles(roles);
-        user.setIsEnabled(true);
+        this.user.setRoles(roles);
+        this.user.setIsEnabled(true);
+        this.user.setDateCreated(new Date());
         userManager.addUser(this.user);
         FacesMessageManager.addSuccessMessage(null, "User created");
     }
