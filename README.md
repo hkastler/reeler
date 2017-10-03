@@ -9,9 +9,13 @@ I called the Entity packages "entities" because NetBeans(on Windows) did not lik
 
 There is as of this writing, still much work to be done, but the blog is operational.
 
+Setup required (for Windows):
+* Have Docker for Windows installed
+* Have Maven binaries on the PATH
+* A writeable directory located at C:\apps\reeler (for use with the docker-compose volumes statement) 
 To start:
--Have Docker for Windows(or Mac) installed
--Have Maven binaries on the PATH
--open terminal to reeler\reeler and run .\dockerComposeUp.bat and .\deployToDocker.bat 
+* Open terminal to reeler\reeler and run .\dockerComposeUp.bat and .\deployToDocker.bat
+
+Docker may ask you to share drive C:\. Check out the reeler-resources\docker-compose.yml to see what's going on.
 
 
