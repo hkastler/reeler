@@ -1,0 +1,26 @@
+# Batch script to add the PostgreSQL driver to the JBoss EAP server configuration
+
+# Start batching commands
+batch
+module add --name=org.postgresql --resources=..\postgresql\postgresql-42.1.4.jar --dependencies=javax.api,javax.transaction.api
+
+
+# Add the  PostgreSQL database driver to the datasources subsystem
+/subsystem=datasources/jdbc-driver=postgresql:add(driver-name=postgresql,driver-module-name=org.postgresql,driver-xa-datasource-class-name=org.postgresql.xa.PGXADataSource)
+
+
+# Add a non-XA datasource
+data-source add \
+    --name=RollerDS \
+    --driver-name=postgresql \
+    --connection-url=jdbc:postgresql://localhost:5432/roller \
+    --jndi-name=java:/RollerDS \
+    --user-name=roller \
+    --password=keeprolling \
+    --use-ccm=false \
+    --max-pool-size=50 \
+    --blocking-timeout-wait-millis=5000
+data-source enable --name=RollerDS
+
+/subsystem=jpa:write-attribute(name=default-datasource, value="java:/RollerDS")
+run-batch
