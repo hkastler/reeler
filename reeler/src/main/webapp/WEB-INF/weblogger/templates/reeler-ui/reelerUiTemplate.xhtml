@@ -93,9 +93,8 @@
         <ui:include src="loader.xhtml"/>
 
         <!-- jQuery Version 3.2.1 -->
-        <script src="https://code.jquery.com/jquery-3.2.1.min.js"
-                integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-        crossorigin="anonymous"></script>
+         <!-- jQuery Version 3.2.1 -->
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g="  crossorigin="anonymous"></script>
         <!-- Tether -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
         <!-- Latest compiled and minified JavaScript -->
@@ -104,6 +103,7 @@
 
 
         <script src="#{request.contextPath}/js/reelerUi.js"></script>
+        <script src="#{request.contextPath}/js/setLocaleAndTimezone.js"></script>
         <ui:insert name="postBody">
                 <script src="#{request.contextPath}/js/vendor/moment.min.js"></script>
                 <script src="#{request.contextPath}/js/vendor/datetimepicker/jquery.datetimepicker.js"></script>
