@@ -115,12 +115,11 @@ public class WeblogManager extends AbstractManager<Weblog> {
      */
     public void addWeblog(Weblog weblog, User user) throws WebloggerException {
         weblog.setCreator(user.getUserName());
-        weblog.setDateCreated(new Date());
-        weblog.setLastModified(new java.util.Date());
+        
         //for backwards compatibility with roller
         weblog.setEditorTheme("basic");
         //addWeblog.merge1
-        em.merge(weblog);
+        em.persist(weblog);
         em.flush();
         addPermission(weblog, user);        
         addWeblogContents(weblog);

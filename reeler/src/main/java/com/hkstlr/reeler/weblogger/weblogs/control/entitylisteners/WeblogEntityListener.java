@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.control.entitylisteners;
 
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import java.util.Date;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.persistence.PostLoad;
@@ -22,17 +23,22 @@ import javax.persistence.PreUpdate;
  * @author henry.kastler
  */
 public class WeblogEntityListener {
-    
-    @EJB
-    WeblogManager wm;
-    
+//      
     
     Logger log = Logger.getLogger(WeblogEntityListener.class.getName());
-
+    
     @PrePersist
-    public void weblogPrePersist(Weblog ob) {
-        //System.out.println("Listening Weblog Pre Persist : " + ob.getName());
+    @PreUpdate
+    public void weblogSetDates(Weblog weblog) {
+        log.info("Listening Weblog Pre Update : " + weblog.getName());
+        if(weblog.getDateCreated()==null){
+            log.info("Listening Weblog Pre Update : getDateCreated()==null" );
+            weblog.setDateCreated(new Date());
+        }
+        weblog.setLastModified(new java.util.Date());
     }
+
+    
 
     @PostPersist
     public void weblogPostPersist(Weblog ob) {
@@ -47,10 +53,6 @@ public class WeblogEntityListener {
         //ob.setWeblogCategories(weblogCategories);
     }
 
-    @PreUpdate
-    public void weblogPreUpdate(Weblog ob) {
-        //System.out.println("Listening Weblog Pre Update : " + ob.getName());
-    }
 
     @PostUpdate
     public void weblogPostUpdate(Weblog ob) {

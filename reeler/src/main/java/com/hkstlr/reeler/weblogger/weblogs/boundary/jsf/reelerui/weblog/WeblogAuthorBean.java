@@ -23,19 +23,19 @@ import javax.transaction.Transactional;
  *
  * @author henry.kastler
  */
-@ManagedBean(name="weblogAuthorBean")
+@ManagedBean(name = "weblogAuthorBean")
 @ViewScoped
 public class WeblogAuthorBean implements Serializable {
-    
+
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
-    
+
     @Inject
     private ReelerUIBean reelerUiBean;
-    
+
     @Inject
     private Weblogger weblogger;
-    
+
     private static Logger log = Logger.getLogger(WeblogAuthorBean.class.getName());
 
     public WeblogAuthorBean() {
@@ -58,27 +58,37 @@ public class WeblogAuthorBean implements Serializable {
         this.reelerUiBean = reelerUiBean;
     }
 
-
     @Transactional(Transactional.TxType.MANDATORY)
     public void createWeblog() throws WebloggerException {
-        weblogger.getWeblogManager().addWeblog(weblog,reelerUiBean.getUser());
-        String msg = java.text.MessageFormat
-                .format("Weblog {0} Created", new String[]{weblog.getName()});
-        FacesMessageManager.addSuccessMessage("createWeblogMsgs", msg);
+        String msg;
+        Weblog check = weblogger.getWeblogManager()
+                .findByHandle(weblog.getHandle());
+        
+        if (check == null) {
+            weblogger.getWeblogManager().addWeblog(weblog, reelerUiBean.getUser());
+            msg = java.text.MessageFormat
+                    .format("Weblog {0} Created", new String[]{weblog.getName()});
+            FacesMessageManager.addSuccessMessage("createWeblogMsgs", msg);
+         } else {
+            msg = java.text.MessageFormat
+                    .format("Weblog with handle {0} already exists", new String[]{weblog.getHandle()});
+            FacesMessageManager.addErrorMessage(msg);
+        }
+
     }
-    
+
     @Transactional(Transactional.TxType.MANDATORY)
     public void updateWeblog() throws WebloggerException {
-        
+
         weblogger.getWeblogManager().saveWeblog(weblog);
-        
+
         FacesMessageManager.addSuccessMessage("editWeblog", "Weblog Updated");
-        
+
     }
-    
-    public void configViewAction(){
+
+    public void configViewAction() {
         log.info("configViewAction here");
-        log.info("currentWeblog:" + weblog.getName());       
-    }    
-   
+        log.info("currentWeblog:" + weblog.getName());
+    }
+
 }
