@@ -1,10 +1,10 @@
 
-jQuery(document).ready(function () {
-    console.log( "ready!" );
+
+    
     setSelectValue(document.getElementById('localeSelect'),navigator.language.replace("-","_"));
     setSelectValue(document.getElementById('timeZone'),
                                 Intl.DateTimeFormat().resolvedOptions().timeZone);
-});
+
 
 function setSelectValue(selectElement, value){     
     if(selectElement.selectedIndex !== 0){
