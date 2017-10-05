@@ -61,8 +61,10 @@ public class WeblogAuthorBean implements Serializable {
 
     @Transactional(Transactional.TxType.MANDATORY)
     public void createWeblog() throws WebloggerException {
-        
         weblogger.getWeblogManager().addWeblog(weblog,reelerUiBean.getUser());
+        String msg = java.text.MessageFormat
+                .format("Weblog {0} Created", new String[]{weblog.getName()});
+        FacesMessageManager.addSuccessMessage("createWeblogMsgs", msg);
     }
     
     @Transactional(Transactional.TxType.MANDATORY)

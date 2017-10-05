@@ -6,11 +6,12 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <f:view>
         <div class="panel panel-primary">
-            <div id="weblogEntryDiv" class="panel panel-body">
-                <div class="panel-heading panel-title">
-                    <h2 >#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
-                        for #{weblogEntryAuthorBean.weblog.name}</h2>
+            <div class="panel-heading panel-title">
+                   #{weblogEntryAuthorBean.actionLabel} Entry 
                 </div>
+            <div id="weblogEntryDiv" class="panel panel-body">
+                <h2 >#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
+                        for #{weblogEntryAuthorBean.weblog.name}</h2>
                 <h:form id="weblogEntryForm" prependId="false" binding="#{weblogEntryForm}">   
                     <h:messages
                         infoClass="alert alert-success list-unstyled"                               

@@ -480,11 +480,11 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     public String getTagsAsString() {
         StringBuilder sb = new StringBuilder();
         // Sort by name
-        Set<WeblogEntryTag> tmp = new TreeSet<WeblogEntryTag>(new WeblogEntryTagComparator());
+        Set<WeblogEntryTag> tmp = new TreeSet<>(new WeblogEntryTagComparator());
         tmp.addAll(getTags());
-        for (WeblogEntryTag entryTag : tmp) {
+        tmp.forEach((entryTag) -> {
             sb.append(entryTag.getName()).append(" ");
-        }
+        });
         if (sb.length() > 0) {
             sb.deleteCharAt(sb.length() - 1);
         }
