@@ -6,182 +6,190 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
 
-
+    <div class="panel-heading panel-title">
+        <h2>
+            <h:outputText value="#{formTitle}"/>
+        </h2>
+    </div>
+    <div class="panel panel-body">
     <form jsfc="h:form" jsf:id="profile" name="profile" prependId="false">
-
-        <div class="formdiv my-4">
-            <h2>
-                <h:outputText value="#{formTitle}"/>
-            </h2>
-            <h:messages
-                layout="table"
-                infoClass="table alert alert-success"
-                errorClass="table alert alert-danger"/>
-            <div class="form-group #{userName.isValid()? '' : 'has-error'}">
-                <label jsf:for="userName" class="control-label #{userName.isValid()? '' : 'has-error'}" >Username</label>
-                <input type="text"
-                       class="form-control #{userName.isValid()? '' : 'has-error'}"
-                       binding="#{userName}"
-                       jsfc="h:inputText"
-                       id="userName" 
-                       value="#{bean.user.userName}" 
-                       readonly="#{param.action eq 'edit' ? 'true':'false'}"
-                       />
-                <h:message for="userName" errorClass="control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin} or #{param.action eq 'edit'}">
-                    Usernames can't be changed.
-                </span>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{isAdmin}">
-                    A short one-word username for the user account. 
-                    Please limit it to simple ASCII alphanumeric characters (a-z, A-Z and 0-9), 
-                    and do not use HTML
-                </span>
-            </div>
-
-            <div class="form-group">
-                <label jsf:for="screenName" class="control-label">Screen Name</label>
-                <input type="text"
-                       class="form-control"
-                       jsf:id="screenName" 
-                       jsf:value="#{bean.user.screenName}"/>
-
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Your desired screen name (with no HTML). This is is what will be displayed 
-                    in your weblog and on weblog entries that you write.
-                </span>
-
-            </div>
-
-            <div class="form-group">
-                <label jsf:for="fullName" class="control-label">Full Name</label>
-                <input type="text"
-                       class="form-control"
-                       jsf:id="fullName"
-                       jsf:value="#{bean.user.fullName}"/>
-
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Your full name (with no HTML), first and last. 
-                    Some weblog themes will display this instead of (or in addition to) your screenname.
-                </span>
-
-            </div>
-
-            <div class="form-group">
-                <label jsf:for="emailAddress" class="control-label">Email</label>
-                <input type="text" 
-                       class="form-control"
-                       jsf:id="emailAddress" 
-                       jsf:value="#{bean.user.emailAddress}"/>
-
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Please enter valid email address, the site administrator may disable your account 
-                    if he/she cannot reach you via email.</span>
-
-            </div>
-
-
-            <div class="form-group">
-                <label jsf:for="passwordText" class="control-label">Password</label>
-                <h:inputSecret 
-                    class="form-control"
-                    id="passwordText"
-                    binding="#{passwordComponent}"/>
-                <h:message for="passwordText"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Your password.  Fill in only if you wish to change it.
-                </span>
-
-            </div>
-
-            <div class="form-group">
-                <label jsf:for="passwordConfirm" class="control-label">Password (Confirm)</label>
-                <h:inputSecret 
-                    class="form-control"
-                    id="passwordConfirm"
-                    required="#{not empty passwordText.value}">
-                    <f:validator validatorId="confirmPasswordValidator"/>
-                    <f:attribute name="passwordComponent" value="#{passwordComponent}"/>
-                </h:inputSecret>
-                <h:message for="passwordConfirm"
-                           errorClass="control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Confirm your password.
-                </span>
-            </div>
-
-            <div class="form-group">
-                <label jsf:for="locale" >Locale</label>
-
-                <select
-                    id="locale"
-                    name="locale"
-                    jsfc="h:selectOneMenu"
-                    title="Locale" 
-                    class="form-control" 
-                    value="#{bean.user.locale}"
-                    required="true">
-                    <option jsfc="f:selectItems" 
-                            value="#{selectItemBean.localeItems}" 
-                            var="locale" 
-                            itemValue="#{locale.value}"
-                            itemLabel="#{locale.label}" />
-
-                </select>
-                <h:message for="locale"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Your preferred locale
-                </span>
-            </div>
-
-            <div class="form-group">
-                <label jsf:for="timeZone" >Timezone</label>
-                <select
-                    id="timeZone"
-                    name="timeZone"
-                    jsfc="h:selectOneMenu"
-                    title="Time Zone" 
-                    class="form-control" 
-                    value="#{bean.user.timeZone}"
-                    required="true">
-                    <option jsfc="f:selectItems" 
-                            value="#{selectItemBean.timeZoneItems}" 
-                            var="tz" 
-                            itemValue="#{tz.value}"
-                            itemLabel="#{tz.label}" />
-
-                </select>
-                <h:message for="timeZone" />
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    The timezone to be used for entry and display of this weblog.
-                </span>
-            </div>
-
-            <div
-                jsfc="h:panelGroup" 
-                layout="block"
-                rendered="#{isAdmin}">
-                <div class="form-group">
-                    <label jsf:for="isEnabled">
-                        <h:selectBooleanCheckbox id="isEnabled" 
-                                                 value="#{bean.user.isEnabled}"/>
-                        Enabled
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label jsf:for="isAdministrator">
-                        <h:selectBooleanCheckbox id="isAdministrator"/>
-                        Administrator
-                    </label>
-                </div>
-            </div>
-            
-
-            <h:inputHidden
-                   id="id"
-                   rendered="#{bean.id ne null}"
-                   value="#{bean.id ne null ? bean.id : ''}"/>
-            <input type="hidden" name="action" value="#{bean.action}"/>
+        <h:messages
+            layout="table"
+            infoClass="table alert alert-success"
+            errorClass="table alert alert-danger"
+            globalOnly="false"
+            id="profileForm"/>
+        <div class="form-group #{userName.isValid()? '' : 'has-error'}">
+            <label jsf:for="userName" class="control-label" >Username</label>
+            <input type="text"
+                   class="form-control"
+                   binding="#{userName}"
+                   jsfc="h:inputText"
+                   id="userName" 
+                   value="#{bean.user.userName}" 
+                   readonly="#{param.action eq 'edit' ? 'true':'false'}"
+                   />
+            <h:message for="userName" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin} or #{param.action eq 'edit'}">
+                Usernames can't be changed.
+            </span>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{isAdmin}">
+                A short one-word username for the user account. 
+                Please limit it to simple ASCII alphanumeric characters (a-z, A-Z and 0-9), 
+                and do not use HTML
+            </span>
         </div>
+
+        <div class="form-group #{screenName.isValid()? '' : 'has-error'}">
+            <label jsf:for="screenName" class="control-label">Screen Name</label>
+            <input type="text"
+                   class="form-control"
+                   binding="#{screenName}"
+                   jsfc="h:inputText"
+                   id="screenName" 
+                   value="#{bean.user.screenName}"/>
+            <h:message for="screenName" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                Your desired screen name (with no HTML). This is is what will be displayed 
+                in your weblog and on weblog entries that you write.
+            </span>
+        </div>
+        <div class="form-group #{fullName.isValid()? '' : 'has-error'}">
+            <label jsf:for="fullName" class="control-label">Full Name</label>
+            <input type="text"
+                   class="form-control"
+                   binding="#{fullName}"
+                   jsfc="h:inputText"
+                   id="fullName"
+                   value="#{bean.user.fullName}"/>
+            <h:message for="fullName" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                Your full name (with no HTML), first and last. 
+                Some weblog themes will display this instead of (or in addition to) your screenname.
+            </span>
+        </div>
+        
+        <div class="form-group #{emailAddress.isValid()? '' : 'has-error'}">
+            <label jsf:for="emailAddress" class="control-label">Email</label>
+            <input jsfc="h:inputText"
+                   class="form-control"                       
+                   id="emailAddress"
+                   binding="#{emailAddress}"
+                   value="#{bean.user.emailAddress}"/>
+            <h:message for="emailAddress" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                Please enter valid email address, the site administrator may disable your account 
+                if he/she cannot reach you via email.</span>
+        </div>
+
+        <div class="form-group #{passwordComponent.isValid()? '' : 'has-error'}">
+            <label jsf:for="passwordText" class="control-label">Password</label>
+            <h:inputSecret 
+                class="form-control"
+                id="passwordText"
+                binding="#{passwordComponent}">
+                <f:validator validatorId="passwordValidator"/>
+            </h:inputSecret>
+            <h:message for="passwordText" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                Your password.  Fill in only if you wish to change it.
+            </span>
+        </div>
+
+        <div class="form-group #{passwordConfirm.isValid()? '' : 'has-error'}">
+            <label jsf:for="passwordConfirm" class="control-label">Password (Confirm)</label>
+            <h:inputSecret 
+                class="form-control"
+                id="passwordConfirm"
+                binding="#{passwordConfirm}"
+                required="#{not empty passwordText.value}">
+                <f:validator validatorId="confirmPasswordValidator"/>
+                <f:attribute name="passwordComponent" value="#{passwordComponent}"/>
+            </h:inputSecret>
+            <h:message for="passwordConfirm"
+                       errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                Confirm your password.
+            </span>
+        </div>
+
+        <div class="form-group #{localeComponent.isValid()? '' : 'has-error'}">
+            <label jsf:for="locale"  class="control-label">Locale</label>
+            <select
+                id="locale"
+                name="locale"
+                jsfc="h:selectOneMenu"
+                binding="#{localeComponent}"
+                title="Locale" 
+                class="form-control" 
+                value="#{bean.user.locale}"
+                required="true"
+                requiredMessage="Locale is required">
+                <option jsfc="f:selectItem" itemValue="#{null}" itemLabel="--select--" />
+                <option jsfc="f:selectItems" 
+                        value="#{selectItemBean.localeItems}" 
+                        var="locale" 
+                        itemValue="#{locale.value}"
+                        itemLabel="#{locale.label}" />
+
+            </select>
+            <h:message for="locale" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                Your preferred locale
+            </span>
+        </div>
+
+        <div class="form-group #{timeZone.isValid()? '' : 'has-error'}">
+            <label jsf:for="timeZone"  class="control-label">Timezone</label>
+            <select
+                id="timeZone"
+                name="timeZone"
+                jsfc="h:selectOneMenu"
+                title="Time Zone" 
+                class="form-control" 
+                value="#{bean.user.timeZone}"
+                binding="#{timeZone}"
+                required="true"
+                requiredMessage="Time Zone is required">
+                <option jsfc="f:selectItem" itemValue="#{null}" itemLabel="--select--" />
+                <option jsfc="f:selectItems" 
+                        value="#{selectItemBean.timeZoneItems}" 
+                        var="tz" 
+                        itemValue="#{tz.value}"
+                        itemLabel="#{tz.label}" />
+            </select>
+            <h:message for="timeZone" errorClass="control-label has-error"/>
+            <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                The timezone to be used for entry and display of this weblog.
+            </span>
+        </div>
+
+        <div
+            jsfc="h:panelGroup" 
+            layout="block"
+            rendered="#{isAdmin}">
+            <div class="form-group">
+                <label jsf:for="isEnabled">
+                    <h:selectBooleanCheckbox id="isEnabled" 
+                                             value="#{bean.user.isEnabled}"/>
+                    Enabled
+                </label>
+            </div>
+            <div class="form-group">
+                <label jsf:for="isAdministrator">
+                    <h:selectBooleanCheckbox id="isAdministrator"/>
+                    Administrator
+                </label>
+            </div>
+        </div>
+
+
+        <h:inputHidden
+            id="id"
+            rendered="#{bean.id ne null}"
+            value="#{bean.id ne null ? bean.id : ''}"/>
+        <input type="hidden" name="action" value="#{bean.action}"/>
+
 
         <br />
         <input jsfc="h:commandButton"
@@ -206,5 +214,6 @@
                class="btn btn-secondary"/>
 
     </form>
+    </div>
 </ui:composition>
 

@@ -5,12 +5,14 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
 
+import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
+import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
@@ -26,6 +28,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.inject.Inject;
 
 /**
  *
@@ -40,6 +43,9 @@ public class SetupBean {
 
     @EJB
     private transient WeblogCategoryManager weblogCategoryManager;
+    
+    @Inject
+    private transient URLStrategy urlStrategy;
 
     private User user;
 
@@ -117,7 +123,7 @@ public class SetupBean {
         return PAGE_HOME;
     }
 
-    public void createUser() throws UnsupportedEncodingException, NoSuchAlgorithmException {
+    public void createUser() throws UnsupportedEncodingException, NoSuchAlgorithmException, WebloggerException {
 
         Map<String, String> params = FacesContext.getCurrentInstance()
                 .getExternalContext()
@@ -142,7 +148,10 @@ public class SetupBean {
         this.user.setIsEnabled(true);
         this.user.setDateCreated(new Date());
         userManager.addUser(this.user);
-        FacesMessageManager.addSuccessMessage(null, "User created");
+        FacesMessageManager.addSuccessMessage(null, "User created, please log in");
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        facesContext. getApplication()
+                .getNavigationHandler().handleNavigation(facesContext, null, URLStrategy.getSetupSuccessOutcome());
     }
 
 }

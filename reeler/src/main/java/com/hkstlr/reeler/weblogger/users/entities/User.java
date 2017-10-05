@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -76,13 +77,13 @@ public class User extends AbstractEntity {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 255, message="{User.userName.NotNull}")
     @Column(name = "username", nullable = false, length = 255)
     private String userName;
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 255, message="{User.password.NotNull}")
     @Column(name = "passphrase", nullable = false, length = 255)
     private String password;
 
@@ -92,19 +93,19 @@ public class User extends AbstractEntity {
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 255, message="{User.screenName.NotNull}")
     @Column(name = "screenname", nullable = false, length = 255)
     private String screenName;
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 255, message="{User.fullName.NotNull}")
     @Column(name = "fullname", nullable = false, length = 255)
     private String fullName;
 
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 255)
+    @Size(min = 1, max = 255, message="{User.emailAddress.NotNull}")
     @Column(name = "emailaddress", nullable = false, length = 255)
     private String emailAddress;
 
@@ -137,7 +138,7 @@ public class User extends AbstractEntity {
     private List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "UserUserRole",
+    @JoinTable(name = "useruserrole",
             joinColumns = @JoinColumn(name = "username", referencedColumnName = "username"),
             inverseJoinColumns = @JoinColumn(name = "rolename", referencedColumnName = "rolename")
     )

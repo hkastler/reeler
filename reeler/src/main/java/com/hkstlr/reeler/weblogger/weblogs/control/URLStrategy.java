@@ -27,6 +27,11 @@ public class URLStrategy {
         // TODO Auto-generated method stub
         return "authorized";
     }
+    
+    public static String getSetupSuccessOutcome() {
+        
+        return "/weblogger/login/index";
+    }
 
     public static String getLoginSuccessOutcome() {
         

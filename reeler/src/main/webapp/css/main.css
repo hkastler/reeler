@@ -18,6 +18,11 @@ h2{
 .has-error .form-control-feedback {
     color: #a94442;
 }
+/*maybe this will workout long term, but for now its for h:message */
+span.control-label.has-error:after{
+    content: "\A";
+    white-space: pre;
+}
 
 /* Color of valid field */
 .has-success .control-label,
@@ -36,6 +41,8 @@ div.alternating-row-container > div:nth-of-type(odd) {
 
 .commentCheckBox { width: 8%; }
 .commentForm { width: 76%; }
+
+
 
 
 
