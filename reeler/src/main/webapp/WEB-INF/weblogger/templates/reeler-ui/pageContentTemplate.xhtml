@@ -6,15 +6,19 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-    <ui:define name="content"> 
-        
+    <ui:define name="content">        
             <div class="panel panel-primary">
-                <div class="panel-heading panel-title">
+                <div class="panel-heading panel-title" 
+                     jsf:id="content-panel-title-case-1" 
+                     rendered="#{messages[pageBean.pages[pageBean.page][0]] ne null}">
                     #{messages[pageBean.pages[pageBean.page][0]]}
                 </div>
+                <div class="panel-heading panel-title" 
+                     jsf:id="content-panel-title-case-2" 
+                     rendered="#{panelTitle ne null}">
+                    <ui:insert name="panelTitle"/>
+                </div>
                 <div class="panel panel-body">
-                    <h:messages infoClass="alert alert-success"
-                                errorClass="alert alert-warning"/>
                     <ui:insert name="pageContent"/>          
                 </div>
             </div>

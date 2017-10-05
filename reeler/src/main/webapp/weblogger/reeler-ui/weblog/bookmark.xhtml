@@ -8,7 +8,7 @@
       xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     
     
-    <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml">
+    <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/pageContentTemplate.xhtml">
         <ui:define name="title">
             <h:outputText value="#{reelerUiBean.pages['blogrolls']} Admin"></h:outputText>            
         </ui:define>
@@ -19,7 +19,10 @@
                 <ui:param name="pageBean" value="#{reelerUiBean}"/>
             </ui:include>
         </ui:define>
-        <ui:define name="content">
+        <ui:define name="panelTitle">Create Bookmark</ui:define>
+        <ui:define name="pageContent">
+            
+            
             <f:view>
                 <h2>#{weblogBookmarkAuthorBean.actionLabel} #{labels.res.getString('bookmarksForm.rootTitle')} for #{reelerUiBean.currentWeblog.name}</h2>
                 <div id="weblogBookmarkDiv">
