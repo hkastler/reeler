@@ -6,14 +6,18 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogCategoryManager;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogPermissionManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.URLStrategy;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
+import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -43,6 +47,9 @@ public class SetupBean {
 
     @EJB
     private transient WeblogCategoryManager weblogCategoryManager;
+    
+    @EJB
+    private transient WeblogPermissionManager wpm;
     
     @Inject
     private transient URLStrategy urlStrategy;
@@ -134,14 +141,13 @@ public class SetupBean {
         this.user.setPassword(hashPassText);
         
         List<JdbcrealmGroup> jdbcrealmGroups = new ArrayList<>(1);
-        String roleName = "admin";
-        JdbcrealmGroup adminGroup =  userManager.getAdminGroup();
-        
+        String roleName = GlobalPermission.ADMIN;
+        JdbcrealmGroup adminGroup =  userManager.getAdminGroup();        
         jdbcrealmGroups.add(adminGroup);
-
         user.setJdbcrealmGroups(jdbcrealmGroups);
-
-        UserRole role = new UserRole(roleName, this.user.getUserName());
+        
+        UserRole role = new UserRole();
+        role.setRoleName(roleName);
         Set<UserRole> roles = new HashSet<>();
         roles.add(role);
         this.user.setRoles(roles);

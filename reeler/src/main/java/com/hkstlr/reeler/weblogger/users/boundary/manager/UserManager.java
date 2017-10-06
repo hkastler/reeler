@@ -16,6 +16,7 @@ import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
 
 import java.util.Date;
 import java.util.Map;
@@ -251,7 +252,7 @@ public class UserManager extends AbstractManager<User> {
     }
     
     public JdbcrealmGroup getAdminGroup(){
-        String groupname = "admin";
+        String groupname = GlobalPermission.ADMIN;
         TypedQuery<JdbcrealmGroup> q = getJdbcrealmGroup(groupname);
         JdbcrealmGroup retGroup = null;
         
