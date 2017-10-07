@@ -126,7 +126,7 @@ public class WeblogManagerTest {
         when(this.cut.pingTargetManager.em.createNamedQuery(Matchers.anyString())).thenReturn(mockQuery2);
         cut.addWeblog(weblog, user);
         verify(this.cut.em, times(1)).persist(weblog);
-        verify(this.cut.em,times(3)).merge(Matchers.anyObject());
+        verify(this.cut.em,times(1)).merge(Matchers.anyObject());
      }
 
 }

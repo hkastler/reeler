@@ -132,9 +132,9 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
         newWeblog = addWeblogCategories(newWeblog);
         newWeblog = addWeblogBlogrolls(newWeblog);
-        //newWeblog = addPingTargets(newWeblog);
+        newWeblog = addPingTargets(newWeblog);
 
-        //addWeblog.merge3
+        //addWeblog.merge
         this.em.merge(newWeblog);
         this.em.flush();
     }
