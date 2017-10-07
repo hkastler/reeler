@@ -9,6 +9,7 @@ import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.util.Optional;
 import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -139,7 +140,18 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
      * @param size
      */
     protected final void calculatePosition(int size) {
-       this.position = size + 1;        
+               
+        if (size == 0) {
+            this.position = 0;
+        } else {
+             Optional<Integer> maxPosition = Optional.ofNullable(
+                     weblog.getWeblogCategories().stream()
+                     .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
+                     .get().getPosition()
+                      );
+             this.position = maxPosition.orElse(0) + 1;
+            
+        }
     }
 
     @Override
