@@ -114,7 +114,7 @@
             </div>
 
             <div class="form-group #{localeComponent.isValid()? '' : 'has-error'}">
-                <label jsf:for="locale"  class="control-label">Locale</label>
+                <label jsf:for="localeSelect"  class="control-label">Locale</label>
                 <select
                     id="localeSelect"
                     name="locale"
@@ -133,7 +133,7 @@
                             itemLabel="#{locale.label}" />
 
                 </select>
-                <h:message for="locale" errorClass="control-label has-error"/>
+                <h:message for="localeSelect" errorClass="control-label has-error"/>
                 <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
                     Your preferred locale
                 </span>

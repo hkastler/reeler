@@ -99,7 +99,7 @@
                 </span>
             </div>
             <div class="form-group #{localeComponent.isValid()? '' : 'has-error'}">
-                <label jsf:for="locale" class="control-label">Locale</label>
+                <label jsf:for="localeSelect" class="control-label">Locale</label>
 
                 <select
                     id="localeSelect"
@@ -118,7 +118,7 @@
                             itemLabel="#{locale.label}" />
 
                 </select>
-                <h:message for="localeComponent" errorClass="control-label has-error"/>
+                <h:message for="localeSelect" errorClass="control-label has-error"/>
                 <div>The default locale to be used for the display of this weblog 
                     when the browser does not specify a locale.</div>
             </div>
