@@ -28,19 +28,11 @@ public class TestManagerReflector {
     
     
     public void testManagerClass(Object cut){
-        //WeblogManager weblogManager = new WeblogManager();
-        
+               
         Class cutClass = cut.getClass();
-        log.info("class under reflection:" + cutClass.getName());
-        Class<?> superclass = cutClass.getSuperclass();
-        //log.info("superclass under reflection:" + superclass.getName());        
+        log.fine("class under reflection:" + cutClass.getName());
+        Class<?> superclass = cutClass.getSuperclass();              
         assertEquals(superclass.getName(),"com.hkstlr.reeler.app.boundary.manager.AbstractManager");
-        /*Method[] superclassMethods = superclass.getDeclaredMethods();
-        for(Method m : superclassMethods){
-        log.info(m.getName());
-        }*/
-        
-        
         Field[] classFields = cutClass.getDeclaredFields();
         //get all the managers, but not EntityManager
         Field[] managerFields = Arrays.stream(classFields)
@@ -68,21 +60,12 @@ public class TestManagerReflector {
             fail("em issues?");
             log.log(Level.SEVERE,"em issue:",ex);
         } 
-        
-        /*Annotation[] anns = cutClass.getAnnotations();
-        for(Annotation ann : anns){
-        log.info(ann.annotationType().getName());
-        }*/
-        
+                
         //ensure the *Manager class has @Stateless annotation
         Annotation annEjb;
         annEjb = cutClass.getDeclaredAnnotation(javax.ejb.Stateless.class);
         assertNotNull(annEjb);
-        //log.info(annEjb.annotationType().getName());
-        
-        //Type genericSuperclass = cutClass.getGenericSuperclass();        
-        //log.info("genericSuperclass:" + genericSuperclass.getClass().getName());
-        
+                
     }
 
 }

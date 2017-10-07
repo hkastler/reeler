@@ -88,27 +88,17 @@ public class WeblogManagerTest {
     public void testCreate() throws Exception {
         System.out.println("create");
         Weblog weblog = TestSetup.getWeblog();
-
         cut.create(weblog);
         verify(this.cut.em, times(1)).persist(weblog);
     }
 
-    /*@Test
-    public void testAddWeblog() throws Exception {
-    System.out.println("addWeblog");
-    Weblog weblog = TestSetup.getWeblog();
-    User user = TestSetup.getUser();
-    cut.addWeblog(weblog, user);
-    //doNothing().when(cut.weblogPermissionManager).grantWeblogPermission(weblog, user, null,false);
-    //when(WebloggerConfig.getProperty("newuser.categories")).thenReturn("General, Technology");
-    //verify(this.cut.em, times(1)).merge(weblog);
-    }*/
     @Test
     public void testAddWeblog() throws Exception {
-        System.out.println("addWeblog");
+        log.info("addWeblog");
+        PowerMockito.mockStatic(WebloggerConfig.class);
         Weblog weblog = TestSetup.getWeblog();
         User user = TestSetup.getUser();
-        cut.addWeblog(weblog, user);
+       
         List<String> actions = new ArrayList<>();
         
         
@@ -117,11 +107,13 @@ public class WeblogManagerTest {
         when(mockQuery.getSingleResult()).thenReturn(perm);
         String qName = "WeblogPermission.getByUserName&WeblogIdIncludingPending";
         when(this.cut.weblogPermissionManager.em.createNamedQuery(qName)).thenReturn(mockQuery);    
-        
+       
         when(WebloggerConfig.getProperty("newuser.categories")).thenReturn("General,Technology");
+        
         when(WebloggerConfig.getProperty("newuser.blogroll")).thenReturn("\\\n" +
 "Apache Software Foundation|http://apache.org,\\\n" +
-"Apache Roller Project|http://roller.apache.org");
+"Apache Roller Project|http://roller.apache.org,\\\n" +
+"Another URL merge match should now be greatly changed|http://hello.org\\\n");
              
         List<PingTarget> pings = new ArrayList<>();
         PingTarget pt = new PingTarget();
@@ -132,8 +124,8 @@ public class WeblogManagerTest {
         
         TypedQuery mockQuery2 = mock(TypedQuery.class);
         when(this.cut.pingTargetManager.em.createNamedQuery(Matchers.anyString())).thenReturn(mockQuery2);
-        
-        verify(this.cut.em, times(2)).merge(weblog);
+        cut.addWeblog(weblog, user);
+        verify(this.cut.em, times(1)).persist(weblog);
         verify(this.cut.em,times(3)).merge(Matchers.anyObject());
      }
 

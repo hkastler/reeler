@@ -6,9 +6,9 @@
 package com.hkstlr.reeler.weblogger.weblogs.entities;
 
 import com.hkstlr.reeler.app.control.JsonBuilder;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.Optional;
 import javax.json.JsonObject;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -84,6 +84,15 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.image = image;
         calculatePosition(this.weblog.getWeblogCategories().size());
     }
+    
+    public WeblogCategory(Weblog blog, String name, int position) {
+        super();
+        this.weblog = blog;
+        this.name = name;
+        this.description = StringPool.BLANK;
+        this.image = StringPool.BLANK;
+        this.position = position;
+    }
 
     public String getName() {
         return name;
@@ -130,19 +139,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
      * @param size
      */
     protected final void calculatePosition(int size) {
-               
-        if (size == 0) {
-            this.position = 0;
-        } else {
-             Optional<Integer> maxPosition = Optional.ofNullable(
-                     weblog.getWeblogCategories().stream()
-                     .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
-                     .orElse(null)
-                     .getPosition());
-            if(maxPosition.isPresent()){
-                this.position = maxPosition.orElse(0) + 1;
-            }
-        }
+       this.position = size + 1;        
     }
 
     @Override

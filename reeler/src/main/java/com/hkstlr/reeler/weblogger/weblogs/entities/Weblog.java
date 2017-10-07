@@ -39,7 +39,6 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.logging.Logger;
 import javax.persistence.Cacheable;
 import javax.persistence.EntityListeners;
 import javax.persistence.Transient;
@@ -230,10 +229,10 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "analyticscode")
     private String analyticsCode;
 
-    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.REMOVE}, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     private List<WeblogCategory> weblogCategories = new ArrayList<WeblogCategory>();
 
-    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @OneToMany(mappedBy = "weblog", cascade = {CascadeType.ALL})
     private List<WeblogBookmarkFolder> bookmarkFolders  = new ArrayList<WeblogBookmarkFolder>();
 
     
