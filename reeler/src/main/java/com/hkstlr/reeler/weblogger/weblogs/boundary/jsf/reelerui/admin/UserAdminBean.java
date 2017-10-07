@@ -11,6 +11,8 @@ import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
+import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
+
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -132,7 +134,7 @@ public class UserAdminBean {
         return userManager.findAll();
     }
     
-    @RolesAllowed("admin")
+    @RolesAllowed(GlobalPermission.ADMIN)
     public void createUser() throws UnsupportedEncodingException, NoSuchAlgorithmException{
         
         Map<String, String> params = FacesContext.getCurrentInstance()
