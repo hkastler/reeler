@@ -6,10 +6,11 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <f:view>       
         <ui:include src="sideNavSearchForm.xhtml">
-            <ui:param name="page" value="comments"/>
+            <ui:param name="pageName" value="comments"/>
             <ui:param name="radioButtonName" value="approvedString"/>
             <ui:param name="radioButtonValues" value="#{weblogEntryAuthorBean.getStatuses()}"/>            
         </ui:include>
+           
     </f:view>
 
 </ui:composition>

@@ -1,7 +1,7 @@
 //this syntax successfully reattaches the click event
 //after the pagination container node gets rewritten by ajax
 $(document).on("click", "[id|='nav'] a", function (e) {
-
+    
     var dataPage = $(this).attr("data-page");
     //ckeditor doesnt render via ajax
     if (dataPage === 'entry') {
@@ -32,6 +32,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
         $.ajax({
             type: 'GET',
             url: ajaxHref + "Content.xhtml",
+            async: true,
             success: function (response) {
                 try {
                     var loader = $('#loader').html();
@@ -51,6 +52,7 @@ $(document).on("click", "[id|='nav'] a", function (e) {
         $.ajax({
             type: 'GET',
             url: ajaxHref + "SideNav.xhtml",
+            async: true,
             success: function (response) {
                 try {
                     

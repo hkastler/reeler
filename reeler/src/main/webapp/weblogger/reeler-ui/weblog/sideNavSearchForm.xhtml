@@ -6,15 +6,24 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf"
                 xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
     <f:view>
-
+        <f:loadBundle basename="ApplicationResources" var="msg"/>
         <div class="row">   
             <div class="col-lg-12">
                 <div class="panel panel-info">
                     <div class="panel-heading panel-title">
-                        Filter Entries
+                        #{page}
+                        <h:outputText value="#{msg['commentManagement.sidebarTitle']}"
+                                             rendered="#{pageName eq 'comments'}"/>
+                        <h:outputText value="#{msg['weblogEntryQuery.sidebarTitle']}"
+                                             rendered="#{pageName eq 'entries'}"/>
                     </div>
                     <div class="panel panel-body">
-                        <p>Filter weblog entries by category, date, and/or status.</p>
+                        <p>
+                            <h:outputText value="#{msg['commentManagement.sidebarDescription']}"
+                                             rendered="#{pageName eq 'comments'}"/>
+                            <h:outputText value="#{msg['weblogEntryQuery.sidebarDescription']}"
+                                             rendered="#{pageName eq 'entries'}"/>
+                        </p>
 
                         <form id="searchForm"
                               name="searchForm" 
@@ -122,7 +131,25 @@
                 </div>
             </div>
         </div>
-        
+        <script>
+            Date.parseDate = function (input, format) {
+                return moment(input, format).toDate();
+            };
+            Date.prototype.dateFormat = function (format) {
+                return moment(this).format(format);
+            };
+
+            $('#startDateString').datetimepicker({
+                format: 'YYYY-MM-DDTHH:mm',
+                formatTime: 'HH:mm',
+                formatDate: 'YYYY MM DD'
+            });
+            $('#endDateString').datetimepicker({
+                format: 'YYYY-MM-DDTHH:mm',
+                formatTime: 'HH:mm',
+                formatDate: 'YYYY MM DD'
+            });
+        </script>
     </f:view>
 
 </ui:composition>
