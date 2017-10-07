@@ -88,13 +88,13 @@ public class JsonBuilder {
                         builder.add(fieldName, formattedCalDate);
                     } else if (fieldValue instanceof List) {
                         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-                        for (Object item : (List) fieldValue) {
+                        for (Object item : (List<?>) fieldValue) {
                             arrayBuilder.add(this.toJsonObject(item, new String[]{}));
                         }
                         builder.add(fieldName, arrayBuilder);
                     } else if (fieldValue instanceof Set) {
                         JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-                        for (Object item : (Set) fieldValue) {
+                        for (Object item : (Set<?>) fieldValue) {
                             arrayBuilder.add(this.toJsonObject(item, new String[]{}));
                         }
                         builder.add(fieldName, arrayBuilder);
