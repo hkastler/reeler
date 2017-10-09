@@ -5,14 +5,13 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-
     <div class="panel-heading panel-title">
         <h2>
             <h:outputText value="#{formTitle}"/>
         </h2>
     </div>
     <div class="panel panel-body">
-        <form jsfc="h:form" jsf:id="profile" name="profile" prependId="false">
+        <h:form id="profile" prependId="false">
             <h:messages
                 layout="table"
                 infoClass="table alert alert-success"
@@ -214,7 +213,7 @@
                    onclick="window.location.href = '#{request.contextPath}#{bean.pageHome}'"
                    class="btn btn-secondary"/>
 
-        </form>
+        </h:form>
     </div>
     <script src="#{request.contextPath}/js/setLocaleAndTimezone.js"></script>
 </ui:composition>
