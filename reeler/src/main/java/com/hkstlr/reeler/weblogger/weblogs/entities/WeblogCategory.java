@@ -91,7 +91,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     }
     
     
-    WeblogCategory(String name, int position) {
+    public WeblogCategory(String name, int position) {
         super();
         this.name = name;
         this.position = position;
