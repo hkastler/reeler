@@ -9,6 +9,7 @@ import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Optional;
 import javax.json.JsonObject;
 import javax.persistence.Basic;
@@ -71,12 +72,6 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         super();
     }
 
-    public WeblogCategory(String name, int position) {
-        super();
-        this.name = name;
-        this.position = position;
-    }
-
     public WeblogCategory(Weblog newWeblog, String name, String description, String image) {
         super();
         this.weblog = newWeblog;
@@ -85,7 +80,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.image = image;
         calculatePosition(this.weblog.getWeblogCategories().size());
     }
-    
+
     public WeblogCategory(Weblog blog, String name, int position) {
         super();
         this.weblog = blog;
@@ -94,6 +89,14 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.image = StringPool.BLANK;
         this.position = position;
     }
+    
+    
+    WeblogCategory(String name, int position) {
+        super();
+        this.name = name;
+        this.position = position;
+    }
+
 
     public String getName() {
         return name;
@@ -134,24 +137,27 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
     }
-    
+
     /**
      *
      * @param size
      */
-    protected final void calculatePosition(int size) {
-               
-        if (size == 0) {
-            this.position = 0;
+    protected final void calculatePosition(int size) {   
+        
+        Optional<Weblog> blog = Optional.ofNullable(this.weblog);
+        
+        if (blog.isPresent()) {
+            Optional<Integer> maxPosition = Optional.ofNullable(
+                    blog.get().getWeblogCategories()
+                            .stream()
+                            .max((wc1, wc2) -> Integer.compare(wc1.getPosition(), wc2.getPosition()))
+                            .orElse(new WeblogCategory("temp", 0))
+                            .getPosition());
+            this.position = maxPosition.orElse(0) + 1;
         } else {
-             Optional<Integer> maxPosition = Optional.ofNullable(
-                     weblog.getWeblogCategories().stream()
-                     .max((wc1, wc2)-> Integer.compare(wc1.getPosition(), wc2.getPosition()))
-                     .get().getPosition()
-                      );
-             this.position = maxPosition.orElse(0) + 1;
-            
+            this.position = 1;
         }
+
     }
 
     @Override
@@ -163,7 +169,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        
+
         if (!(object instanceof WeblogCategory)) {
             return false;
         }
@@ -173,14 +179,14 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         }
         return true;
     }
-    
+
     @Override
-    public String toJsonString(){
+    public String toJsonString() {
         return this.toJsonObject().toString();
     }
-    
+
     @Override
-    public JsonObject toJsonObject(){
+    public JsonObject toJsonObject() {
         return new JsonBuilder().toJsonObject(this, new String[]{"weblog"});
     }
 

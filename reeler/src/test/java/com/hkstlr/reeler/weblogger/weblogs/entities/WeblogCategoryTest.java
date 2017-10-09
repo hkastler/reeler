@@ -48,16 +48,23 @@ public class WeblogCategoryTest {
         cats.add(newCat);
         weblog.setWeblogCategories(cats);
         cut.setWeblog(weblog);
-        cut.calculatePosition(weblog.getWeblogCategories().size());
-        assertEquals(1, cut.getPosition());
+        //cut.calculatePosition(weblog.getWeblogCategories().size());
+        assertEquals(1, newCat.getPosition());
         
         WeblogCategory newCat2 = new WeblogCategory(weblog, "Name", "Description", "Image");
+        System.out.println(weblog.getWeblogCategories().size());
+        System.out.println(newCat2.getPosition());
+        newCat2.calculatePosition(weblog.getWeblogCategories().size());
+        System.out.println(newCat2.getPosition());
         cats.add(newCat);
         cats.add(newCat2);
         weblog.setWeblogCategories(cats);
-        cut.setWeblog(weblog);
-        cut.calculatePosition(weblog.getWeblogCategories().size());
-        assertEquals(2, cut.getPosition());
+        //newCat2.calculatePosition(weblog.getWeblogCategories().size());
+        assertEquals(2, newCat2.getPosition());
+        
+        WeblogCategory newCat3 = new WeblogCategory("blogless position test",10);
+        newCat3.calculatePosition(0);
+        assertEquals(1, newCat3.getPosition());
     }
 
     
