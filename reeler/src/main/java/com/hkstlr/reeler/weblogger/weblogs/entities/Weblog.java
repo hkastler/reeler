@@ -121,7 +121,7 @@ public class Weblog extends AbstractEntity implements Serializable {
     @Column(name = "editorpage", length = 255)
     private String editorPage;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "bloggercatid")
     private WeblogCategory bloggerCategory;
 
