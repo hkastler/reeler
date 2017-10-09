@@ -12,14 +12,14 @@
     <div id="createWeblogDiv" class="panel panel-body">
 
         <form id="createWeblogForm" name="createWeblog" jsfc="h:form" prependId="false">
-            
+
             <h:messages
                 layout="table"
                 infoClass="table alert alert-success"
                 errorClass="table alert alert-danger"
                 globalOnly="false"
                 id="createWeblogMsgs"/>
-            
+
             <div class="form-group #{name.isValid()? '' : 'has-error'}">
                 <label jsf:for="name" class="control-label">Name</label>
                 <input type="text" 
@@ -54,7 +54,7 @@
                     This field should not include HTML.
                 </span>
             </div>
-            
+
             <div class="form-group #{handle.isValid()? '' : 'has-error'}">
                 <label jsf:for="handle" class="control-label" >Handle</label>
                 <input type="text" 
@@ -63,10 +63,11 @@
                        binding="#{handle}"
                        jsfc="h:inputText"
                        value="#{weblogAuthorBean.weblog.handle}"
-                       onkeyup="change(this,'handlePreview')"/>
-                <span class="help-block">
+                       onkeyup="change(this, 'handlePreview')"/>
+                <<span class="help-block">
                     URL:&#160;
- #{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}/<span id="handlePreview" style="alert alert-info">handle</span>
+ #{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}/<span id="handlePreview" class="alert alert-info">handle</span>
+                    
                 </span>
                 <h:message for="handle" errorClass="control-label has-error"/>
                 <span class="help-block" jsfc="h:panelGroup" >
@@ -74,13 +75,13 @@
                     It will be used in your URL, so please limit it to simple ASCII 
                     alphanumeric characters (a-z, A-Z and 0-9), and do not use HTML.
                 </span>
-                <script language="javascript" type="text/javascript"> 
-                    function change(boxid, divtoaffect) { 
+                <script language="javascript" type="text/javascript">
+                    function change(boxid, divtoaffect) {
                         content = boxid.value;
-                        content = content.replace(/[^a-z0-9]+/gi,"-").toLowerCase();
+                        content = content.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
                         document.getElementById(divtoaffect).innerHTML = content;
                         boxid.value = content;
-                    } 
+                    }
                 </script> 
             </div>
 
