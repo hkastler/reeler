@@ -2,10 +2,10 @@
 host=smtp.gmail.com, \
 port=465)
 
-/subsystem=mail/mail-session=RollerMail:add(jndi-name="java:/RollerMail", from="henrykastler@gmail.com", debug=true)
+/subsystem=mail/mail-session=RollerMail:add(jndi-name="java:/ReelerMail", from="henrykastler+reeler@gmail.com", debug=true)
 
 /subsystem=mail/mail-session=RollerMail/server=smtp:add( \
 outbound-socket-binding-ref=RollerSMTP, \
 ssl=true, \
-username=henrykastler@gmail.example.com, \
+username=henrykastler, \
 password=****)

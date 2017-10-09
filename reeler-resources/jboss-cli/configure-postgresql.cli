@@ -23,7 +23,9 @@ data-source add \
 data-source enable --name=RollerDS
 
 /subsystem=jpa:write-attribute(name=default-datasource, value="java:/RollerDS")
-run-batch
 
+/subsystem=ee/service=default-bindings:write-attribute(name="datasource", value="java:/RollerDS")
+
+run-batch
 # Reload the server configuration
 :reload

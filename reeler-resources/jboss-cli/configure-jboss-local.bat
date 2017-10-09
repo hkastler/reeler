@@ -12,5 +12,7 @@ call %JBOSS_HOME%\bin\jboss-cli --user=admin --password=adminadmin1  --connect -
 
 call %JBOSS_HOME%\bin\jboss-cli --user=admin --password=adminadmin1 --connect --file=configure-logging.cli
 
+call %JBOSS_HOME%\bin\jboss-cli --user=admin --password=adminadmin1 --connect --file=remove-exampleds.cli
+
 call %JBOSS_HOME%\bin\jboss-cli --user=admin --password=adminadmin1  --connect reload
 
