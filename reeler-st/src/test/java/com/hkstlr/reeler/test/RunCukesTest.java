@@ -8,7 +8,7 @@ import org.junit.runner.RunWith;
 @CucumberOptions(plugin = {"pretty","html:target/cucumber" ,
                            "json:target/cucumber.json" ,
                            "junit:target/cucumber.xml"}
-                            , features = { "src/test/resources/com/hkstlr/reeler/test/login.feature" })
+                            , features = { "src/test/resources/com/hkstlr/reeler/test/first_account_creation.feature" })
 public class RunCukesTest {
 }
 

@@ -5,7 +5,11 @@
         <jta-data-source>java:comp/DefaultDataSource</jta-data-source>
         <shared-cache-mode>ENABLE_SELECTIVE</shared-cache-mode>
         <properties> 
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <!-- 
+                validate | update | create | create-drop 
+                for dev purposes only
+            -->
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
             <property name="hibernate.show_sql" value="false"/>
         </properties>
     </persistence-unit>
