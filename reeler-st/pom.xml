@@ -67,8 +67,9 @@
             </activation>
             <properties>
                 <env>dev</env>
-                <hostName>localhost:8080</hostName>
-                <protocol>http</protocol>		        	        
+                <hostName>localhost</hostName>
+                <protocol>http</protocol>
+                <port>8080</port>		        	        
             </properties>
         </profile>
         <profile>
@@ -79,7 +80,8 @@
             <properties>
                 <env>qa</env>
                 <hostName>staging.hkstlr.com</hostName>
-                <protocol>http</protocol>		                
+                <protocol>http</protocol>
+                <port>80</port>		                
             </properties>
         </profile>
         <profile>
@@ -90,7 +92,8 @@
             <properties>
                 <env>production</env>
                 <hostName>www.hkstlr.com</hostName>
-                <protocol>http</protocol>		                
+                <protocol>http</protocol>
+                <port>80</port>		                
             </properties>
         </profile>
     </profiles>
