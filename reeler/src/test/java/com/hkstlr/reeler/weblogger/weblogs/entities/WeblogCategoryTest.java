@@ -8,8 +8,6 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 import com.hkstlr.reeler.weblogger.TestSetup;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -41,30 +39,49 @@ public class WeblogCategoryTest {
     public void testCalculatePosition() throws Exception{
         
         Weblog weblog = TestSetup.getWeblog();
-          
-        WeblogCategory newCat = new WeblogCategory(weblog, "Name", "Description", "Image");
+        
+        WeblogCategory newCat = new WeblogCategory(weblog, "Name",
+                weblog.getWeblogCategories().size());
         
         List<WeblogCategory> cats = new ArrayList<>();
         cats.add(newCat);
-        weblog.setWeblogCategories(cats);
-        cut.setWeblog(weblog);
-        //cut.calculatePosition(weblog.getWeblogCategories().size());
+        weblog.setWeblogCategories(cats);        
         assertEquals(1, newCat.getPosition());
         
-        WeblogCategory newCat2 = new WeblogCategory(weblog, "Name", "Description", "Image");
-        System.out.println(weblog.getWeblogCategories().size());
-        System.out.println(newCat2.getPosition());
-        newCat2.calculatePosition(weblog.getWeblogCategories().size());
-        System.out.println(newCat2.getPosition());
+        WeblogCategory newCat2 = new WeblogCategory(weblog, "Name", weblog.getWeblogCategories().size());
+        
         cats.add(newCat);
         cats.add(newCat2);
         weblog.setWeblogCategories(cats);
-        //newCat2.calculatePosition(weblog.getWeblogCategories().size());
+        
         assertEquals(2, newCat2.getPosition());
         
-        WeblogCategory newCat3 = new WeblogCategory("blogless position test",10);
-        newCat3.calculatePosition(0);
-        assertEquals(1, newCat3.getPosition());
+        WeblogCategory newCat3 = new WeblogCategory(weblog, "position test",
+                weblog.getWeblogCategories().size());
+        
+        assertEquals(3, newCat3.getPosition());
+        
+        weblog = TestSetup.getWeblog();
+        
+        String catstr = "General,Technology,Finance";
+        int position = 1;
+        if (catstr != null) {
+            String[] splitcats = catstr.split(",");
+            
+            for (String catName : splitcats) {
+                if (catName.trim().length() == 0) {
+                    continue;
+                }
+                //System.out.println( blogCats.size());
+                WeblogCategory cat = new WeblogCategory(weblog, catName);
+                //System.out.println("position: " + position);
+                //System.out.println("categoryPosition: " + cat.getPosition());
+                
+                weblog.getWeblogCategories().add(cat);
+                assertEquals(cat.getPosition(), position);
+                position++;
+            }
+        }
     }
 
     
