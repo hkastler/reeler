@@ -12,8 +12,6 @@ import org.openqa.selenium.support.ui.LoadableComponent;
 public class LoginPage extends LoadableComponent<LoginPage> {
 
     private static final Logger LOG = Logger.getLogger(LoginPage.class.getName());
-
-    
     
     private final WebDriver driver;
     private final String pageURL = TestUtils.getTestURL() + "/reeler/weblogger/login";
@@ -34,6 +32,10 @@ public class LoginPage extends LoadableComponent<LoginPage> {
         PageFactory.initElements(driver, this);
         this.driver.get(pageURL);
     }
+
+    public String getPageURL() {
+        return pageURL;
+    }   
 
     @Override
     protected void load() {

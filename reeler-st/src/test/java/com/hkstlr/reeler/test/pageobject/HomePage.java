@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.test.pageobject;
 
+import com.hkstlr.reeler.test.util.TestUtils;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
@@ -15,10 +16,11 @@ import org.openqa.selenium.support.ui.LoadableComponent;
  */
 public class HomePage extends LoadableComponent<HomePage> {
     private final WebDriver driver;
-    private final String pageURL = "http://localhost:8080/reeler/";
+    private final String pageURL;
 
     
     public HomePage(WebDriver aDriver) {
+        this.pageURL = TestUtils.getTestURL().concat("/reeler/");
         this.driver = aDriver;
         PageFactory.initElements(driver, this);
         this.driver.get(pageURL);
