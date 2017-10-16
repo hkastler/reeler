@@ -48,6 +48,7 @@ import java.util.TreeSet;
 import java.util.logging.Logger;
 import javax.json.JsonObject;
 import javax.persistence.Cacheable;
+import javax.persistence.Lob;
 import javax.persistence.UniqueConstraint;
 /**
  *
@@ -125,7 +126,8 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.text.NotNull}")
     @Size
-    @Column(name = "text", nullable = false, columnDefinition = "text")
+    @Column(name = "text", nullable = false)
+    @Lob
     private String text;
 
     @Basic

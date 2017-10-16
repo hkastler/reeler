@@ -62,7 +62,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "position", nullable = false)
-    private int position;
+    private int position = 0;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, insertable = true, updatable = true)
@@ -90,6 +90,14 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         this.position = position;
     }
     
+    public WeblogCategory(Weblog blog, String name) {
+        super();
+        this.weblog = blog;
+        this.name = name;
+        this.description = StringPool.BLANK;
+        this.image = StringPool.BLANK;
+        calculatePosition(this.weblog.getWeblogCategories().size());
+    }
     
     public WeblogCategory(String name, int position) {
         super();
@@ -143,16 +151,18 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
      * @param size
      */
     protected final void calculatePosition(int size) {   
-        
+       
         Optional<Weblog> blog = Optional.ofNullable(this.weblog);
         
         if (blog.isPresent()) {
+            
             Optional<Integer> maxPosition = Optional.ofNullable(
                     blog.get().getWeblogCategories()
                             .stream()
                             .max((wc1, wc2) -> Integer.compare(wc1.getPosition(), wc2.getPosition()))
-                            .orElse(new WeblogCategory("temp", 0))
+                            .orElse(new WeblogCategory())
                             .getPosition());
+            
             this.position = maxPosition.orElse(0) + 1;
         } else {
             this.position = 1;

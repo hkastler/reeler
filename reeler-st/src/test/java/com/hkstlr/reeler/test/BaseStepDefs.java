@@ -11,12 +11,12 @@ import javax.annotation.PreDestroy;
 public class BaseStepDefs {
 
     protected WebDriver driver;
+    private String envURL;
 
     @PostConstruct
     public void setUp() {
         driver = new HtmlUnitDriver();
-        String myURL;
-        myURL = TestUtils.getTestURL();
+        envURL = TestUtils.getTestURL();
         //System.out.println("myURL:" + myURL);
     }
 

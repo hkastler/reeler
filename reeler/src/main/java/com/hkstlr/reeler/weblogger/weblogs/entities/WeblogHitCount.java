@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "WeblogHitCount.findByWebsiteid", query = "SELECT r FROM WeblogHitCount r WHERE r.weblog = :websiteid")
     , @NamedQuery(name = "WeblogHitCount.findByDailyhits", query = "SELECT r FROM WeblogHitCount r WHERE r.dailyHits = :dailyhits")
     , @NamedQuery(name = "WeblogHitCount.getByWeblog", query = "SELECT h FROM WeblogHitCount h WHERE h.weblog = ?1")
-    , @NamedQuery(name = "WeblogHitCount.getByWeblogEnabledTrueAndActiveTrue&DailyHitsGreaterThenZero&WeblogLastModifiedGreaterOrderByDailyHitsDesc", query = "SELECT h FROM WeblogHitCount h WHERE h.weblog.visible = true AND h.weblog.isActive = true AND h.weblog.lastModified > ?1 AND h.dailyHits > 0 ORDER BY h.dailyHits DESC")
+     
     , @NamedQuery(name = "WeblogHitCount.updateDailyHitCountZero", query = "UPDATE WeblogHitCount h SET h.dailyHits = 0")})
 public class WeblogHitCount extends AbstractEntity implements Serializable {
 

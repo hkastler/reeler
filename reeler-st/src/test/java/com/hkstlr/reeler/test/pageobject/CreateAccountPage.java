@@ -1,5 +1,6 @@
 package com.hkstlr.reeler.test.pageobject;
 
+import com.hkstlr.reeler.test.util.TestUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,21 +9,12 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.LoadableComponent;
 
 
-import com.hkstlr.reeler.test.util.TestUtils;
-import org.openqa.selenium.support.ui.Select;
 
 public class CreateAccountPage extends LoadableComponent<CreateAccountPage> {
 
     public WebDriver driver;
    
-    private final String pageURL = "http://localhost:8080/reeler/";
-
-    public CreateAccountPage(WebDriver aDriver) {
-        driver = aDriver;
-        PageFactory.initElements(driver, this);
-        driver.get(pageURL);
-       
-    }
+    private final String pageURL;
 
     private String prefixId = "";
 
@@ -31,18 +23,22 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage> {
 
     @FindBy(id = "userName")
     private WebElement userNameField;
+    
     @FindBy(id = "screenName")
     private WebElement screenNameField;
+    
     @FindBy(id = "fullName")
     private WebElement fullNameField;
     
     @FindBy(id = "emailAddress")
     private WebElement emailField;
+    
     @FindBy(id = "passwordText")
     private WebElement passwordField;
+    
     @FindBy(id = "passwordConfirm")
     private WebElement passwordConfirmField;
-
+    
     @FindBy(id = "localeSelect")
     private WebElement localeField;
     
@@ -52,6 +48,15 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage> {
 
     @FindBy(xpath = "/html/body/main/div/div/div[1]/div/div/div/div/div[2]/div/div[1]/h2")
     private WebElement formPanelTitle;
+    
+    
+    public CreateAccountPage(WebDriver aDriver) {
+        this.pageURL = TestUtils.getTestURL() + "/reeler/";
+        driver = aDriver;
+        PageFactory.initElements(driver, this);
+        driver.get(pageURL);
+       
+    }
 
     @Override
     protected void load() {

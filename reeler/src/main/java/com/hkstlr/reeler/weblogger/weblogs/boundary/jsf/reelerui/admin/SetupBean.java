@@ -6,7 +6,6 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.admin;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
-import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.users.boundary.manager.UserManager;
 import com.hkstlr.reeler.weblogger.users.control.PasswordDigester;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
@@ -146,10 +145,9 @@ public class SetupBean {
         jdbcrealmGroups.add(adminGroup);
         user.setJdbcrealmGroups(jdbcrealmGroups);
         
-        UserRole role = new UserRole();
-        role.setRoleName(roleName);
+        UserRole attachedRole = userManager.getRoleByName(roleName);
         Set<UserRole> roles = new HashSet<>();
-        roles.add(role);
+        roles.add(attachedRole);
         this.user.setRoles(roles);
         this.user.setIsEnabled(true);
         this.user.setDateCreated(new Date());

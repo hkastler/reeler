@@ -77,7 +77,7 @@ public class User extends AbstractEntity {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255, message="{User.userName.NotNull}")
-    @Column(name = "username", nullable = false, length = 255)
+    @Column(name = "username", nullable = false, length = 255, unique = true)
     private String userName;
 
     @Basic(optional = false)

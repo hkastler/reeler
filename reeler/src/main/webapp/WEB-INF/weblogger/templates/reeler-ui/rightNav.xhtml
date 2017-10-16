@@ -19,7 +19,11 @@
                     <a href="#{request.contextPath}#{reelerUiBean.pageHome}/user/profile/index.xhtml?action=edit">Edit User Profile</a>
                     <span class="help-block">Change user info, locale, timezone</span>
                     <hr/>
-                    <h:form><a action="#{reelerUiBean.newWeblog()}" jsfc="h:commandLink">
+                    <h:form prependId="false"
+                            id="createBlogForm"><a action="#{reelerUiBean.newWeblog()}" 
+                               jsfc="h:commandLink"
+                               id="createBlogLink"
+                               >
                         <f:param name="action" value="create"/>Create new blog</a></h:form>
                     <span class="help-block">Create a new weblog</span>         
                     <hr/>

@@ -45,7 +45,7 @@ public class UserRole extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "rolename", nullable = false, length = 255)
+    @Column(name = "rolename", nullable = false, length = 255, unique = true)
     private String roleName;
 
     @Basic
@@ -61,6 +61,11 @@ public class UserRole extends AbstractEntity implements Serializable {
         super();
         this.roleName = rolename;
         this.userName = username;
+    }
+    
+    public UserRole(String rolename) {
+        super();
+        this.roleName = rolename;
     }
 
     public String getRoleName() {

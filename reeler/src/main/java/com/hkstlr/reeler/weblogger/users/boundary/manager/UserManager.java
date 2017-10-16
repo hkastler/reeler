@@ -13,13 +13,20 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import com.hkstlr.reeler.weblogger.users.entities.UserRole;
 import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.Resource;
 import javax.persistence.TypedQuery;
 import javax.validation.Validator;
@@ -30,6 +37,10 @@ import javax.validation.Validator;
  */
 @Stateless
 public class UserManager extends AbstractManager<User> {
+
+    private static final Logger LOG = Logger.getLogger(UserManager.class.getName());
+    
+    
 
     @Resource
     Validator validator;
@@ -117,11 +128,18 @@ public class UserManager extends AbstractManager<User> {
      *
      * @param userName User Name of user to lookup.
      * @return The user, or null if not found or not enabled.
-     * @throws WebloggerException If there is a problem.
      */
     public User getUserByUserName(String userName){
-        return findByField("userName", userName);
-       
+        //return findByField("userName", userName);
+       TypedQuery<User> uq = em.createNamedQuery("User.findByUsername", User.class);
+       uq.setParameter("userName", userName);
+       User returnUser = null;
+       try{
+            returnUser = uq.getSingleResult();
+       }catch(Exception e){
+           //throwNoResultException
+       }
+       return returnUser;
     }
 
     /**
@@ -263,6 +281,20 @@ public class UserManager extends AbstractManager<User> {
         }
         return retGroup;
     }
+    
+    public UserRole getRoleByName(String roleName) {
+        
+        UserRole retRole;
+        TypedQuery<UserRole> q = em.createNamedQuery("UserRole.findByRolename",UserRole.class);
+        q.setParameter("roleName", roleName);
+        try{
+            retRole =  q.getSingleResult();
+        }catch(javax.persistence.NoResultException nre){
+            retRole =  (UserRole)createAttach(new UserRole(roleName));
+        }
+        return retRole;
+    }
+    
 
     public TypedQuery<JdbcrealmGroup> getJdbcrealmGroup(String groupname){
         TypedQuery<JdbcrealmGroup> q = em.createNamedQuery("JdbcrealmGroup.findByGroupname", JdbcrealmGroup.class);
@@ -292,6 +324,29 @@ public class UserManager extends AbstractManager<User> {
         JdbcrealmGroup attachedRetGroup = getJdbcrealmGroup(groupname).getSingleResult();
         return attachedRetGroup;
     }
+    
+    public Object createAttach(Object obj){        
+        em.persist(obj);
+        String id = StringPool.BLANK;
+                          
+        try {
+            //this works because our expected entities 
+            //extend AbstractEntity 
+            Method getId = obj.getClass().getSuperclass().getMethod("getId", null);
+            id = (String)getId.invoke(obj, null);
+            
+        } catch (IllegalAccessException | IllegalArgumentException | NoSuchMethodException | SecurityException | InvocationTargetException ex) {
+            Logger.getLogger(UserManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Object attachObj = em.find(obj.getClass(), id);
+        if(attachObj == null){
+            LOG.info("can't find " + obj.getClass().getName() + " by id " + id);
+            return obj;
+        }
+        return attachObj;
+    }
+
+    
     
 
 }

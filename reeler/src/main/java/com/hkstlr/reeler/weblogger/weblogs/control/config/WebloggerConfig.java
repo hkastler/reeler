@@ -54,7 +54,7 @@ public class WebloggerConfig {
 
     private static final Logger LOG = Logger.getLogger(WebloggerConfig.class.getName());
 
-    protected WebloggerConfig() {
+    public WebloggerConfig() {
 
         LOG.log(Level.FINE, "init WebloggerConfig");
         if (CONFIG.isEmpty()) {

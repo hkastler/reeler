@@ -44,11 +44,19 @@ public class LoginStepDefs extends BaseStepDefs {
         put.loginForm.submit();
     }
 
-    @Then("^a message is displayed$")
+    @Then("^a fail message is displayed$")
     public void a_message_is_displayed() throws Throwable {
         String body = driver.findElement(By.tagName("body")).getText();
-        System.out.println("postLogin body:" + body);
+        //System.out.println("postLogin body:" + body);
         boolean hasExpectedMessage = body.contains("Login Failed");
+        assertTrue(hasExpectedMessage);
+    }
+    
+    @Then("^the user is redirected to the admin$")
+    public void the_user_is_redirected_to_the_admin() throws Throwable {
+        String reelerUiTxt = driver.findElement(By.className("navbar-brand")).getText();
+        System.out.println("postLogin header:" + reelerUiTxt);
+        boolean hasExpectedMessage = reelerUiTxt.contains("Reeler UI");
         assertTrue(hasExpectedMessage);
     }
 

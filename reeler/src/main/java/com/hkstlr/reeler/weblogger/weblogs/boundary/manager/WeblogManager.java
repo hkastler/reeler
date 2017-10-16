@@ -37,6 +37,7 @@ import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import com.hkstlr.reeler.app.boundary.manager.AbstractManager;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.media.boundary.manager.MediaFileManager;
 import com.hkstlr.reeler.weblogger.pings.boundary.AutoPingManager;
@@ -159,25 +160,22 @@ public class WeblogManager extends AbstractManager<Weblog> {
     private Weblog addWeblogCategories(Weblog weblog) {
         String cats = WebloggerConfig.getProperty("newuser.categories");
         WeblogCategory firstCat = null;
-        List<WeblogCategory> blogCats = new ArrayList<>();
+        
         if (cats != null) {
             String[] splitcats = cats.split(",");
-            int position = 1;
+            
             for (String catName : splitcats) {
                 if (catName.trim().length() == 0) {
                     continue;
                 }
-                WeblogCategory cat = new WeblogCategory(weblog, catName,
-                        position);
-                
-                
+                WeblogCategory cat = new WeblogCategory(weblog, catName);
                 
                 if (firstCat == null) {
                     firstCat = cat;
                 }
-                blogCats.add(cat);
+                
+                weblog.getWeblogCategories().add(cat);                
             }
-            weblog.setWeblogCategories(blogCats);
         }
 
         // Use first category as default for Blogger API
@@ -200,18 +198,18 @@ public class WeblogManager extends AbstractManager<Weblog> {
         List<WeblogBookmark> bookmarks = new ArrayList<>();
         if (blogroll != null) {
             String[] splitroll = blogroll.split(",");
+            
             for (String splitItem : splitroll) {
                 String[] rollitems = splitItem.split("\\|");
                 if (rollitems.length > 1) {
                     WeblogBookmark wb = new WeblogBookmark(
                             blog.getBookmarkFolders().get(0),
                             rollitems[0],
-                            "",
+                            StringPool.BLANK,
                             rollitems[1].trim(),
-                            null,
-                            null);
+                            StringPool.BLANK,
+                            StringPool.BLANK);
                     bookmarks.add(wb);
-                    //this.em.merge(wb);
                 }
             }
         }
@@ -416,7 +414,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.log(Level.WARNING, "getByHandle", e);
+            LOG.log(Level.INFO, "getByHandle", e);
             weblog = null;
         }
 

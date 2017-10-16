@@ -17,7 +17,7 @@ import javax.persistence.PersistenceContext;
  */
 public class MediaFileDirectoryManager extends AbstractManager<MediaFileDirectory> {
 
-    @PersistenceContext(unitName = "rollerPU")
+    @PersistenceContext
     private EntityManager em;
 
     @Override

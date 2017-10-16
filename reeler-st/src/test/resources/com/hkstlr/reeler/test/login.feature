@@ -9,5 +9,12 @@ Given the user is on the login page
 When user enters "testola" as the email address
 And enters "testola" as the password
 And submits the form
-Then a message is displayed
+Then a fail message is displayed
+
+Scenario: Account found
+Given the user is on the login page
+When user enters "testerson" as the email address
+And enters "password" as the password
+And submits the form
+Then the user is redirected to the admin
 

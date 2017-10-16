@@ -39,7 +39,7 @@ import javax.validation.constraints.Size;
 @DiscriminatorColumn(name = "objecttype")
 @DiscriminatorValue(value = "objecttype")
 @MappedSuperclass
-public class PermissionEntity extends java.security.Permission {
+public abstract class PermissionEntity {
 
     protected static final long serialVersionUID = 1L;
 
@@ -49,11 +49,12 @@ public class PermissionEntity extends java.security.Permission {
     /**
      *
      */
-    @Id
+    
     @Basic(optional = false)
     @NotNull(message = "{id.NotNull}")
     @Size(min = 1, max = 48)
     @Column(name = "id", nullable = false, length = 48)
+    @Id
     protected final String id;
 
     @Basic(optional = false)
@@ -84,13 +85,16 @@ public class PermissionEntity extends java.security.Permission {
     protected String actions;
 
     PermissionCollection permissionCollection;
-
-    public PermissionEntity(String name) {
-        super(name);
+    
+    public PermissionEntity(){
         this.id = UUID.randomUUID().toString();
     }
-
-    @Override
+    
+     public PermissionEntity(String name){
+        this.userName = name;
+        this.id = UUID.randomUUID().toString();
+    }
+    
     public String getActions() {
         return actions;
     }
@@ -215,8 +219,8 @@ public class PermissionEntity extends java.security.Permission {
         return this.id.equals(other.id);
     }
 
-    @Override
-    public boolean implies(Permission permission) {
+    
+    public boolean implies(PermissionEntity permission) {
         // TODO Auto-generated method stub
         return false;
     }

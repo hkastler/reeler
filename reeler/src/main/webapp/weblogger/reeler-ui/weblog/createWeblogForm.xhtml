@@ -64,9 +64,9 @@
                        jsfc="h:inputText"
                        value="#{weblogAuthorBean.weblog.handle}"
                        onkeyup="change(this, 'handlePreview')"/>
-                <<span class="help-block">
+                <span class="help-block">
                     URL:&#160;
- #{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}/<span id="handlePreview" class="alert alert-info">handle</span>
+ #{request.scheme}://#{request.serverName}:#{request.serverPort}#{request.contextPath}/<span id="handlePreview" class="text-info">handle</span>
                     
                 </span>
                 <h:message for="handle" errorClass="control-label has-error"/>

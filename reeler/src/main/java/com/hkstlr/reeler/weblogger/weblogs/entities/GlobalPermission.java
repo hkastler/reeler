@@ -64,15 +64,15 @@ public class GlobalPermission extends PermissionEntity implements Serializable {
     public static final String ADMIN  = "admin";
     
     public GlobalPermission() {
-        super("");
+        
     }
 
     public GlobalPermission(String name) {
-        super(name);
+        
     }
 
     public GlobalPermission(String userName, Date dateCreated) {
-        super(userName);
+       
         super.dateCreated = dateCreated;
     }
     
@@ -102,7 +102,7 @@ public class GlobalPermission extends PermissionEntity implements Serializable {
         //List<String> roles = WebloggerFactory.getWeblogger().getUserManager().getRoles(user);
         Set<UserRole> userRoles = user.getRoles();        
         List<String> roles = new ArrayList<>();
-        userRoles.forEach(userRole -> roles.add(getName()));
+        userRoles.forEach(userRole -> roles.add(userRole.getRoleName()));
         List<String> actionsList = new ArrayList<>();        
         for (String role : roles) {
             String impliedActions = WebloggerConfig.getProperty("role.action." + role);
@@ -153,8 +153,7 @@ public class GlobalPermission extends PermissionEntity implements Serializable {
         return "com.hkstlr.reeler.weblogger.entities.GlobalPermission[ id=" + id + " ]";
     }
 
-    @Override
-    public boolean implies(Permission permission) {
+    public boolean implies(PermissionEntity permission) {
         // TODO Auto-generated method stub
         return false;
     }
