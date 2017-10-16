@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-generate-resources-dev</actionName>
+            <displayName>generate-resources-dev</displayName>
+            <goals>
+                <goal>generate-resources</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>dev</activatedProfile>
+            </activatedProfiles>
+        </action>
+    </actions>

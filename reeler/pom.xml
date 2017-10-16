@@ -82,7 +82,7 @@
          <dependency>
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
-            <version>${version.eclipselink}</version>
+            <version>2.7.0</version>
         </dependency>
         
         <dependency>
@@ -337,12 +337,8 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <outputDirectory>${project.build.directory}/generated-sources/metamodel</outputDirectory>
-                            <compilerArguments>
-                                -Aeclipselink.persistencexml=${project.basedir}/src/main/java/META-INF/persistence.xml
-                            </compilerArguments>
                             <processors>
-                                <processor>org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor
-                                </processor>
+                                <processor>org.eclipse.persistence.internal.jpa.modelgen.CanonicalModelProcessor</processor>
                             </processors>
                         </configuration>
                     </execution>

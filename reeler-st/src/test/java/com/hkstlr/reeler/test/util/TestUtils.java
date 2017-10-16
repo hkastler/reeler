@@ -17,9 +17,7 @@ public class TestUtils {
         String randomString = RandomStringUtils.randomAlphanumeric(6).toLowerCase();
 
         String newEmail = String.format(oldEmail, randomString);
-
-        //System.out.println("new email: " + newEmail);
-
+        
         return newEmail;
     }
 
