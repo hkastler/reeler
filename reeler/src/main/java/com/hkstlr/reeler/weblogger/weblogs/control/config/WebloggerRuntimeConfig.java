@@ -72,8 +72,9 @@ public class WebloggerRuntimeConfig {
     RuntimeConfigManager runtimeConfigManager;
     
     
-    protected WebloggerRuntimeConfig() {
+    public WebloggerRuntimeConfig() {
         // prevent instantiations
+        
     }
     
     @PostConstruct

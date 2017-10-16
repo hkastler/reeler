@@ -414,7 +414,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.log(Level.WARNING, "getByHandle", e);
+            LOG.log(Level.INFO, "getByHandle", e);
             weblog = null;
         }
 

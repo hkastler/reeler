@@ -163,7 +163,7 @@ public class LoginBean implements Serializable {
 
         } catch (NoResultException |  NullPointerException ex) {
 
-            Logger.getLogger(LoginBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(LoginBean.class.getName()).log(Level.INFO, null, ex);
         }
         return userToGet;
     }

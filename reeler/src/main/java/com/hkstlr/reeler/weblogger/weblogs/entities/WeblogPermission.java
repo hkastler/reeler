@@ -2,17 +2,22 @@ package com.hkstlr.reeler.weblogger.weblogs.entities;
 
 import com.hkstlr.reeler.app.entities.PermissionEntity;
 import java.io.Serializable;
-import java.security.Permission;
 import java.util.ArrayList;
 import java.util.List;
 
 
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import java.util.UUID;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -49,6 +54,13 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
 
     protected static final long serialVersionUID = 1L;
 
+    @Basic(optional = false)
+    @NotNull(message = "{id.NotNull}")
+    @Size(min = 1, max = 48)
+    @Column(name = "id", nullable = false, length = 48)
+    @Id
+    protected final String id;
+    
     static {
         ALL_ACTIONS.add(EDIT_DRAFT);
         ALL_ACTIONS.add(POST);
@@ -56,19 +68,23 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
     }
 
     public WeblogPermission() {
-        super(PERMISSION_OBJECT_TYPE);
+        super();
+        this.id = UUID.randomUUID().toString();
     }
     
     public WeblogPermission(String name) {
         super(name);
+        this.id = UUID.randomUUID().toString();
     }
 
     public WeblogPermission(Weblog weblog, User user, String actions) {
+       
         super(USER_WEBLOG_PERMISSION_NAME_PREFIX + user.getUserName());
         super.setActions(actions);
         super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
+         this.id = UUID.randomUUID().toString();
     }
 
     public WeblogPermission(Weblog weblog, User user, List<String> actions) {
@@ -77,6 +93,7 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
         super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
+         this.id = UUID.randomUUID().toString();
     }
      public WeblogPermission(Weblog weblog, User user, List<String> actions, boolean pending) {
         super(USER_WEBLOG_PERMISSION_NAME_PREFIX + user.getUserName());
@@ -85,6 +102,7 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
         super.setObjectId(weblog.getHandle());
         super.setUserName(user.getUserName());
         super.setPending(pending);
+         this.id = UUID.randomUUID().toString();
     }
      
     public WeblogPermission(Weblog weblog, List<String> actions) {
@@ -92,6 +110,7 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
         super.setActionsAsList(actions);
         super.setObjectType(PERMISSION_OBJECT_TYPE);
         super.setObjectId(weblog.getHandle());
+        this.id = UUID.randomUUID().toString();
     } 
     
       
@@ -99,8 +118,7 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
         return ALL_ACTIONS;
     }
 
-    @Override
-    public boolean implies(Permission perm) {
+    public boolean implies(PermissionEntity perm) {
         if (perm instanceof WeblogPermission) {
             WeblogPermission rperm = (WeblogPermission) perm;
 

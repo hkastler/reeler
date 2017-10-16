@@ -6,6 +6,7 @@
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui;
 
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
@@ -128,7 +129,7 @@ public class ReelerUIBean implements Serializable {
 
         Map<String, String> weblogPermissionMap = new HashMap<>();
 
-        for (Permission perm : user.getPermissions()) {
+        for (PermissionEntity perm : user.getPermissions()) {
             
             if(perm instanceof WeblogPermission){
                 WeblogPermission wp = (WeblogPermission) perm;

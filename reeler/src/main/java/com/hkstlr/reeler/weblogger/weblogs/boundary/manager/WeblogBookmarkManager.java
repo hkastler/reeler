@@ -38,7 +38,8 @@ public class WeblogBookmarkManager extends AbstractManager<WeblogBookmark> {
     }
 
     public List<WeblogBookmark> getBookmarksForWeblog(Weblog weblog) {
-        String qlString = "SELECT b FROM WeblogBookmark b JOIN b.folder WHERE b.folder.weblog = ?1";
+        String qlString = "SELECT b FROM WeblogBookmark b "
+                + "WHERE b.folder.weblog = ?1";
         Query query = getEntityManager().createQuery(qlString);
         query.setParameter(1, weblog);
         

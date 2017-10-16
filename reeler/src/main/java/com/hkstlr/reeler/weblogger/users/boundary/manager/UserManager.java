@@ -128,11 +128,18 @@ public class UserManager extends AbstractManager<User> {
      *
      * @param userName User Name of user to lookup.
      * @return The user, or null if not found or not enabled.
-     * @throws WebloggerException If there is a problem.
      */
     public User getUserByUserName(String userName){
-        return findByField("userName", userName);
-       
+        //return findByField("userName", userName);
+       TypedQuery<User> uq = em.createNamedQuery("User.findByUsername", User.class);
+       uq.setParameter("userName", userName);
+       User returnUser = null;
+       try{
+            returnUser = uq.getSingleResult();
+       }catch(Exception e){
+           //throwNoResultException
+       }
+       return returnUser;
     }
 
     /**

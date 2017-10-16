@@ -12,6 +12,6 @@ import org.junit.runner.RunWith;
                                 "src/test/resources/com/hkstlr/reeler/test/1_first_account_creation.feature",
                                 "src/test/resources/com/hkstlr/reeler/test/2_create_blog.feature"
                             })
-public class RunCukesTest {
+public class RunSetupTest {
 }
 
