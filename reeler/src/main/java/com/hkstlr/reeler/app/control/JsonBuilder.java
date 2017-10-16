@@ -70,7 +70,7 @@ public class JsonBuilder {
                 Object fieldValue = field.get(o);
 
                 if (fieldValue != null) {
-
+                    
                     if (fieldValue instanceof String) {
                         builder.add(fieldName, (String) fieldValue);
                     } else if (fieldValue instanceof Integer) {
@@ -112,61 +112,7 @@ public class JsonBuilder {
         }
 
         return builder.build();
-    }
-
-    /**
-     *
-     * @param o
-     * @param skipFields
-     * @return
-     */
-    public JsonObject toJsonArray(Object o, String[] skipFields) {
-
-        Field[] classFields = o.getClass().getDeclaredFields();
-        Field[] superClassFields = o.getClass().getSuperclass().getDeclaredFields();
-
-        Field[] fields = Stream.concat(Arrays.stream(superClassFields), Arrays.stream(classFields))
-                .toArray(Field[]::new);
-        //get all that don't equal the following filters
-        fields = Arrays.stream(fields).filter(f -> !"log".equalsIgnoreCase(f.getName()))
-                .filter(f -> !"serialversionuid".equalsIgnoreCase(f.getName()))
-                .toArray(Field[]::new);
-        fields = filterInverses(fields);
-        //filter out any user defined fields
-        fields = filterFieldsByName(fields, skipFields);
-
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        JsonArrayBuilder arrayBuilder = Json.createArrayBuilder();
-
-        for (Field field : fields) {
-            field.setAccessible(true);
-            try {
-                String fieldName = field.getName();
-                Object fieldValue = field.get(o);
-
-                if (fieldValue != null) {
-                    if (fieldValue instanceof String) {
-                        arrayBuilder.add(Json.createObjectBuilder().add(fieldName, (String) fieldValue));
-                    } else if (fieldValue instanceof Integer) {
-                        arrayBuilder.add(Json.createObjectBuilder().add(fieldName, (Integer) fieldValue));
-                    } else if (fieldValue instanceof Boolean) {
-                        arrayBuilder.add(Json.createObjectBuilder().add(fieldName, (Boolean) fieldValue));
-                    } else if (fieldValue instanceof Long) {
-                        arrayBuilder.add(Json.createObjectBuilder().add(fieldName, (Long) fieldValue));
-                    } else {
-                        arrayBuilder.add(Json.createObjectBuilder().add(fieldName, fieldValue.toString()));
-                    }
-                } else {
-                    arrayBuilder.add(Json.createObjectBuilder().addNull(fieldName));
-                }
-            } catch (IllegalArgumentException | IllegalAccessException ex) {
-                Logger.getLogger(JsonBuilder.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        builder.add(o.getClass().getName(), arrayBuilder);
-        return builder.build();
-    }
+    }   
 
     public Field[] getAllFieldsForObject(Object o) {
         Field[] classFields = o.getClass().getDeclaredFields();

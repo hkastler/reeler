@@ -146,23 +146,6 @@ public class JsonBuilderTest {
         // TODO review the generated test code and remove the default call to fail.
         //fail("The test case is a prototype.");
     }
-
-    /**
-     * Test of toJsonArray method, of class JsonBuilder.
-     */
-    @Ignore
-    @Test
-    public void testToJsonArray() {
-        System.out.println("toJsonArray");
-        Object o = weblogEntry;
-        //String[] skipFields = null;
-        JsonBuilder instance = new JsonBuilder();
-        JsonObject expResult = null;
-        JsonObject result = instance.toJsonArray(o, skipFields);
-        //log.info("result:" + result);
-        //assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        //fail("The test case is a prototype.");
-    }
+    
 
 }
