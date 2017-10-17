@@ -18,13 +18,10 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jaxrs;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryCommentManager;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
-import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 
 /**
  *
