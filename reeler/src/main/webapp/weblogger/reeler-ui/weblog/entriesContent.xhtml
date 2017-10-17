@@ -10,11 +10,17 @@
     </f:metadata>
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
-            Find and edit entries in weblog #{weblog.name}
+           
+           <h:outputFormat  value="Find and edit entries in weblog {0}"
+                          escape="false">
+                <f:param value="#{reelerUiBean.currentWeblog.name}" />
+            </h:outputFormat>
         </div>
 
         <div class="panel-body">
-            <p>#{labels.res.getString("weblogEntryQuery.tip")}</p>
+            <p>
+                #{res["weblogEntryQuery.tip"]}
+            </p>
             <div class="row">
                 <div class="text-center" style="margin: 0 auto" id="top-paginatorContainer">
                     <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">

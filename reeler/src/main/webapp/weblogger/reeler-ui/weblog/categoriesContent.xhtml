@@ -5,14 +5,17 @@
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
 
-
+    
     <div class="panel panel-primary">
-        <div class="panel-heading panel-title">
-            Manage Categories in weblog #{reelerUiBean.currentWeblog.name}
+        <div class="panel-heading panel-title">            
+            <h:outputFormat  value="#{res['categoriesForm.subtitle']}"
+                          escape="false">
+                <f:param name="{0}" value="#{reelerUiBean.currentWeblog.name}" />
+            </h:outputFormat>
         </div>
 
         <div class="panel-body">
-            <p><h:outputText value="#{labels.res.getString('commentManagement.tip')}"/></p>
+            <p><h:outputText value="#{res['categoriesForm.rootPrompt']}"/></p>
             <div class="row">
                 <div class="col-lg-6">
 
@@ -25,7 +28,7 @@
                 <div class="col-lg-12">                    
                     <h:form styleClass="form">
                         <h:panelGroup id="messagePanel" layout="block" styleClass="control-label panel-info">
-                            <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
+                            <h:messages errorClass="alert alert-danger" infoClass="alert alert-info" layout="table"/>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{reelerUiBean.currentWeblog.weblogCategories.size() > 0}">
                             <div class="row">
