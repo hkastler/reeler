@@ -58,26 +58,14 @@ public class ResetPasswordBean {
         try {
             userToGet = userManager.getUserByUserName(username);
             Logger.getLogger(ResetPasswordBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toJsonString());
-            String subject = "Reset Password request ";
-            String body = "reset password link here";
-
+            
             sendMessage(userToGet.getEmailAddress());
-            //sendMail(userToGet.getEmailAddress(),
-            //        subject,
-            //        body);
+            
 
         } catch (NoResultException | NullPointerException ex) {
 
             Logger.getLogger(ResetPasswordBean.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    private void sendMail(String email, String subject, String body) throws NamingException, MessagingException {
-        MimeMessage message = new MimeMessage(mailSession);
-        message.setSubject(subject);
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));
-        message.setText(body);
-        Transport.send(message);
     }
 
     @Asynchronous
@@ -88,15 +76,13 @@ public class ResetPasswordBean {
             message.setFrom();
             message.setRecipients(Message.RecipientType.TO,
                     InternetAddress.parse(email, false));
-            message.setSubject("Test message from async example");
+            message.setSubject("Reset Password Request");
             message.setHeader("X-Mailer", "JavaMail");
             DateFormat dateFormatter = DateFormat
                     .getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT);
             Date timeStamp = new Date();
-            String messageBody = "This is a test message from the async example "
-                    + "of the Java EE Tutorial. It was sent on "
-                    + dateFormatter.format(timeStamp)
-                    + ".";
+            String messageBody = "have some text and a password reset link here. sent:"
+                    + dateFormatter.format(timeStamp);
             message.setText(messageBody);
             message.setSentDate(timeStamp);
             Transport.send(message);

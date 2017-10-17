@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 import javax.validation.Validator;
 
@@ -136,8 +137,11 @@ public class UserManager extends AbstractManager<User> {
        User returnUser = null;
        try{
             returnUser = uq.getSingleResult();
+       }catch(NoResultException e){
+           LOG.log(Level.FINE,"username not found",e);
+           throw e;
        }catch(Exception e){
-           //throwNoResultException
+           LOG.log(Level.FINE,"error",e);
        }
        return returnUser;
     }
@@ -276,21 +280,27 @@ public class UserManager extends AbstractManager<User> {
         
         try{
             retGroup =  q.getSingleResult();
-        }catch(javax.persistence.NoResultException nre){
+        }catch(javax.persistence.NoResultException e){
             retGroup =  createJdbcrealmGroup(groupname);
+            throw e;
+        }catch(Exception e){
+            LOG.log(Level.FINE,"error",e);
         }
         return retGroup;
     }
     
     public UserRole getRoleByName(String roleName) {
         
-        UserRole retRole;
+        UserRole retRole = null;
         TypedQuery<UserRole> q = em.createNamedQuery("UserRole.findByRolename",UserRole.class);
         q.setParameter("roleName", roleName);
         try{
             retRole =  q.getSingleResult();
-        }catch(javax.persistence.NoResultException nre){
+        }catch(javax.persistence.NoResultException e){
             retRole =  (UserRole)createAttach(new UserRole(roleName));
+            throw e;
+        }catch(Exception e){
+            LOG.log(Level.FINE,"error",e);
         }
         return retRole;
     }
