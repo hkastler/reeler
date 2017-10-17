@@ -83,19 +83,15 @@ public class WebloggerRuntimeConfig {
         if(this.props.isEmpty()) {
             this.props = runtimeConfigManager.getProperties();
             if(this.props.isEmpty()){
-                LOG.fine("loading from xml config file on first time run");
-                LOG.fine(getRuntimeConfigDefsAsString());
                 configDefs = getRuntimeConfigDefs();
                 configDefs.getConfigDefs().forEach((cd) -> {
                     cd.getDisplayGroups().forEach((dg) -> {
                        dg.getPropertyDefs().forEach((prop) -> {
-                           LOG.fine(prop.getName());
                            props.put(prop.getName(), prop.getDefaultValue());
                        });
                     });
                 });
                 runtimeConfigManager.saveProperties(props);
-
             }
         } 
     }

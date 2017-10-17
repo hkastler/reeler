@@ -281,8 +281,8 @@ public class UserManager extends AbstractManager<User> {
         try{
             retGroup =  q.getSingleResult();
         }catch(javax.persistence.NoResultException e){
-            retGroup =  createJdbcrealmGroup(groupname);
-            
+            retGroup =  createJdbcrealmGroup(groupname);            
+            LOG.log(Level.FINE,groupname.concat(" JdbcrealmGroup not found, created "));
         }catch(Exception e){
             LOG.log(Level.FINE,"error",e);
         }
@@ -298,7 +298,7 @@ public class UserManager extends AbstractManager<User> {
             retRole =  q.getSingleResult();
         }catch(javax.persistence.NoResultException e){
             retRole =  (UserRole)createAttach(new UserRole(roleName));
-            
+            LOG.log(Level.FINE,roleName.concat(" roleName not found, created"));
         }catch(Exception e){
             LOG.log(Level.FINE,"error",e);
         }
@@ -316,12 +316,13 @@ public class UserManager extends AbstractManager<User> {
     public JdbcrealmGroup getUserGroup(){
         String groupname = "user";
         TypedQuery<JdbcrealmGroup> q = getJdbcrealmGroup(groupname);
-        JdbcrealmGroup retGroup = null;
+        JdbcrealmGroup retGroup;
         
         try{
             retGroup =  q.getSingleResult();
-        }catch(javax.persistence.NoResultException nre){
+        }catch(javax.persistence.NoResultException e){
             retGroup =  createJdbcrealmGroup(groupname);
+            LOG.log(Level.FINE,groupname.concat(" groupname not found, created"));
         }
         return retGroup;
     }

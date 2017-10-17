@@ -128,16 +128,10 @@ public class WeblogPermissionManager extends AbstractManager<WeblogPermission> {
         WeblogPermission existingPerm = null;
         try {
             existingPerm = q.getSingleResult();
-        } catch (NoResultException ignored) {
-            LOG.log(Level.FINE, null, ignored);
-        }
-
-        // permission already exists, so add any actions specified in perm argument
-        if (existingPerm != null) {
             existingPerm.addActions(actions);
-
             save(existingPerm);
-        } else {
+        } catch (NoResultException ignored) {
+            LOG.log(Level.OFF, null, ignored);
             // it's a new permission, so store it
             WeblogPermission perm = new WeblogPermission(weblog, user, actions, pending);
             save(perm);

@@ -117,7 +117,7 @@ public abstract class AbstractManager<T> {
         try {
             record = (T) query.getSingleResult();
         } catch (NoResultException e) {
-            log.log(Level.WARNING, queryName+StringPool.COLON , e);
+            log.log(Level.FINE, queryName+StringPool.COLON , e);
         }
         return record;
     }

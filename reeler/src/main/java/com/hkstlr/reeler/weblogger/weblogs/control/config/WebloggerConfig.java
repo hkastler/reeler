@@ -85,7 +85,7 @@ public class WebloggerConfig {
                     tempConfig.putAll(customConfigLoad);
                     LOG.info("Successfully loaded custom properties file from classpath");
                     LOG.fine("customPropFilePath : " + configClass.getResource(CUSTOM_CONFIG));
-                    LOG.finest("customConfigLoad:" + customConfigLoad.toString());
+                    LOG.log(Level.OFF, "customConfigLoad:" + customConfigLoad.toString());
                 } else {
                     LOG.severe("No custom properties file found in classpath");
                 }
