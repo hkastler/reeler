@@ -130,13 +130,13 @@ public class WeblogManager extends AbstractManager<Weblog> {
     
     private void addWeblogContents(Weblog newWeblog)
             throws WebloggerException {
-
-        newWeblog = addWeblogCategories(newWeblog);
-        newWeblog = addWeblogBlogrolls(newWeblog);
-        newWeblog = addPingTargets(newWeblog);
+        Weblog wblg = newWeblog;
+        wblg = addWeblogCategories(wblg);
+        wblg = addWeblogBlogrolls(wblg);
+        wblg = addPingTargets(wblg);
 
         //addWeblog.merge
-        this.em.merge(newWeblog);
+        this.em.merge(wblg);
         this.em.flush();
     }
     

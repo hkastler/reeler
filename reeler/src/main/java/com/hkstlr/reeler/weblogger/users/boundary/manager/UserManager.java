@@ -139,7 +139,7 @@ public class UserManager extends AbstractManager<User> {
             returnUser = uq.getSingleResult();
        }catch(NoResultException e){
            LOG.log(Level.FINE,"username not found",e);
-           throw e;
+           
        }catch(Exception e){
            LOG.log(Level.FINE,"error",e);
        }
@@ -282,7 +282,7 @@ public class UserManager extends AbstractManager<User> {
             retGroup =  q.getSingleResult();
         }catch(javax.persistence.NoResultException e){
             retGroup =  createJdbcrealmGroup(groupname);
-            throw e;
+            
         }catch(Exception e){
             LOG.log(Level.FINE,"error",e);
         }
@@ -298,7 +298,7 @@ public class UserManager extends AbstractManager<User> {
             retRole =  q.getSingleResult();
         }catch(javax.persistence.NoResultException e){
             retRole =  (UserRole)createAttach(new UserRole(roleName));
-            throw e;
+            
         }catch(Exception e){
             LOG.log(Level.FINE,"error",e);
         }
