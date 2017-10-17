@@ -13,7 +13,7 @@
     <ui:define name="title">Reeler UI</ui:define>
 
     <!-- Page Content -->
-    
+
     <ui:define name="content">
         <div class="panel panel-primary">
             <div class="panel-heading panel-title">
@@ -24,45 +24,47 @@
             <div class="panel-body">
                 Select a Blog to edit, manage, or configure.
                 <div class="panel-group">
-                <ui:repeat value="#{reelerUiBean.userWeblogs}" var="blog" varStatus="status">
-                    <div class="panel panel-default">
-                        <h3 class="panel-heading panel-title">#{blog.name}</h3>
-                        <div class="panel-body">
-                            <div class="row">
-                                <div class="col-6">
-                                    <c:set var="link" value="#{request.contextPath}/#{blog.handle}/"/>
-                                    <i class="fa fa-external-link" aria-hidden="true"></i>Link: <a href="#{link}" target="_blank">#{link}</a><br/>
-                                    <i class="fa fa-id-card" aria-hidden="true"></i>Permission: <h:outputText 
-                                        value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
-                                    Description: #{blog.about}<br/>
-                                    <i class="fa fa-user" aria-hidden="true"></i>Members: <br/>
-                                    Today's hits:<br/>
+                    <ui:repeat value="#{reelerUiBean.userWeblogs}" var="blog" varStatus="status">
+                        <div class="panel panel-default">
+                            <h3 class="panel-heading panel-title">#{blog.name}</h3>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <c:set var="link" value="#{request.contextPath}/#{blog.handle}/"/>
+                                        <i class="fa fa-external-link" aria-hidden="true"></i>Link: <a href="#{link}" target="_blank">#{link}</a><br/>
+                                        <i class="fa fa-id-card" aria-hidden="true"></i>Permission: <h:outputText 
+                                            value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
+                                        Description: #{blog.about}<br/>
+                                        <i class="fa fa-user" aria-hidden="true"></i>Members: <br/>
+                                        Today's hits:<br/>
+                                    </div>
+
+                                    <div class="col-6">
+                                        <form jsfc="h:form">
+                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                            <a action="#{reelerUiBean.action(blog,'entry')}"
+                                               jsfc="h:commandLink"><f:param name="action" value="create"/>New Entry</a></form><br/>
+                                        <form jsfc="h:form">
+                                            <i class="fa fa-book" aria-hidden="true"></i>
+                                            <a action="#{reelerUiBean.action(blog,'entries')}"
+                                               jsfc="h:commandLink"
+                                               ps:data-blog="#{blog.handle}">Entries()</a></form><br/>
+                                        <form jsfc="h:form"><i class="fa fa-comments" aria-hidden="true"></i>
+                                            <a action="#{reelerUiBean.action(blog,'comments')}"
+                                               jsfc="h:commandLink"
+                                               ps:data-blog="#{blog.handle}">Comments()</a></form><br/>
+                                        <form jsfc="h:form">
+                                            <i class="fa fa-cog" aria-hidden="true"></i>
+                                            <a action="#{reelerUiBean.action(blog,'config')}"
+                                               jsfc="h:commandLink">Settings</a>
+                                        </form><br/>
+
+                                    </div>
+
                                 </div>
-
-                                <div class="col-6">
-                                    <form jsfc="h:form">
-                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                        <a action="#{reelerUiBean.action(blog,'entry')}"
-                                                           jsfc="h:commandLink"><f:param name="action" value="create"/>New Entry</a></form><br/>
-                                    <form jsfc="h:form">
-                                        <i class="fa fa-book" aria-hidden="true"></i>
-                                        <a action="#{reelerUiBean.action(blog,'entries')}"
-                                                           jsfc="h:commandLink">Entries()</a></form><br/>
-                                    <form jsfc="h:form"><i class="fa fa-comments" aria-hidden="true"></i>
-                                        <a action="#{reelerUiBean.action(blog,'comments')}"
-                                                           jsfc="h:commandLink">Comments()</a></form><br/>
-                                    <form jsfc="h:form">
-                                        <i class="fa fa-cog" aria-hidden="true"></i>
-                                        <a action="#{reelerUiBean.action(blog,'config')}"
-                                                           jsfc="h:commandLink">Settings</a>
-                                    </form><br/>
-
-                                </div>
-
                             </div>
                         </div>
-                    </div>
-                </ui:repeat>
+                    </ui:repeat>
                 </div>
             </div>
             <div class="panel-footer"></div>
@@ -70,9 +72,67 @@
 
 
     </ui:define>
-    
-    <ui:define name="postBody">
 
+    <ui:define name="postBody">
+        <script>
+            var ajaxHref = "#{request.contextPath}/resources/weblog/entry-count/";
+            $("a:contains('Entries')").each(function (index) {
+                //console.log(index + ": " + $(this).text());
+                var weblogHandle = $(this).attr("data-blog");
+                var href = $(this);
+                try {
+                    //console.log(ajaxHref + weblogHandle);
+                    $.ajax({
+                        type: 'GET',
+                        url: ajaxHref + weblogHandle,
+                        async: true,
+                        success: function (response) {
+                            try {                                 
+                                //console.log(response.toString());
+                                //console.log($(this));
+                                $(href).text("Entries: " + response.toString())
+                            } catch (err) {
+                                //do nothing
+                                console.log(err)
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response.toString());
+                        }
+                    });                    
+                } catch (err) {
+
+                }
+            });
+            
+            var ajaxHref = "#{request.contextPath}/resources/weblog/comments-count/";
+            $("a:contains('Comments')").each(function (index) {
+                
+                var weblogHandle = $(this).attr("data-blog");
+                var href = $(this);
+                try {
+                    
+                    $.ajax({
+                        type: 'GET',
+                        url: ajaxHref + weblogHandle,
+                        async: true,
+                        success: function (response) {
+                            try {
+                                $(href).text("Comments: " + response.toString())
+                            } catch (err) {
+                                //do nothing
+                                console.log(err)
+                            }
+                        },
+                        error: function (response) {
+                            console.log(response.toString());
+                        }
+                    });                    
+                } catch (err) {
+
+                }
+            });
+        </script>
 
     </ui:define>
 </ui:composition>

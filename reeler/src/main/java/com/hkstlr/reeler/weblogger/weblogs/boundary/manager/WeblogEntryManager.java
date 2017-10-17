@@ -56,6 +56,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 
 /**
  *
@@ -359,6 +361,22 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         Root<WeblogEntry> weblogEntry = cq.from(WeblogEntry.class);
         cq.select(getEntityManager().getCriteriaBuilder().count(weblogEntry));
         cq.where(cb.equal(weblogEntry.get(WEBSITE_FIELD_NAME), weblog));
+        Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
+    }
+     
+     public int getWeblogEntryCountForWeblog(String weblogHandle) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
+        
+        Root<WeblogEntry> weblogEntry = cq.from(WeblogEntry.class);
+        EntityType<WeblogEntry> WeblogEntry_ = weblogEntry.getModel();
+                
+        cq.select(getEntityManager().getCriteriaBuilder().count(weblogEntry));
+        
+        cq.where(cb.equal(weblogEntry.get(WeblogEntry_
+                .getSingularAttribute(WEBSITE_FIELD_NAME, Weblog.class)).get("handle"), weblogHandle));        
+        
         Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }

@@ -38,13 +38,17 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
 
 /**
  *
  * @author henry.kastler
  */
 @Stateless
-public class WeblogEntryCommentManager extends AbstractManager {
+public class WeblogEntryCommentManager extends AbstractManager<WeblogEntryComment> {
 
     private static final Logger LOG = Logger.getLogger(WeblogEntryCommentManager.class.getName());
 
@@ -204,6 +208,24 @@ public class WeblogEntryCommentManager extends AbstractManager {
         q.setParameter(1, website);
        
         return q.getResultList().get(0);
+    }
+    
+    public int getCommentCountForWeblog(String weblogHandle) throws WebloggerException {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
+        
+        Root<WeblogEntryComment> weblogEntryComment = cq.from(WeblogEntryComment.class);
+        EntityType<WeblogEntryComment> WeblogEntryComment_ = weblogEntryComment.getModel();
+                
+        cq.select(getEntityManager().getCriteriaBuilder().count(weblogEntryComment));
+        
+        cq.where(cb.equal(weblogEntryComment.get(WeblogEntryComment_
+                .getSingularAttribute("weblogEntry", WeblogEntry.class))
+                .get("website")
+                .get("handle"), weblogHandle));        
+        
+        Query q = getEntityManager().createQuery(cq);
+        return ((Long) q.getSingleResult()).intValue();
     }
     
     public void save(WeblogEntryComment comment){
