@@ -1,4 +1,3 @@
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  The ASF licenses this file to You
@@ -16,6 +15,7 @@
  * copyright in this work, please see the NOTICE file in the top level
  * directory of this distribution.
  * original package org.apache.roller.util
+ * edited to remove the use of StringBuffer
  */
 
 
@@ -67,25 +67,20 @@ public final class PropertyExpander {
         if (input == null) {
             return null;
         }
-        
-        Matcher matcher = EXPANSION_PATTERN.matcher(input);
-        
-
-        StringBuffer expanded = new StringBuffer(input.length());
-        while (matcher.find()) {
-            String propName = matcher.group(2);
-            String value = (String) props.get(propName);
-            // if no value is found, use a value equal to the original expression
-            if (value == null) {
-                value = matcher.group(0);
+        //see https://stackoverflow.com/questions/38376584/java-matcher-appendreplacement-and-matcher-appendtail-for-stringbuilder               
+        Matcher m = EXPANSION_PATTERN.matcher(input);
+        StringBuilder sb = new StringBuilder();
+        int pos = 0;
+        while (m.find()) {
+            sb.append(input, pos, m.start());
+            pos = m.end();
+            if (m.start(2) >= 0) {                  // check if group 1 matched
+                sb.append(input, m.start(2), m.end(2)); // replace with group 1
             }
-            // Fake a literal replacement since Matcher.quoteReplacement() is not present in 1.4.
-            matcher.appendReplacement(expanded, "");
-            expanded.append(value);
         }
-        matcher.appendTail(expanded);
+        sb.append(input, pos, input.length());
         
-        return expanded.toString();
+        return sb.toString();
     }
     
     
