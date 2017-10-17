@@ -7,6 +7,7 @@ import java.util.List;
 
 
 import com.hkstlr.reeler.weblogger.users.entities.User;
+import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -148,8 +149,23 @@ public class WeblogPermission extends PermissionEntity implements Serializable {
         return false;
     }
     
-    
+    @Override
+    public boolean equals(Object object) {
 
+        if (!(object instanceof WeblogPermission)) {
+            return false;
+        }
+        WeblogPermission other = (WeblogPermission) object;
+        return this.id.equals(other.id);
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 19 * hash + Objects.hashCode(this.id);
+        return hash;
+    }
+    
     @Override
     public String toString() {
         return this.toJsonString();

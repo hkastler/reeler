@@ -66,6 +66,7 @@ import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -73,8 +74,6 @@ import javax.transaction.Transactional;
  */
 @Stateless
 public class WeblogManager extends AbstractManager<Weblog> {
-
-    private Map<String, String> weblogHandleToIdMap = new HashMap<>();
 
     private final String APPEND_AND = " AND ";
 
@@ -234,10 +233,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
     public void removeWeblog(Weblog weblog) throws WebloggerException {
         // remove contents first, then remove weblog
         this.removeWeblogContents(weblog);
-        this.em.remove(weblog);
-
-        // remove entry from cache mapping
-        this.weblogHandleToIdMap.remove(weblog.getHandle());
+        this.em.remove(weblog);        
     }
 
     /**
@@ -384,29 +380,8 @@ public class WeblogManager extends AbstractManager<Weblog> {
      * @return
      * @throws com.hkstlr.reeler.app.control.WebloggerException
      */
-    public Weblog getWeblogByHandle(String handle, Boolean visible)
+    public Weblog getWeblogByHandle(@NotNull String handle, Boolean visible)
             throws WebloggerException {
-
-        if (handle == null) {
-            throw new WebloggerException("Handle cannot be null");
-        }
-
-        // check cache first
-        // NOTE: if we ever allow changing handles then this needs updating
-        if (this.weblogHandleToIdMap.containsKey(handle)) {
-
-            Weblog weblog = this.getWeblog(this.weblogHandleToIdMap.get(handle));
-            if (weblog != null) {
-                // only return weblog if enabled status matches
-                if (visible == null || visible.equals(weblog.isVisible())) {
-                    LOG.fine("weblogHandleToId CACHE HIT - " + handle);
-                    return weblog;
-                }
-            } else {
-                // mapping hit with lookup miss?  mapping must be old, remove it
-                this.weblogHandleToIdMap.remove(handle);
-            }
-        }
 
         TypedQuery<Weblog> query = getNamedQuery("Weblog.getByHandle", Weblog.class);
         query.setParameter(1, handle);
@@ -416,12 +391,6 @@ public class WeblogManager extends AbstractManager<Weblog> {
         } catch (NoResultException e) {
             LOG.log(Level.INFO, "getByHandle", e);
             weblog = null;
-        }
-
-        // add mapping to cache
-        if (weblog != null) {
-            LOG.fine("weblogHandleToId CACHE MISS - " + handle);
-            this.weblogHandleToIdMap.put(weblog.getHandle(), weblog.getId());
         }
 
         if (weblog != null
@@ -524,7 +493,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         for (WeblogPermission perm : perms) {
             User user = userManager.getUserByUserName(perm.getUserName());
             if (user == null) {
-                LOG.warning("ERROR user is null, userName:" + perm.getUserName());
+                LOG.log(Level.FINE, "ERROR user is null, userName:{0}", perm.getUserName());
                 continue;
             }
             if (!enabledOnly || user.getIsEnabled()) {

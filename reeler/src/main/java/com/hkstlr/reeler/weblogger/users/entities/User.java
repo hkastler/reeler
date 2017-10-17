@@ -144,7 +144,7 @@ public class User extends AbstractEntity {
     private Set<UserRole> roles;
 
     @Transient
-    private List<PermissionEntity> permissions = new ArrayList<>();
+    private transient List<PermissionEntity> permissions = new ArrayList<>();
 
     public User() {
         //default constructor
