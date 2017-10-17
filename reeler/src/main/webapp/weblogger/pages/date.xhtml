@@ -51,24 +51,7 @@
             </div>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() gt 0}">
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
-                    <!-- Title -->
-                    <h3 class="mt-4">
-                        <a href="#{request.contextPath}/#{weblogBean.handle}/entry/#{weblogEntry.anchor}">
-                            <h:outputText value="#{weblogEntry.title}" />
-                        </a>
-                    </h3>
-                    <!-- Author -->
-                    by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
-                    <!-- Date/Time -->
-                    <p>Posted on <h:outputText value="#{weblogEntry.pubTime.time}" >
-                            <f:convertDateTime dateStyle="default"
-                                               type="both"
-                                               locale="#{weblogBean.weblog.localeInstance}"
-                                               timeZone="#{weblogBean.weblog.timeZoneInstance}"/>
-                        </h:outputText></p>
-                    <!-- Post Content -->
-                    <h:outputText value="#{weblogEntry.text}" escape="false" />
-                    <hr/>
+                    <ui:include src="weblogRow.xhtml"/>
                 </ui:repeat>
             </div>
         </f:view>

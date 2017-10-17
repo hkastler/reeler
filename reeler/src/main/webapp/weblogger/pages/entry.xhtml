@@ -23,18 +23,17 @@
             <article>
                 <!-- Title -->
                 <h1 class="mt-4"><h:outputText value="#{weblogEntryBean.weblogEntry.title}" escape="false" /></h1>
-                <!-- Author -->
-                <p class="lead">
-                    by <a href="#"><h:outputText value="#{weblogEntryBean.weblogEntry.creatorUserName}" /></a>
-                </p>
+                
                 <hr/>
                 <!-- Date/Time -->       
-                <p>Posted on
+                <p class="lead">Posted on
                     <h:outputText value="#{weblogEntryBean.weblogEntry.pubTime.time}" >
                         <f:convertDateTime dateStyle="default"
                                            type="both"
                                            timeZone="#{weblogEntryBean.weblog.timeZone}"/>
                     </h:outputText>
+                    <!-- Author -->
+                    by <a href="#"><h:outputText value="#{weblogEntryBean.weblogEntry.creatorUserName}" /></a>
                 </p>
                 <p jsf:id="pTags" rendered="#{weblogEntryBean.weblogEntry.tags.size() gt 0}">
                     Tags: #{weblogEntryBean.weblogEntry.tagsAsString}

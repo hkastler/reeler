@@ -16,7 +16,7 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <h2 class="text-center">Main</h2>
+            <h2 class="text-center my-4">Main</h2>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() eq 0}">
                 No entries found for Weblog #{weblogBean.weblog.name}
             </div>
@@ -34,26 +34,7 @@
                 </div>
                 <hr/>
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
-                    <!-- Title -->
-                    <h3 class="mt-4">
-                        <a href="#{request.contextPath}/#{weblogBean.handle}/entry/#{weblogEntry.anchor}">
-                            <h:outputText value="#{weblogEntry.title}" />
-                        </a>
-                    </h3>
-                    <!-- Author -->
-                    by <a href="/about.xhtml"><h:outputText value="#{weblogEntry.creatorUserName}" /></a>
-                    <!-- Date/Time -->                    
-                    <p>
-                        Posted on                     
-                        <h:outputText value="#{weblogEntry.pubTime.time}" >                            
-                            <f:convertDateTime dateStyle="default"
-                                               type="both"
-                                               timeZone="#{weblogBean.weblog.timeZone}"/>
-                        </h:outputText>
-                    </p>
-                    <!-- Post Content -->
-                    <h:outputText value="#{weblogEntry.text}" escape="false" />
-                    <hr/>
+                    <ui:include src="weblogRow.xhtml"/>
                 </ui:repeat>
 
                 <div class="row">

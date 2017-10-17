@@ -1,0 +1,30 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+    <!-- Title -->
+    <h3 class="mt-4">
+        <a href="#{request.contextPath}/#{weblogBean.handle}/entry/#{weblogEntry.anchor}">
+            <h:outputText value="#{weblogEntry.title}" />
+        </a>
+    </h3>
+
+    <p>
+        <!-- Date/Time --> 
+        Posted on                     
+        <h:outputText value="#{weblogEntry.pubTime.time}" >                            
+            <f:convertDateTime dateStyle="default"
+                               type="both"
+                               timeZone="#{weblogBean.weblog.timeZone}"/>
+        </h:outputText>                        
+        <!-- Author -->
+        by <h:outputText value="#{weblogEntry.creatorUserName}" />
+    </p>
+    <!-- Post Content -->
+    <h:outputText value="#{weblogEntry.text}" escape="false" />
+    <hr/>
+</ui:composition>
+
