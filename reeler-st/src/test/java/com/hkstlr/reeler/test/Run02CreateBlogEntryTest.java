@@ -9,9 +9,8 @@ import org.junit.runner.RunWith;
                            "json:target/cucumber.json" ,
                            "junit:target/cucumber.xml"}
                             , features = {
-                                "src/test/resources/com/hkstlr/reeler/test/1_first_account_creation.feature",
-                                "src/test/resources/com/hkstlr/reeler/test/2_create_blog.feature"
+                                "src/test/resources/com/hkstlr/reeler/test/3_create_blog_entry.feature"
                             })
-public class RunSetupTest {
+public class Run02CreateBlogEntryTest {
 }
 

@@ -53,10 +53,9 @@ public class CreateBlogEntryDefs extends BaseStepDefs {
 
     @When("^the user enters$")
     public void the_user_enters(List<Entry> entries) throws Throwable {
-         //Initialize data table 
+      
       Entry entry = entries.get(0);
       
-      //Enter data
       this.cbep.titleField.clear();
       this.cbep.titleField.sendKeys(entry.title);
       
