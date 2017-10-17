@@ -380,7 +380,7 @@
         <sonar.jacoco.reportPath>${basedir}/target/coverage-reports/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.host.url>http://sonar:9000</sonar.host.url>
         <sonar.exclusions>**/vendor/**</sonar.exclusions>
-        <sonar.issue.ignore.multicriteria>e1,e2,e3</sonar.issue.ignore.multicriteria>
+        <sonar.issue.ignore.multicriteria>e1,e2,e3,e4</sonar.issue.ignore.multicriteria>
         <!-- # "@NonNull" values should not be set to null -->
         <sonar.issue.ignore.multicriteria.e1.ruleKey>squid:S2637</sonar.issue.ignore.multicriteria.e1.ruleKey>
         <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e1.resourceKey>
@@ -389,7 +389,8 @@
         <sonar.issue.ignore.multicriteria.e2.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e2.resourceKey>
         <sonar.issue.ignore.multicriteria.e3.ruleKey>Web:BoldAndItalicTagsCheck</sonar.issue.ignore.multicriteria.e3.ruleKey>
         <sonar.issue.ignore.multicriteria.e3.resourceKey>**/*.xhtml</sonar.issue.ignore.multicriteria.e3.resourceKey>
-        
+        <sonar.issue.ignore.multicriteria.e4.ruleKey>squid:S1166</sonar.issue.ignore.multicriteria.e4.ruleKey>
+        <sonar.issue.ignore.multicriteria.e4.resourceKey>**/*.java</sonar.issue.ignore.multicriteria.e4.resourceKey>
     </properties>
     
 </project>
