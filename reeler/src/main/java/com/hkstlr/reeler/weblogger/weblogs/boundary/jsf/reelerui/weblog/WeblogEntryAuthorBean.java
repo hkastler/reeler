@@ -107,8 +107,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
                 reelerUiBean.setUserFromSession();
             }
             this.weblogEntry = new WeblogEntry(weblog, reelerUiBean.getUser());
-            weblogEntry.setCommentDays(weblog.getDefaultCommentDays());
-            //allowCommentsChecked = weblog.isAllowComments();
+            
             this.action = "create";
             this.actionLabel = "Create";
         }

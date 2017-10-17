@@ -228,6 +228,8 @@ public class WeblogEntryCommentManager extends AbstractManager<WeblogEntryCommen
         return ((Long) q.getSingleResult()).intValue();
     }
     
+    
+    @Override
     public void save(WeblogEntryComment comment){
         LOG.info("saving comment:" + comment.getContent());
         em.merge(comment);
