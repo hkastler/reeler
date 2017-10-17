@@ -64,7 +64,7 @@ public class WebloggerConfig {
 
                 // first, lets load our default properties
                 InputStream is = configClass.getResourceAsStream(DEFAULT_CONFIG);
-                LOG.fine("defaultConfigPath:" + DEFAULT_CONFIG);
+                LOG.fine("defaultConfigPath:".concat(DEFAULT_CONFIG));
 
                 //config is static, so we'll need temp vars
                 //TODO: less procedural
@@ -113,8 +113,9 @@ public class WebloggerConfig {
                         tempConfig.putAll(customConfigLoad2);
 
                     } else {
-                        LOG.fine("Failed to load custom properties from "
-                                + CUSTOM_CONFIG_FILE.getAbsolutePath());
+                        LOG.log(Level.FINE, 
+                                "Failed to load custom properties from {0}", 
+                                CUSTOM_CONFIG_FILE.getAbsolutePath());
                     }
 
                 }
@@ -134,8 +135,8 @@ public class WebloggerConfig {
                 }
 
                 //transfer to static storage            
-                this.CONFIG.putAll(tempConfig);
-                LOG.finest("config:" + CONFIG.toString());
+                WebloggerConfig.CONFIG.putAll(tempConfig);
+                LOG.log(Level.FINEST, "config:{0}", CONFIG.toString());
 
                 if (LOG.isLoggable(Level.FINEST)) {
                     LOG.finest("WebloggerConfig looks like this ...");
@@ -144,11 +145,11 @@ public class WebloggerConfig {
                     Enumeration keys = CONFIG.keys();
                     while (keys.hasMoreElements()) {
                         key = (String) keys.nextElement();
-                        LOG.finest(key + StringPool.EQUAL + CONFIG.getProperty(key));
+                        LOG.log(Level.FINEST,"{0}={1}", new Object[]{key, CONFIG.getProperty(key)});
                     }
                 }
 
-            } catch (Exception e) {
+            } catch (IOException | ClassNotFoundException e) {
                 LOG.log(Level.SEVERE, "WebloggerConfig failed:", e);
 
             }
@@ -162,7 +163,7 @@ public class WebloggerConfig {
      * @return String Value of property requested, null if not found
      */
     public static String getProperty(String key) {
-        LOG.finer("Fetching property [" + key + "=" + CONFIG.getProperty(key) + "]");
+        LOG.log(Level.FINER, "Fetching property [{0}={1}]", new Object[]{key, CONFIG.getProperty(key)});
         String value = CONFIG.getProperty(key);
 
         //for system properties
@@ -186,7 +187,8 @@ public class WebloggerConfig {
      * @return String Value of property requested or defaultValue
      */
     public static String getProperty(String key, String defaultValue) {
-        LOG.finer("Fetching property [" + key + "=" + CONFIG.getProperty(key) + ",defaultValue=" + defaultValue + "]");
+        LOG.log(Level.FINER, "Fetching property [{0}={1},defaultValue={2}]", 
+                new Object[]{key, CONFIG.getProperty(key), defaultValue});
         String value = CONFIG.getProperty(key);
         if (value == null) {
             return defaultValue;
