@@ -11,6 +11,8 @@ import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog_;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry_;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogPermission;
 import java.util.ArrayList;
 import java.util.List;

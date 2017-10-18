@@ -16,10 +16,8 @@
  * directory of this distribution.
  * 
  * adapted from org.apache.roller.weblogger.business.jpa.JPAWeblogEntryManagerImpl.java
-**
+** all the criteriabuilder queries are new
  */
-
-
 package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
 
 import java.util.ArrayList;
@@ -40,24 +38,30 @@ import com.hkstlr.reeler.weblogger.weblogs.control.TagStat;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntrySearchCriteria;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory_;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryAttribute;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTag;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry_;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog_;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 
 import javax.ejb.Stateless;
 import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -82,55 +86,69 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
     @PersistenceContext
     protected EntityManager em;
-    
-    private static final String WEBSITE_FIELD_NAME = "website";
-    private static final String PUBTIME_FIELD_NAME = "pubTime";
 
-    
+    private static String WEBSITE_FIELD_NAME;
+    private static String PUBTIME_FIELD_NAME;
+
     public WeblogEntryManager() {
         super(WeblogEntry.class);
     }
-    
+
+    @PostConstruct
+    protected void init() {
+        WEBSITE_FIELD_NAME = WeblogEntry_.website.getName();
+        PUBTIME_FIELD_NAME = WeblogEntry_.pubTime.getName();
+    }
+
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
-    
-    public WeblogEntry getWeblogEntryByHandleAndAnchor(String handle, String anchor) {
 
-        Weblog weblog = null;
+    public WeblogEntry getWeblogEntryByHandleAndAnchor(@Size(min = 1) String handle,
+            @Size(min = 1) String anchor) {
+
         WeblogEntry weblogEntry;
-
-        Query website = em.createNamedQuery("Weblog.findByHandle");
-        website.setParameter("handle", handle);
-
-        try {
-            weblog = (Weblog) website.getSingleResult();
-        } catch (Exception e) {
-            LOG.log(Level.WARNING,"Weblog.findByHandle",e);
-        }
-
-
-        Query query = em.createNamedQuery("WeblogEntry.findByWebsiteAndAnchor");
-        query.setParameter(WEBSITE_FIELD_NAME, weblog);
-        query.setParameter("anchor", anchor);
         
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
+
+        Root<WeblogEntry> rt = cq.from(WeblogEntry.class);
+        EntityType<WeblogEntry> weblogEntry_ = rt.getModel();
+        
+        cq.select(rt);
+        
+        List<Predicate> predicates = new ArrayList<>();
+
+        predicates.add(cb.equal(rt.get(weblogEntry_
+                .getSingularAttribute(WEBSITE_FIELD_NAME, Weblog.class))
+                .get(Weblog_.handle.getName()), handle));
+        
+        //a mix of metamodels!
+        predicates.add(cb.equal(rt.get(
+                weblogEntry_.getSingularAttribute(WeblogEntry_.anchor.getName(),String.class)
+                ), anchor));
+        
+
+        cq.where(predicates.toArray(new Predicate[]{}));
+        
+        Query query = getEntityManager().createQuery(cq);
+
         try {
             weblogEntry = (WeblogEntry) query.getSingleResult();
             weblogEntry.getTags().size();
-            weblogEntry.setWebsite(weblog);
         } catch (Exception e) {
             weblogEntry = new WeblogEntry();
             weblogEntry.setTitle("not found");
             weblogEntry.setText("not found");
-            LOG.log(Level.WARNING, "weblog: {0} not found", new Object[]{anchor, e});
+            LOG.log(Level.INFO, "weblog: {0} not found", new Object[]{anchor, e});
         }
 
         return weblogEntry;
     }
 
     @SuppressWarnings("unchecked")
-    public List<WeblogEntry> getWeblogEntriesForWeblog(Weblog weblog) {
+    public List<WeblogEntry> getWeblogEntriesForWeblog(@NotNull Weblog weblog) {
         Query query = em.createNamedQuery("WeblogEntry.getByWebsite");
         query.setParameter(1, weblog);
         List<WeblogEntry> entries = (List<WeblogEntry>) query.getResultList();
@@ -140,9 +158,9 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return entries;
     }
 
-   public List<WeblogEntry> findByPinnedToMain() {
+    public List<WeblogEntry> findByPinnedToMain() {
         Query query = em.createNamedQuery("WeblogEntry.findByPinnedToMain");
-        query.setParameter("pinnedToMain", true);
+        query.setParameter(WeblogEntry_.pinnedToMain.getName(), true);
         List<WeblogEntry> entries = query.getResultList();
         if (entries == null) {
             entries = new ArrayList<>();
@@ -150,7 +168,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return entries;
     }
 
-    public WeblogEntry getWeblogEntry(String id) {
+    public WeblogEntry getWeblogEntry(@NotNull String id) {
         WeblogEntry entry = em.find(WeblogEntry.class, id);
         if (entry == null) {
             entry = new WeblogEntry();
@@ -158,7 +176,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return entry;
     }
 
-    public WeblogEntry findForEdit(String id) {
+    public WeblogEntry findForEdit(@NotNull String id) {
         WeblogEntry entry = findById(id);
         if (entry == null) {
             entry = new WeblogEntry();
@@ -167,30 +185,25 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         return entry;
     }
 
-    public List<WeblogEntry> getWeblogEntriesByCategoryName(String weblogCategoryName) {
+    public List<WeblogEntry> getWeblogEntriesByCategoryName(@Size(min = 1) String weblogCategoryName) {
 
-        List<WeblogEntry> categoryEntries;
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByWeblogCategoryName");
-        
-        String trimmed = weblogCategoryName.trim();
-        q.setParameter("weblogCategoryName", trimmed);
-        categoryEntries = q.getResultList();
-        return categoryEntries;
+        q.setParameter(WeblogCategory_.name.getName(), weblogCategoryName.trim());
+        return q.getResultList();
+
     }
 
-    public List<WeblogEntry> getWeblogEntriesByCategoryNameAndWeblog(String weblogCategoryName, Weblog weblog) {
+    public List<WeblogEntry> getWeblogEntriesByCategoryNameAndWeblog(
+            @Size(min = 1) String weblogCategoryName, @NotNull Weblog weblog) {
 
-        List<WeblogEntry> categoryEntries;
         Query q = getEntityManager().createNamedQuery("WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog");
-        
-        String trimmed = weblogCategoryName.trim();
-        q.setParameter("weblogCategoryName", trimmed);
-        q.setParameter("weblog", weblog);
-        categoryEntries = q.getResultList();
-        return categoryEntries;
+        q.setParameter(WeblogCategory_.name.getName(), weblogCategoryName.trim());
+        q.setParameter(WeblogCategory_.weblog.getName(), weblog);
+        return q.getResultList();
     }
 
-    public List<WeblogEntry> getWeblogEntriesByDateAndWeblog(String dateString, Weblog weblog) {
+    public List<WeblogEntry> getWeblogEntriesByDateAndWeblog(
+            @Size(min = 6, max = 8) String dateString, @NotNull Weblog weblog) {
 
         Integer year = Integer.parseInt(dateString.substring(0, 4));
         Integer month = Integer.parseInt(dateString.substring(4, 6));
@@ -199,44 +212,43 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         if (dateString.length() == 8) {
             startDate = Integer.parseInt(dateString.substring(6, 8));
         }
-                
+
         Calendar pubTimeBefore = Calendar.getInstance(weblog.getTimeZoneInstance());
-        pubTimeBefore.set(year, month-1, startDate,0,0,0);
+        pubTimeBefore.set(year, month - 1, startDate, 0, 0, 0);
 
         Calendar pubTimeAfter = Calendar.getInstance(weblog.getTimeZoneInstance());
 
-        List<WeblogEntry> entries;
-        
         //if the dateString is 6
         //then we want the whole month
         if (dateString.length() == 6) {
-            pubTimeAfter.set(year, month-1, pubTimeBefore.getActualMaximum(Calendar.DAY_OF_MONTH),23,59,59);
+            pubTimeAfter.set(year, month - 1, pubTimeBefore.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
         }
 
         //if the dateString is 8
         //then we want just a day
         if (dateString.length() == 8) {
-            pubTimeAfter.set(year, month-1,startDate,23,59,59);
+            pubTimeAfter.set(year, month - 1, startDate, 23, 59, 59);
         }
         Query q = getEntityManager().createQuery("SELECT we FROM WeblogEntry we"
-                    + " WHERE we.website = :blog"
-                    + " AND we.publishEntry = true"
-                    + " AND we.pubTime < :now"
-                    + " AND we.pubTime BETWEEN "
-                    + ":pubTimeBefore"
-                    + " AND "
-                    + ":pubTimeAfter");
-             q.setParameter("blog", weblog);
-             Date now = new Date();             
-             q.setParameter("now",now,TemporalType.TIMESTAMP);             
-             q.setParameter("pubTimeBefore", pubTimeBefore, TemporalType.TIMESTAMP);             
-             q.setParameter("pubTimeAfter", pubTimeAfter, TemporalType.TIMESTAMP);
+                + " WHERE we.website = :blog"
+                + " AND we.publishEntry = true"
+                + " AND we.pubTime < :now"
+                + " AND we.pubTime BETWEEN "
+                + ":pubTimeBefore"
+                + " AND "
+                + ":pubTimeAfter");
+        q.setParameter("blog", weblog);
+        Date now = new Date();
+        q.setParameter("now", now, TemporalType.TIMESTAMP);
+        q.setParameter("pubTimeBefore", pubTimeBefore, TemporalType.TIMESTAMP);
+        q.setParameter("pubTimeAfter", pubTimeAfter, TemporalType.TIMESTAMP);
 
         return q.getResultList();
-        
+
     }
-    
-     public List<Calendar> getWeblogEntryDatesForCalendar(String dateString, Weblog weblog) {
+
+    public List<Calendar> getWeblogEntryDatesForCalendar(
+            @Size(min = 6, max = 8) String dateString, Weblog weblog) {
 
         Integer year = Integer.parseInt(dateString.substring(0, 4));
         Integer month = Integer.parseInt(dateString.substring(4, 6));
@@ -247,32 +259,32 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             startDate = Calendar.getInstance(weblog.getTimeZoneInstance());
             endDate = Calendar.getInstance(weblog.getTimeZoneInstance());
         }
-        startDate.set(year, month - 1, 1,0,0,0);
-        endDate.set(year, month - 1,startDate.getActualMaximum(Calendar.DAY_OF_MONTH),23,59,59);
-       
+        startDate.set(year, month - 1, 1, 0, 0, 0);
+        endDate.set(year, month - 1, startDate.getActualMaximum(Calendar.DAY_OF_MONTH), 23, 59, 59);
+
         Query query = em.createQuery("SELECT DISTINCT we.pubTime FROM WeblogEntry we"
-                + " WHERE we.website = :blog"
+                + " WHERE we.website = :website"
                 + " AND we.publishEntry = true"
                 + " AND we.pubTime < :now"
                 + " AND we.pubTime BETWEEN "
                 + ":startDate"
                 + " AND "
                 + ":endDate");
-        query.setParameter("blog", weblog);
+        query.setParameter(WeblogEntry_.website.getName(), weblog);
+        query.setParameter("now", new Timestamp(new Date().getTime()), TemporalType.TIMESTAMP);
         query.setParameter("startDate", startDate, TemporalType.TIMESTAMP);
         query.setParameter("endDate", endDate, TemporalType.TIMESTAMP);
-        query.setParameter("now", new Timestamp(new Date().getTime()), TemporalType.TIMESTAMP);
-        
+
         return query.getResultList();
     }
 
     public WeblogEntry getLatestEntryForWeblog(Weblog weblog) {
 
-        Query q = em.createNamedQuery("WeblogEntry.getLatestEntryForWeblog")
-                .setParameter("weblog", weblog)
+        TypedQuery q = em.createNamedQuery("WeblogEntry.getLatestEntryForWeblog", WeblogEntry.class)
+                .setParameter(WeblogEntry_.website.getName(), weblog)
                 .setMaxResults(1);
-       return (WeblogEntry) q.getSingleResult();
-       
+        return (WeblogEntry) q.getSingleResult();
+
     }
 
     /**
@@ -301,7 +313,6 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         // Store value object (creates new or updates existing)
         entry.setUpdateTime(new Date());
         save(entry);
-        
 
         if (entry.isPublishEntry()) {
             weblogManager.saveWeblog(entry.getWebsite());
@@ -309,7 +320,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         em.flush();
 
     }
-    
+
     public void removeWeblogEntry(WeblogEntry entry) throws WebloggerException {
         Weblog weblog = entry.getWebsite();
 
@@ -354,8 +365,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         // TODO Auto-generated method stub
         return null;
     }
-    
-     public int getWeblogEntryCountForWeblog(Weblog weblog) {
+
+    public int getWeblogEntryCountForWeblog(Weblog weblog) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
         Root<WeblogEntry> weblogEntry = cq.from(WeblogEntry.class);
@@ -364,101 +375,103 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-     
-     public int getWeblogEntryCountForWeblog(String weblogHandle) {
+
+    public int getWeblogEntryCountForWeblog(String weblogHandle) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
-        
+
         Root<WeblogEntry> weblogEntry = cq.from(WeblogEntry.class);
         EntityType<WeblogEntry> WeblogEntry_ = weblogEntry.getModel();
-                
+
         cq.select(getEntityManager().getCriteriaBuilder().count(weblogEntry));
-        
+
         cq.where(cb.equal(weblogEntry.get(WeblogEntry_
-                .getSingularAttribute(WEBSITE_FIELD_NAME, Weblog.class)).get("handle"), weblogHandle));        
-        
+                .getSingularAttribute(WEBSITE_FIELD_NAME, Weblog.class))
+                .get(Weblog_.handle.getName()), weblogHandle));
+
         Query q = getEntityManager().createQuery(cq);
         return ((Long) q.getSingleResult()).intValue();
     }
-     
-     
-     public List<WeblogEntry> getPaginatedEntries(Weblog weblog,int[] range) {
-                    
-        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();        
+
+    public List<WeblogEntry> getPaginatedEntries(Weblog weblog, int[] range) {
+
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
         Root<WeblogEntry> t = cq.from(WeblogEntry.class);
-        
-        cq.select(t); 
-        
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
+
+        cq.select(t);
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         List<Predicate> predicates = new ArrayList<>();
-                
+
         predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), weblog));
-        predicates.add(cb.equal(t.get("publishEntry"), true));
-        predicates.add(cb.lessThanOrEqualTo(t.<Calendar>get(PUBTIME_FIELD_NAME), Calendar.getInstance()));        
-        
+        predicates.add(cb.equal(t.get(WeblogEntry_.publishEntry.getName()), true));
+        predicates.add(cb.lessThanOrEqualTo(t.<Calendar>get(PUBTIME_FIELD_NAME), Calendar.getInstance()));
+
         cq.where(predicates.toArray(new Predicate[]{}));
-        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));  
-        
-        Query q = getEntityManager().createQuery(cq);        
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));
+
+        Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
-        
+
         return q.getResultList();
-        
+
     }
-     
-    public List<WeblogEntry> getAllEntriesPaginated(Weblog weblog,int[] range) {
-                    
-        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();        
+
+    public List<WeblogEntry> getAllEntriesPaginated(Weblog weblog, int[] range) {
+
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
         Root<WeblogEntry> t = cq.from(WeblogEntry.class);
-        
-        cq.select(t); 
-        
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
+
+        cq.select(t);
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         List<Predicate> predicates = new ArrayList<>();
-                
-        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), weblog));       
-        
+
+        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), weblog));
+
         cq.where(predicates.toArray(new Predicate[]{}));
-        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));  
-        
-        Query q = getEntityManager().createQuery(cq);        
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));
+
+        Query q = getEntityManager().createQuery(cq);
         q.setMaxResults(range[1] - range[0] + 1);
         q.setFirstResult(range[0]);
-        
+
         return q.getResultList();
-        
-    }  
-    
+
+    }
+
     public List<WeblogEntry> getBySearchCriteria(WeblogEntrySearchCriteria wesc) {
-                    
-        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();   
+
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
         Root<WeblogEntry> t = cq.from(WeblogEntry.class);
-        
-        cq.select(t); 
-        
-        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();  
+
+        cq.select(t);
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         List<Predicate> predicates = new ArrayList<>();
-                
-        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), wesc.getWeblog())); 
-        
-        if(wesc.getCategoryId() != null && !wesc.getCategoryId().isEmpty()){
+
+        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), wesc.getWeblog()));
+
+        if (wesc.getCategoryId() != null && !wesc.getCategoryId().isEmpty()) {
             //should be a join?
             WeblogCategory category = em.find(WeblogCategory.class, wesc.getCategoryId());
-            predicates.add(cb.equal(t.get("category"), category));
+            predicates.add(cb.equal(t.get(WeblogEntry_.category.getName()), category));
         }
-        
-        if(wesc.getText() != null && !wesc.getText().isEmpty()){
+
+        if (wesc.getText() != null && !wesc.getText().isEmpty()) {
             String lcased = wesc.getText().toLowerCase();
             Predicate textP;
             textP = cb.or(
-                    cb.like(cb.lower(t.get("title")), StringPool.PERCENT+ lcased +StringPool.PERCENT),
-                    cb.like(cb.lower(t.get("text")),StringPool.PERCENT+ lcased +StringPool.PERCENT)
+                    cb.like(cb.lower(t.get(WeblogEntry_.title.getName())), 
+                            StringPool.PERCENT + lcased + StringPool.PERCENT),
+                    cb.like(cb.lower(t.get(WeblogEntry_.text.getName())), 
+                            StringPool.PERCENT + lcased + StringPool.PERCENT)
             );
             predicates.add(textP);
         }
-        
-        if(wesc.getStartDate() != null && wesc.getEndDate() != null){
+
+        if (wesc.getStartDate() != null && wesc.getEndDate() != null) {
             Predicate p;
             Calendar startDate = Calendar.getInstance();
             Calendar endDate = Calendar.getInstance();
@@ -471,23 +484,23 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             p = cb.between(t.<Calendar>get(PUBTIME_FIELD_NAME), startDate, endDate);
             predicates.add(p);
         }
-        
-        if(wesc.getStatus()!=null){
-            predicates.add(cb.equal(t.get("status"), wesc.getStatus().toString()));
+
+        if (wesc.getStatus() != null) {
+            predicates.add(cb.equal(t.get(WeblogEntry_.status.getName()),
+                    wesc.getStatus().toString()));
         }
-        
+
         cq.where(predicates.toArray(new Predicate[]{}));
-        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));  
-        
-        Query q = getEntityManager().createQuery(cq);    
-        if(wesc.getMaxResults() > 0){
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));
+
+        Query q = getEntityManager().createQuery(cq);
+        if (wesc.getMaxResults() > 0) {
             q.setMaxResults(wesc.getMaxResults());
         }
         q.setFirstResult(wesc.getOffset());
-        
+
         return q.getResultList();
-        
-    }  
-    
-   
+
+    }
+
 }

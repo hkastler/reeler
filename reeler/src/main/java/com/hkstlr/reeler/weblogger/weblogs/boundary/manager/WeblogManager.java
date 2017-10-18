@@ -60,8 +60,8 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTagAggregate;
 import com.hkstlr.reeler.weblogger.pings.entities.AutoPing;
 import com.hkstlr.reeler.weblogger.pings.entities.PingQueueEntry;
 import com.hkstlr.reeler.weblogger.pings.entities.PingTarget;
+import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog_;
 
-import java.util.HashMap;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -356,7 +356,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
 
     public Weblog findByHandle(String handle) throws WebloggerException {
         TypedQuery<Weblog> query = getNamedQuery("Weblog.findByHandle", Weblog.class);
-        query.setParameter("handle", handle);
+        query.setParameter(Weblog_.handle.getName(), handle);
         Weblog weblog;
         try {
             weblog = query.getSingleResult();
@@ -510,7 +510,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
                 "Weblog.getCountByHandleLike", Long.class);
         for (int i = 0; i < 26; i++) {
             char currentChar = lc.charAt(i);
-            query.setParameter(1, currentChar + "%");
+            query.setParameter(1, currentChar + StringPool.PERCENT);
             List row = query.getResultList();
             Long count = (Long) row.get(0);
             results.put(String.valueOf(currentChar), count);
@@ -522,7 +522,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
             throws WebloggerException {
         TypedQuery<Weblog> query = getNamedQuery(
                 "Weblog.getByLetterOrderByHandle", Weblog.class);
-        query.setParameter(1, letter + "%");
+        query.setParameter(1, letter + StringPool.PERCENT);
         if (offset != 0) {
             query.setFirstResult(offset);
         }

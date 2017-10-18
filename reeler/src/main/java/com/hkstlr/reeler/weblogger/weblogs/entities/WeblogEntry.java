@@ -91,19 +91,19 @@ import javax.persistence.UniqueConstraint;
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1")
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus&Website", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1 AND e.website = ?2")
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
-    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :weblogCategoryName")
-    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :weblogCategoryName ")
+    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :name")
+    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :name ")
     , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime = :pubTime AND w.publishEntry = true")    
-    , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :weblog ORDER BY we.pubTime DESC")})
+    , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :website ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
     
     private transient Logger log = Logger.getLogger(WeblogEntry.class.getName());
+        
+    private static final transient long serialVersionUID = 1L;
 
     public enum PubStatus {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
     }
-
-    private static final transient long serialVersionUID = 1L;
 
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.anchor.NotNull}")
