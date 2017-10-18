@@ -32,7 +32,7 @@ public class CreateAccountStepDefs extends BaseStepDefs {
     public void step1() {
         cap.get();
         String pageTitle = cap.getTitle();
-        String expected = "rEEler blog engine";
+        String expected = "Reeler Blog Engine";
         assertEquals(expected, pageTitle);
 
     }
@@ -89,7 +89,7 @@ public class CreateAccountStepDefs extends BaseStepDefs {
     @Given("^user selects en_US in locale field$")
     public void user_selects_en_US_in_locale_field() throws Throwable {
         // Write code here that turns the phrase above into concrete actions
-        System.out.println(cap.get().driver.getPageSource());
+        //System.out.println(cap.get().driver.getPageSource());
         //got the Select working here
         Select localeSelect = new Select(cap.getLocaleField());
         localeSelect.selectByValue("en_US");
