@@ -18,45 +18,57 @@
             <ui:repeat value="#{runtimeConfigBean.runtimeConfigDefs.configDefs}"
                        var="configDef">
                 <ui:repeat value="#{configDef.displayGroups}" var="displayGroup">                    
-                    <h3>#{runtimeConfigBean.res.getString(displayGroup.key)}</h3>
-                    <br/>
-                    <ui:repeat value="#{displayGroup.propertyDefs}" var="propertyDef">
-                        <div class="form-group" jsf:id="text" rendered="#{propertyDef.type eq 'string' 
-                                                                          or propertyDef.type eq 'text'}">
-                            <label for="#{propertyDef.name}" class="control-label">
-                                #{runtimeConfigBean.res.getString(propertyDef.key)}
-                            </label>
-                            <input 
-                                jsfc="h:inputText"
-                                type="text" 
-                                name="#{propertyDef.name}" 
-                                value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
-                                class="form-control" 
-                                rendered="#{propertyDef.type eq 'string'}"/>
+                    <h3><h:outputText value="#{runtimeConfigBean.res.getString(displayGroup.key)}"
+                                      escape="false"/></h3>
 
-                            <textarea 
-                                class="form-control"
-                                jsfc="h:inputTextarea"
-                                name="#{propertyDef.name}"
-                                value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
-                                rendered="#{propertyDef.type eq 'text'}">
-                            </textarea>
-                        </div> 
-                        <div class="checkbox" jsf:id="checkbox" rendered="#{propertyDef.type eq 'boolean'}">
-                            <label jsf:for="checkbox">
-                                <input jsfc="h:selectBooleanCheckbox"
-                                       type="checkbox"
-                                       value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
-                                       name="#{propertyDef.name}"
-                                       rendered="#{propertyDef.type eq 'boolean'}"/>
-                                <h:outputText value="#{runtimeConfigBean.res.getString(propertyDef.key)}"/>
-                            </label>
-                        </div>
+                    <ui:repeat value="#{displayGroup.propertyDefs}" var="propertyDef">
+                        <ui:fragment rendered="#{propertyDef.type eq 'string' 
+                                                 or propertyDef.type eq 'text'}"
+                                     >
+                            <div class="form-group">
+                                <label for="#{propertyDef.name}" class="control-label">
+                                    <h:outputText
+                                        value="#{res[propertyDef.key]}"
+                                        escape="false"/>
+                                </label>
+                                <input 
+                                    jsfc="h:inputText"
+                                    type="text" 
+                                    name="#{propertyDef.name}" 
+                                    value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
+                                    class="form-control" 
+                                    rendered="#{propertyDef.type eq 'string'}"/>
+
+                                <textarea 
+                                    class="form-control"
+                                    jsfc="h:inputTextarea"
+                                    name="#{propertyDef.name}"
+                                    value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
+                                    rendered="#{propertyDef.type eq 'text'}"
+                                    rows="#{propertyDef.rows}"
+                                    cols="#{propertyDef.cols}">
+                                </textarea>
+                            </div> 
+                        </ui:fragment>
+                        <ui:fragment rendered="#{propertyDef.type eq 'boolean'}">
+                            <div class="checkbox">
+                                <label for="#{propertyDef.name}" class="control-label">                                
+                                    <input jsfc="h:selectBooleanCheckbox"
+                                           type="checkbox"
+                                           value="#{runtimeConfigBean.runtimeConfigs[propertyDef.name]}"
+                                           />
+                                    <h:outputText value="#{res[propertyDef.key]}"
+                                                  escape="false"/>
+                                </label>
+                            </div>
+                        </ui:fragment>
+
                     </ui:repeat>
                     <hr/>
                 </ui:repeat>
                 <hr/>
             </ui:repeat>
+
             <input type="hidden" jsf:id="page" value="#{adminUIBean.page}"/>
             <h:commandButton id="updateRuntimeConfig" 
                              value="#{messages.label_update} #{messages[adminUIBean.pages[adminUIBean.page][0]]}"
