@@ -15,8 +15,10 @@
  */
 package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf;
 
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
+import com.hkstlr.reeler.weblogger.weblogs.control.config.WebloggerRuntimeConfig;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import java.util.List;
@@ -26,6 +28,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.inject.Inject;
 import javax.inject.Named;
 
 /**
@@ -40,6 +43,9 @@ public class IndexBean {
     
     @EJB
     Weblogger weblogger;
+    
+    @Inject
+    WebloggerRuntimeConfig wrc;
         
     private List<Weblog> weblogs;
     
@@ -94,6 +100,18 @@ public class IndexBean {
        }
        LOG.finest(Boolean.toString(needsSetup));
        return needsSetup; 
+    }
+    
+    @Named
+    public boolean hasFrontPageBlog(){
+       boolean  hasFrontPageBlog = false; 
+       String fpb =  wrc.getProperty("site.frontpage.weblog.handle", StringPool.BLANK);
+       
+       if(! StringPool.BLANK.equals(fpb)){
+            hasFrontPageBlog = true;
+       }
+       
+       return  hasFrontPageBlog; 
     }
     
 }

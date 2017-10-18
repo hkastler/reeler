@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+
+    <div class="panel my-4" jsfc="h:panelGroup" layout="block"
+         rendered="#{webloggerRuntimeConfig.getProperty( 'site.frontpage.weblog.handle', '') ne ''}">
+
+        <hr/>
+        #{webloggerRuntimeConfig.getProperty( 'site.frontpage.weblog.handle', '') ne ''}
+        <br/>
+        #{webloggerRuntimeConfig.props["site.frontpage.weblog.handle"].toString()} here
+        <br/>
+        #{webloggerRuntimeConfig.getProperty( 'site.frontpage.weblog.handle', '') }
+    </div>
+</ui:composition>
+

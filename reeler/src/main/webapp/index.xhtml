@@ -8,8 +8,12 @@
     <!-- Page Content -->
     <ui:define name="content">
         <ui:include src="weblogger/reeler-ui/setup/index.xhtml"
-                    rendered="#{indexBean.needsSetup()}"/>        
-        <ui:include src="weblogger/pages/pinnedToMain.xhtml"/>        
+                    rendered="#{indexBean.needsSetup()}"/>
+        <ui:include src="weblogger/pages/pinnedToMain.xhtml"/> 
+        
+        <ui:include src="weblogger/pages/frontPageBlog.xhtml"
+                    rendered="#{indexBean.hasFrontPageBlog()}"/>
+               
         <ui:include src="weblogger/pages/bloglist.xhtml"/>    
     </ui:define>
     

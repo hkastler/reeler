@@ -6,7 +6,18 @@
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
     <!-- Page Content -->
     <ui:define name="content">
+       #{webloggerRuntimeConfig.props["site.frontpage.weblog.handle"]} 
+        
        <div class="panel" jsfc="h:panelGroup" rendered="#{indexBean.weblogs.size() gt 0}" layout="block">
+           
+           <div jsfc="h:panelGroup" 
+                rendered="#{webloggerRuntimeConfig.props["site.frontpage.weblog.handle"] ne ''}"
+                layout="block">
+               #{not empty webloggerRuntimeConfig.props["site.frontpage.weblog.handle"]}
+               #{webloggerRuntimeConfig.props["site.frontpage.weblog.handle"]} here!
+           </div>
+           
+           
             <h2>Blogs</h2>
             <hr/>
             <ui:repeat value="#{indexBean.weblogs}" var="weblog" varStatus="status">

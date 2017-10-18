@@ -130,6 +130,10 @@ public class WebloggerRuntimeConfig {
         return value;
     }
     
+    public String getProperty(String name, String defaultValue) {
+        
+        return props.getOrDefault(name, defaultValue);
+    }
     
     /**
      * Retrieve a property as a boolean ... defaults to false if there is an error
