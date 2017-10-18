@@ -185,7 +185,11 @@ public class WeblogBean extends PageBean {
     public void setDate(Date date) {
         this.date = date;
     }
-
+    
+    public DateFormat localeDateFormat() {
+        return DateFormatter.localeDefaultDateFormat(weblog.getLocaleInstance());
+    }
+    
     private Weblog getWeblogByHandle(String handle) {
 
         if (handle == null) {
@@ -202,7 +206,9 @@ public class WeblogBean extends PageBean {
         Weblog lweblog = null;
         try {
             lweblog = weblogger.getWeblogManager().getWeblogByHandle(handle);
-            List<WeblogBookmark> weblogBookmarks = weblogger.getWeblogBookmarkManager().getBookmarksForWeblog(weblog);
+            List<WeblogBookmark> weblogBookmarks = 
+                    weblogger.getWeblogBookmarkManager()
+                             .getBookmarksForWeblog(weblog);
             setBookmarks(weblogBookmarks);
         } catch (WebloggerException ex) {
             log.log(Level.SEVERE, null, ex);
@@ -235,12 +241,8 @@ public class WeblogBean extends PageBean {
             this.categoryName = "Technology";
         }
         this.viewEntries = weblogger.getWeblogEntryManager()
-                .getWeblogEntriesByCategoryNameAndWeblog(categoryName, weblog);
+                .categoryViewAction(categoryName, weblog);
 
-    }
-
-    public DateFormat localeDateFormat() {
-        return DateFormatter.localeDefaultDateFormat(weblog.getLocaleInstance());
     }
 
     public void dateViewAction() {

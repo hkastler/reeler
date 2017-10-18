@@ -40,6 +40,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogCategory_;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry.PubStatus;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryAttribute;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryTag;
@@ -501,6 +502,32 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
         return q.getResultList();
 
+    }
+    
+    public List<WeblogEntry> categoryViewAction(String categoryName,Weblog weblog){
+        CriteriaQuery<Object> cq = getEntityManager().getCriteriaBuilder().createQuery();
+        Root<WeblogEntry> t = cq.from(WeblogEntry.class);
+        EntityType<WeblogEntry> ent_ = t.getModel();
+        cq.select(t);
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        
+        List<Predicate> predicates = new ArrayList<>();
+        
+        predicates.add(cb.equal(t.get(WEBSITE_FIELD_NAME), weblog));
+        predicates.add(cb.equal(t.get(WeblogEntry_.status.getName()), PubStatus.PUBLISHED.toString()));
+        
+        predicates.add(cb.equal(t.get(ent_
+                .getSingularAttribute(WeblogEntry_.category.getName()))
+                .get(WeblogCategory_.name.getName())
+                , categoryName));
+        
+        cq.where(predicates.toArray(new Predicate[]{}));
+        cq.orderBy(cb.desc(t.get(PUBTIME_FIELD_NAME)));
+
+        Query q = getEntityManager().createQuery(cq);
+        
+        return q.getResultList();
     }
 
 }

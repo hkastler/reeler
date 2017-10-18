@@ -18,7 +18,7 @@
 
 
                 <div class="panel-body">
-                    <h:form id="login" class="form-horizontal" role="form" prependId="false">
+                    <h:form id="login" class="form-signin" role="form" prependId="false">
                         <h:messages errorClass="table alert alert-danger"
                                     infoClass="table alert alert-success"
                                     layout="table"
@@ -26,7 +26,7 @@
 
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <label for="username" class="control-label">Username</label>
+                                <label for="username" class="sr-only">Username</label>
                                 <div>
                                     <input type="text"
                                            jsfc="h:inputText"
@@ -37,6 +37,7 @@
                                            class="form-control"
                                            required="true"
                                            requiredMessage="Username is required"
+                                           ps:placeholder="Username"
                                            ps:required="true"
                                            ps:requiredMessage="Username is required"
                                            ps:autofocus="autofocus"
@@ -48,14 +49,17 @@
                         </div>  
                         <div class="form-group row">
                             <div class="col-lg-12">
-                                <label for="password" class="control-label">Password</label>
+                                <label for="password" class="sr-only">Password</label>
                                 <div>
                                     <h:inputSecret id="password"                                                   
                                                    class="form-control"
                                                    value="#{loginBean.password}"
-                                                   required="true"
                                                    binding="#{password}"
-                                                   requiredMessage="Password is required"/>
+                                                   required="true"
+                                                   requiredMessage="Password is required"
+                                                   ps:placeholder="Password"
+                                                   ps:required="true"
+                                                   ps:requiredMessage="Username is required"/>
                                 </div>
                             </div>
                         </div>
@@ -66,9 +70,6 @@
                                              action="#{loginBean.validateUser}"
                                              />
                         </div>
-
-
-
                     </h:form>
                 </div>
 
