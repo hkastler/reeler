@@ -135,6 +135,17 @@ public class WebloggerRuntimeConfig {
         return props.getOrDefault(name, defaultValue);
     }
     
+    public Boolean getProperty(String name, Boolean defaultValue) {
+        
+        String value =  props.get(name);
+        
+        if (value == null) {
+            return defaultValue;
+        }
+
+        return Boolean.valueOf(value);
+    }
+    
     /**
      * Retrieve a property as a boolean ... defaults to false if there is an error
      **/

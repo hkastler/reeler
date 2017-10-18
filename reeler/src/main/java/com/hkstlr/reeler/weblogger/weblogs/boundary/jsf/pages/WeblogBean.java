@@ -66,6 +66,16 @@ public class WeblogBean extends PageBean {
     public WeblogBean() {
         super();
     }
+    
+    public WeblogBean(String handle) {
+        super();
+        this.handle = handle;
+    }
+    
+    public WeblogBean(Weblog weblog) {
+        super();
+        this.weblog = weblog;
+    }
 
     @PostConstruct
     public void init() {
@@ -80,7 +90,9 @@ public class WeblogBean extends PageBean {
         
         try {
             //null can be passed here
-            this.weblog = getWeblogByHandle(this.handle);
+            if(this.weblog == null){
+                this.weblog = getWeblogByHandle(this.handle);
+            }
             
             if(this.weblog != null){
                 
@@ -252,6 +264,7 @@ public class WeblogBean extends PageBean {
     }
 
     public void weblogViewAction() {
+        log.info("weblogViewAction");
         int[] range = new int[2];
         range[0] = getPaginator().getPageFirstItem()-1;
         range[1] = getPaginator().getPageLastItem()-1;

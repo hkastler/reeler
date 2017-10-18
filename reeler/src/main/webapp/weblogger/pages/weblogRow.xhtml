@@ -15,11 +15,11 @@
     <p>
         <!-- Date/Time --> 
         Posted on                     
-        <h:outputText value="#{weblogEntry.pubTime.time}" >                            
+        <h:outputFormat value="#{weblogEntry.pubTime.time}" >                            
             <f:convertDateTime dateStyle="default"
                                type="both"
                                timeZone="#{weblogBean.weblog.timeZone}"/>
-        </h:outputText>                        
+        </h:outputFormat>                        
         <!-- Author -->
         by <h:outputText value="#{weblogEntry.creatorUserName}" />
     </p>

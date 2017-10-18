@@ -4,16 +4,17 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-
-    <div class="panel my-4" jsfc="h:panelGroup" layout="block"
-         rendered="#{webloggerRuntimeConfig.getProperty( 'site.frontpage.weblog.handle', '') ne ''}">
-
-        <hr/>
-        #{webloggerRuntimeConfig.getProperty( 'site.frontpage.weblog.handle', '') ne ''}
-        <br/>
-        #{webloggerRuntimeConfig.props["site.frontpage.weblog.handle"].toString()} here
-        <br/>
-        #{webloggerRuntimeConfig.getProperty( 'site.frontpage.weblog.handle', '') }
-    </div>
+    
+    <f:view>
+        <div class="panel my-4" jsfc="h:panelGroup" layout="block">
+            <div jsfc="h:panelGroup" rendered="#{indexBean.weblogBean.viewEntries.size() gt 0}">
+                <ui:repeat value="#{indexBean.weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
+                    <ui:include src="weblogRow.xhtml">
+                        <ui:param name="weblogBean" value="#{weblogEntry.website}"/>
+                    </ui:include>
+                </ui:repeat>
+            </div>
+        </div>
+    </f:view>
 </ui:composition>
 
