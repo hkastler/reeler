@@ -105,6 +105,8 @@ public class RuntimeConfigBean {
     public void updateConfigs() {
         
         runtimeConfigManager.saveProperties(runtimeConfigs);
+        webloggerRuntimeConfig.setProps(runtimeConfigs);
+        
         FacesMessageManager.addSuccessMessage("globalConfig", "Config updated");
         
     }    
