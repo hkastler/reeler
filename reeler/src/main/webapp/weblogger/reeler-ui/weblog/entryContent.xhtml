@@ -196,6 +196,7 @@
                                              styleClass="btn btn-primary"
                                              rendered="#{weblogEntryAuthorBean.action eq 'create'}">
                             </h:commandButton>
+                            
                             <h:commandButton id="submitDraft" 
                                              value="Save as Draft"
                                              action="#{weblogEntryAuthorBean.saveAsDraft}"
@@ -203,9 +204,7 @@
                                              rendered="#{weblogEntryAuthorBean.action eq 'create'}">
 
                             </h:commandButton>
-
-
-
+                            
                             <h:commandButton id="editWeblogEntry" 
                                              value="Update Weblog Entry"
                                              action="#{weblogEntryAuthorBean.updateWeblogEntry}"
@@ -223,7 +222,7 @@
                     </div>
                 </h:form>
             </div>
-            <div class="panel panel-footer"></div>
+            <div class="panel-footer"></div>
         </div>
         
        
