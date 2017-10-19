@@ -92,7 +92,7 @@ import javax.persistence.UniqueConstraint;
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus&Website", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1 AND e.website = ?2")
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
     , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :name")
-    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :name AND w.status = PubStatus.PUBLISHED")
+    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :name AND w.status = PubStatus.PUBLISHED.toString()")
     , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime = :pubTime AND w.publishEntry = true")    
     , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :website ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
