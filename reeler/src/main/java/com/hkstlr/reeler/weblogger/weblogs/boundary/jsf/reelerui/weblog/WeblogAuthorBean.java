@@ -87,8 +87,7 @@ public class WeblogAuthorBean implements Serializable {
     }
 
     public void configViewAction() {
-        log.info("configViewAction here");
-        log.info("currentWeblog:" + weblog.getName());
+       //do something?
     }
 
 }

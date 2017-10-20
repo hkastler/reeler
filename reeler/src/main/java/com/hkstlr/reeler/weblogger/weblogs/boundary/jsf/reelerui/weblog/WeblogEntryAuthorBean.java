@@ -85,15 +85,12 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         
         this.handle = weblog.getHandle();
         this.cal = Calendar.getInstance(TimeZone.getTimeZone(weblog.getTimeZone()));
-        //this.allowCommentsChecked = weblog.isAllowComments();
+        
 
         if (this.id != null && !this.id.isEmpty()) {
             this.weblogEntry = weblogger.getWeblogEntryManager().findForEdit(id);
-            /*this.weblogEntry.getTags().forEach((tag) -> {
-            tagBag = tagBag.concat(tag.getName()).concat(" ");
-            });*/
+            
             tagBag = this.weblogEntry.getTagsAsString();
-            //allowCommentsChecked = this.weblogEntry.isAllowComments();
             
             if(weblogEntry.getPubTime() != null){        
                 this.strDateTimeOfPubDate = DateFormatter.sdf.format(new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
@@ -241,7 +238,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         
         WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
         wesc.setWeblog(weblog);
-        wesc.setMaxResults(10);
+        wesc.setMaxResults(weblog.getEntryDisplayCount());
         wesc.setSortBy(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME);
         return weblogger.getWeblogEntryManager().getBySearchCriteria(wesc);
          
@@ -251,7 +248,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         
         WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
         wesc.setWeblog(weblog);
-        wesc.setMaxResults(10);
+        wesc.setMaxResults(weblog.getEntryDisplayCount());
         wesc.setSortBy(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME);
         wesc.setStatus(WeblogEntry.PubStatus.DRAFT);
         return weblogger.getWeblogEntryManager().getBySearchCriteria(wesc);
@@ -262,7 +259,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         
         WeblogEntrySearchCriteria wesc = new WeblogEntrySearchCriteria();
         wesc.setWeblog(weblog);
-        wesc.setMaxResults(10);
+        wesc.setMaxResults(weblog.getEntryDisplayCount());
         wesc.setSortBy(WeblogEntrySearchCriteria.SortBy.UPDATE_TIME);
         wesc.setStatus(WeblogEntry.PubStatus.PENDING);
         return weblogger.getWeblogEntryManager().getBySearchCriteria(wesc);
