@@ -130,9 +130,9 @@ public class LoginBean implements Serializable {
             log.log(Level.INFO, "user?{0}", request.isUserInRole("user"));
             log.log(Level.INFO, "admin?{0}", request.isUserInRole("admin"));
 
-            FacesContext facesContext = FacesContext.getCurrentInstance();
             
-            facesContext.getApplication().getNavigationHandler().handleNavigation(facesContext, null, outcome);
+            
+            context.getApplication().getNavigationHandler().handleNavigation(context, null, outcome);
 
         } else {
             FacesMessage message;
