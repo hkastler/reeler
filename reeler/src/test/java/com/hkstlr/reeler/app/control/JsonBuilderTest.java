@@ -114,12 +114,13 @@ public class JsonBuilderTest {
      */
     @Test
     public void testToJsonString_Object_StringArr() {
-        System.out.println("toJsonString");
+        System.out.println("testToJsonString_Object_StringArr");
         Object o = weblogEntry;
-        String[] lskipFields = skipFields;
+        String[] lskipFields = this.skipFields;
         JsonBuilder instance = new JsonBuilder();
         String expResult = "";
         String result = instance.toJsonString(o, lskipFields);
+        log.info(result);
         assertTrue(!result.contains("pubTime"));
         // assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.

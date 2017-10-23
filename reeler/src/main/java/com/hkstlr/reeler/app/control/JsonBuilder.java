@@ -1,10 +1,7 @@
 package com.hkstlr.reeler.app.control;
 
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -12,7 +9,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Stream;
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
@@ -45,21 +41,10 @@ public class JsonBuilder {
      * @return
      */
     public JsonObject toJsonObject(Object o, String[] skipFields) {
-
-        Field[] fields = getAllFieldsForObject(o);
-        //get all that don't equal the following filters
-        //never want these fields
-        fields = Arrays.stream(fields).filter(f -> !"log".equalsIgnoreCase(f.getName()))
-                .filter(f -> !"serialversionuid".equalsIgnoreCase(f.getName()))
-                .toArray(Field[]::new);
-        //prolly don't want the statics neither
-        fields = filterStatics(fields);
-        //the inverses must be filtered out
-        //to prevent stackoverflow issues
-        //infinite recursion
-        fields = filterInverses(fields);
-        //filter out any user defined fields
-        fields = filterFieldsByName(fields, skipFields);
+        FieldFilter fieldFilter = new FieldFilter(o);
+        fieldFilter.setFilteredFields(skipFields);    
+        
+        Field[] fields = fieldFilter.getFields();
 
         JsonObjectBuilder builder = Json.createObjectBuilder();
 
@@ -114,69 +99,6 @@ public class JsonBuilder {
         return builder.build();
     }   
 
-    public Field[] getAllFieldsForObject(Object o) {
-        Field[] classFields = o.getClass().getDeclaredFields();
-        Field[] superClassFields = o.getClass().getSuperclass().getDeclaredFields();
-
-        return Stream.concat(Arrays.stream(superClassFields), Arrays.stream(classFields))
-                .toArray(Field[]::new);
-
-    }
-
-    public Field[] filterFieldsByName(Field[] fieldsToFilter, String[] skipFields) {
-        Field[] lFields = fieldsToFilter;
-        for (String skipField : skipFields) {
-            lFields = Arrays.stream(lFields).filter(f -> !skipField.equalsIgnoreCase(f.getName()))
-                    .toArray(Field[]::new);
-        }
-
-        return lFields;
-    }
-
-    public Field[] filterInverses(Field[] fieldsToFilter) {
-
-        Field[] lFields = fieldsToFilter;
-        for (Field field : fieldsToFilter) {
-
-            Annotation[] annotations = field.getAnnotations();
-            for (Annotation ann : annotations) {
-                log.finest("annotation type:" + ann.annotationType().getTypeName());
-                if ( "javax.persistence.ManyToMany".equals(ann.annotationType().getTypeName())
-                        ||
-                        "javax.persistence.OneToMany".equals(ann.annotationType().getTypeName())) {
-                    log.finer(field.getName() + StringPool.COLON + ann.annotationType().getTypeName());
-                    for (Method method : ann.annotationType().getDeclaredMethods()) {
-                        if ("mappedBy".equals(method.getName())) {
-                            try {
-                                Object value = method.invoke(ann, (Object[]) null);
-
-                                if (value != null && value.toString().length() > 0) {
-                                    lFields = Arrays.stream(lFields)
-                                            .filter(f -> !f.equals(field)).toArray(Field[]::new);
-                                }
-                            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                                log.log(Level.SEVERE, null, ex);
-                            }
-                        }
-                    }
-                }
-            }
-
-        }
-        return lFields;
-    }
-
-    public Field[] filterStatics(Field[] fieldsToFilter) {
-
-        Field[] lFields = fieldsToFilter;
-        for (Field field : fieldsToFilter) {
-            if (java.lang.reflect.Modifier.isStatic(field.getModifiers())) {
-                lFields = Arrays.stream(lFields)
-                        .filter(f -> !f.equals(field)).toArray(Field[]::new);
-            }
-
-        }
-        return lFields;
-    }
+   
 
 }
