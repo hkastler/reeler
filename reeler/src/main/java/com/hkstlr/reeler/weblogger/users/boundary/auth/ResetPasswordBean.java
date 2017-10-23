@@ -18,6 +18,8 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -39,8 +41,6 @@ public class ResetPasswordBean {
 
     private static final Logger LOG = Logger.getLogger(ResetPasswordBean.class.getName());
 
-    
-    
     @Resource(name = "java:/ReelerMail")
     private Session mailSession;
 
@@ -54,14 +54,15 @@ public class ResetPasswordBean {
     }
 
     public void resetPassword() throws NamingException, MessagingException {
+        FacesContext context = FacesContext.getCurrentInstance();
         User userToGet;
         try {
             userToGet = userManager.getUserByUserName(username);
             Logger.getLogger(ResetPasswordBean.class.getName()).log(Level.INFO, "user:{0}", userToGet.toJsonString());
             
-            sendMessage(userToGet.getEmailAddress());
-            
-
+            //sendMessage(userToGet.getEmailAddress());
+            //If an account exists with this email address, we will send instructions to you shortly. If you don't receive the email, please contact support.
+            context.addMessage(null, new FacesMessage("If an account exists with this email address, we will send instructions to you shortly. If you don't receive the email, please contact support."));
         } catch (NoResultException | NullPointerException ex) {
 
             Logger.getLogger(ResetPasswordBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -93,7 +94,7 @@ public class ResetPasswordBean {
             status = "Encountered an error";
            
         }
-        return new AsyncResult<String>(status);
+        return new AsyncResult<>(status);
     }
 
     /**
