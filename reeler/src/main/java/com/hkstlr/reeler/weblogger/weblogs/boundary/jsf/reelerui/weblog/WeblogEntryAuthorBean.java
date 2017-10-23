@@ -93,7 +93,8 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
             tagBag = this.weblogEntry.getTagsAsString();
             
             if(weblogEntry.getPubTime() != null){        
-                this.strDateTimeOfPubDate = DateFormatter.sdf.format(new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
+                this.strDateTimeOfPubDate = DateFormatter.sdf.format(
+                        new Date(this.weblogEntry.getPubTime().getTimeInMillis()));
             }
             
             this.action = "edit";
@@ -282,6 +283,15 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         weblogEntry.setPubTime(setCalFromStrPubDate(strDateTimeOfPubDate));
         weblogEntry.setStatus(WeblogEntry.PubStatus.PUBLISHED.toString());
         setupAndSave("Blog post published");
+    }
+    
+    public void publishWeblogDynamic(String facesMsg) throws WebloggerException {
+        log.info("posted?");
+        FacesMessageManager.addSuccessMessage("authorBeanUpdate", facesMsg);
+        //TODO: need some logic for PENDING and SCHEDULED        
+        //weblogEntry.setPubTime(setCalFromStrPubDate(strDateTimeOfPubDate));
+        //weblogEntry.setStatus(WeblogEntry.PubStatus.PUBLISHED.toString());
+        //setupAndSave("Blog post published");
     }
 
     public String updateWeblogEntry() throws WebloggerException {

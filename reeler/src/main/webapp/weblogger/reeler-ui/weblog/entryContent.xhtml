@@ -19,6 +19,7 @@
 
 
                     <fieldset id="weblogEntry-fieldset">
+                                               
                         <div class="form-group #{title.valid ? '':'has-error'}">
                             <div>
                                 <label jsf:for="title" 
@@ -42,7 +43,7 @@
                                        type="text"
                                        class="form-control"
                                        disabled="true"/>
-                                <h:message for="weblogEntryForm:status" style="color: red"/>
+                                <h:message for="weblogEntryForm:status" class="control-label has-error"/>
                             </div>
                         </div>
 
@@ -74,7 +75,7 @@
                                             itemLabel="#{category.name}" />
 
                                 </select>
-                                <h:message for="weblogEntryForm:weblogEntryCategory" errorClass="alert alert-danger"/>
+                                <h:message for="weblogEntryForm:weblogEntryCategory" errorClass="control-label has-error"/>
 
                             </div>                            
                         </div>

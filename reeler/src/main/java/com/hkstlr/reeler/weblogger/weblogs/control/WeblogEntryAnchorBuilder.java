@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 import javax.enterprise.context.Dependent;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -28,12 +29,12 @@ public class WeblogEntryAnchorBuilder {
         //constructor
     }
     
-    public String createAnchorBase(WeblogEntry weblogEntry){
+    public String createAnchorBase(@NotNull WeblogEntry weblogEntry){
         return createAnchorBase(weblogEntry, 7);
     }
     
     /** Create anchor for weblog entry, based on title or text */
-    public String createAnchorBase(WeblogEntry weblogEntry, Integer numberOfWordsInUrl) {
+    public String createAnchorBase(@NotNull WeblogEntry weblogEntry, @NotNull Integer numberOfWordsInUrl) {
         
         String title = weblogEntry.getTitle();
         String text = weblogEntry.getText();

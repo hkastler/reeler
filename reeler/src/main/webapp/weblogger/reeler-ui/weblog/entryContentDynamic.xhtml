@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:jsf="http://xmlns.jcp.org/jsf">
+    <f:view>
+        <div class="panel panel-primary">
+            <div class="panel-heading panel-title">
+                #{weblogEntryAuthorBean.actionLabel} Entry here
+            </div>
+            <div id="weblogEntryDiv" class="panel-body">
+                <h2 >#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
+                    for #{weblogEntryAuthorBean.weblog.name}</h2>
+                <h:form id="weblogEntryForm" prependId="false" binding="#{weblogEntryForm}">   
+                    <h:messages
+                        infoClass="alert alert-success list-unstyled"                               
+                        errorClass="alert alert-danger list-unstyled"/>
+                    <fieldset id="weblogEntry-fieldset">
+                        <ui:repeat value="#{weblogEntryAuthorBean.weblogEntry.getFields()}" var="field">                            
+                            <c:set var="label" value="WeblogEntry_#{field.name}"/>
+                            
+                            <ui:fragment rendered="#{field.type.name eq 'java.lang.String' and messages[label] ne ''}">
+                                <ui:fragment rendered="true">
+                                <div class="form-group">
+                                    <div>                                        
+                                        <label for="#{field.name}" 
+                                               class="control-label ">
+                                            #{messages[label]}</label>
+                                            #{field.type.name}
+                                            #{Arrays.asList(field.annotations).forEach(ann -> ann.toString())}
+                                            
+                                        <input value="#{weblogEntryAuthorBean.weblogEntry.get(field)}"
+                                               name="#{binding}"
+                                               class="form-control "
+                                               type="text"
+                                               /><h:message for="weblogEntryForm:#{field.name}" class="control-label has-error"/> 
+                                    </div>
+                                </div>
+                                </ui:fragment>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{field.type.name eq 'boolean' }">
+                                <div class="checkbox">
+                                    <label for="#{field.name}">
+                                        <input type="checkbox"
+                                               name="#{field.name}"
+                                               value="#{weblogEntryAuthorBean.weblogEntry.get(field)}"/>
+                                        
+                                        #{messages[label]}
+                                    </label>
+                                </div>
+                            </ui:fragment>
+                        </ui:repeat>
+                        <div class="form-group">
+                        <div>
+                            <h:commandButton id="submitPost1" 
+                                             value="Post to Weblog"
+                                             action="#{weblogEntryAuthorBean.publishWeblogDynamic('Blog post published')}"
+                                             styleClass="btn btn-primary"
+                                             rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+                            </h:commandButton>
+
+                            <h:commandButton id="submitDraft1" 
+                                             value="Save as Draft"
+                                             action="#{weblogEntryAuthorBean.saveAsDraft}"
+                                             styleClass="btn btn-secondary"
+                                             rendered="#{weblogEntryAuthorBean.action eq 'create'}">
+
+                            </h:commandButton>
+
+                            <h:commandButton id="editWeblogEntry1" 
+                                             value="Update Weblog Entry"
+                                             action="#{weblogEntryAuthorBean.updateWeblogEntry}"
+                                             styleClass="btn btn-primary"
+                                             rendered="#{weblogEntryAuthorBean.action eq 'edit'}">
+                            </h:commandButton>
+                            <input 
+                                jsf:id="cancelButton1"
+                                type="button" 
+                                class="btn btn-secondary"
+                                value="Cancel" 
+                                onclick="window.location = '#{request.contextPath}#{reelerUiBean.pageHome}'" 
+                                rendered="#{weblogEntryAuthorBean.action eq 'edit'}"/>
+                        </div>
+                    </div>
+
+                        <input type="hidden" name="dynamic" value="true"/>
+                        <input type="hidden" name="id" value="#{weblogEntryAuthorBean.id}"/>
+                        <input type="hidden" name="action" value="#{weblogEntryAuthorBean.action}"/>
+                    </fieldset>
+                </h:form>
+            </div>
+            <div class="panel-footer"></div>
+        </div>
+
+
+    </f:view>
+
+</ui:composition>
+

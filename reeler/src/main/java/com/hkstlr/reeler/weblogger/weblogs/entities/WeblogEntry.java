@@ -40,11 +40,13 @@ import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.weblogs.control.LocaleFixer;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryTagComparator;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryTagFixer;
+import java.lang.reflect.Field;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TreeSet;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.json.JsonObject;
 import javax.persistence.Cacheable;
@@ -92,7 +94,7 @@ import javax.persistence.UniqueConstraint;
     , @NamedQuery(name = "WeblogEntry.getCountDistinctByStatus&Website", query = "SELECT COUNT(e) FROM WeblogEntry e WHERE e.status = ?1 AND e.website = ?2")
     , @NamedQuery(name = "WeblogEntry.updateAllowComments&CommentDaysByWebsite", query = "UPDATE WeblogEntry e SET e.allowComments = ?1, e.commentDays = ?2 WHERE e.website = ?3")
     , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByWeblogCategoryName", query = "SELECT w FROM WeblogEntry w, WeblogCategory c WHERE w.category = c AND c.name = :name")
-    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :name AND w.status = PubStatus.PUBLISHED.toString()")
+    , @NamedQuery(name = "WeblogEntry.getByWeblogEntriesByCategoryNameAndWeblog", query = "SELECT w FROM WeblogEntry w JOIN w.category c JOIN c.weblog b WHERE b = :weblog AND c.name = :name AND w.status = 'PUBLISHED'")
     , @NamedQuery(name = "WeblogEntry.getWeblogEntriesByDateAndWeblog", query = "SELECT w FROM WeblogEntry w WHERE w.website = :weblog AND w.pubTime = :pubTime AND w.publishEntry = true")    
     , @NamedQuery(name = "WeblogEntry.getLatestEntryForWeblog", query = "SELECT we FROM WeblogEntry we WHERE we.website = :website ORDER BY we.pubTime DESC")})
 public class WeblogEntry extends AbstractEntity implements Serializable {
@@ -104,36 +106,77 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     public enum PubStatus {
         DRAFT, PUBLISHED, PENDING, SCHEDULED
     }
+    
+    //form fields at the top? hmmm..
+    @Basic(optional = false)
+    @NotNull(message = "{WeblogEntry.title.NotNull}")
+    @Size(min = 1, max = 255, message="{WeblogEntry.title.NotNull}")
+    @Column(name = "title", nullable = false, length = 255)
+    private String title;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 20)
+    @Column(name = "status", nullable = false, length = 20)
+    private String status = "Create";   
 
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.anchor.NotNull}")
     @Size(min = 1, max = 255, message="{WeblogEntry.anchor.NotNull}")
     @Column(name = "anchor", nullable = false, length = 255)
     private String anchor;
-
-    @Basic(optional = false)
-    @NotNull(message = "{WeblogEntry.creatorUserName.NotNull}")
-    @Size(min = 1, max = 255)
-    @Column(name = "creator", nullable = false, length = 255)
-    private String creatorUserName;
-
-    @Basic(optional = false)
-    @NotNull(message = "{WeblogEntry.title.NotNull}")
-    @Size(min = 1, max = 255, message="{WeblogEntry.title.NotNull}")
-    @Column(name = "title", nullable = false, length = 255)
-    private String title;
-
+    
+    @NotNull(message = "{WeblogEntry.category.NotNull}")
+    @ManyToOne
+    @JoinColumn(name = "categoryid", referencedColumnName = "id", nullable = false, updatable = true)
+    private WeblogCategory category = new WeblogCategory();
+    
+    @OneToMany(mappedBy = "weblogEntry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<WeblogEntryTag> tags = new ArrayList<>();
+        
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.text.NotNull}")
     @Size
     @Column(name = "text", nullable = false)
     @Lob
     private String text;
-
+    
     @Basic
     @Column(name = "pubtime", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar pubTime;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "allowcomments", nullable = false)
+    private boolean allowComments = false;
+        
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "commentdays", nullable = false)
+    private int commentDays = 0;
+    
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "righttoleft", nullable = false)
+    private boolean rightToLeft = false;
+
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "pinnedtomain", nullable = false)
+    private boolean pinnedToMain = false;    
+    
+    @Size
+    @Column(name = "search_description")
+    private String searchDescription;
+    
+
+    @Basic(optional = false)
+    @NotNull(message = "{WeblogEntry.creatorUserName.NotNull}")
+    @Size(min = 1, max = 255)
+    @Column(name = "creator", nullable = false, length = 255)
+    private String creatorUserName;    
+
 
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.updateTime.NotNull}")
@@ -154,37 +197,11 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Column(name = "plugins", length = 255)
     private String plugins;
 
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "allowcomments", nullable = false)
-    private boolean allowComments = false;
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "commentdays", nullable = false)
-    private int commentDays = 0;
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "righttoleft", nullable = false)
-    private boolean rightToLeft = false;
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "pinnedtomain", nullable = false)
-    private boolean pinnedToMain = false;
-
     @Basic(optional = false, fetch = FetchType.EAGER)
     @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "locale", length = 20)
-    private String locale;
-
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "status", nullable = false, length = 20)
-    private String status = "Not Saved";
+    private String locale;    
 
     @Size
     @Column(name = "summary")
@@ -198,21 +215,12 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Column(name = "content_src", length = 255)
     private String contentSrc;
 
-    @Size
-    @Column(name = "search_description")
-    private String searchDescription;
 
     @JoinColumn(name = "websiteid", referencedColumnName = "id", nullable = false, updatable = true, insertable = true)
     @ManyToOne(optional = false,fetch = FetchType.EAGER)
     private Weblog website;
 
-    @NotNull(message = "{WeblogEntry.category.NotNull}")
-    @ManyToOne
-    @JoinColumn(name = "categoryid", referencedColumnName = "id", nullable = false, updatable = true)
-    private WeblogCategory category = new WeblogCategory();
-
-    @OneToMany(mappedBy = "weblogEntry", cascade = {CascadeType.PERSIST, CascadeType.REMOVE, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<WeblogEntryTag> tags = new ArrayList<>();
+    
 
     @OneToMany(mappedBy = "weblogEntry")
     private List<WeblogEntryComment> comments = new ArrayList<>();
@@ -578,6 +586,33 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         this.comments = comments;
     }
     
+    
+    public Field[] getFields(){
+        
+        return this.getClass().getDeclaredFields();
+    }
+    
+    
+    public Object get(Field field){
+        
+        try {
+            if(field.get(this) != null){
+                return field.get(this);
+            }else{
+                return null;
+            }
+        } catch (IllegalArgumentException | IllegalAccessException ex) {
+            Logger.getLogger(WeblogEntry.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex){
+            Logger.getLogger(WeblogEntry.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+    
+    public void set(Field field){
+        //this.get = field;
+    }
+    
     @Override
     public String toJsonString(){
         return this.toJsonObject().toString();
@@ -643,7 +678,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
         if (getPlugins() != null) {
             return Arrays.asList(getPlugins().split(","));
         }
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
     
     public Boolean getRefreshAggregates() {

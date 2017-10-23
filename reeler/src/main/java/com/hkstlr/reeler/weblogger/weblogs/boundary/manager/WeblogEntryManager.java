@@ -183,6 +183,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             entry = new WeblogEntry();
         }
         entry.getTags().size();
+        entry.getComments().size();
+        entry.getEntryAttributes().size();
         return entry;
     }
 
