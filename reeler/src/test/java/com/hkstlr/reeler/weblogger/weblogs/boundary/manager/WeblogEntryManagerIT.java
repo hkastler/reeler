@@ -1,3 +1,5 @@
+package com.hkstlr.reeler.weblogger.weblogs.boundary.manager;
+
 import com.hkstlr.reeler.app.control.AppConstants;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
 import org.jboss.arquillian.container.test.api.Deployment;
