@@ -76,7 +76,12 @@
             <groupId>org.eclipse.persistence</groupId>
             <artifactId>eclipselink</artifactId>
             <version>${version.eclipselink}</version>
-            <scope>test</scope>
+        </dependency>
+            
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.jpa.modelgen.processor</artifactId>
+            <version>${version.eclipselink}</version>
         </dependency>
         
         
@@ -179,7 +184,6 @@
         </dependency>
 
         <!-- Java EE deps -->
-
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
@@ -207,11 +211,13 @@
                     <artifactId>activation</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>       
+        
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
         </dependency>
-        
-       
-        
-        
     </dependencies>
     <build>
         <finalName>reeler</finalName>
@@ -261,14 +267,13 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${version.surefire.plugin}</version>
                 <configuration>
-                    <skipTests>false</skipTests>
+                    <skipTests>${surefire.plugin.skipTests}</skipTests>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.20</version>
-                
+                <version>2.20</version>                
                 <executions>
                     <execution>
                         <phase>test</phase>
@@ -278,49 +283,14 @@
                         </goals>
                     </execution>
                 </executions>
-                
-            </plugin>
-            
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>cobertura-maven-plugin</artifactId>
-                <version>2.7</version>
                 <configuration>
-                    <formats>
-                        <format>html</format>
-                        <format>xml</format>
-                    </formats>
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.9</version>
-                <configuration>
-                    <destFile>${basedir}/target/coverage-reports/jacoco.exec</destFile>
-                    <dataFile>${basedir}/target/coverage-reports/jacoco.exec</dataFile>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>jacoco-initialize</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>jacoco-site</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                    <skipTests>${failsafe.plugin.skipTests}</skipTests>
+                </configuration>                
             </plugin>
             
             
-            
-            
+            <!--
+                        
             <plugin>
                 <groupId>org.bsc.maven</groupId>
                 <artifactId>maven-processor-plugin</artifactId>
@@ -348,11 +318,92 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            -->
         </plugins>
 
     </build>
 
-
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <env>dev</env>
+                <hostName>localhost</hostName>
+                <protocol>http</protocol>
+                <port>8080</port>
+                <surefire.plugin.skipTests>true</surefire.plugin.skipTests>
+                <failsafe.plugin.skipTests>true</failsafe.plugin.skipTests>
+            </properties>
+        </profile>
+        <profile>
+            <id>jacoco</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <env>qa</env>
+                <hostName>staging.hkstlr.com</hostName>
+                <protocol>http</protocol>
+                <port>80</port>
+                <failsafe.plugin.skipTests>true</failsafe.plugin.skipTests>	                
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.7.9</version>
+                        <configuration>
+                            <destFile>${basedir}/target/coverage-reports/jacoco.exec</destFile>
+                            <dataFile>${basedir}/target/coverage-reports/jacoco.exec</dataFile>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>jacoco-initialize</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-site</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>2.7</version>
+                        <configuration>
+                            <formats>
+                                <format>html</format>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <env>production</env>
+                <hostName>www.hkstlr.com</hostName>
+                <protocol>http</protocol>
+                <port>80</port>            
+            </properties>
+        </profile>
+    </profiles>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -375,6 +426,12 @@
         <version.surefire.plugin>2.17</version.surefire.plugin>
         <version.war.plugin>2.5</version.war.plugin>
         <version.eclipselink>2.5.1</version.eclipselink>
+        
+        <!--default props -->
+        <surefire.plugin.skipTests>false</surefire.plugin.skipTests>
+        <failsafe.plugin.skipTests>false</failsafe.plugin.skipTests>
+        
+        <!-- sonar props -->
         <sonar.core.codeCoveragePlugin>jacoco</sonar.core.codeCoveragePlugin>
         <sonar.exclusions>**/vendor/**</sonar.exclusions>
         <sonar.jacoco.reportPath>${basedir}/target/coverage-reports/jacoco.exec</sonar.jacoco.reportPath>
