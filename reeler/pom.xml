@@ -287,8 +287,6 @@
                     <skipTests>${failsafe.plugin.skipTests}</skipTests>
                 </configuration>                
             </plugin>
-            
-            
             <!--
                         
             <plugin>
@@ -344,11 +342,63 @@
                 <activeByDefault>false</activeByDefault>
             </activation>
             <properties>
-                <env>qa</env>
-                <hostName>staging.hkstlr.com</hostName>
+                <env>dev</env>
+                <hostName>localhost</hostName>
                 <protocol>http</protocol>
-                <port>80</port>
+                <port>8080</port>
                 <failsafe.plugin.skipTests>true</failsafe.plugin.skipTests>	                
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.7.9</version>
+                        <configuration>
+                            <destFile>${basedir}/target/coverage-reports/jacoco.exec</destFile>
+                            <dataFile>${basedir}/target/coverage-reports/jacoco.exec</dataFile>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>jacoco-initialize</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>jacoco-site</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>cobertura-maven-plugin</artifactId>
+                        <version>2.7</version>
+                        <configuration>
+                            <formats>
+                                <format>html</format>
+                                <format>xml</format>
+                            </formats>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <env>jenkins</env>
+                <hostName>cosmicmachine</hostName>
+                <protocol>http</protocol>
+                <port>8080</port>                
             </properties>
             <build>
                 <plugins>
@@ -410,9 +460,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
         <lucene.version>4.10.3</lucene.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- JBoss dependency versions -->
         <version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
