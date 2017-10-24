@@ -35,6 +35,11 @@ span.control-label.has-error:after{
     table-layout: fixed;
 }
 
+div.alternating-row-container {
+    padding: 15px;
+    /* border: 5px; */
+    /* border-color: black; */
+}
 div.alternating-row-container > div:nth-of-type(odd) {
     background: #e0e0e0;
 }

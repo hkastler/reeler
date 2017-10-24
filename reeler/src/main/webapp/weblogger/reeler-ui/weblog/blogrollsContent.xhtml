@@ -10,20 +10,18 @@
     </f:metadata>
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
-            Manage Bookmarks in weblog #{reelerUiBean.currentWeblog.name}
+            <h:outputFormat value="#{res['bookmarksForm.subtitle']}"
+                            escape="false">
+                <f:param value="#{reelerUiBean.currentWeblog.name}"/>
+            </h:outputFormat> 
         </div>
 
         <div class="panel-body">
-            <p>#{reelerUiBean.currentWeblog.bookmarkFolders.size() > 0} #{labels.res.getString("bookmarksForm.rootPrompt")}</p>
-            <div class="row">
-                <div class="col-lg-6">
-
-                </div>
-                <div class="col-lg-6">
-
-                </div>
-            </div>
-
+            <p>
+                <h:outputText value="#{res['bookmarksForm.rootPrompt']}"
+                              escape="false"/>
+            </p>
+            
             <div class="row">
                 <div class="col-lg-12">                    
 
@@ -39,11 +37,7 @@
                                     <div class="row">
                                         <div class="col-sm-12">
                                             <b><i class="fa fa-folder-o" aria-hidden="true"></i>
-                                            #{folder.name}</b>
-                                            <br/>
-                                            <a href="bookmark.xhtml?action=create&amp;folderid=#{folder.id}">
-                                                <i class="fa fa-plus" aria-hidden="true"></i>Create bookmark
-                                            </a>
+                                            &#160;#{folder.name}</b>
                                         </div>
                                     </div>
                                     <div jsfc="h:panelGroup" rendered="#{folder.bookmarks.size() eq 0}">
@@ -78,6 +72,13 @@
                                                     <div class="col-lg-1"><a href="#{bookmark.url}" target="_blank"><i class="fa fa-globe" aria-hidden="true"></i></a></div>
                                                 </div>
                                             </ui:repeat>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <a href="bookmark.xhtml?action=create&amp;folderid=#{folder.id}">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>&#160;Create bookmark in folder:#{folder.name}
+                                            </a>
                                         </div>
                                     </div>
                                 </ui:repeat>
