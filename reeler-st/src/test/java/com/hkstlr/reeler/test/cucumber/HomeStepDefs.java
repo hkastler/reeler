@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.test;
+package com.hkstlr.reeler.test.cucumber;
 
 import com.hkstlr.reeler.test.pageobject.HomePage;
 import cucumber.api.java.Before;

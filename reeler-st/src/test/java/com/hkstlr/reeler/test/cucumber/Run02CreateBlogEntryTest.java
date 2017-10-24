@@ -1,4 +1,4 @@
-package com.hkstlr.reeler.test;
+package com.hkstlr.reeler.test.cucumber;
 
 import cucumber.api.CucumberOptions;
 import cucumber.api.junit.Cucumber;

@@ -1,4 +1,4 @@
-package com.hkstlr.reeler.test;
+package com.hkstlr.reeler.test.cucumber;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;

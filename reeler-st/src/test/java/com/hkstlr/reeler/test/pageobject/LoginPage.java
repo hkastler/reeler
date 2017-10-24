@@ -24,6 +24,8 @@ public class LoginPage extends LoadableComponent<LoginPage> {
 
     @FindBy(id = "password")
     public WebElement passwordField;
+    
+    
 
     public LoginPage(WebDriver aDriver) {
         LOG.info(pageURL);

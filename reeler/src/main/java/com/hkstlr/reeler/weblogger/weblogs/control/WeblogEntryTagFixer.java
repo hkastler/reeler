@@ -16,8 +16,6 @@ import java.util.Locale;
  */
 public class WeblogEntryTagFixer {
     
-    public static final String TAG_SPLIT_REGEX = "/[ ,]+/";
-
     public WeblogEntryTagFixer() {
         //constructor
     }    

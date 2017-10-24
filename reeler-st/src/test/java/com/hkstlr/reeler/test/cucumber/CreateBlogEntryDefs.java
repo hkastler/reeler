@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.hkstlr.reeler.test;
+package com.hkstlr.reeler.test.cucumber;
 
 import com.hkstlr.reeler.test.pageobject.CreateBlogEntryPage;
 import com.hkstlr.reeler.test.pageobject.LoginPage;
+import com.hkstlr.reeler.test.util.TestUtils;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -57,13 +58,13 @@ public class CreateBlogEntryDefs extends BaseStepDefs {
       Entry entry = entries.get(0);
       
       this.cbep.titleField.clear();
-      this.cbep.titleField.sendKeys(entry.title);
+      this.cbep.titleField.sendKeys(String.format(entry.title, TestUtils.getRandomString(8)));
       
       Select categorySelect = new Select(cbep.weblogEntryCategoryField); 
       categorySelect.selectByVisibleText(entry.category); 
 		
       this.cbep.tagBagField.clear();
-      this.cbep.tagBagField.sendKeys(entry.tags);
+      this.cbep.tagBagField.sendKeys(String.format(entry.tags, TestUtils.getRandomString(6)));
 		
       this.cbep.textField.clear();
       this.cbep.textField.sendKeys(entry.content);

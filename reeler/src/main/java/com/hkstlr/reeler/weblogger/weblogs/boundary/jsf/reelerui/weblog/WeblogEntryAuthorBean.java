@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.reelerui.weblog;
 
 import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.control.WebloggerException;
+import com.hkstlr.reeler.weblogger.weblogs.boundary.manager.WeblogEntryManager;
 import com.hkstlr.reeler.weblogger.weblogs.control.DateFormatter;
 import com.hkstlr.reeler.weblogger.weblogs.control.StringChanger;
 import com.hkstlr.reeler.weblogger.weblogs.control.WeblogEntryAnchorBuilder;
@@ -15,6 +16,7 @@ import com.hkstlr.reeler.weblogger.weblogs.control.jsf.FacesMessageManager;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
+import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry_;
 import java.io.Serializable;
 
 import java.text.ParseException;
@@ -28,6 +30,8 @@ import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
 import javax.enterprise.inject.Produces;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,6 +39,7 @@ import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -42,6 +47,7 @@ import javax.inject.Named;
  */
 @ManagedBean
 @RequestScoped
+@Stateless
 public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Serializable {
 
     @Inject
@@ -49,6 +55,9 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     
     @Inject
     private WeblogEntryAnchorBuilder anchorBuilder;
+    
+    @EJB
+    WeblogEntryManager wem;
 
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
@@ -273,6 +282,26 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
         return weblogger.getWeblogEntryCommentManager().getComments(weblogEntry);
     }
 
+    public Boolean isSafeAnchor(String anchor){
+        
+        Boolean isSafeAnchor = true;
+        WeblogEntry exWe = weblogger.getWeblogEntryManager()
+                .getWeblogEntryByHandleAndAnchor(weblogEntry.getWebsite().getHandle(),
+                anchor);
+            
+            if(exWe.equals(weblogEntry)){
+                isSafeAnchor = true;
+                log.info("this is the owner of this website/anchor combo");
+            }else if("not found".equals(exWe.getTitle())){
+                isSafeAnchor = true;
+                log.info("you need a new permalink");
+            }else{
+                isSafeAnchor = false;
+            }
+            
+            return isSafeAnchor;
+    }
+    
     public void saveAsDraft() throws WebloggerException {
         log.info("draft?");
         weblogEntry.setStatus(WeblogEntry.PubStatus.DRAFT.toString());
@@ -309,10 +338,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     }
 
     private void setupAndSave(String facesMsg) throws WebloggerException {
-        if(weblogEntry.getAnchor() == null || weblogEntry.getAnchor().isEmpty()){
-            String anchor = anchorBuilder.createAnchorBase(weblogEntry);
-            weblogEntry.setAnchor(anchor);
-        }        
+               
         weblogEntry.setUpdateTime(setCalFromDate(new Date()));        
         setupTagsAndSave();
         FacesMessageManager.addSuccessMessage("authorBeanUpdate", facesMsg);
@@ -324,6 +350,24 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
      }
     
     public void save(WeblogEntry weblogEntry) throws WebloggerException {
+        if(weblogEntry.getAnchor() == null || weblogEntry.getAnchor().isEmpty()){
+            String anchor = anchorBuilder.createAnchorBase(weblogEntry);
+            //log.info("anchor0:".concat(anchor));
+            Boolean anchorOk = false;
+            int counter = 1;
+            while(!anchorOk && counter < 10000){
+                //log.info("anchor1:".concat(anchor));
+                anchorOk = isSafeAnchor(anchor);
+                
+                if(!anchorOk){
+                    anchor = anchorBuilder.createAnchorBase(weblogEntry);
+                    anchor = anchor.concat(StringPool.DASH).concat(Integer.toString(counter));
+                    counter++;              
+                }
+                
+            }
+            weblogEntry.setAnchor(anchor);
+        } 
         weblogger.getWeblogEntryManager().saveWeblogEntry(weblogEntry);
     }
     

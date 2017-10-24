@@ -1,4 +1,4 @@
-package com.hkstlr.reeler.test;
+package com.hkstlr.reeler.test.cucumber;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

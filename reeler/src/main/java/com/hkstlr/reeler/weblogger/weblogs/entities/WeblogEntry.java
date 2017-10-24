@@ -265,6 +265,8 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     public WeblogEntry(Weblog weblog) {
         this.website = weblog;
         this.locale = weblog.getLocale();
+        this.allowComments = weblog.isAllowComments();
+        this.commentDays = weblog.getDefaultCommentDays();
     }
     
     public WeblogEntry(Weblog weblog, User creator) {
