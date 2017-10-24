@@ -40,11 +40,11 @@ public class AdminUIBean {
         if(page == null){
             page = "index";
         }
-        pages.put("index", new String[]{"label_configuration","label_serveradmin"});        
-        pages.put("users", new String[]{"label_useradmin"});        
-        pages.put("comments", new String[]{"label_globalcomment"});        
-        pages.put("pings", new String[]{"label_pings"});        
-        pages.put("cacheinfo", new String[]{"label_cacheinfo"});        
+        pages.put("index", new String[]{"reeler-ui_admin_index","reeler-ui_admin_serveradmin"});        
+        pages.put("users", new String[]{"reeler-ui_admin_users"});        
+        pages.put("comments", new String[]{"reeler-ui_admin_comments"});        
+        pages.put("pings", new String[]{"reeler-ui_admin_pings"});        
+        pages.put("cacheinfo", new String[]{"reeler-ui_admin_cacheinfo"});        
     }
 
     public Map<String, String[]> getPages() {

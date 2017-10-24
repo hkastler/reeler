@@ -31,9 +31,11 @@
                                             #{Arrays.asList(field.annotations).forEach(ann -> ann.toString())}
                                             
                                         <input value="#{weblogEntryAuthorBean.weblogEntry.get(field)}"
-                                               name="#{binding}"
+                                               name="#{field.name}"
+                                               binding="#{this}"
                                                class="form-control "
                                                type="text"
+                                               jsfc="h:inputText"
                                                /><h:message for="weblogEntryForm:#{field.name}" class="control-label has-error"/> 
                                     </div>
                                 </div>

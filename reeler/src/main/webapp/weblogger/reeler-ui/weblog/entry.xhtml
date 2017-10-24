@@ -20,7 +20,7 @@
         <ui:include src="navigation.xhtml">
             <ui:param name="page" value="entry"/>
             <ui:param name="pageBean" value="#{reelerUiBean}"/>
-            <ui:param name="customLabel" value="  #{weblogEntryAuthorBean.actionLabel} Entry #{param.toString()}" />
+            <ui:param name="customLabel" value="#{weblogEntryAuthorBean.actionLabel} #{messages['WeblogEntry_entry']}" />
         </ui:include>
     </ui:define>
     <ui:define name="content">

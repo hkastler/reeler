@@ -23,6 +23,7 @@ import java.time.format.FormatStyle;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -31,6 +32,7 @@ import javax.enterprise.inject.Produces;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -287,7 +289,10 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
     
     public void publishWeblogDynamic(String facesMsg) throws WebloggerException {
         log.info("posted?");
-        FacesMessageManager.addSuccessMessage("authorBeanUpdate", facesMsg);
+        Map<String,String> params;
+        params = FacesContext.getCurrentInstance()
+                .getExternalContext().getRequestParameterMap();
+        FacesMessageManager.addSuccessMessage("authorBeanUpdate", facesMsg.concat(params.toString()));
         //TODO: need some logic for PENDING and SCHEDULED        
         //weblogEntry.setPubTime(setCalFromStrPubDate(strDateTimeOfPubDate));
         //weblogEntry.setStatus(WeblogEntry.PubStatus.PUBLISHED.toString());
