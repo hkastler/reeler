@@ -240,29 +240,34 @@ public class WeblogBean extends PageBean {
         if (this.categoryName == null) {
             this.categoryName = "Technology";
         }
+        int numberOfItems = weblogger.getWeblogEntryManager()
+                .categoryViewActionCount(categoryName, weblog);
+        //log.info("numberOfItems:"+numberOfItems);
+        this.paginator = new Paginator(pageSize,pageNum, numberOfItems);
+        
+        int[] range = new int[2];
+        range[0] = getPaginator().getPageFirstItem()-1;
+        range[1] = getPaginator().getPageLastItem()-1;
+        
         this.viewEntries = weblogger.getWeblogEntryManager()
-                .categoryViewAction(categoryName, weblog);
+                .categoryViewAction(categoryName, weblog,range);
 
     }
 
     public void dateViewAction() {
 
         String dateToGet = this.dateString;
-
-        Integer year = Integer.parseInt(dateString.substring(0, 4));
-        Integer month = Integer.parseInt(dateString.substring(4, 6));
-        Integer startDate = 1;
-
-        if (dateString.length() == 8) {
-            startDate = Integer.parseInt(dateString.substring(6, 8));
-        }
-
-        Calendar calendar = weblog.getCalendarInstance();
-        calendar.set(year, month - 1, startDate, 0, 0, 0);
-        this.date = new Date(calendar.getTimeInMillis());
+        long numberOfItems = weblogger.getWeblogEntryManager()
+                .getWeblogEntriesByDateAndWeblogCount(dateToGet, weblog);
+        //log.info("numberOfItems:"+numberOfItems);
+        this.paginator = new Paginator(pageSize,pageNum, (int) numberOfItems);
+        
+        int[] range = new int[2];
+        range[0] = getPaginator().getPageFirstItem()-1;
+        range[1] = getPaginator().getPageLastItem()-1;
         this.viewEntries = weblogger.getWeblogEntryManager()
-                .getWeblogEntriesByDateAndWeblog(dateToGet, weblog);
-
+                .getWeblogEntriesByDateAndWeblog(dateToGet,weblog,range);
+        
     }
 
     public void weblogViewAction() {

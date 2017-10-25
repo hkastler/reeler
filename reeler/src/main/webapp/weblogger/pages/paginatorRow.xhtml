@@ -1,0 +1,19 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <div class="row">
+        <div class="text-center" style="margin: 0 auto" id="#{position}-paginatorContainer">
+            <ui:include src="/WEB-INF/weblogger/templates/shared/paginator.xhtml">
+                <ui:param name="paginator" value="#{paginator}"/>
+                <ui:param name="outcome" value="#{outcome}"/>
+                <ui:param name="position" value="#{position}"/>
+            </ui:include>
+        </div>
+    </div>
+
+
+</ui:composition>
+

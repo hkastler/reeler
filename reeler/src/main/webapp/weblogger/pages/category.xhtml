@@ -23,6 +23,11 @@
                 No entries found for category #{weblogBean.categoryName}
             </div>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() gt 0}">
+                <ui:include src="paginatorRow.xhtml">
+                    <ui:param name="paginator" value="#{weblogBean.paginator}"/>
+                    <ui:param name="outcome" value="#{request.contextPath}/#{weblogBean.handle}/category/#{weblogBean.categoryName}"/>
+                    <ui:param name="position" value="top"/>
+                </ui:include>    
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
                     <ui:include src="weblogRow.xhtml"/>
                 </ui:repeat>

@@ -17,7 +17,7 @@
     </ui:define>
     <ui:define name="content">
         <f:view>
-            <h2>                                                
+            <h2 class="my-4">                                                
                 <h:outputText value="#{weblogBean.date}" rendered="#{weblogBean.dateString.length() eq 6}">
                     <f:convertDateTime pattern="MMMM yyyy"
                                        locale="#{weblogBean.weblog.localeInstance}"
@@ -50,9 +50,19 @@
                                     </h:outputText>
             </div>
             <div jsfc="h:panelGroup" rendered="#{weblogBean.viewEntries.size() gt 0}">
+                <ui:include src="paginatorRow.xhtml">
+                    <ui:param name="paginator" value="#{weblogBean.paginator}"/>
+                    <ui:param name="outcome" value="#{request.contextPath}/#{weblogBean.handle}/date/#{weblogBean.dateString}"/>
+                    <ui:param name="position" value="top"/>
+                </ui:include> 
                 <ui:repeat value="#{weblogBean.viewEntries}" var="weblogEntry" varStatus="status">
                     <ui:include src="weblogRow.xhtml"/>
                 </ui:repeat>
+                <ui:include src="paginatorRow.xhtml">
+                    <ui:param name="paginator" value="#{weblogBean.paginator}"/>
+                    <ui:param name="outcome" value="#{request.contextPath}/#{weblogBean.handle}/date/#{weblogBean.dateString}"/>
+                    <ui:param name="position" value="bottom"/>
+                </ui:include>
             </div>
         </f:view>
     </ui:define>

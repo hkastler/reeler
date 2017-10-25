@@ -21,6 +21,9 @@ import org.ocpsoft.rewrite.servlet.config.rule.TrailingSlash;
 public class ApplicationConfigurationProvider extends HttpConfigurationProvider {
 
     private static final String WEBLOG_PATH = "/weblogger/pages/weblog.xhtml";
+    private static final String CATEGORY_PATH = "/weblogger/pages/category.xhtml";
+    private static final String DATE_PATH = "/weblogger/pages/date.xhtml";
+    private static final String PARAMS_PATH = "/page/{page}/pageSize/{pageSize}";
     
     @Override
     public Configuration getConfiguration(ServletContext context) {
@@ -30,12 +33,15 @@ public class ApplicationConfigurationProvider extends HttpConfigurationProvider 
                 .addRule(Join.path("/").to("/index.xhtml"))
                 .addRule(Join.path("/{handle}").to(WEBLOG_PATH))
                 .addRule(Join.path("/{handle}/").to(WEBLOG_PATH))
-                .addRule(Join.path("/{handle}/page/{page}/pageSize/{pageSize}").to(WEBLOG_PATH))
+                .addRule(Join.path("/{handle}".concat(PARAMS_PATH)).to(WEBLOG_PATH))
                 .addRule(Join.path("/{handle}/entry/{anchor}").to("/weblogger/pages/entry.xhtml"))
                 .addRule(Join.path("/{handle}/entry-m/{anchor}").to("/weblogger/pages/entryMustache.xhtml"))
-                .addRule(Join.path("/{handle}/category/{categoryName}").to("/weblogger/pages/category.xhtml"))
+                .addRule(Join.path("/{handle}/category/{categoryName}").to(CATEGORY_PATH))
+                .addRule(Join.path("/{handle}/category/{categoryName}".concat(PARAMS_PATH))
+                        .to(CATEGORY_PATH))
                 .addRule(Join.path("/{handle}/search").to("/weblogger/pages/search.xhtml"))
-                .addRule(Join.path("/{handle}/date/{dateString}").to("/weblogger/pages/date.xhtml"))
+                .addRule(Join.path("/{handle}/date/{dateString}").to(DATE_PATH))
+                .addRule(Join.path("/{handle}/date/{dateString}".concat(PARAMS_PATH)).to(DATE_PATH))
                 .addRule(TrailingSlash.append())
                 .when(Path.matches("/{x}"))
                 .where("x").matches("^(?!.*\\.xhtml.*).*$");
