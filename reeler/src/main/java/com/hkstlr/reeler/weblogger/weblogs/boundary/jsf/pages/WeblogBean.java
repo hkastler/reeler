@@ -257,6 +257,18 @@ public class WeblogBean extends PageBean {
     public void dateViewAction() {
 
         String dateToGet = this.dateString;
+
+        Integer year = Integer.parseInt(dateString.substring(0, 4));
+        Integer month = Integer.parseInt(dateString.substring(4, 6));
+        Integer startDate = 1;
+
+        if (dateString.length() == 8) {
+            startDate = Integer.parseInt(dateString.substring(6, 8));
+        }
+
+        Calendar calendar = weblog.getCalendarInstance();
+        calendar.set(year, month - 1, startDate, 0, 0, 0);
+        this.date = new Date(calendar.getTimeInMillis());
         long numberOfItems = weblogger.getWeblogEntryManager()
                 .getWeblogEntriesByDateAndWeblogCount(dateToGet, weblog);
         //log.info("numberOfItems:"+numberOfItems);
