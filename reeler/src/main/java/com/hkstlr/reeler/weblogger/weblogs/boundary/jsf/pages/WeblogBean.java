@@ -7,6 +7,7 @@ package com.hkstlr.reeler.weblogger.weblogs.boundary.jsf.pages;
 
 import com.hkstlr.reeler.app.control.PageBean;
 import com.hkstlr.reeler.app.control.Paginator;
+import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.weblogger.weblogs.boundary.Weblogger;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,7 +37,7 @@ import javax.ejb.EJB;
 @RequestScoped
 public class WeblogBean extends PageBean {
 
-    private static final Logger log = Logger.getLogger(WeblogBean.class.getName());    
+    private static final Logger LOG = Logger.getLogger(WeblogBean.class.getName());    
 
     @EJB
     Weblogger weblogger;
@@ -57,7 +58,6 @@ public class WeblogBean extends PageBean {
     private List<WeblogEntry> viewEntries;
 
     private List<WeblogBookmark> bookmarks;
-
 
     private Weblog weblog;
 
@@ -81,7 +81,7 @@ public class WeblogBean extends PageBean {
     public void init() {
         
         if(dateString == null){
-            dateString = "";
+            dateString = StringPool.BLANK;
         }
         
         if (pageNum == null) {
@@ -109,7 +109,7 @@ public class WeblogBean extends PageBean {
             }
             
         } catch (Exception e) {
-          log.log(Level.WARNING,"WeblogBean.init()",e);
+          LOG.log(Level.WARNING,"WeblogBean.init()",e);
         }
 
     }
@@ -197,7 +197,7 @@ public class WeblogBean extends PageBean {
                 WeblogEntry weblogEntry = weblogger.getWeblogEntryManager().findByPinnedToMain().get(0);
                 return weblogEntry.getWebsite();
             }catch(Exception e){
-                log.log(Level.FINER,null,e);
+                LOG.log(Level.FINER,null,e);
                 Weblog fallback = new Weblog();
                 return fallback;
             }
@@ -211,7 +211,7 @@ public class WeblogBean extends PageBean {
                              .getBookmarksForWeblog(weblog);
             setBookmarks(weblogBookmarks);
         } catch (WebloggerException ex) {
-            log.log(Level.SEVERE, null, ex);
+            LOG.log(Level.SEVERE, null, ex);
         }
 
         return lweblog;
@@ -242,7 +242,7 @@ public class WeblogBean extends PageBean {
         }
         int numberOfItems = weblogger.getWeblogEntryManager()
                 .categoryViewActionCount(categoryName, weblog);
-        //log.info("numberOfItems:"+numberOfItems);
+        
         this.paginator = new Paginator(pageSize,pageNum, numberOfItems);
         
         int[] range = new int[2];
@@ -283,7 +283,7 @@ public class WeblogBean extends PageBean {
     }
 
     public void weblogViewAction() {
-        log.info("weblogViewAction");
+        LOG.info("weblogViewAction");
         int[] range = new int[2];
         range[0] = getPaginator().getPageFirstItem()-1;
         range[1] = getPaginator().getPageLastItem()-1;

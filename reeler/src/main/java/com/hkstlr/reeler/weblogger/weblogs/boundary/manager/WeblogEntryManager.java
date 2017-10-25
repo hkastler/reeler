@@ -211,18 +211,23 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             Calendar pubTimeEnd,
             String selecting) {
 
-        String selectStatement = "SELECT".concat(selecting);
-                
+        String selectStatement = "SELECT".concat(selecting)        
+                .concat(" FROM WeblogEntry we")
+                .concat(" WHERE we.website = :blog")
+                .concat(" AND we.publishEntry = true")
+                .concat(" AND we.pubTime < :now")
+                .concat(" AND we.pubTime BETWEEN ")
+                .concat(":pubTimeStart")
+                .concat(" AND ")
+                .concat(":pubTimeEnd"); 
+        if(" we ".equals(selecting)){
+            selectStatement+=" ORDER BY pubTime DESC";
+        }
         Query q = getEntityManager().createQuery(
                 selectStatement
-                +" FROM WeblogEntry we"
-                + " WHERE we.website = :blog"
-                + " AND we.publishEntry = true"
-                + " AND we.pubTime < :now"
-                + " AND we.pubTime BETWEEN "
-                + ":pubTimeStart"
-                + " AND "
-                + ":pubTimeEnd");
+                );
+        
+        
         q.setParameter("blog", weblog);
 
         q.setParameter("now", new Date(), TemporalType.TIMESTAMP);
@@ -269,8 +274,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             @NotNull Weblog weblog) {
 
         Map<String, Calendar> pubTimes = getCalendarsFromDateString(dateString, weblog);
-        LOG.info(pubTimes.get("pubTimeStart").toString());
-        LOG.info(pubTimes.get("pubTimeEnd").toString());
+        
         Query q = queryWeblogEntriesByDateAndWeblog(weblog,
                 pubTimes.get("pubTimeStart"),
                 pubTimes.get("pubTimeEnd"),
@@ -278,7 +282,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         
         Long maxResultsQ = (Long)q.getSingleResult();
         long maxResults = maxResultsQ;
-        //LOG.info("maxResults:" + maxResults);
+        
         if (maxResults > 100) {
             maxResults = 100;
         }
@@ -290,13 +294,12 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
             int[] range) {
 
         Map<String, Calendar> pubTimes = getCalendarsFromDateString(dateString, weblog);
-        LOG.info(pubTimes.get("pubTimeStart").toString());
-        LOG.info(pubTimes.get("pubTimeEnd").toString());
+        
         Query q = queryWeblogEntriesByDateAndWeblog(weblog,
                 pubTimes.get("pubTimeStart"),
                 pubTimes.get("pubTimeEnd"),
                 " we ");
-
+        
         if (range != null) {
             q.setMaxResults(range[1] - range[0] + 1);
             q.setFirstResult(range[0]);
