@@ -47,8 +47,8 @@ public class CreateBlogPage extends LoadableComponent<CreateBlogPage>{
     @FindBy(id = "createBlogLink")
     public WebElement createBlogLink;
     
-    @FindBy(xpath = "/html/body/main/div/div/div[1]/div/div/div[1]/h3")
-    public WebElement createBlogPanelTitle;
+    @FindBy(id = "createBlogTitle")
+    public WebElement createBlogTitle;
     
 
     public CreateBlogPage(WebDriver aDriver) {

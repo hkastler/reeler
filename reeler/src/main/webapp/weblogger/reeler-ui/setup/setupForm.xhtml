@@ -7,12 +7,12 @@
                 xmlns:ps="http://xmlns.jcp.org/jsf/passthrough">
 
     <div class="panel-heading panel-title">
-        <h2 id="#{isSetup ? 'setupTitle':'profileTitle'}">
+        <h2 id="setupTitle">
             <i class="fa fa-id-card"></i>
             <h:outputText value="#{formTitle}"/></h2>
     </div>
     <div class="panel-body">
-        
+
         <h:form id="profile" prependId="false">
             <h:messages
                 layout="table"
@@ -21,9 +21,7 @@
                 globalOnly="false"
                 id="profileForm"/>
             <div class="form-group #{userName.isValid()? '' : 'has-error'}">
-                <label jsf:for="userName" class="form-control-label" >
-                    <h:outputText value="#{res['userSettings.username']}"/>
-                </label>
+
                 <input type="text"
                        class="form-control"
                        binding="#{userName}"
@@ -33,13 +31,14 @@
                        readonly="#{param.action eq 'edit' ? 'true':'false'}"
                        ps:placeholder="#{res['userSettings.username']}"
                        ps:required="true"
-                       ps:requiredMessage="Username is required"
+                       ps:requiredMessage="required"
                        />
                 <h:message for="userName" errorClass="form-control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin} or #{param.action eq 'edit'}">
-                    <h:outputText value="#{res['userSettings.tip.username']}"/>
+                <span class="help-block" jsfc="h:panelGroup">
+                    <h:outputText value="#{res['userSettings.tip.username']}"
+                                  escape="false"/>
                 </span>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{isAdmin}">
+                <span class="help-block" jsfc="h:panelGroup">
                     A short one-word username for the user account. 
                     Please limit it to simple ASCII alphanumeric characters (a-z, A-Z and 0-9), 
                     and do not use HTML
@@ -47,15 +46,16 @@
             </div>
 
             <div class="form-group #{screenName.isValid()? '' : 'has-error'}">
-                <label jsf:for="screenName" class="form-control-label">
-                    <h:outputText value="#{res['userSettings.screenname']}"/>
-                </label>
+                
                 <input type="text"
                        class="form-control"
                        binding="#{screenName}"
                        jsfc="h:inputText"
                        id="screenName" 
-                       value="#{bean.user.screenName}"/>
+                       value="#{bean.user.screenName}"
+                       ps:placeholder="#{res['userSettings.screenname']}"
+                       ps:required="true"
+                       ps:requiredMessage="required"/>
                 <h:message for="screenName" errorClass="form-control-label has-error"/>
                 <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
                     Your desired screen name (with no HTML). This is is what will be displayed 
@@ -63,68 +63,76 @@
                 </span>
             </div>
             <div class="form-group #{fullName.isValid()? '' : 'has-error'}">
-                <label jsf:for="fullName" class="control-label">
-                    #{res['userSettings.fullname']}
-                </label>
+                
                 <input type="text"
                        class="form-control"
                        binding="#{fullName}"
                        jsfc="h:inputText"
                        id="fullName"
-                       value="#{bean.user.fullName}"/>
+                       value="#{bean.user.fullName}"
+                       ps:placeholder="#{res['userSettings.fullname']}"
+                       ps:required="true"
+                       ps:requiredMessage="required"/>
                 <h:message for="fullName" errorClass="form-control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
-                    Your full name (with no HTML), first and last. 
-                    Some weblog themes will display this instead of (or in addition to) your screenname.
+                <span class="help-block" jsfc="h:panelGroup">
+                    Your full name (with no HTML), first and last.
                 </span>
             </div>
 
             <div class="form-group #{emailAddress.isValid()? '' : 'has-error'}">
-                <label jsf:for="emailAddress" class="form-control-label">Email</label>
+               
                 <input jsfc="h:inputText"
                        class="form-control"                       
                        id="emailAddress"
                        binding="#{emailAddress}"
-                       value="#{bean.user.emailAddress}"/>
+                       value="#{bean.user.emailAddress}"
+                       ps:placeholder="#{res['userSettings.email']}"
+                       ps:required="true"
+                       ps:requiredMessage="required"/>
                 <h:message for="emailAddress" errorClass="form-control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin and !isSetup}">
-                    Please enter valid email address, the site administrator may disable your account 
-                    if he/she cannot reach you via email.</span>
+                <span class="help-block" jsfc="h:panelGroup">
+                    Please enter valid email address.</span>
             </div>
 
             <div class="form-group #{passwordComponent.isValid()? '' : 'has-error'}">
-                <label jsf:for="passwordText" class="form-control-label">Password</label>
+                
                 <h:inputSecret 
                     class="form-control"
                     id="passwordText"
-                    binding="#{passwordComponent}">
+                    binding="#{passwordComponent}"
+                    ps:placeholder="#{res['userSettings.password']}"
+                    ps:required="true"
+                    ps:requiredMessage="required">
                     <f:validator validatorId="passwordValidator"/>
                 </h:inputSecret>
                 <h:message for="passwordText" errorClass="form-control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin and !isSetup}">
-                    Your password.  Fill in only if you wish to change it.
+                <span class="help-block" jsfc="h:panelGroup">
+                    Your password.
                 </span>
             </div>
 
             <div class="form-group #{passwordConfirm.isValid()? '' : 'has-error'}">
-                <label jsf:for="passwordConfirm" class="form-control-label">Password (Confirm)</label>
+                
                 <h:inputSecret 
                     class="form-control"
                     id="passwordConfirm"
                     binding="#{passwordConfirm}"
-                    required="#{not empty passwordText.value}">
+                    required="#{not empty passwordText.value}"
+                    ps:placeholder="#{res['userSettings.passwordConfirm']}"
+                    ps:required="true"
+                    ps:requiredMessage="required">
                     <f:validator validatorId="confirmPasswordValidator"/>
                     <f:attribute name="passwordComponent" value="#{passwordComponent}"/>
                 </h:inputSecret>
                 <h:message for="passwordConfirm"
                            errorClass="control-label has-error"/>
-                <span class="help-block" jsfc="h:panelGroup" rendered="#{!isAdmin}">
+                <span class="help-block" jsfc="h:panelGroup">
                     Confirm your password.
                 </span>
             </div>
 
             <div class="form-group #{localeComponent.isValid()? '' : 'has-error'}">
-                <label jsf:for="localeSelect"  class="form-control-label">Locale</label>
+                
                 <select
                     id="localeSelect"
                     name="locale"
@@ -150,7 +158,7 @@
             </div>
 
             <div class="form-group #{timeZone.isValid()? '' : 'has-error'}">
-                <label jsf:for="timeZone"  class="form-control-label">Timezone</label>
+                
                 <select
                     id="timeZone"
                     name="timeZone"
@@ -229,4 +237,4 @@
     <script src="#{request.contextPath}/js/setLocaleAndTimezone.js"></script>
 </ui:composition>
 
- 
+

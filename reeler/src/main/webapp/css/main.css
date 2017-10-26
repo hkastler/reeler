@@ -52,7 +52,9 @@ i{
     font-size: medium;
 }
 
-
+input:focus::-webkit-input-placeholder {
+    color: transparent;
+}
 
 
 

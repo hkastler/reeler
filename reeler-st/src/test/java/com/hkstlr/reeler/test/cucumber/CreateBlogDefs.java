@@ -63,7 +63,7 @@ public class CreateBlogDefs extends BaseStepDefs {
     @Then("^the create blog form is displayed$")
     public void the_create_blog_form_is_displayed() throws Throwable {
         String expectedTitle = "Create New Blog";
-        assertEquals(expectedTitle, cbp.createBlogPanelTitle.getText());
+        assertEquals(expectedTitle, cbp.createBlogTitle.getText());
     }
 
     @Then("^user enters \"([^\"]*)\" in create blog form name field$")
