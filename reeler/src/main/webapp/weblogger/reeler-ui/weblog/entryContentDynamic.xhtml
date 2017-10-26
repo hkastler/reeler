@@ -3,11 +3,12 @@
                 xmlns:f="http://xmlns.jcp.org/jsf/core"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:jsf="http://xmlns.jcp.org/jsf">
+                xmlns:jsf="http://xmlns.jcp.org/jsf"
+                xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions">
     <f:view>
         <div class="panel panel-primary">
             <div class="panel-heading panel-title">
-                #{weblogEntryAuthorBean.actionLabel} Entry here
+                #{weblogEntryAuthorBean.actionLabel} Entry
             </div>
             <div id="weblogEntryDiv" class="panel-body">
                 <h2 >#{weblogEntryAuthorBean.actionLabel} Entry #{weblogEntryAuthorBean.weblogEntry.title} 
@@ -28,8 +29,13 @@
                                                class="control-label ">
                                             #{messages[label]}</label>
                                             #{field.type.name}
-                                            #{Arrays.asList(field.annotations).forEach(ann -> ann.toString())}
-                                            
+                                            #{field.annotations.stream().forEach(ann -> ann.toString())}
+                                            <ui:repeat value="#{field.annotations}" var="ann">
+                                                <c:set value="#{ann.toString()}" var="strAnn"/>
+                                                <c:if test="#{fn:contains(strAnn, 'javax.persistence.Lob')}">
+                                                    #{ann.toString()}
+                                                </c:if>
+                                            </ui:repeat>
                                         <input value="#{weblogEntryAuthorBean.weblogEntry.get(field)}"
                                                name="#{field.name}"
                                                binding="#{this}"
