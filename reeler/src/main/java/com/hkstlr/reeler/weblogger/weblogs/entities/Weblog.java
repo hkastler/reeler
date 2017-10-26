@@ -548,10 +548,10 @@ public class Weblog extends AbstractEntity implements Serializable {
      * @return Locale
      */
     public Locale getLocaleInstance() {
-        if(getLocale() == null || getLocale().length() == 0){
-            this.setLocale(Locale.getDefault().toString());
+        if(this.locale == null || this.locale.length() == 0){
+            this.locale = Locale.getDefault().toString();
         }
-        return LocaleFixer.toLocale(getLocale());
+        return LocaleFixer.toLocale(this.locale);
     }
     
     /**

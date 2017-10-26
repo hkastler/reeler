@@ -47,7 +47,7 @@ public class WeblogEntryBean {
     private String anchor;
 
     @Inject
-    private Logger log;
+    private Logger LOG;
 
     private WeblogEntry weblogEntry;
 
@@ -80,7 +80,7 @@ public class WeblogEntryBean {
             this.weblog = weblogEntry.getWebsite();
             this.comments = getComments(weblogEntry);
             this.showComments = weblogEntry.isAllowComments();
-            
+            LOG.info("website:" + weblog.toJsonString());
             Date now = new Date();
             todayCal = Calendar.getInstance(weblog.getLocaleInstance());
             todayCal.setTime(now);
@@ -94,7 +94,7 @@ public class WeblogEntryBean {
             this.showCommentForm = this.showComments && (weblogEntry.getCommentDays() == 0 
                                                             || daysBetween < weblogEntry.getCommentDays());
         } catch (Exception e) {
-            log.log(Level.SEVERE,"WeblogEntryBean init error:", e);            
+            LOG.log(Level.SEVERE,"WeblogEntryBean init error:", e);            
         }
 
     }
@@ -156,7 +156,12 @@ public class WeblogEntryBean {
     }
 
     public WeblogEntry getEntryByHandleAndAnchor(String handle, String anchor) {
-        return weblogger.getWeblogEntryManager().getWeblogEntryByHandleAndAnchor(handle, anchor);
+        WeblogEntry getMe = weblogger.getWeblogEntryManager()
+                .getWeblogEntryByHandleAndAnchor(handle, anchor);
+        
+        
+        
+        return getMe;
     }
 
     public List<WeblogEntryComment> getComments(WeblogEntry entry) {
@@ -174,12 +179,12 @@ public class WeblogEntryBean {
     }
 
     public void postComment() {
-        log.fine("postingComment");
-        log.fine("numberOfComments:" + getComments(this.weblogEntry).size());
+        LOG.fine("postingComment");
+        LOG.fine("numberOfComments:" + getComments(this.weblogEntry).size());
         
         //ApprovalStatus.PENDING is the default
         boolean moderated = weblog.isModerateComments();
-        log.info("moderateComments:" + moderated);
+        LOG.info("moderateComments:" + moderated);
         if(!moderated){
              this.weblogEntryComment.setStatus(WeblogEntryComment.ApprovalStatus.APPROVED);
         }
