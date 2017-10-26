@@ -1,4 +1,3 @@
-
 <ui:composition template="/WEB-INF/weblogger/templates/reeler-ui/reelerUiTemplate.xhtml"
                 xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
@@ -13,7 +12,6 @@
     <ui:define name="title">Reeler UI</ui:define>
 
     <!-- Page Content -->
-
     <ui:define name="content">
         <div class="panel panel-primary">
             <div class="panel-heading panel-title">
@@ -30,37 +28,57 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-6">
-                                        <c:set var="link" value="#{request.contextPath}/#{blog.handle}/"/>
-                                        <i class="fa fa-external-link" aria-hidden="true"></i>Link: <a href="#{link}" target="_blank">#{link}</a><br/>
-                                        <i class="fa fa-id-card" aria-hidden="true"></i>Permission: <h:outputText 
-                                            value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
-                                        Description: #{blog.about}<br/>
-                                        <i class="fa fa-user" aria-hidden="true"></i>Members: <br/>
-                                        Today's hits:<br/>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <c:set var="link" value="#{request.contextPath}/#{blog.handle}/"/>
+                                                <i class="fa fa-external-link" aria-hidden="true"></i>Link: <a href="#{link}" target="_blank">#{link}</a><br/>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="fa fa-id-card" aria-hidden="true"></i>Permission: <h:outputText 
+                                                    value="#{reelerUiBean.userWeblogPermissions.get(blog.handle)}"/><br/>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="fa fa-paint-brush" aria-hidden="true"></i>Description: #{blog.about}<br/>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="fa fa-user" aria-hidden="true"></i>Members: <br/>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <i class="fa fa-bullseye" aria-hidden="true"></i>Today's hits:<br/>
+                                            </li>
+                                        </ul>                                      
                                     </div>
 
                                     <div class="col-6">
-                                        <form jsfc="h:form">
-                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                            <a action="#{reelerUiBean.action(blog,'entry')}"
-                                               jsfc="h:commandLink"><f:param name="action" value="create"/>New Entry</a></form><br/>
-                                        <form jsfc="h:form">
-                                            <i class="fa fa-book" aria-hidden="true"></i>
-                                            <a action="#{reelerUiBean.action(blog,'entries')}"
-                                               jsfc="h:commandLink"
-                                               ps:data-blog="#{blog.handle}">Entries()</a></form><br/>
-                                        <form jsfc="h:form"><i class="fa fa-comments" aria-hidden="true"></i>
-                                            <a action="#{reelerUiBean.action(blog,'comments')}"
-                                               jsfc="h:commandLink"
-                                               ps:data-blog="#{blog.handle}">Comments()</a></form><br/>
-                                        <form jsfc="h:form">
-                                            <i class="fa fa-cog" aria-hidden="true"></i>
-                                            <a action="#{reelerUiBean.action(blog,'config')}"
-                                               jsfc="h:commandLink">Settings</a>
-                                        </form><br/>
-
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <form jsfc="h:form">
+                                                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    <a action="#{reelerUiBean.action(blog,'entry')}"
+                                                       jsfc="h:commandLink"><f:param name="action" value="create"/>New Entry</a></form>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <form jsfc="h:form">
+                                                    <i class="fa fa-book" aria-hidden="true"></i>
+                                                    <a action="#{reelerUiBean.action(blog,'entries')}"
+                                                       jsfc="h:commandLink"
+                                                       ps:data-blog="#{blog.handle}">Entries()</a></form>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <form jsfc="h:form"><i class="fa fa-comments" aria-hidden="true"></i>
+                                                    <a action="#{reelerUiBean.action(blog,'comments')}"
+                                                       jsfc="h:commandLink"
+                                                       ps:data-blog="#{blog.handle}">Comments()</a></form>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <form jsfc="h:form">
+                                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                                    <a action="#{reelerUiBean.action(blog,'config')}"
+                                                       jsfc="h:commandLink">Settings</a>
+                                                </form>
+                                            </li>                                            
+                                        </ul>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -87,7 +105,7 @@
                         url: ajaxHref + weblogHandle,
                         async: true,
                         success: function (response) {
-                            try {                                 
+                            try {
                                 //console.log(response.toString());
                                 //console.log($(this));
                                 $(href).text("Entries: " + response.toString())
@@ -99,19 +117,19 @@
                         error: function (response) {
                             console.log(response.toString());
                         }
-                    });                    
+                    });
                 } catch (err) {
 
                 }
             });
-            
+
             var ajaxHref = "#{request.contextPath}/resources/weblog/comments-count/";
             $("a:contains('Comments')").each(function (index) {
-                
+
                 var weblogHandle = $(this).attr("data-blog");
                 var href = $(this);
                 try {
-                    
+
                     $.ajax({
                         type: 'GET',
                         url: ajaxHref + weblogHandle,
@@ -127,7 +145,7 @@
                         error: function (response) {
                             console.log(response.toString());
                         }
-                    });                    
+                    });
                 } catch (err) {
 
                 }

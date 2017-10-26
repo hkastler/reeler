@@ -47,6 +47,10 @@ div.alternating-row-container > div:nth-of-type(odd) {
 .commentCheckBox { width: 8%; }
 .commentForm { width: 76%; }
 
+i{
+    letter-spacing: 5px;
+    font-size: medium;
+}
 
 
 
