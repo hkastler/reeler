@@ -39,9 +39,13 @@ public class CreateAccountStepDefs extends BaseStepDefs {
 
     @When("the setup first account screen is displayed")
     public void the_setup_first_account_screen_is_displayed() throws Throwable {
-        String formTitle = cap.getFormPanelTitle().getText();
+        
+        assertNotNull(cap.getSetupFormContainer());
+        
+        String formTitle = cap.setupFormTitle.getText();
         System.out.println("formTitle:" + formTitle);
         String expected = "Setup First/Admin User";
+        
         assertEquals(expected, formTitle);
         assertNotNull(cap.createAccountForm);
 

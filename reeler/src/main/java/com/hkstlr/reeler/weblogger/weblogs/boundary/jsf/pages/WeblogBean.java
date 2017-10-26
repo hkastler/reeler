@@ -283,7 +283,7 @@ public class WeblogBean extends PageBean {
     }
 
     public void weblogViewAction() {
-        LOG.info("weblogViewAction");
+        
         int[] range = new int[2];
         range[0] = getPaginator().getPageFirstItem()-1;
         range[1] = getPaginator().getPageLastItem()-1;

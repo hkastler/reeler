@@ -39,11 +39,11 @@ public class UserJdbcrealmGroups implements Serializable {
     private int userJdbcrealmGroupId;
 
     
-    @JoinColumn(name = "groupname")
+    @JoinColumn(name = "groupname",unique = true)
     private JdbcrealmGroup group_;
     
     
-    @JoinColumn(name = "username")
+    @JoinColumn(name = "username",unique = true)
     private User user_;
 
     @Override

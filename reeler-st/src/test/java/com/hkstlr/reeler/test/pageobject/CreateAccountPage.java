@@ -46,8 +46,11 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage> {
     private WebElement timezoneField;
     
 
-    @FindBy(xpath = "/html/body/main/div/div/div[1]/div/div/div/div/div[2]/div/div[1]/h2")
-    private WebElement formPanelTitle;
+    @FindBy(id = "setup")
+    private WebElement setupFormContainer;
+    
+    @FindBy(id = "setupTitle")
+    public WebElement setupFormTitle;
     
     
     public CreateAccountPage(WebDriver aDriver) {
@@ -72,8 +75,8 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage> {
         return this.driver.getTitle();
     }
 
-    public WebElement getFormPanelTitle() {
-        return this.formPanelTitle;
+    public WebElement getSetupFormContainer() {
+        return this.setupFormContainer;
     }
 
     public WebElement getUserNameField() {
@@ -140,6 +143,8 @@ public class CreateAccountPage extends LoadableComponent<CreateAccountPage> {
     public void setTimezoneField() {
         this.timezoneField = driver.findElement(By.id("timeZone"));
     }
+
+    
 
     
 

@@ -28,7 +28,7 @@ public class LoginPage extends LoadableComponent<LoginPage> {
     
 
     public LoginPage(WebDriver aDriver) {
-        LOG.info(pageURL);
+        //LOG.info(pageURL);
         java.util.logging.Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF); 
         this.driver = aDriver;
         PageFactory.initElements(driver, this);

@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.weblogger.users.entities;
 
+import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import com.hkstlr.reeler.app.entities.PermissionEntity;
 import com.hkstlr.reeler.weblogger.users.control.UserEntityListener;
@@ -277,6 +278,12 @@ public class User extends AbstractEntity {
     public void setPermissions(List<PermissionEntity> permissions) {
         this.permissions = permissions;
     }
+    
+    @Override
+    public String toString() {
+        //skip the manytomany with the owner or jsonbuilder will stackoverflow
+        return new JsonBuilder().toJsonString(this,new String[]{"users"});
+    }
 
     @Override
     public int hashCode() {
@@ -292,10 +299,7 @@ public class User extends AbstractEntity {
             return false;
         }
         User other = (User) object;
-        if (!this.id.equals(other.id)) {
-            return false;
-        }
-        return true;
+        return this.id.equals(other.id);
     }
         
     

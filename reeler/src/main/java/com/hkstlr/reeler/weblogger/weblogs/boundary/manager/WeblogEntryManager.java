@@ -60,6 +60,8 @@ import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.EntityType;
@@ -118,7 +120,9 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
         Root<WeblogEntry> rt = cq.from(WeblogEntry.class);
         EntityType<WeblogEntry> weblogEntry_ = rt.getModel();
-
+        rt.fetch(WEBSITE_FIELD_NAME, JoinType.INNER);
+        rt.fetch(WeblogEntry_.tags.getName(),JoinType.RIGHT);
+        
         cq.select(rt);
 
         List<Predicate> predicates = new ArrayList<>();
@@ -138,7 +142,8 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
 
         try {
             weblogEntry = (WeblogEntry) query.getSingleResult();
-            weblogEntry.getTags().size();
+            //weblogEntry.getWebsite();
+            //weblogEntry.getTags().size();
         } catch (Exception e) {
             weblogEntry = new WeblogEntry();
             weblogEntry.setTitle("not found");

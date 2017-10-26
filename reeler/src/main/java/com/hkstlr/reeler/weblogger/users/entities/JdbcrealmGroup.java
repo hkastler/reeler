@@ -46,7 +46,7 @@ public class JdbcrealmGroup implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 255)
-    @Column(name = "groupname")
+    @Column(name = "groupname", nullable = false, length = 255, unique = true)
     private String groupname;
     
     @ManyToMany(mappedBy = "jdbcrealmGroups")
