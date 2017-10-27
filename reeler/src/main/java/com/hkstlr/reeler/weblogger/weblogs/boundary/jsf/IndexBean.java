@@ -142,17 +142,17 @@ public class IndexBean {
 
     public void indexViewAction() {
         if ( weblogBean != null) {
-                
-                int[] range = new int[2];
-                range[0] = 0;
-                range[1] = this.weblogBean.getWeblog().getEntryDisplayCount();
-                this.weblogBean.setViewEntries(
-                        weblogger
-                                .getWeblogEntryManager()
-                                .getPaginatedEntries(this.weblogBean.getWeblog(), range));
-            }
+            
+            int[] range = new int[2];
+            range[0] = 0;
+            range[1] = this.weblogBean.getWeblog().getEntryDisplayCount();
+            this.weblogBean.setViewEntries(
+                    weblogger
+                            .getWeblogEntryManager()
+                            .getPaginatedEntries(this.weblogBean.getWeblog(), range));
+        }
         
-        LOG.info("frontPageViewAction");
+        
     }
 
 }
