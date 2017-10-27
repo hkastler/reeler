@@ -34,7 +34,7 @@ import org.openqa.selenium.support.ui.Select;
  *
  * @author Henry
  */
-public class SeleniumCreateBlogEntry extends BaseStepDefs {
+public class CreateBlogEntryIT extends BaseStepDefs {
 
     
     private CreateBlogEntryPage cbep;
