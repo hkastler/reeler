@@ -121,7 +121,7 @@ public class WeblogEntryManager extends AbstractManager<WeblogEntry> {
         Root<WeblogEntry> rt = cq.from(WeblogEntry.class);
         EntityType<WeblogEntry> weblogEntry_ = rt.getModel();
         rt.fetch(WEBSITE_FIELD_NAME, JoinType.INNER);
-        rt.fetch(WeblogEntry_.tags.getName(),JoinType.RIGHT);
+        rt.fetch(WeblogEntry_.tags.getName(),JoinType.LEFT);
         
         cq.select(rt);
 
