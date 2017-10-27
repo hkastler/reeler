@@ -131,8 +131,8 @@ public class CalendarPrinter {
             days.add(Integer.parseInt(day));
         }
 
-        StringBuilder calTable = new StringBuilder("<table id=\"calendarTable\" class=\"table table-striped table-condensed table-hover\">");
-        calTable.append("<thead class=\"thead-default\">");
+        StringBuilder calTable = new StringBuilder("<table id=\"calendarTable\" class=\"table table-striped\">");
+        calTable.append("<thead class=\"thead-default text-center\">");
         calTable.append(TROPEN);
         calTable.append(tdAlignColspanTemplate(new String[]{"left", "1"}));
         String pastMonthDateStr = String.format("%02d", previousMonth);
@@ -167,7 +167,7 @@ public class CalendarPrinter {
         calTable.append(TRCLOSE);
         calTable.append("</thead>");
 
-        calTable.append("<tbody>");
+        calTable.append("<tbody class=\"text-center\">");
         calTable.append(TROPEN);
 
         if (calendar.getFirstDayOfWeek() == Calendar.MONDAY) {
