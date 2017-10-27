@@ -361,7 +361,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.log(Level.WARNING, "findByHandle", e);
+            LOG.log(Level.FINE, "findByHandle", e);
             weblog = null;
         }
 
@@ -389,7 +389,7 @@ public class WeblogManager extends AbstractManager<Weblog> {
         try {
             weblog = query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.log(Level.INFO, "getByHandle", e);
+            LOG.log(Level.FINE, "getByHandle", e);
             weblog = null;
         }
 
