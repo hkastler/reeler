@@ -13,6 +13,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 import java.util.List;
+import java.util.logging.Logger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
@@ -24,6 +25,8 @@ import org.openqa.selenium.support.ui.Select;
  */
 public class CreateBlogEntryDefs extends BaseStepDefs {
 
+    private static final Logger LOG = Logger.getLogger(CreateBlogEntryDefs.class.getName());
+    
     private CreateBlogEntryPage cbep;
 
     @Before
@@ -73,12 +76,14 @@ public class CreateBlogEntryDefs extends BaseStepDefs {
 
     @When("^user submits the create entry form$")
     public void user_submits_the_create_entry_form() throws Throwable {
+        LOG.info("submitting form");
         cbep.weblogEntryForm.submit();
     }
 
     @Then("^a create entry success message should be displayed$")
     public void a_create_entry_success_message_should_be_displayed() throws Throwable {
         String body = driver.findElement(By.tagName("body")).getText();
+        LOG.info(driver.findElement(By.tagName("body")).toString());
         boolean hasSuccessMessage = body.contains("Blog post published");
         assertTrue(hasSuccessMessage);
     }

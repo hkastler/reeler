@@ -2,7 +2,7 @@ Feature: Create Blog Entry
 	As a user
 	I want to create a blog entry
 
-Scenario: Account Registration
+Scenario: Creating a blog entry from the admin home
         Given the user is logged in
 	Given the user has a blog and is on create entry page
         
