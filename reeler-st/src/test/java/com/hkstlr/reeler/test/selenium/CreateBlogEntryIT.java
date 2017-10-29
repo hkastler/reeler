@@ -9,7 +9,6 @@ package com.hkstlr.reeler.test.selenium;
 import com.hkstlr.reeler.test.cucumber.BaseStepDefs;
 import com.hkstlr.reeler.test.pageobject.CreateBlogEntryPage;
 import com.hkstlr.reeler.test.pageobject.LoginPage;
-import com.hkstlr.reeler.test.util.TestUtils;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -21,7 +20,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.net.ssl.HttpsURLConnection;
-import org.json.JSONObject;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.junit.Before;
@@ -134,7 +132,7 @@ public class CreateBlogEntryIT extends BaseStepDefs {
         String body = driver.findElement(By.tagName("body")).getText();
         System.out.println(driver.findElement(By.tagName("body")).getText());
         boolean hasSuccessMessage = body.contains("Blog post published");
-        assertTrue(true);
+        assertTrue(hasSuccessMessage);
     }
 
     public class Entry {
