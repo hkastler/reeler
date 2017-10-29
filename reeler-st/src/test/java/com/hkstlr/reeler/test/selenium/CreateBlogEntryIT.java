@@ -88,7 +88,8 @@ public class CreateBlogEntryIT extends BaseStepDefs {
         //String data = getLitipsumText("/api/15/p/json");
         //JSONObject obj = new JSONObject(data);
         //System.out.println(obj.get("text").toString());
-        String data = getLitipsumText("/api/15/p");
+        //String data = getLitipsumText("/api/15/p");
+        String data = sendPost("15");
         String titleData = data.replace("<p>", "").replace("</p>", "");
         
         //String title = obj.getString("title");
@@ -143,7 +144,7 @@ public class CreateBlogEntryIT extends BaseStepDefs {
         String content;
     }
 
-    private String sendPost() throws Exception {
+    private String sendPost(String numberOfParagraphs) throws Exception {
         String USER_AGENT = "Mozilla/5.0";
         
         URL url = new URL("http://justinjay.wang/90s-ipsum/");
@@ -154,7 +155,7 @@ public class CreateBlogEntryIT extends BaseStepDefs {
         con.setRequestProperty("User-Agent", USER_AGENT);
         con.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-        String urlParameters = "p=5";
+        String urlParameters = "p=".concat(numberOfParagraphs);
 
         // Send post request
         con.setDoOutput(true);
