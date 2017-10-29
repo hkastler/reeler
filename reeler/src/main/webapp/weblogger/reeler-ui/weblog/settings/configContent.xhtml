@@ -12,6 +12,7 @@
             </div>
 
             <div class="panel-body">
+                <h2><i class="fa fa-cog" aria-hidden="true"></i>Blog Settings</h2>
                 <form id="editWeblog" name="editWeblog" class="form" jsfc="h:form">
                     <div class="row">
                         <div class="col-lg-12"> 
@@ -19,7 +20,7 @@
                             <input type="hidden" name="salt" value="0HS75ZzFjTwYk2dqfs9z" id="createWeblog_salt"/>
 
                             <div class="formdiv">
-                                <h2>General Settings</h2>
+                                <h3>General Settings</h3>
                                 <div id="messagePanel" layout="block">
                                     <h:messages 
                                         errorStyle="color: red" 
@@ -83,7 +84,7 @@
                                            value="#{weblogAuthorBean.weblog.entryDisplayCount}" />
 
                                 </div>
-                                <h2>Internationalization Settings</h2>
+                                <h3>Internationalization Settings</h3>
                                 <div class="form-group">                                
                                     <label jsf:for="enableMultiLang" class="checkbox-inline">I publish my weblog in multiple languages</label>  
 
@@ -145,7 +146,7 @@
                                 
                                 <hr/>
 
-                                <h2>Comments</h2>
+                                <h3>Comments</h3>
 
                                 <div class="form-group">
                                     <label jsf:for="allowComments" class="checkbox-inline">Allow comments for your weblog?</label>
@@ -166,7 +167,7 @@
 
                                 <hr/>
 
-                                <h2>Default comment settings</h2>
+                                <h3>Default comment settings</h3>
 
                                 <div class="form-group">
                                     <label jsf:for="defaultAllowComments" class="checkbox-inline">By default, allow comments for new entries</label>
@@ -198,7 +199,7 @@
 
                                 <hr/>
 
-                                <h2>Weblog Client API</h2>
+                                <h3>Weblog Client API</h3>
 
                                 <div class="form-group">
                                     <label jsf:for="enableBloggerApi" class="checkbox-inline">Enable weblog client support?</label>
@@ -210,7 +211,7 @@
 
                                 <hr/>
 
-                                <h2>Formatting</h2>
+                                <h3>Formatting</h3>
                                 <div class="form-group">
                                     <label jsf:for="defaultPlugins">
                                         Default Entry Formatters
@@ -223,7 +224,7 @@
                                 </div>
                                 <hr/>
 
-                                <h2>Spam Prevention</h2>
+                                <h3>Spam Prevention</h3>
                                 <div class="form-group">
                                     <label jsf:for="blacklist">
                                         List of words and regex expressions listed one per line to be added 
@@ -238,7 +239,7 @@
                                 <hr/>
 
 
-                                <h2>Web Analytics</h2>
+                                <h3>Web Analytics</h3>
                                 <div class="form-group">
                                     <label jsf:for="analyticsCode">
                                         Tracking Code

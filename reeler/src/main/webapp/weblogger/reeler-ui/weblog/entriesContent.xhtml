@@ -4,7 +4,8 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-    <ui:param name="weblog" value="#{reelerUiBean.currentWeblog}"/>
+    <ui:param name="weblog" value="#{weblogEntriesBean.reelerUiBean.currentWeblog}"/>
+    
     <f:metadata>            
         <f:viewAction action="#{weblogEntriesBean.entriesViewAction}"/>
     </f:metadata>
@@ -13,13 +14,19 @@
            
            <h:outputFormat  value="Find and edit entries in weblog {0}"
                           escape="false">
-                <f:param value="#{reelerUiBean.currentWeblog.name}" />
+                <f:param value="#{weblog.name}" />
             </h:outputFormat>
         </div>
 
         <div class="panel-body">
+            <h2 ><i class="fa fa-book" aria-hidden="true"></i> Entries  
+                        for #{weblog.name}</h2>
             <p>
-                #{res["weblogEntryQuery.tip"]}
+                <h:outputText value="No Entries found."
+                              rendered="#{weblog.weblogEntries.size() eq 0}"/>
+                
+                <h:outputText value="#{res['weblogEntryQuery.tip']}"
+                              rendered="#{weblog.weblogEntries.size() gt 0}"/>
             </p>
             <div class="row">
                 <div class="text-center" style="margin: 0 auto" id="top-paginatorContainer">
@@ -39,9 +46,6 @@
                         <h:panelGroup id="messagePanel" layout="block" styleClass="control-label">
                             <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                         </h:panelGroup>
-
-
-
                         <h:panelGroup rendered="#{weblog.weblogEntries.size() > 0}">
 
                             <h:dataTable value="#{weblog.weblogEntries}" 

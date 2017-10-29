@@ -4,7 +4,7 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
                 xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
                 xmlns:jsf="http://xmlns.jcp.org/jsf">
-
+    <ui:param name="weblog" value="#{reelerUiBean.currentWeblog}"/>
     <f:metadata>            
         <f:viewAction action="#{reelerUiBean.blogrollsViewAction()}"/>
     </f:metadata>
@@ -12,11 +12,12 @@
         <div class="panel-heading panel-title">
             <h:outputFormat value="#{res['bookmarksForm.subtitle']}"
                             escape="false">
-                <f:param value="#{reelerUiBean.currentWeblog.name}"/>
+                <f:param value="#{weblog.name}"/>
             </h:outputFormat> 
         </div>
 
         <div class="panel-body">
+            <h2>Bookmarks</h2>
             <p>
                 <h:outputText value="#{res['bookmarksForm.rootPrompt']}"
                               escape="false"/>
@@ -29,10 +30,10 @@
                         <h:messages errorStyle="color: red" infoStyle="color: green" layout="table"/>
                     </h:panelGroup>
 
-                    <h:panelGroup rendered="#{reelerUiBean.currentWeblog.bookmarkFolders.size() > 0}">
+                    <h:panelGroup rendered="#{weblog.bookmarkFolders.size() > 0}">
                         <h:form>
                             <div>
-                                <ui:repeat value="#{reelerUiBean.currentWeblog.bookmarkFolders}" 
+                                <ui:repeat value="#{weblog.bookmarkFolders}" 
                                            var="folder">
                                     <div class="row">
                                         <div class="col-sm-12">

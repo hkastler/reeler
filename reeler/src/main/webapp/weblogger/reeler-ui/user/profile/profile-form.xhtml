@@ -7,12 +7,13 @@
                 xmlns:ps="http://xmlns.jcp.org/jsf/passthrough">
 
     <div class="panel-heading panel-title">
+        <h:outputText value="#{formTitle}"/>
+    </div>
+    
+    <div class="panel-body">
         <h2 id="#{isSetup ? 'setupTitle':'profileTitle'}">
             <i class="fa fa-id-card"></i>
             <h:outputText value="#{formTitle}"/></h2>
-    </div>
-    <div class="panel-body">
-        
         <h:form id="profile" prependId="false">
             <h:messages
                 layout="table"

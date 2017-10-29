@@ -8,15 +8,21 @@
     <f:metadata>        
         <f:viewAction action="#{weblogEntryCommentBean.commentsViewAction}"/>
     </f:metadata>
-    <f:loadBundle basename="ApplicationResources" var="msg"/>
+   
     <div class="panel panel-primary">
         <div class="panel-heading panel-title">
             Manage comments in weblog #{weblogEntryCommentBean.weblog.name}
         </div>
 
         <div class="panel-body">
+            <h2 ><i class="fa fa-comments" aria-hidden="true"></i> Comments</h2>
             <p>
-                <h:outputText value="#{msg['commentManagement.tip']}" escape="false"/>
+                <h:outputText value="No comments found." 
+                              escape="false"
+                              rendered="#{weblogEntryCommentBean.weblogEntryCommentVisitors.size() eq 0}"/>
+                <h:outputText value="#{res['commentManagement.tip']}" 
+                              escape="false"
+                              rendered="#{weblogEntryCommentBean.weblogEntryCommentVisitors.size() gt 0}"/>
             </p>
             
             <div class="row">
@@ -47,7 +53,7 @@
 
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="#{msg['commentManagement.columnApproved']}"
+                            <h:outputText value="#{res['commentManagement.columnApproved']}"
                                           escape="false"/>
 
                         </f:facet>
@@ -71,7 +77,7 @@
 
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="#{msg['commentManagement.columnSpam']}"/>
+                            <h:outputText value="#{res['commentManagement.columnSpam']}"/>
                         </f:facet>
                         <div class="text-center alert alert-warning">
                             <h:form id="isSpamForm">
@@ -104,15 +110,15 @@
                     </h:column>
                     <h:column>
                         <f:facet name="header">
-                            <h:outputText value="#{msg['commentManagement.columnComment']}"/>
+                            <h:outputText value="#{res['commentManagement.columnComment']}"/>
                         </f:facet>
                         <div >
 
-                            <p><h:outputText value="#{msg['commentManagement.entryTitled']}"/>: #{commentVisitor.weblogEntryComment.weblogEntry.title}<br/>
-                                <h:outputText value="#{msg['commentManagement.commentBy']}"/>: #{commentVisitor.weblogEntryComment.name}<br/>
-                                <h:outputText value="#{msg['commentManagement.commentByURL']}"/>: <h:outputText value="#{commentVisitor.weblogEntryComment.url}"/>
+                            <p><h:outputText value="#{res['commentManagement.entryTitled']}"/>: #{commentVisitor.weblogEntryComment.weblogEntry.title}<br/>
+                                <h:outputText value="#{res['commentManagement.commentBy']}"/>: #{commentVisitor.weblogEntryComment.name}<br/>
+                                <h:outputText value="#{res['commentManagement.commentByURL']}"/>: <h:outputText value="#{commentVisitor.weblogEntryComment.url}"/>
                                 <br/>
-                                <h:outputText value="#{msg['commentManagement.postTime']}"/>: <h:outputText value="#{commentVisitor.weblogEntryComment.postTime}" >
+                                <h:outputText value="#{res['commentManagement.postTime']}"/>: <h:outputText value="#{commentVisitor.weblogEntryComment.postTime}" >
                                     <f:convertDateTime type="both" dateStyle="full"/>
                                 </h:outputText>
                             </p>
