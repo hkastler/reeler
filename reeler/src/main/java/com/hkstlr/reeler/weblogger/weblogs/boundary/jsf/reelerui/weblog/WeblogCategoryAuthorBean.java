@@ -58,11 +58,12 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
         this.weblogCategory = weblogCategory;
     }
 
-    public void save() {
-        log.info(weblogCategory.toString());
+    public void save() {       
         weblogger.getWeblogCategoryManager().save(weblogCategory);
-        log.info("saved:" + this.weblogCategory.getId());
-        //FacesMessageManager.addSuccessMessage("weblogCategoryForm", "Category Saved");
+        weblogCategory = weblogger.getWeblogCategoryManager().find(weblogCategory.getId());
+        //refresh the view
+        reelerUiBean.setCurrentWeblog(weblogger.getWeblogManager().find(weblogCategory.getWeblog().getId())); 
+        FacesMessageManager.addSuccessMessage("weblogCategoryForm", "Category Saved");
     }
        
     
