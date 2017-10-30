@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import org.openqa.selenium.By;
+import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.Select;
 
 /**
@@ -28,12 +29,16 @@ public class CreateBlogEntryDefs extends BaseStepDefs {
     private static final Logger LOG = Logger.getLogger(CreateBlogEntryDefs.class.getName());
     
     private CreateBlogEntryPage cbep;
+    private LoginPage lp;
 
     @Before
     @Override
     public void setUp() {
         super.setUp();
         cbep = new CreateBlogEntryPage(driver);
+        driver = new HtmlUnitDriver();
+        cbep = new CreateBlogEntryPage(driver);
+        lp = new LoginPage(driver);
     }
 
     @Given("^the user is logged in$")
@@ -41,7 +46,7 @@ public class CreateBlogEntryDefs extends BaseStepDefs {
         String username = "testerson";
         String password = "password";
         
-        LoginPage lp = new LoginPage(driver);
+        
         driver.get(lp.getPageURL());
         lp.usernameField.sendKeys(username);
         lp.passwordField.sendKeys(password);
