@@ -30,7 +30,7 @@ public class WeblogAuthorBean implements Serializable {
     @ManagedProperty(value = "#{reelerUiBean.currentWeblog}")
     private Weblog weblog;
 
-    @Inject
+    @ManagedProperty(value = "#{reelerUiBean}")
     private ReelerUIBean reelerUiBean;
 
     @Inject
