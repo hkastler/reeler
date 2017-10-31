@@ -37,10 +37,8 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
         
         if(this.id != null && !this.id.isEmpty()){
             this.weblogCategory = weblogger.getWeblogCategoryManager().findById(id);
-        }else{
-            
-            this.weblogCategory = new WeblogCategory();
-            this.weblogCategory.setWeblog(reelerUiBean.getCurrentWeblog());
+        }else{            
+            this.weblogCategory = new WeblogCategory(reelerUiBean.getCurrentWeblog());            
         }
         
         if(this.action == null || this.action.isEmpty()){
@@ -59,6 +57,7 @@ public class WeblogCategoryAuthorBean extends AuthorBean {
     }
 
     public void save() {       
+        
         weblogger.getWeblogCategoryManager().save(weblogCategory);
         weblogCategory = weblogger.getWeblogCategoryManager().find(weblogCategory.getId());
         //refresh the view

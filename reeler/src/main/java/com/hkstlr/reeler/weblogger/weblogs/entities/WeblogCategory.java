@@ -99,6 +99,13 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
         calculatePosition(this.weblog.getWeblogCategories().size());
     }
     
+     public WeblogCategory(Weblog blog) {
+        super();
+        this.weblog = blog;
+        calculatePosition();
+    }
+    
+    
     public WeblogCategory(String name, int position) {
         super();
         this.name = name;
@@ -145,6 +152,26 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
     public void setWeblog(Weblog weblog) {
         this.weblog = weblog;
     }
+    
+    public final void calculatePosition() {   
+       
+        Optional<Weblog> blog = Optional.ofNullable(this.weblog);
+        
+        if (blog.isPresent()) {
+            
+            Optional<Integer> maxPosition = Optional.ofNullable(
+                    blog.get().getWeblogCategories()
+                            .stream()
+                            .max((wc1, wc2) -> Integer.compare(wc1.getPosition(), wc2.getPosition()))
+                            .orElse(this)
+                            .getPosition());
+            
+            this.position = maxPosition.orElse(0) + 1;
+        } else {
+            this.position = 1;
+        }
+
+    }
 
     /**
      *
@@ -163,7 +190,7 @@ public class WeblogCategory extends AbstractEntity implements Serializable {
                             .orElse(new WeblogCategory())
                             .getPosition());
             
-            this.position = maxPosition.orElse(0) + 1;
+            this.position = maxPosition.orElse(size) + 1;
         } else {
             this.position = 1;
         }
