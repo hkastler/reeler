@@ -67,7 +67,7 @@
             </property-def>      
             <property-def  name="site.frontpage.weblog.aggregated"  key="configForm.frontpageWeblogAggregated">
                 <type>boolean</type>
-                <default-value>false</default-value>
+                <default-value>true</default-value>
             </property-def>
             <property-def name="site.adminemail"  key="configForm.siteAdminEmail">
                 <type>string</type>
