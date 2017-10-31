@@ -16,7 +16,7 @@
                         <ui:repeat value="#{pageBean.pages.keySet().toArray()}" var="key">
                             <li class="#{pageBean.page == key ? 'active': ''}" >                                                        
                                 <a href="#{request.contextPath}#{pageBean.path}/#{key}.xhtml"
-                                   id="nav">
+                                   id="nav-#{key}">
                                     #{((pageBean.page == key) and (customLabel ne null)) ? customLabel : messages[pageBean.pages[key][0]]}
                                 </a>
                             </li>
