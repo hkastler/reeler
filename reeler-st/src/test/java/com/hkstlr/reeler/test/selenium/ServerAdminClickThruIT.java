@@ -5,6 +5,8 @@
  */
 package com.hkstlr.reeler.test.selenium;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,8 +26,8 @@ public class ServerAdminClickThruIT {
     
     @Before
     public void setUp() throws Exception {
-        wd = new HtmlUnitDriver();//new FirefoxDriver();
-        //wd.manage().timeouts().implicitlyWait(60, TimeUnit.SECONDS);
+        wd = new HtmlUnitDriver();
+        Logger.getLogger("com.gargoylesoftware.htmlunit").setLevel(Level.OFF);
     }
     
     @Test
