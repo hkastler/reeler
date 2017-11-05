@@ -5,6 +5,7 @@
  */
 package com.hkstlr.reeler.test.selenium;
 
+import com.hkstlr.reeler.test.util.TestUtils;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.junit.After;
@@ -21,8 +22,12 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
  * @author Henry
  */
 public class ServerAdminClickThruIT {
+
+    private static final Logger LOG = Logger.getLogger(ServerAdminClickThruIT.class.getName());
     
     HtmlUnitDriver wd;
+    String baseUrl = TestUtils.getTestURL();
+    
     
     @Before
     public void setUp() throws Exception {
@@ -32,7 +37,9 @@ public class ServerAdminClickThruIT {
     
     @Test
     public void clickthru() {
-        wd.get("http://localhost:8080/reeler/weblogger/login/");
+        String url = baseUrl.concat("/reeler/weblogger/login/");
+        LOG.info(url);
+        wd.get(url);
         wd.findElement(By.id("username")).click();
         wd.findElement(By.id("username")).clear();
         wd.findElement(By.id("username")).sendKeys("testerson");
@@ -41,7 +48,7 @@ public class ServerAdminClickThruIT {
         wd.findElement(By.id("password")).sendKeys("password");
         wd.findElement(By.id("submit")).click();
         
-        wd.get("http://localhost:8080/reeler/weblogger/reeler-ui/");
+        wd.get(baseUrl.concat("/reeler/weblogger/reeler-ui/"));
         wd.findElement(By.id("navbarReeler")).click();
         wd.findElement(By.linkText("Reeler UI")).click();
         wd.findElement(By.linkText("Server Administration")).click();
