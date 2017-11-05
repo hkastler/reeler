@@ -1,6 +1,6 @@
 @echo "build reeler"
 call cd ..\reeler
-call mvn -f pom.xml -e clean package -DskipTests=true
+call mvn clean package -DskipTests=true -T 1.5C
 @echo "mvn package successful"
 call cp .\target\reeler.war \apps\reeler\.
 echo "copy to \apps\reeler\ successful"

@@ -108,6 +108,18 @@
             </properties>
         </profile>
         <profile>
+            <id>local-docker</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <env>local-docker</env>
+                <hostName>localhost</hostName>
+                <protocol>http</protocol>
+                <port>80</port>		        	        
+            </properties>
+        </profile>
+        <profile>
             <id>qa</id>
             <activation>
                 <activeByDefault>false</activeByDefault>
