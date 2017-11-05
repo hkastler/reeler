@@ -17,7 +17,7 @@ function restore_saved_artifacts() {
 
 # Source code provided to STI will be bind-mounted at /tmp/src
 # and then copied into /opt/wildfly/source for building.
-local_source_dir=/opt/wildfly/source
+local_source_dir=/wildfly/source
 mkdir -p $local_source_dir
 
 # Resulting WAR files will be deployed to /wildfly/standalone/deployments
