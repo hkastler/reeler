@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntry;
 import com.hkstlr.reeler.weblogger.weblogs.entities.WeblogEntryComment;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Collection;
