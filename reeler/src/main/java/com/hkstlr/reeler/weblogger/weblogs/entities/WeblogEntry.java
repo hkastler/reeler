@@ -137,8 +137,7 @@ public class WeblogEntry extends AbstractEntity implements Serializable {
     @Basic(optional = false)
     @NotNull(message = "{WeblogEntry.text.NotNull}")
     @Size
-    @Column(name = "text", nullable = false)
-    @Lob
+    @Column(name = "text", nullable = false, length=10485760)
     private String text;
     
     @Basic
