@@ -105,23 +105,7 @@ public abstract class AbstractManager<T> {
         return record;
     }
 
-    public T findByField(String fieldName, Object fieldValue) {
-        String className = entityClass.getSimpleName();
-        
-        String queryNameSuffix = StringChanger.toTitleCase(fieldName);
-        String queryName = className.concat(".findBy").concat(queryNameSuffix);
-        
-        Query query = getEntityManager().createNamedQuery(queryName);
-        query.setParameter(fieldName, fieldValue);
-        T record = null;
-        try {
-            record = (T) query.getSingleResult();
-        } catch (NoResultException e) {
-            log.log(Level.FINE, queryName+StringPool.COLON , e);
-        }
-        return record;
-    }
-
+    
     public List<T> findAll() {
         javax.persistence.criteria.CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
         cq.select(cq.from(entityClass));

@@ -42,8 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @UniqueConstraint(columnNames = {"websiteid", "name"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogEntryTagAggregate.findAll", query = "SELECT r FROM WeblogEntryTagAggregate r")
-    , @NamedQuery(name = "WeblogEntryTagAggregate.findById", query = "SELECT r FROM WeblogEntryTagAggregate r WHERE r.id = :id")
+    @NamedQuery(name = "WeblogEntryTagAggregate.findById", query = "SELECT r FROM WeblogEntryTagAggregate r WHERE r.id = :id")
     , @NamedQuery(name = "WeblogEntryTagAggregate.findByWebsite", query = "SELECT r FROM WeblogEntryTagAggregate r WHERE r.weblog = :website")
     , @NamedQuery(name = "WeblogEntryTagAggregate.findByName", query = "SELECT r FROM WeblogEntryTagAggregate r WHERE r.name = :name")
     , @NamedQuery(name = "WeblogEntryTagAggregate.findByTotal", query = "SELECT r FROM WeblogEntryTagAggregate r WHERE r.total = :total")

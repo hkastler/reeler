@@ -40,8 +40,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "roller_weblogentrytag")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogEntryTag.findAll", query = "SELECT r FROM WeblogEntryTag r")
-    , @NamedQuery(name = "WeblogEntryTag.findById", query = "SELECT r FROM WeblogEntryTag r WHERE r.id = :id")
+    @NamedQuery(name = "WeblogEntryTag.findById", query = "SELECT r FROM WeblogEntryTag r WHERE r.id = :id")
     , @NamedQuery(name = "WeblogEntryTag.findByWebsite", query = "SELECT r FROM WeblogEntryTag r WHERE r.weblog = :website")
     , @NamedQuery(name = "WeblogEntryTag.findByNameAndWeblogEntry", query = "SELECT r FROM WeblogEntryTag r WHERE r.name = :name AND r.weblogEntry = :weblogEntry")
     , @NamedQuery(name = "WeblogEntryTag.findByCreator", query = "SELECT r FROM WeblogEntryTag r WHERE r.creator = :creator")

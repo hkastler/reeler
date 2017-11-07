@@ -29,6 +29,7 @@ import com.hkstlr.reeler.app.control.WebloggerException;
 import com.hkstlr.reeler.weblogger.users.entities.JdbcrealmGroup;
 import com.hkstlr.reeler.weblogger.users.entities.User;
 import com.hkstlr.reeler.weblogger.users.entities.UserRole;
+import com.hkstlr.reeler.weblogger.users.entities.User_;
 import com.hkstlr.reeler.weblogger.weblogs.entities.GlobalPermission;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -115,7 +116,8 @@ public class UserManager extends AbstractManager<User> {
      * @throws WebloggerException
      */
     public User getUserByActivationCode(String activationCode){
-        User user = findByField("activationCode", activationCode);
+        User user = em.createNamedQuery("User.getUserByActivationCode", User.class)
+                .setParameter("activationCode", activationCode).getSingleResult();
         return user;
     }
 
@@ -141,7 +143,7 @@ public class UserManager extends AbstractManager<User> {
      * @return The user, or null if not found or not enabled.
      */
     public User getUserByUserName(String userName){
-        //return findByField("userName", userName);
+              
        TypedQuery<User> uq = em.createNamedQuery("User.findByUsername", User.class);
        uq.setParameter("userName", userName);
        User returnUser = null;
@@ -183,7 +185,18 @@ public class UserManager extends AbstractManager<User> {
      * @throws WebloggerException If there is a problem.
      */
     public User getUserByOpenIdUrl(String openIdUrl){
-        return findByField("openIdUrl", openIdUrl);        
+       TypedQuery<User> uq = em.createNamedQuery("User.getByOpenIdUrl", User.class);
+       uq.setParameter(User_.openIdUrl.getName(), openIdUrl);
+       User returnUser = null;
+       try{
+            returnUser = uq.getSingleResult();
+       }catch(NoResultException e){
+           LOG.log(Level.FINE,"username not found",e);
+           
+       }catch(Exception e){
+           LOG.log(Level.FINE,"error",e);
+       }
+       return returnUser;
     }
 
     /**

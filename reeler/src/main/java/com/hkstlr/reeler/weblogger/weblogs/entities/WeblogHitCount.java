@@ -36,10 +36,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "roller_hitcounts")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogHitCount.findAll", query = "SELECT r FROM WeblogHitCount r")
-    , @NamedQuery(name = "WeblogHitCount.findById", query = "SELECT r FROM WeblogHitCount r WHERE r.id = :id")
-    , @NamedQuery(name = "WeblogHitCount.findByWebsiteid", query = "SELECT r FROM WeblogHitCount r WHERE r.weblog = :websiteid")
-    , @NamedQuery(name = "WeblogHitCount.findByDailyhits", query = "SELECT r FROM WeblogHitCount r WHERE r.dailyHits = :dailyhits")
+    @NamedQuery(name = "WeblogHitCount.findById", query = "SELECT r FROM WeblogHitCount r WHERE r.id = :id")
     , @NamedQuery(name = "WeblogHitCount.getByWeblog", query = "SELECT h FROM WeblogHitCount h WHERE h.weblog = ?1")
      
     , @NamedQuery(name = "WeblogHitCount.updateDailyHitCountZero", query = "UPDATE WeblogHitCount h SET h.dailyHits = 0")})

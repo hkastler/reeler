@@ -39,18 +39,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "roller_tasklock", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"name"})})
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "TaskLock.findAll", query = "SELECT r FROM TaskLock r")
-    , @NamedQuery(name = "TaskLock.findById", query = "SELECT r FROM TaskLock r WHERE r.id = :id")
-    , @NamedQuery(name = "TaskLock.findByName", query = "SELECT r FROM TaskLock r WHERE r.name = :name")
-    , @NamedQuery(name = "TaskLock.findByIslocked", query = "SELECT r FROM TaskLock r WHERE r.isLocked = :isLocked")
-    , @NamedQuery(name = "TaskLock.findByTimeacquired", query = "SELECT r FROM TaskLock r WHERE r.timeAcquired = :timeAcquired")
-    , @NamedQuery(name = "TaskLock.findByTimeleased", query = "SELECT r FROM TaskLock r WHERE r.timeLeased = :timeLeased")
-    , @NamedQuery(name = "TaskLock.findByLastRun", query = "SELECT r FROM TaskLock r WHERE r.lastRun = :lastRun")
-    , @NamedQuery(name = "TaskLock.findByClient", query = "SELECT r FROM TaskLock r WHERE r.clientId = :clientId")
-    , @NamedQuery(name = "TaskLock.getByName", query = "SELECT t FROM TaskLock t WHERE t.name = ?1")
-    , @NamedQuery(name = "TaskLock.updateClient&Timeacquired&Timeleased&LastRunByName&Timeacquired", query = " UPDATE TaskLock t SET t.clientId=?1, t.timeAcquired= ?2, t.timeLeased= ?3, t.lastRun= ?4 WHERE t.name=?5 AND t.timeAcquired=?6 AND ?7 < CURRENT_TIMESTAMP")
-    , @NamedQuery(name = "TaskLock.updateTimeLeasedByName&Client", query = "UPDATE TaskLock t SET t.timeLeased=?1 WHERE t.name=?2 AND t.clientId=?3")})
 public class TaskLock implements Serializable {
 
     private static final long serialVersionUID = 1L;

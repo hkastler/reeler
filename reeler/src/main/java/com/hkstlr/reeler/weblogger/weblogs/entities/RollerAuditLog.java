@@ -37,14 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "roller_audit_log")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "RollerAuditLog.findAll", query = "SELECT r FROM RollerAuditLog r")
-    , @NamedQuery(name = "RollerAuditLog.findById", query = "SELECT r FROM RollerAuditLog r WHERE r.id = :id")
-    , @NamedQuery(name = "RollerAuditLog.findByUserId", query = "SELECT r FROM RollerAuditLog r WHERE r.userId = :userId")
-    , @NamedQuery(name = "RollerAuditLog.findByObjectId", query = "SELECT r FROM RollerAuditLog r WHERE r.objectId = :objectId")
-    , @NamedQuery(name = "RollerAuditLog.findByObjectClass", query = "SELECT r FROM RollerAuditLog r WHERE r.objectClass = :objectClass")
-    , @NamedQuery(name = "RollerAuditLog.findByCommentText", query = "SELECT r FROM RollerAuditLog r WHERE r.commentText = :commentText")
-    , @NamedQuery(name = "RollerAuditLog.findByChangeTime", query = "SELECT r FROM RollerAuditLog r WHERE r.changeTime = :changeTime")})
 public class RollerAuditLog implements Serializable {
 
     private static final long serialVersionUID = 1L;

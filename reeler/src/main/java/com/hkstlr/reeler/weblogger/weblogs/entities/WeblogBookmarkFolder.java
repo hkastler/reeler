@@ -44,8 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Table(name = "bookmark_folder")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogBookmarkFolder.findAll", query = "SELECT b FROM WeblogBookmarkFolder b")
-    , @NamedQuery(name = "WeblogBookmarkFolder.findById", query = "SELECT b FROM WeblogBookmarkFolder b WHERE b.id = :id")
+    @NamedQuery(name = "WeblogBookmarkFolder.findById", query = "SELECT b FROM WeblogBookmarkFolder b WHERE b.id = :id")
     , @NamedQuery(name = "WeblogBookmarkFolder.findByName", query = "SELECT b FROM WeblogBookmarkFolder b WHERE b.name = :name")
     , @NamedQuery(name = "WeblogBookmarkFolder.getByWebsite", query = "SELECT f FROM WeblogBookmarkFolder f WHERE f.weblog = ?1")
     , @NamedQuery(name = "WeblogBookmarkFolder.getByWebsite&amp;Name", query = "SELECT f FROM WeblogBookmarkFolder f WHERE f.weblog = ?1 AND f.name = ?2")})

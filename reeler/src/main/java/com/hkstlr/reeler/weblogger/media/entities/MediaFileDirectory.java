@@ -41,13 +41,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "roller_mediafiledir")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MediaFileDirectory.findAll", query = "SELECT r FROM MediaFileDirectory r")
-    , @NamedQuery(name = "MediaFileDirectory.findById", query = "SELECT r FROM MediaFileDirectory r WHERE r.id = :id")
-    , @NamedQuery(name = "MediaFileDirectory.findByName", query = "SELECT r FROM MediaFileDirectory r WHERE r.name = :name")
-    , @NamedQuery(name = "MediaFileDirectory.findByDescription", query = "SELECT r FROM MediaFileDirectory r WHERE r.description = :description")
-    , @NamedQuery(name = "MediaFileDirectory.getByWeblog", query = "SELECT d FROM MediaFileDirectory d WHERE d.weblog = ?1")
-    , @NamedQuery(name = "MediaFileDirectory.getByWeblogAndName", query = "SELECT d FROM MediaFileDirectory d WHERE d.weblog = ?1 AND d.name = ?2")})
 public class MediaFileDirectory extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -19,7 +19,6 @@ import com.hkstlr.reeler.app.control.JsonBuilder;
 import com.hkstlr.reeler.app.control.StringPool;
 import com.hkstlr.reeler.app.entities.AbstractEntity;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Optional;
 import javax.json.JsonObject;
 import javax.persistence.Basic;
@@ -42,11 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "weblogcategory")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogCategory.findAll", query = "SELECT w FROM WeblogCategory w")
-    , @NamedQuery(name = "WeblogCategory.findById", query = "SELECT w FROM WeblogCategory w WHERE w.id = :id")
-    , @NamedQuery(name = "WeblogCategory.findByName", query = "SELECT w FROM WeblogCategory w WHERE w.name = :name")
-    , @NamedQuery(name = "WeblogCategory.findByDescription", query = "SELECT w FROM WeblogCategory w WHERE w.description = :description")
-    , @NamedQuery(name = "WeblogCategory.findByImage", query = "SELECT w FROM WeblogCategory w WHERE w.image = :image")
+    @NamedQuery(name = "WeblogCategory.findById", query = "SELECT w FROM WeblogCategory w WHERE w.id = :id")
     , @NamedQuery(name = "WeblogCategory.findByPosition", query = "SELECT w FROM WeblogCategory w WHERE w.position = :position")
     , @NamedQuery(name = "WeblogCategory.getByWeblog", query = "SELECT w FROM WeblogCategory w WHERE w.weblog = ?1 order by w.position")
     , @NamedQuery(name = "WeblogCategory.getByWeblog&amp;Name", query = "SELECT w FROM WeblogCategory w WHERE w.weblog = ?1 AND w.name = ?2")

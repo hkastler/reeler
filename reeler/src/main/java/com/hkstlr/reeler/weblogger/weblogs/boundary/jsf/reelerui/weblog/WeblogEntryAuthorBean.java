@@ -96,7 +96,7 @@ public class WeblogEntryAuthorBean extends AuthorBean<WeblogEntry> implements Se
 
     @PostConstruct
     private void init() {
-        //this.weblog = currentWeblog;//weblogManager.findByHandle(handle);
+        
         if(weblogId != null){
             weblog = weblogger.getWeblogManager().findById(weblogId);
             reelerUiBean.setCurrentWeblog(weblog);

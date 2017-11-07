@@ -39,8 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @UniqueConstraint(columnNames = {"entryid", "name"})})
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogEntryAttribute.findAll", query = "SELECT e FROM WeblogEntryAttribute e")
-    , @NamedQuery(name = "WeblogEntryAttribute.findById", query = "SELECT e FROM WeblogEntryAttribute e WHERE e.id = :id")
+    @NamedQuery(name = "WeblogEntryAttribute.findById", query = "SELECT e FROM WeblogEntryAttribute e WHERE e.id = :id")
     , @NamedQuery(name = "WeblogEntryAttribute.findByName", query = "SELECT e FROM WeblogEntryAttribute e WHERE e.name = :name")
     , @NamedQuery(name = "WeblogEntryAttribute.findByValue", query = "SELECT e FROM WeblogEntryAttribute e WHERE e.value = :value")})
 public class WeblogEntryAttribute implements Serializable {

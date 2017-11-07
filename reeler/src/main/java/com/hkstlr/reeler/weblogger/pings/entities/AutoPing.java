@@ -35,8 +35,7 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 @Table(name = "autoping")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AutoPing.findAll", query = "SELECT a FROM AutoPing a")
-    , @NamedQuery(name = "AutoPing.findById", query = "SELECT a FROM AutoPing a WHERE a.id = :id")
+    @NamedQuery(name = "AutoPing.findById", query = "SELECT a FROM AutoPing a WHERE a.id = :id")
     , @NamedQuery(name = "AutoPing.getAll", query = "SELECT a FROM AutoPing a")
     , @NamedQuery(name = "AutoPing.getByPingTarget", query = "SELECT a FROM AutoPing a WHERE a.pingTarget = ?1")
     , @NamedQuery(name = "AutoPing.getByWebsite", query = "SELECT a FROM AutoPing a WHERE a.website = ?1")

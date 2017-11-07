@@ -38,11 +38,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "roller_mediafiletag")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MediaFileTag.findAll", query = "SELECT r FROM MediaFileTag r")
-    , @NamedQuery(name = "MediaFileTag.findById", query = "SELECT r FROM MediaFileTag r WHERE r.id = :id")
-    , @NamedQuery(name = "MediaFileTag.findByName", query = "SELECT r FROM MediaFileTag r WHERE r.name = :name")
-    , @NamedQuery(name = "MediaFileTag.getByMediaFile", query = "SELECT w FROM MediaFileTag w WHERE w.mediaFile = ?1")})
 public class MediaFileTag extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

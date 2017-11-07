@@ -37,14 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "bookmark")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WeblogBookmark.findAll", query = "SELECT b FROM WeblogBookmark b")
-    , @NamedQuery(name = "WeblogBookmark.findById", query = "SELECT b FROM WeblogBookmark b WHERE b.id = :id")
-    , @NamedQuery(name = "WeblogBookmark.findByName", query = "SELECT b FROM WeblogBookmark b WHERE b.name = :name")
-    , @NamedQuery(name = "WeblogBookmark.findByDescription", query = "SELECT b FROM WeblogBookmark b WHERE b.description = :description")
-    , @NamedQuery(name = "WeblogBookmark.findByUrl", query = "SELECT b FROM WeblogBookmark b WHERE b.url = :url")
-    , @NamedQuery(name = "WeblogBookmark.findByPriority", query = "SELECT b FROM WeblogBookmark b WHERE b.priority = :priority")
-    , @NamedQuery(name = "WeblogBookmark.findByImage", query = "SELECT b FROM WeblogBookmark b WHERE b.image = :image")
-    , @NamedQuery(name = "WeblogBookmark.findByFeedUrl", query = "SELECT b FROM WeblogBookmark b WHERE b.feedUrl = :feedUrl")
+    @NamedQuery(name = "WeblogBookmark.findById", query = "SELECT b FROM WeblogBookmark b WHERE b.id = :id")
     , @NamedQuery(name = "BookmarkData.getByFolder", query = "SELECT b FROM WeblogBookmark b WHERE b.folder = ?1 order by b.priority")})
 public class WeblogBookmark extends AbstractEntity implements Serializable {
 

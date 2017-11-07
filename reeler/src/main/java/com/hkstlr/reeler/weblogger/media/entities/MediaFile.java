@@ -47,25 +47,6 @@ import com.hkstlr.reeler.weblogger.weblogs.entities.Weblog;
 @Entity
 @Table(name = "roller_mediafile")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "MediaFile.findAll", query = "SELECT r FROM MediaFile r")
-    , @NamedQuery(name = "MediaFile.findById", query = "SELECT r FROM MediaFile r WHERE r.id = :id")
-    , @NamedQuery(name = "MediaFile.findByName", query = "SELECT r FROM MediaFile r WHERE r.name = :name")
-    , @NamedQuery(name = "MediaFile.findByDescription", query = "SELECT r FROM MediaFile r WHERE r.description = :description")
-    , @NamedQuery(name = "MediaFile.findByOrigpath", query = "SELECT r FROM MediaFile r WHERE r.originalPath = :originalPath")
-    , @NamedQuery(name = "MediaFile.findByContentType", query = "SELECT r FROM MediaFile r WHERE r.contentType = :contentType")
-    , @NamedQuery(name = "MediaFile.findByCopyrightText", query = "SELECT r FROM MediaFile r WHERE r.copyrightText = :copyrightText")
-    , @NamedQuery(name = "MediaFile.findByWeblog", query = "SELECT r FROM MediaFile r WHERE r.weblog = :weblog")
-    , @NamedQuery(name = "MediaFile.findByWidth", query = "SELECT r FROM MediaFile r WHERE r.width = :width")
-    , @NamedQuery(name = "MediaFile.findByHeight", query = "SELECT r FROM MediaFile r WHERE r.height = :height")
-    , @NamedQuery(name = "MediaFile.findBySizeInBytes", query = "SELECT r FROM MediaFile r WHERE r.sizeInBytes = :sizeInBytes")
-    , @NamedQuery(name = "MediaFile.findByDateUploaded", query = "SELECT r FROM MediaFile r WHERE r.dateUploaded = :dateUploaded")
-    , @NamedQuery(name = "MediaFile.findByLastUpdated", query = "SELECT r FROM MediaFile r WHERE r.lastUpdated = :lastUpdated")
-    , @NamedQuery(name = "MediaFile.findByAnchor", query = "SELECT r FROM MediaFile r WHERE r.anchor = :anchor")
-    , @NamedQuery(name = "MediaFile.findByCreator", query = "SELECT r FROM MediaFile r WHERE r.creator = :creator")
-    , @NamedQuery(name = "MediaFile.findByIsPublic", query = "SELECT r FROM MediaFile r WHERE r.isPublic = :isPublic")
-    , @NamedQuery(name = "MediaFile.getByWeblogAndOrigpath", query = "SELECT f FROM MediaFile f WHERE f.weblog = ?1 AND f.originalPath = ?2")})
-
 public class MediaFile extends Resource implements Serializable {
 
     private static final long serialVersionUID = 1L;

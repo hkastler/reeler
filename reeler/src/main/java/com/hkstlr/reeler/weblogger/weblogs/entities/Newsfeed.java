@@ -37,12 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "newsfeed")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Newsfeed.findAll", query = "SELECT n FROM Newsfeed n")
-    , @NamedQuery(name = "Newsfeed.findById", query = "SELECT n FROM Newsfeed n WHERE n.id = :id")
-    , @NamedQuery(name = "Newsfeed.findByName", query = "SELECT n FROM Newsfeed n WHERE n.name = :name")
-    , @NamedQuery(name = "Newsfeed.findByDescription", query = "SELECT n FROM Newsfeed n WHERE n.description = :description")
-    , @NamedQuery(name = "Newsfeed.findByLink", query = "SELECT n FROM Newsfeed n WHERE n.link = :link")})
 public class Newsfeed extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
