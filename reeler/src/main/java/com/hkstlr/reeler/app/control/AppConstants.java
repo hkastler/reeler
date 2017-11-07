@@ -1,12 +1,4 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package com.hkstlr.reeler.app.control;
-
-
-/*
 * Licensed to the Apache Software Foundation (ASF) under one or more
 *  contributor license agreements.  The ASF licenses this file to You
 * under the Apache License, Version 2.0 (the "License"); you may not
@@ -22,10 +14,10 @@ package com.hkstlr.reeler.app.control;
 * limitations under the License.  For additional information regarding
 * copyright in this work, please see the NOTICE file in the top level
 * directory of this distribution.
-* originally from package org.apache.roller.util.RollerConstants
+* modified 2017, originally from package org.apache.roller.util.RollerConstants
 */
 
-
+package com.hkstlr.reeler.app.control;
 
 public class AppConstants {
 

@@ -2,6 +2,8 @@ FROM jboss/wildfly
 
 ENV JBOSS_HOME /opt/jboss/wildfly
 
+COPY ./jboss-cli/standalone.conf $JBOSS_HOME/bin/.
+
 #admin scripts
 COPY ./jboss-cli/configure-logging.cli $JBOSS_HOME/standalone/tmp/.
 COPY ./jboss-cli/configure-mail.cli $JBOSS_HOME/standalone/tmp/.
@@ -23,7 +25,7 @@ RUN $JBOSS_HOME/bin/add-user.sh admin adminadmin1 --silent
 
 # Install postgres drivers and datasource
 RUN /bin/sh -c '$JBOSS_HOME/bin/standalone.sh &' && \
-  sleep 10 && \
+  sleep 30 && \
   cd $JBOSS_HOME/standalone/tmp/ && \  
   $JBOSS_HOME/bin/jboss-cli.sh --user=admin --password=adminadmin1  --connect --file=configure-postgresql.cli && \
   $JBOSS_HOME/bin/jboss-cli.sh --user=admin --password=adminadmin1  --connect --file=configure-security.cli && \

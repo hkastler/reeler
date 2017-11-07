@@ -10,4 +10,15 @@
                 <activatedProfile>dev</activatedProfile>
             </activatedProfiles>
         </action>
+        <action>
+            <actionName>CUSTOM-generate-resources test local-docker</actionName>
+            <displayName>generate-resources test local-docker</displayName>
+            <goals>
+                <goal>generate-resources</goal>
+                <goal>test</goal>
+            </goals>
+            <activatedProfiles>
+                <activatedProfile>local-docker</activatedProfile>
+            </activatedProfiles>
+        </action>
     </actions>
